@@ -5,418 +5,119 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Flame, Star, Trophy, Play, BookOpen, BarChart2, Volume2, X, Check, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
-
-// Sample vocabulary data
-const VOCABULARY_DATA = [
-  { id: "surv_001", front: "안녕하세요 (annyeonghaseyo)", back: "Hello (polite/formal)", tag: "survival", example: "안녕하세요, 저는 학생입니다." },
-  { id: "surv_002", front: "감사합니다 (gamsahamnida)", back: "Thank you (formal)", tag: "survival", example: "도와주셔서 감사합니다." },
-  { id: "surv_003", front: "죄송합니다 (joesonghamnida)", back: "I'm sorry / Excuse me", tag: "survival", example: "늦어서 죄송합니다." },
-  { id: "daily_001", front: "만나서 반가워요 (mannaseo bangawoyo)", back: "Nice to meet you", tag: "daily" },
-  { id: "daily_002", front: "잘 지내요? (jal jinaeyo?)", back: "How are you doing?", tag: "daily" },
-  { id: "daily_003", front: "좋아해요 (joahaeyo)", back: "I like it", tag: "daily" },
-  { id: "num_001", front: "하나 / 둘 / 셋 (hana / dul / set)", back: "One / Two / Three", tag: "numbers" },
-  { id: "food_001", front: "밥 (bap)", back: "Rice / Meal", tag: "food" },
-  { id: "food_002", front: "물 (mul)", back: "Water", tag: "food" },
-  { id: "food_003", front: "커피 (keopi)", back: "Coffee", tag: "food" },
-];
-
-interface CardState {
-  id: string;
-  box: number;
-  due: string;
-  interval: number;
-  timesReviewed: number;
-  timesCorrect: number;
-  lastReviewDate: string;
-}
-
-interface UserState {
-  cardStates: Record<string, CardState>;
-  stats: {
-    totalXp: number;
-    level: number;
-    streak: number;
-    lastStudyDate: string;
-    highestStreak: number;
-    cardsStudiedToday: number;
-  };
-  settings: {
-    dailyGoal: number;
-    ttsEnabled: boolean;
-    autoPlayAudio: boolean;
-  };
-}
-
-const STORAGE_KEY = "goyo-progress-v1";
-
-function cleanKoreanText(text: string): string {
-  const match = text.match(/^([^\(]+)/);
-  return match ? match[1].trim() : text.trim();
-}
-
-function speakKorean(text: string) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "ko-KR";
-  utterance.rate = 0.9;
-  window.speechSynthesis.speak(utterance);
-}
-
-function StudySessionComponent({ queue, onGrade, onClose }: any) {
-  const [index, setIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
-  const [showRoman, setShowRoman] = useState(false);
-
-  const currentCard = queue[index];
-
-  useEffect(() => {
-    if (currentCard && !flipped) {
-      const timer = setTimeout(() => {
-        speakKorean(cleanKoreanText(currentCard.front));
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [index, currentCard, flipped]);
-
-  const handleGrade = (rating: "again" | "good" | "easy") => {
-    const isLastCard = index >= queue.length - 1;
-    onGrade(rating, currentCard.id);
-    
-    if (!isLastCard) {
-      setIndex(index + 1);
-      setFlipped(false);
-      setShowRoman(false);
-    } else {
-      onClose();
-    }
-  };
-
-  if (!currentCard) return null;
-
-  return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col">
-      <header className="p-4 flex items-center justify-between border-b">
-        <Button variant="ghost" size="icon" onClick={onClose}>
-          <X />
-        </Button>
-        <div className="flex-1 px-8">
-          <Progress value={(index / queue.length) * 100} className="h-2" />
-        </div>
-        <div className="text-sm font-medium text-slate-500">
-          {index + 1} / {queue.length}
-        </div>
-      </header>
-
-      <main className="flex-1 flex flex-col items-center justify-center p-6">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentCard.id + (flipped ? "-back" : "-front")}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="w-full max-w-md aspect-[3/4]"
-          >
-            <div 
-              className={`w-full h-full relative transition-transform duration-500 ${flipped ? "rotate-y-180" : ""}`}
-              style={{ transformStyle: "preserve-3d" }}
-              onClick={!flipped ? () => setFlipped(true) : undefined}
-            >
-              <div 
-                className="absolute inset-0 bg-white border-2 border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
-                style={{ backfaceVisibility: "hidden" }}
-              >
-                <Badge variant="outline" className="mb-8 capitalize text-slate-400 font-normal">
-                  {currentCard.tag}
-                </Badge>
-                <h2 className="text-5xl font-bold text-slate-900 mb-6">
-                  {cleanKoreanText(currentCard.front)}
-                </h2>
-                {showRoman && (
-                  <p className="text-xl text-slate-500 font-mono mb-8">
-                    {currentCard.front.match(/\(([^)]*)\)/)?.[1]}
-                  </p>
-                )}
-                <div className="flex gap-4 mt-8">
-                  <Button 
-                    variant="secondary" 
-                    size="icon" 
-                    className="rounded-full w-12 h-12"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      speakKorean(cleanKoreanText(currentCard.front));
-                    }}
-                  >
-                    <Volume2 size={20} />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-slate-400"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowRoman(!showRoman);
-                    }}
-                  >
-                    {showRoman ? "Hide" : "Show"} Romanization
-                  </Button>
-                </div>
-                {!flipped && (
-                  <div className="absolute bottom-12 text-slate-300 flex items-center gap-2 text-sm animate-pulse">
-                    Tap to reveal <ChevronRight size={16} />
-                  </div>
-                )}
-              </div>
-
-              <div 
-                className="absolute inset-0 bg-emerald-50 border-2 border-emerald-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
-                style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-              >
-                <Badge className="mb-8 bg-emerald-500">Meaning</Badge>
-                <h2 className="text-3xl font-bold text-slate-900 mb-6">
-                  {currentCard.back}
-                </h2>
-                {currentCard.example && (
-                  <div className="mt-4 p-4 bg-white/50 rounded-2xl border border-emerald-100 max-w-xs">
-                    <p className="text-sm text-slate-600 italic">"{currentCard.example}"</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </main>
-
-      <footer className="p-8 border-t bg-slate-50">
-        {!flipped ? (
-          <Button 
-            className="w-full h-16 rounded-2xl text-xl font-bold bg-slate-900 hover:bg-slate-800"
-            onClick={() => setFlipped(true)}
-          >
-            Reveal Answer
-          </Button>
-        ) : (
-          <div className="grid grid-cols-3 gap-4">
-            <Button 
-              variant="outline" 
-              className="h-20 flex flex-col gap-1 border-2 border-red-100 hover:bg-red-50 text-red-600 rounded-2xl"
-              onClick={() => handleGrade("again")}
-            >
-              <X size={20} />
-              <span className="font-bold">Again</span>
-            </Button>
-            <Button 
-              variant="outline" 
-              className="h-20 flex flex-col gap-1 border-2 border-emerald-100 hover:bg-emerald-50 text-emerald-600 rounded-2xl"
-              onClick={() => handleGrade("good")}
-            >
-              <Check size={20} />
-              <span className="font-bold">Good</span>
-            </Button>
-            <Button 
-              variant="outline" 
-              className="h-20 flex flex-col gap-1 border-2 border-blue-100 hover:bg-blue-50 text-blue-600 rounded-2xl"
-              onClick={() => handleGrade("easy")}
-            >
-              <Star size={20} />
-              <span className="font-bold">Easy</span>
-            </Button>
-          </div>
-        )}
-      </footer>
-    </div>
-  );
-}
+import { useStudyState } from "@/hooks/useStudyState";
+import { StudySession } from "@/components/StudySession";
+import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 
 export default function Home() {
-  const [state, setState] = useState<UserState | null>(null);
-  const [queue, setQueue] = useState<any[]>([]);
+  const { state, gradeCard } = useStudyState();
+  const [queue, setQueue] = useState<typeof VOCABULARY_DATA>([]);
   const [isStudying, setIsStudying] = useState(false);
   const [showBrowse, setShowBrowse] = useState(false);
   const [showStats, setShowStats] = useState(false);
-  const [sessionQueue, setSessionQueue] = useState<any[]>([]);
-
-  // Initialize state from localStorage
-  useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const today = new Date().toISOString().slice(0, 10);
-    
-    const initial: UserState = raw ? JSON.parse(raw) : {
-      cardStates: {},
-      stats: {
-        totalXp: 0,
-        level: 1,
-        streak: 0,
-        lastStudyDate: "",
-        highestStreak: 0,
-        cardsStudiedToday: 0
-      },
-      settings: {
-        dailyGoal: 10,
-        ttsEnabled: true,
-        autoPlayAudio: true
-      }
-    };
-
-    // Reset daily counter if it's a new day
-    if (initial.stats.lastStudyDate !== today) {
-      initial.stats.cardsStudiedToday = 0;
-    }
-
-    setState(initial);
-  }, []);
-
-  // Save state to localStorage whenever it changes
-  useEffect(() => {
-    if (state) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  }, [state]);
+  const [showSettings, setShowSettings] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   // Build queue of cards to study
   useEffect(() => {
     if (!state) return;
-    const today = new Date().toISOString().slice(0, 10);
-    
-    // Get cards that haven't been studied yet or are due for review
-    const newCards = VOCABULARY_DATA.filter(c => !state.cardStates[c.id]).slice(0, 10);
-    setQueue(newCards);
+
+    // Get cards that haven't been studied yet
+    const newCards = VOCABULARY_DATA.filter((c) => !state.cardStates[c.id]);
+    const dailyGoal = state.settings.dailyGoal;
+    const cardsToStudy = newCards.slice(0, dailyGoal);
+
+    setQueue(cardsToStudy);
   }, [state?.cardStates]);
 
-  // Handle grading a card
-  const handleGrade = (rating: "again" | "good" | "easy", cardId: string) => {
-    if (!state) return;
-    
+  const handleGrade = (cardId: string, rating: "again" | "good" | "easy") => {
+    gradeCard(cardId, rating);
+
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
-    const today = new Date().toISOString().slice(0, 10);
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-    
-    // Determine if streak should continue
-    const lastDate = state.stats.lastStudyDate;
-    let newStreak = state.stats.streak;
-    
-    if (lastDate === today) {
-      // Same day, streak continues
-      newStreak = state.stats.streak;
-    } else if (lastDate === yesterday) {
-      // Consecutive day, increment streak
-      newStreak = state.stats.streak + 1;
-    } else {
-      // Gap in streak, reset to 1
-      newStreak = 1;
-    }
-
-    // Update highest streak
-    const newHighestStreak = Math.max(state.stats.highestStreak, newStreak);
-
-    // Create card state entry
-    const newCardState: CardState = {
-      id: cardId,
-      box: rating === "easy" ? 2 : rating === "good" ? 1 : 0,
-      due: today,
-      interval: rating === "easy" ? 4 : rating === "good" ? 2 : 1,
-      timesReviewed: 1,
-      timesCorrect: rating === "again" ? 0 : 1,
-      lastReviewDate: today
-    };
-
-    const newState: UserState = {
-      ...state,
-      cardStates: {
-        ...state.cardStates,
-        [cardId]: newCardState
-      },
-      stats: {
-        totalXp: state.stats.totalXp + xpGain,
-        level: Math.floor(Math.sqrt((state.stats.totalXp + xpGain) / 100)) + 1,
-        lastStudyDate: today,
-        streak: newStreak,
-        highestStreak: newHighestStreak,
-        cardsStudiedToday: state.stats.cardsStudiedToday + 1
-      }
-    };
-
-    setState(newState);
-    
-    // Check if session is complete
-    if (state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
+    if (state && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
       setTimeout(() => {
         setIsStudying(false);
         toast.success("Daily goal reached! 🎉", {
-          description: `You've earned ${xpGain} XP and maintained your streak!`
+          description: `You've earned ${xpGain} XP and maintained your streak!`,
         });
       }, 300);
     }
   };
 
-  // Start study session
   const startSession = () => {
     if (queue.length === 0) {
-      toast.info("No cards available to study");
+      toast.info("No cards available to study today");
       return;
     }
-    setSessionQueue([...queue]);
     setIsStudying(true);
   };
 
   if (!state) return null;
 
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - state.stats.cardsStudiedToday);
+  const progressPercent = (state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100;
+  const filteredCards = selectedCategory
+    ? VOCABULARY_DATA.filter((c) => c.tag === selectedCategory)
+    : VOCABULARY_DATA;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white/50 backdrop-blur-sm sticky top-0 z-40">
-        <div className="max-w-2xl mx-auto px-4 py-6">
+      <header className="border-b border-slate-200 bg-white/60 backdrop-blur-md sticky top-0 z-40">
+        <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-4xl font-serif text-slate-900">고요</h1>
               <p className="text-sm text-slate-500">Stillness · Scientific Korean Practice</p>
             </div>
-            <div className="flex gap-4">
-              <div className="flex items-center gap-1 text-orange-500 font-bold">
-                <Flame size={20} fill="currentColor" />
-                <span>{state.stats.streak}</span>
+            <div className="flex gap-6 items-center">
+              <div className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-full border border-orange-100">
+                <Flame size={20} className="text-orange-500" fill="currentColor" />
+                <span className="font-bold text-orange-600">{state.stats.streak}</span>
               </div>
-              <div className="flex items-center gap-1 text-yellow-500 font-bold">
-                <Star size={20} fill="currentColor" />
-                <span>{state.stats.totalXp}</span>
+              <div className="flex items-center gap-2 bg-yellow-50 px-4 py-2 rounded-full border border-yellow-100">
+                <Star size={20} className="text-yellow-500" fill="currentColor" />
+                <span className="font-bold text-yellow-600">{state.stats.totalXp}</span>
               </div>
+              <Button variant="ghost" size="icon" onClick={() => setShowSettings(true)}>
+                <Settings size={20} />
+              </Button>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-2xl mx-auto px-4 py-8 space-y-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
         {/* Welcome Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <Card className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white border-none shadow-xl overflow-hidden relative">
             <div className="absolute top-0 right-0 p-8 opacity-10">
-              <Trophy size={120} />
+              <Trophy size={140} />
             </div>
             <CardHeader>
-              <CardTitle className="text-2xl font-serif">Ready to practice?</CardTitle>
-              <p className="text-emerald-50 opacity-90">
-                {cardsRemaining > 0 
-                  ? `${cardsRemaining} cards left for today's goal` 
+              <CardTitle className="text-3xl font-serif">Ready to practice?</CardTitle>
+              <p className="text-emerald-50 opacity-90 mt-2">
+                {cardsRemaining > 0
+                  ? `${cardsRemaining} cards left for today's goal`
                   : "Daily goal complete! Come back tomorrow."}
               </p>
             </CardHeader>
             <CardContent className="pt-4">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="w-full bg-white text-emerald-600 hover:bg-emerald-50 font-bold text-lg h-14 disabled:opacity-50"
                 onClick={startSession}
                 disabled={cardsRemaining <= 0}
               >
-                <Play className="mr-2 fill-current" />
+                <Play className="mr-2 fill-current" size={20} />
                 Start Daily Session
               </Button>
             </CardContent>
@@ -424,48 +125,89 @@ export default function Home() {
         </motion.div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-4">
-          <Card className="bg-white border-slate-100 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
-                <BookOpen size={16} />
-                Today's Progress
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-slate-900">
-                {state.stats.cardsStudiedToday}/{state.settings.dailyGoal}
-              </div>
-              <Progress value={(state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100} className="h-2 mt-2 bg-slate-100" />
-              <p className="text-xs text-slate-400 mt-2">
-                Cards studied today
-              </p>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <Card className="bg-white border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
+                  <BookOpen size={16} />
+                  Today's Progress
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-slate-900">
+                  {state.stats.cardsStudiedToday}/{state.settings.dailyGoal}
+                </div>
+                <Progress value={progressPercent} className="h-2 mt-3 bg-slate-100" />
+                <p className="text-xs text-slate-400 mt-2">Cards studied today</p>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-          <Card className="bg-white border-slate-100 shadow-sm">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
-                <Star size={16} />
-                Level {state.stats.level}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-slate-900">Expert</div>
-              <p className="text-xs text-slate-400 mt-2">
-                {100 - (state.stats.totalXp % 100)} XP to next level
-              </p>
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <Card className="bg-white border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
+                  <Zap size={16} />
+                  Level {state.stats.level}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-slate-900">Expert</div>
+                <p className="text-xs text-slate-400 mt-2">
+                  {100 - (state.stats.totalXp % 100)} XP to next level
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card className="bg-white border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
+                  <TrendingUp size={16} />
+                  Total Learned
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-slate-900">
+                  {state.stats.totalCardsLearned}
+                </div>
+                <p className="text-xs text-slate-400 mt-2">
+                  {Math.round((state.stats.totalCardsLearned / VOCABULARY_DATA.length) * 100)}% of deck
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
 
         {/* Quick Links */}
-        <div className="flex gap-4">
-          <Button variant="outline" className="flex-1 h-12 border-slate-200 text-slate-600" onClick={() => setShowBrowse(true)}>
+        <div className="grid grid-cols-2 gap-4">
+          <Button
+            variant="outline"
+            className="h-12 border-slate-200 text-slate-600 hover:bg-slate-50"
+            onClick={() => setShowBrowse(true)}
+          >
             <BookOpen className="mr-2" size={18} />
             Browse Deck
           </Button>
-          <Button variant="outline" className="flex-1 h-12 border-slate-200 text-slate-600" onClick={() => setShowStats(true)}>
+          <Button
+            variant="outline"
+            className="h-12 border-slate-200 text-slate-600 hover:bg-slate-50"
+            onClick={() => setShowStats(true)}
+          >
             <BarChart2 className="mr-2" size={18} />
             Full Stats
           </Button>
@@ -473,21 +215,32 @@ export default function Home() {
 
         {/* Categories */}
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-slate-500">Categories</h3>
-          <div className="flex flex-wrap gap-2">
-            {["survival", "daily", "numbers", "food"].map(tag => (
-              <Badge key={tag} variant="secondary" className="px-3 py-1 bg-slate-100 text-slate-600 capitalize">
-                {tag}
-              </Badge>
+          <h3 className="text-sm font-semibold text-slate-700">Categories</h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            {CATEGORIES.map((cat) => (
+              <motion.button
+                key={cat.id}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedCategory(selectedCategory === cat.id ? null : cat.id)}
+                className={`p-3 rounded-xl text-center transition-all ${
+                  selectedCategory === cat.id
+                    ? cat.color
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                <div className="text-lg mb-1">{cat.icon}</div>
+                <div className="text-xs font-medium">{cat.name}</div>
+              </motion.button>
             ))}
           </div>
         </div>
       </main>
 
       {/* Study Session Modal */}
-      {isStudying && sessionQueue.length > 0 && (
-        <StudySessionComponent 
-          queue={sessionQueue}
+      {isStudying && queue.length > 0 && (
+        <StudySession
+          queue={queue}
           onGrade={handleGrade}
           onClose={() => setIsStudying(false)}
         />
@@ -497,18 +250,34 @@ export default function Home() {
       <Dialog open={showBrowse} onOpenChange={setShowBrowse}>
         <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
           <DialogHeader>
-            <DialogTitle>Vocabulary Library</DialogTitle>
+            <DialogTitle>
+              {selectedCategory
+                ? `${CATEGORIES.find((c) => c.id === selectedCategory)?.name} Vocabulary`
+                : "Vocabulary Library"}
+            </DialogTitle>
           </DialogHeader>
           <ScrollArea className="flex-1 pr-4">
-            <div className="space-y-4">
-              {VOCABULARY_DATA.map(card => (
-                <div key={card.id} className="p-4 bg-white border rounded-xl flex justify-between items-center">
-                  <div>
-                    <div className="text-lg font-bold text-slate-900">{cleanKoreanText(card.front)}</div>
-                    <div className="text-sm text-slate-500">{card.back}</div>
+            <div className="space-y-3">
+              {filteredCards.map((card) => (
+                <motion.div
+                  key={card.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="p-4 bg-white border rounded-xl hover:border-emerald-200 hover:bg-emerald-50 transition-all"
+                >
+                  <div className="flex justify-between items-start gap-4">
+                    <div className="flex-1">
+                      <div className="text-lg font-bold text-slate-900">{card.front}</div>
+                      <div className="text-sm text-slate-500">{card.back}</div>
+                      {card.example && (
+                        <div className="text-xs text-slate-400 italic mt-2">"{card.example}"</div>
+                      )}
+                    </div>
+                    <Badge variant="secondary" className="capitalize whitespace-nowrap">
+                      {card.tag}
+                    </Badge>
                   </div>
-                  <Badge variant="secondary" className="capitalize">{card.tag}</Badge>
-                </div>
+                </motion.div>
               ))}
             </div>
           </ScrollArea>
@@ -517,26 +286,49 @@ export default function Home() {
 
       {/* Stats Dialog */}
       <Dialog open={showStats} onOpenChange={setShowStats}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Learning Statistics</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="p-4 bg-slate-50 rounded-xl">
-              <div className="text-sm text-slate-500">Total XP</div>
-              <div className="text-2xl font-bold">{state.stats.totalXp}</div>
+            <div className="p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl border border-yellow-200">
+              <div className="text-xs text-yellow-600 font-medium">Total XP</div>
+              <div className="text-3xl font-bold text-yellow-700">{state.stats.totalXp}</div>
             </div>
-            <div className="p-4 bg-slate-50 rounded-xl">
-              <div className="text-sm text-slate-500">Current Level</div>
-              <div className="text-2xl font-bold">{state.stats.level}</div>
+            <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border border-purple-200">
+              <div className="text-xs text-purple-600 font-medium">Current Level</div>
+              <div className="text-3xl font-bold text-purple-700">{state.stats.level}</div>
             </div>
-            <div className="p-4 bg-slate-50 rounded-xl">
-              <div className="text-sm text-slate-500">Longest Streak</div>
-              <div className="text-2xl font-bold">{state.stats.highestStreak} days</div>
+            <div className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200">
+              <div className="text-xs text-orange-600 font-medium">Longest Streak</div>
+              <div className="text-3xl font-bold text-orange-700">{state.stats.highestStreak}d</div>
             </div>
-            <div className="p-4 bg-slate-50 rounded-xl">
-              <div className="text-sm text-slate-500">Current Streak</div>
-              <div className="text-2xl font-bold">{state.stats.streak} days</div>
+            <div className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
+              <div className="text-xs text-emerald-600 font-medium">Current Streak</div>
+              <div className="text-3xl font-bold text-emerald-700">{state.stats.streak}d</div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Settings Dialog */}
+      <Dialog open={showSettings} onOpenChange={setShowSettings}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Settings</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <label className="text-sm font-medium text-slate-700">Daily Goal</label>
+              <div className="text-2xl font-bold text-emerald-600 mt-1">
+                {state.settings.dailyGoal} cards
+              </div>
+            </div>
+            <div className="border-t pt-4">
+              <label className="text-sm font-medium text-slate-700">Text-to-Speech</label>
+              <div className="text-sm text-slate-500 mt-1">
+                {state.settings.ttsEnabled ? "Enabled" : "Disabled"}
+              </div>
             </div>
           </div>
         </DialogContent>

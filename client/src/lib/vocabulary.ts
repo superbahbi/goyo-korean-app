@@ -1,0 +1,181 @@
+export interface VocabularyCard {
+  id: string;
+  front: string;
+  back: string;
+  romanization: string;
+  tag: string;
+  example: string;
+  difficulty: "beginner" | "intermediate" | "advanced";
+  partOfSpeech: string;
+}
+
+export const VOCABULARY_DATA: VocabularyCard[] = [
+  // Survival Phrases (10 cards)
+  { id: "surv_001", front: "안녕하세요", back: "Hello (polite/formal)", romanization: "annyeonghaseyo", tag: "survival", example: "안녕하세요, 저는 학생입니다.", difficulty: "beginner", partOfSpeech: "greeting" },
+  { id: "surv_002", front: "감사합니다", back: "Thank you (formal)", romanization: "gamsahamnida", tag: "survival", example: "도와주셔서 감사합니다.", difficulty: "beginner", partOfSpeech: "expression" },
+  { id: "surv_003", front: "죄송합니다", back: "I'm sorry / Excuse me", romanization: "joesonghamnida", tag: "survival", example: "늦어서 죄송합니다.", difficulty: "beginner", partOfSpeech: "expression" },
+  { id: "surv_004", front: "네", back: "Yes", romanization: "ne", tag: "survival", example: "네, 맞습니다.", difficulty: "beginner", partOfSpeech: "adverb" },
+  { id: "surv_005", front: "아니요", back: "No", romanization: "aniyo", tag: "survival", example: "아니요, 저는 학생이 아닙니다.", difficulty: "beginner", partOfSpeech: "adverb" },
+  { id: "surv_006", front: "모르겠습니다", back: "I don't know", romanization: "moreugessumnida", tag: "survival", example: "죄송하지만 모르겠습니다.", difficulty: "beginner", partOfSpeech: "expression" },
+  { id: "surv_007", front: "도와주세요", back: "Help me please", romanization: "dowajuseyo", tag: "survival", example: "영어를 도와주세요.", difficulty: "beginner", partOfSpeech: "expression" },
+  { id: "surv_008", front: "화장실은 어디입니까?", back: "Where is the bathroom?", romanization: "hwajangsilun eodiiimnikka", tag: "survival", example: "화장실은 어디입니까?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "surv_009", front: "얼마입니까?", back: "How much is it?", romanization: "eolmaiimnikka", tag: "survival", example: "이 책은 얼마입니까?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "surv_010", front: "영어를 합니다", back: "I speak English", romanization: "yeongeoreul hamnida", tag: "survival", example: "저는 영어를 합니다.", difficulty: "beginner", partOfSpeech: "verb" },
+
+  // Daily Conversation (15 cards)
+  { id: "daily_001", front: "만나서 반가워요", back: "Nice to meet you", romanization: "mannaseo bangawoyo", tag: "daily", example: "만나서 반가워요.", difficulty: "beginner", partOfSpeech: "expression" },
+  { id: "daily_002", front: "잘 지내요?", back: "How are you doing?", romanization: "jal jinaeyo", tag: "daily", example: "요즘 잘 지내요?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "daily_003", front: "좋아해요", back: "I like it", romanization: "joahaeyo", tag: "daily", example: "나는 한국 음식을 좋아해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "daily_004", front: "싫어해요", back: "I dislike it", romanization: "silheohaeyo", tag: "daily", example: "나는 매운 음식을 싫어해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "daily_005", front: "재미있어요", back: "It's fun/interesting", romanization: "jaemiisseowo", tag: "daily", example: "이 영화는 재미있어요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "daily_006", front: "지루해요", back: "It's boring", romanization: "jiruheyo", tag: "daily", example: "이 책은 지루해요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "daily_007", front: "피곤해요", back: "I'm tired", romanization: "pigonheyo", tag: "daily", example: "오늘 하루가 피곤해요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "daily_008", front: "행복해요", back: "I'm happy", romanization: "haengbokheyo", tag: "daily", example: "나는 행복해요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "daily_009", front: "슬퍼요", back: "I'm sad", romanization: "seulpeoyo", tag: "daily", example: "그 소식을 들으니 슬퍼요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "daily_010", front: "화났어요", back: "I'm angry", romanization: "hwanasseowo", tag: "daily", example: "나는 화났어요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "daily_011", front: "뭐 하고 있어요?", back: "What are you doing?", romanization: "mwo hago isseowo", tag: "daily", example: "지금 뭐 하고 있어요?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "daily_012", front: "뭘 먹고 싶어요?", back: "What do you want to eat?", romanization: "mwol meokgo sipeoyo", tag: "daily", example: "점심에 뭘 먹고 싶어요?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "daily_013", front: "어디 가고 싶어요?", back: "Where do you want to go?", romanization: "eodi gago sipeoyo", tag: "daily", example: "주말에 어디 가고 싶어요?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "daily_014", front: "뭐라고 했어요?", back: "What did you say?", romanization: "mworago haesseowo", tag: "daily", example: "죄송하지만 뭐라고 했어요?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "daily_015", front: "다시 말씀해 주세요", back: "Please say it again", romanization: "dasi malsseum hae juseyo", tag: "daily", example: "천천히 다시 말씀해 주세요.", difficulty: "beginner", partOfSpeech: "expression" },
+
+  // Numbers & Time (20 cards)
+  { id: "num_001", front: "하나", back: "One", romanization: "hana", tag: "numbers", example: "하나, 둘, 셋", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_002", front: "둘", back: "Two", romanization: "dul", tag: "numbers", example: "둘이 함께 갔어요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_003", front: "셋", back: "Three", romanization: "set", tag: "numbers", example: "셋이 모였어요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_004", front: "넷", back: "Four", romanization: "net", tag: "numbers", example: "넷은 너무 많아요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_005", front: "다섯", back: "Five", romanization: "daseot", tag: "numbers", example: "다섯 명이 왔어요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_006", front: "여섯", back: "Six", romanization: "yeoseot", tag: "numbers", example: "여섯 시간이 걸렸어요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_007", front: "일곱", back: "Seven", romanization: "ilgop", tag: "numbers", example: "일곱 살이 되었어요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_008", front: "여덟", back: "Eight", romanization: "yeodeol", tag: "numbers", example: "여덟 개를 샀어요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_009", front: "아홉", back: "Nine", romanization: "ahop", tag: "numbers", example: "아홉 번 했어요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_010", front: "열", back: "Ten", romanization: "yeol", tag: "numbers", example: "열 개를 주세요.", difficulty: "beginner", partOfSpeech: "number" },
+  { id: "num_011", front: "시간", back: "Hour", romanization: "sigan", tag: "numbers", example: "한 시간이 걸렸어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_012", front: "분", back: "Minute", romanization: "bun", tag: "numbers", example: "10분 기다려 주세요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_013", front: "초", back: "Second", romanization: "cho", tag: "numbers", example: "5초 기다려요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_014", front: "어제", back: "Yesterday", romanization: "eoje", tag: "numbers", example: "어제 뭐 했어요?", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_015", front: "오늘", back: "Today", romanization: "oneul", tag: "numbers", example: "오늘 날씨가 좋아요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_016", front: "내일", back: "Tomorrow", romanization: "naeil", tag: "numbers", example: "내일 만나요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_017", front: "아침", back: "Morning", romanization: "achim", tag: "numbers", example: "아침 7시에 일어나요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_018", front: "점심", back: "Lunch", romanization: "jeomshim", tag: "numbers", example: "점심 12시에 먹어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_019", front: "저녁", back: "Evening", romanization: "jeonyeok", tag: "numbers", example: "저녁 6시에 만나요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_020", front: "밤", back: "Night", romanization: "bam", tag: "numbers", example: "밤 10시에 자요.", difficulty: "beginner", partOfSpeech: "noun" },
+
+  // Food & Drinks (15 cards)
+  { id: "food_001", front: "밥", back: "Rice / Meal", romanization: "bap", tag: "food", example: "밥을 먹어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_002", front: "물", back: "Water", romanization: "mul", tag: "food", example: "물을 마셔요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_003", front: "커피", back: "Coffee", romanization: "keopi", tag: "food", example: "아침에 커피를 마셔요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_004", front: "차", back: "Tea", romanization: "cha", tag: "food", example: "녹차를 좋아해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_005", front: "우유", back: "Milk", romanization: "uyu", tag: "food", example: "우유를 마셔요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_006", front: "주스", back: "Juice", romanization: "juseu", tag: "food", example: "오렌지 주스를 마셔요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_007", front: "맥주", back: "Beer", romanization: "maekju", tag: "food", example: "저는 맥주를 안 마셔요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_008", front: "포도주", back: "Wine", romanization: "podoju", tag: "food", example: "빨간 포도주를 좋아해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_009", front: "김밥", back: "Kimbap (Korean sushi)", romanization: "gimbap", tag: "food", example: "김밥은 맛있어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_010", front: "비빔밥", back: "Bibimbap (mixed rice)", romanization: "bibimbap", tag: "food", example: "비빔밥을 먹고 싶어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_011", front: "국", back: "Soup", romanization: "guk", tag: "food", example: "미역국을 먹어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_012", front: "떡볶이", back: "Tteokbokki (spicy rice cakes)", romanization: "tteokbokki", tag: "food", example: "떡볶이는 매워요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_013", front: "만두", back: "Dumpling", romanization: "mandu", tag: "food", example: "만두를 먹어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_014", front: "고기", back: "Meat", romanization: "gogi", tag: "food", example: "소고기를 좋아해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "food_015", front: "생선", back: "Fish", romanization: "saengseon", tag: "food", example: "생선이 건강해요.", difficulty: "beginner", partOfSpeech: "noun" },
+
+  // Family & Relationships (12 cards)
+  { id: "fam_001", front: "엄마", back: "Mother", romanization: "eomma", tag: "family", example: "엄마를 사랑해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_002", front: "아빠", back: "Father", romanization: "appa", tag: "family", example: "아빠는 회사에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_003", front: "오빠", back: "Older brother (for females)", romanization: "oppa", tag: "family", example: "오빠가 도와줘요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_004", front: "언니", back: "Older sister (for females)", romanization: "eonni", tag: "family", example: "언니와 함께 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_005", front: "형", back: "Older brother (for males)", romanization: "hyeong", tag: "family", example: "형이 학교에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_006", front: "누나", back: "Older sister (for males)", romanization: "nuna", tag: "family", example: "누나를 만났어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_007", front: "남동생", back: "Younger brother", romanization: "namdongseang", tag: "family", example: "남동생이 학교에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_008", front: "여동생", back: "Younger sister", romanization: "yeodongseang", tag: "family", example: "여동생과 놀아요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_009", front: "할머니", back: "Grandmother", romanization: "halmeoni", tag: "family", example: "할머니는 착해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_010", front: "할아버지", back: "Grandfather", romanization: "harabeoji", tag: "family", example: "할아버지와 함께 있어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_011", front: "남편", back: "Husband", romanization: "nampyeon", tag: "family", example: "남편이 일을 해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_012", front: "아내", back: "Wife", romanization: "anae", tag: "family", example: "아내를 사랑해요.", difficulty: "beginner", partOfSpeech: "noun" },
+
+  // Emotions & Adjectives (15 cards)
+  { id: "emot_001", front: "사랑해요", back: "I love you", romanization: "saranghaeyo", tag: "emotions", example: "나는 너를 사랑해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_002", front: "미워해요", back: "I hate it", romanization: "miweohaeyo", tag: "emotions", example: "나는 거짓말을 미워해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_003", front: "두려워요", back: "I'm scared", romanization: "duryeowwoyo", tag: "emotions", example: "나는 높이를 두려워해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_004", front: "놀라워요", back: "I'm surprised", romanization: "nollawoyo", tag: "emotions", example: "그 소식에 놀라워요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_005", front: "부끄러워요", back: "I'm embarrassed", romanization: "bukkeureowoyo", tag: "emotions", example: "나는 부끄러워요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_006", front: "자랑스러워요", back: "I'm proud", romanization: "jarangseueowoyo", tag: "emotions", example: "나는 자랑스러워요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_007", front: "화가 나요", back: "I'm angry", romanization: "hwaga nayo", tag: "emotions", example: "나는 화가 나요.", difficulty: "beginner", partOfSpeech: "expression" },
+  { id: "emot_008", front: "기쁜데요", back: "I'm happy", romanization: "gippeundaeyo", tag: "emotions", example: "나는 기쁜데요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "emot_009", front: "슬픈데요", back: "I'm sad", romanization: "seulpeundaeyo", tag: "emotions", example: "나는 슬픈데요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "emot_010", front: "신나요", back: "I'm excited", romanization: "sinnayo", tag: "emotions", example: "나는 신나요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_011", front: "답답해요", back: "I'm frustrated", romanization: "dapdaphaeyo", tag: "emotions", example: "나는 답답해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_012", front: "외로워요", back: "I'm lonely", romanization: "oerowoyo", tag: "emotions", example: "나는 외로워요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_013", front: "편해요", back: "I'm comfortable", romanization: "pyeonhaeyo", tag: "emotions", example: "나는 편해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_014", front: "불편해요", back: "I'm uncomfortable", romanization: "bulpyeonhaeyo", tag: "emotions", example: "나는 불편해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_015", front: "감동했어요", back: "I was moved", romanization: "gamdonghaesseowo", tag: "emotions", example: "나는 감동했어요.", difficulty: "beginner", partOfSpeech: "verb" },
+
+  // Common Verbs (15 cards)
+  { id: "verb_001", front: "가요", back: "Go", romanization: "gayo", tag: "verbs", example: "나는 학교에 가요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_002", front: "와요", back: "Come", romanization: "wayo", tag: "verbs", example: "친구가 와요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_003", front: "먹어요", back: "Eat", romanization: "meogeoyo", tag: "verbs", example: "나는 밥을 먹어요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_004", front: "마셔요", back: "Drink", romanization: "mashewoyo", tag: "verbs", example: "나는 물을 마셔요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_005", front: "자요", back: "Sleep", romanization: "jayo", tag: "verbs", example: "나는 밤에 자요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_006", front: "일어나요", back: "Wake up", romanization: "ireonayo", tag: "verbs", example: "나는 아침 7시에 일어나요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_007", front: "공부해요", back: "Study", romanization: "gongbuhaeyo", tag: "verbs", example: "나는 한국어를 공부해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_008", front: "일해요", back: "Work", romanization: "ilhaeyo", tag: "verbs", example: "나는 회사에서 일해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_009", front: "놀아요", back: "Play", romanization: "noraayo", tag: "verbs", example: "아이들이 놀아요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_010", front: "읽어요", back: "Read", romanization: "ilgeoya", tag: "verbs", example: "나는 책을 읽어요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_011", front: "쓰세요", back: "Write", romanization: "sseusaeyo", tag: "verbs", example: "나는 편지를 써요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_012", front: "말해요", back: "Speak", romanization: "malhaeyo", tag: "verbs", example: "나는 한국어를 말해요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_013", front: "듣어요", back: "Listen", romanization: "deureoyo", tag: "verbs", example: "나는 음악을 들어요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_014", front: "봐요", back: "See/Watch", romanization: "bwayo", tag: "verbs", example: "나는 영화를 봐요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_015", front: "만나요", back: "Meet", romanization: "mannayo", tag: "verbs", example: "나는 친구를 만나요.", difficulty: "beginner", partOfSpeech: "verb" },
+
+  // Body Parts (12 cards)
+  { id: "body_001", front: "머리", back: "Head", romanization: "meori", tag: "body", example: "머리가 아파요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_002", front: "눈", back: "Eye", romanization: "nun", tag: "body", example: "눈이 크다.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_003", front: "코", back: "Nose", romanization: "ko", tag: "body", example: "코가 길다.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_004", front: "입", back: "Mouth", romanization: "ip", tag: "body", example: "입이 크다.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_005", front: "귀", back: "Ear", romanization: "gwi", tag: "body", example: "귀가 아파요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_006", front: "손", back: "Hand", romanization: "son", tag: "body", example: "손이 차가워요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_007", front: "발", back: "Foot", romanization: "bal", tag: "body", example: "발이 아파요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_008", front: "다리", back: "Leg", romanization: "dari", tag: "body", example: "다리가 길다.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_009", front: "팔", back: "Arm", romanization: "pal", tag: "body", example: "팔이 아파요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_010", front: "배", back: "Stomach", romanization: "bae", tag: "body", example: "배가 고파요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_011", front: "가슴", back: "Chest", romanization: "gaseum", tag: "body", example: "가슴이 아파요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "body_012", front: "등", back: "Back", romanization: "deung", tag: "body", example: "등이 아파요.", difficulty: "beginner", partOfSpeech: "noun" },
+
+  // Colors (10 cards)
+  { id: "color_001", front: "빨강", back: "Red", romanization: "ppalgap", tag: "colors", example: "빨간 사과를 좋아해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_002", front: "파랑", back: "Blue", romanization: "parang", tag: "colors", example: "파란 하늘이 아름다워요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_003", front: "노랑", back: "Yellow", romanization: "norang", tag: "colors", example: "노란 꽃이 예뻐요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_004", front: "초록", back: "Green", romanization: "chorok", tag: "colors", example: "초록 나무가 있어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_005", front: "검정", back: "Black", romanization: "geomjeong", tag: "colors", example: "검은 고양이를 봤어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_006", front: "하양", back: "White", romanization: "hayang", tag: "colors", example: "하얀 눈이 내려요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_007", front: "회색", back: "Gray", romanization: "hoesaek", tag: "colors", example: "회색 옷을 입어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_008", front: "주황", back: "Orange", romanization: "juhwang", tag: "colors", example: "주황 오렌지를 먹어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_009", front: "보라", back: "Purple", romanization: "bora", tag: "colors", example: "보라 포도를 좋아해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_010", front: "분홍", back: "Pink", romanization: "bunhong", tag: "colors", example: "분홍 꽃이 예뻐요.", difficulty: "beginner", partOfSpeech: "noun" },
+
+  // Places (12 cards)
+  { id: "place_001", front: "학교", back: "School", romanization: "hakgyo", tag: "places", example: "나는 학교에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_002", front: "회사", back: "Company", romanization: "hoesa", tag: "places", example: "아버지는 회사에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_003", front: "집", back: "House", romanization: "jip", tag: "places", example: "나는 집에 있어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_004", front: "병원", back: "Hospital", romanization: "byeongwon", tag: "places", example: "나는 병원에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_005", front: "은행", back: "Bank", romanization: "eunhaeng", tag: "places", example: "은행에 가서 돈을 찾아요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_006", front: "가게", back: "Store", romanization: "gage", tag: "places", example: "나는 가게에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_007", front: "공원", back: "Park", romanization: "gongwon", tag: "places", example: "나는 공원에서 놀아요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_008", front: "도서관", back: "Library", romanization: "doseogwan", tag: "places", example: "나는 도서관에서 책을 읽어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_009", front: "영화관", back: "Movie theater", romanization: "yeonghwagwan", tag: "places", example: "나는 영화관에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_010", front: "식당", back: "Restaurant", romanization: "sikdang", tag: "places", example: "우리는 식당에서 밥을 먹어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_011", front: "카페", back: "Cafe", romanization: "kape", tag: "places", example: "나는 카페에서 커피를 마셔요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "place_012", front: "역", back: "Station", romanization: "yeok", tag: "places", example: "나는 역에서 기차를 타요.", difficulty: "beginner", partOfSpeech: "noun" },
+];
+
+export const CATEGORIES = [
+  { id: "survival", name: "Survival", icon: "🆘", color: "bg-red-100 text-red-700" },
+  { id: "daily", name: "Daily", icon: "💬", color: "bg-blue-100 text-blue-700" },
+  { id: "numbers", name: "Numbers", icon: "🔢", color: "bg-yellow-100 text-yellow-700" },
+  { id: "food", name: "Food", icon: "🍜", color: "bg-orange-100 text-orange-700" },
+  { id: "family", name: "Family", icon: "👨‍👩‍👧‍👦", color: "bg-pink-100 text-pink-700" },
+  { id: "emotions", name: "Emotions", icon: "😊", color: "bg-purple-100 text-purple-700" },
+  { id: "verbs", name: "Verbs", icon: "⚡", color: "bg-green-100 text-green-700" },
+  { id: "body", name: "Body", icon: "💪", color: "bg-indigo-100 text-indigo-700" },
+  { id: "colors", name: "Colors", icon: "🎨", color: "bg-cyan-100 text-cyan-700" },
+  { id: "places", name: "Places", icon: "📍", color: "bg-lime-100 text-lime-700" },
+];
