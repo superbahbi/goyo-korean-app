@@ -33,9 +33,8 @@ export default function Home() {
     window.speechSynthesis.speak(utterance);
   };
 
-  const getRomanization = (text: string) => {
-    const match = text.match(/\(([^)]*)\)/);
-    return match ? match[1] : "";
+  const getRomanization = (card: typeof VOCABULARY_DATA[0]) => {
+    return card.romanization || "";
   };
 
   // Build queue of cards to study
@@ -280,7 +279,7 @@ export default function Home() {
             <div className="px-6 py-4 space-y-2">
               {filteredCards.length > 0 ? (
                 filteredCards.map((card) => {
-                  const romanization = getRomanization(card.front);
+                  const romanization = getRomanization(card);
                   const isShowingRoman = showRomanization[card.id];
                   return (
                     <motion.div
@@ -295,6 +294,7 @@ export default function Home() {
                           <div className="text-sm text-slate-600 font-medium">{card.back}</div>
                           {isShowingRoman && romanization && (
                             <div className="text-sm text-emerald-600 font-mono font-semibold mt-1">
+                              <span className="text-xs text-slate-500 mr-2">Romanization:</span>
                               {romanization}
                             </div>
                           )}
