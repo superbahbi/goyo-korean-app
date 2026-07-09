@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Volume2, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FlashCardProps {
   front: string;
@@ -57,6 +57,8 @@ export function FlashCard({
     return match ? match[1] : "";
   };
 
+  const romanization = getRomanization();
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -77,16 +79,21 @@ export function FlashCard({
           transition={{ duration: 0.3 }}
           className="absolute inset-0 bg-white border-2 border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
         >
-          <Badge variant="outline" className="mb-8 capitalize text-slate-400 font-normal">
+          <Badge variant="outline" className="mb-8 capitalize text-slate-500 font-medium bg-slate-50 border-slate-200">
             {tag}
           </Badge>
           <h2 className="text-5xl font-bold text-slate-900 mb-6">
             {cleanKoreanText(front)}
           </h2>
-          {showRoman && (
-            <p className="text-xl text-slate-500 font-mono mb-8">
-              {getRomanization()}
-            </p>
+          {showRoman && romanization && (
+            <motion.p
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="text-2xl text-emerald-600 font-mono font-semibold mb-8"
+            >
+              {romanization}
+            </motion.p>
           )}
           <div className="flex gap-4 mt-8">
             <Button
@@ -103,7 +110,7 @@ export function FlashCard({
             <Button
               variant="ghost"
               size="sm"
-              className="text-slate-400"
+              className="text-slate-500 hover:text-slate-700"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowRoman(!showRoman);
@@ -124,11 +131,11 @@ export function FlashCard({
           transition={{ duration: 0.3 }}
           className="absolute inset-0 bg-emerald-50 border-2 border-emerald-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
         >
-          <Badge className="mb-8 bg-emerald-500">Meaning</Badge>
+          <Badge className="mb-8 bg-emerald-500 text-white font-semibold">Meaning</Badge>
           <h2 className="text-3xl font-bold text-slate-900 mb-6">{back}</h2>
           {example && (
-            <div className="mt-4 p-4 bg-white/50 rounded-2xl border border-emerald-100 max-w-xs">
-              <p className="text-sm text-slate-600 italic">"{example}"</p>
+            <div className="mt-4 p-4 bg-white/70 rounded-2xl border border-emerald-200 max-w-xs">
+              <p className="text-sm text-slate-600 italic">\"{ example}\"</p>
             </div>
           )}
         </motion.div>
