@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useStudyState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
+import { AlphabetPractice } from "./AlphabetPractice";
 
 export default function Home() {
   const { state, gradeCard } = useStudyState();
@@ -19,6 +20,7 @@ export default function Home() {
   const [showBrowse, setShowBrowse] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showAlphabet, setShowAlphabet] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
 
@@ -215,6 +217,17 @@ export default function Home() {
           </motion.div>
         </div>
 
+        {/* Hangul Practice Button */}
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          onClick={() => setShowAlphabet(true)}
+          className="w-full mb-6 p-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-base hover:shadow-lg transition-all"
+        >
+          <div className="text-2xl mb-1">🔤</div>
+          Learn Hangul (Korean Alphabet)
+        </motion.button>
+
         {/* Quick Links */}
         <div className="grid grid-cols-2 gap-4">
           <Button
@@ -267,6 +280,11 @@ export default function Home() {
           onClose={() => setIsStudying(false)}
           allowRepeat={dailyGoalReached}
         />
+      )}
+
+      {/* Alphabet Practice Modal */}
+      {showAlphabet && (
+        <AlphabetPractice onClose={() => setShowAlphabet(false)} />
       )}
 
       {/* Browse Dialog */}
