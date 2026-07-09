@@ -248,19 +248,19 @@ export default function Home() {
 
       {/* Browse Dialog */}
       <Dialog open={showBrowse} onOpenChange={setShowBrowse}>
-        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
-          <DialogHeader className="px-6 py-4 border-b">
-            <DialogTitle className="text-2xl">
+        <DialogContent className="w-full max-w-2xl max-h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-200 flex-shrink-0">
+            <h2 className="text-2xl font-bold text-slate-900">
               {selectedCategory
                 ? `${CATEGORIES.find((c) => c.id === selectedCategory)?.name} Vocabulary`
                 : "Vocabulary Library"}
-            </DialogTitle>
+            </h2>
             <p className="text-sm text-slate-500 font-normal mt-1">
               {filteredCards.length} words
             </p>
-          </DialogHeader>
-          <ScrollArea className="flex-1">
-            <div className="space-y-2 p-6">
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            <div className="px-6 py-4 space-y-2">
               {filteredCards.length > 0 ? (
                 filteredCards.map((card) => (
                   <motion.div
@@ -289,7 +289,7 @@ export default function Home() {
                 </div>
               )}
             </div>
-          </ScrollArea>
+          </div>
         </DialogContent>
       </Dialog>
 
