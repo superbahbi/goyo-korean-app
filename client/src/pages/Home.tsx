@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap } from "lucide-react";
+import { Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useStudyState } from "@/hooks/useStudyState";
@@ -20,6 +20,23 @@ export default function Home() {
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
+
+  const speakKorean = (text: string) => {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const match = text.match(/^([^(]+)/);
+    const cleanText = match ? match[1].trim() : text;
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = "ko-KR";
+    utterance.rate = 0.9;
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const getRomanization = (text: string) => {
+    const match = text.match(/\(([^)]*)\)/);
+    return match ? match[1] : "";
+  };
 
   // Build queue of cards to study
   useEffect(() => {
@@ -262,27 +279,72 @@ export default function Home() {
           <div className="flex-1 overflow-y-auto">
             <div className="px-6 py-4 space-y-2">
               {filteredCards.length > 0 ? (
-                filteredCards.map((card) => (
-                  <motion.div
-                    key={card.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-4 bg-white border border-slate-100 rounded-xl hover:border-emerald-300 hover:bg-emerald-50 transition-all cursor-pointer"
-                  >
-                    <div className="flex justify-between items-start gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="text-lg font-bold text-slate-900">{card.front}</div>
-                        <div className="text-sm text-slate-600 font-medium">{card.back}</div>
-                        {card.example && (
-                          <div className="text-xs text-slate-500 italic mt-2 line-clamp-2">\"{ card.example}\"</div>
+                filteredCards.map((card) => {
+                  const romanization = getRomanization(card.front);
+                  const isShowingRoman = showRomanization[card.id];
+                  return (
+                    <motion.div
+                      key={card.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 bg-white border border-slate-100 rounded-xl hover:border-emerald-300 hover:bg-emerald-50 transition-all"
+                    >
+                      <div className="flex justify-between items-start gap-3 mb-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-lg font-bold text-slate-900">{card.front}</div>
+                          <div className="text-sm text-slate-600 font-medium">{card.back}</div>
+                          {isShowingRoman && romanization && (
+                            <div className="text-sm text-emerald-600 font-mono font-semibold mt-1">
+                              {romanization}
+                            </div>
+                          )}
+                          {card.example && (
+                            <div className="text-xs text-slate-500 italic mt-2 line-clamp-2">"{ card.example}"</div>
+                          )}
+                        </div>
+                        <Badge variant="secondary" className="capitalize whitespace-nowrap flex-shrink-0">
+                          {card.tag}
+                        </Badge>
+                      </div>
+                      <div className="flex gap-2 pt-2 border-t border-slate-100">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                          onClick={() => speakKorean(card.front)}
+                        >
+                          <Volume2 size={14} />
+                          Speak
+                        </Button>
+                        {romanization && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                            onClick={() =>
+                              setShowRomanization({
+                                ...showRomanization,
+                                [card.id]: !isShowingRoman,
+                              })
+                            }
+                          >
+                            {isShowingRoman ? (
+                              <>
+                                <EyeOff size={14} />
+                                Hide
+                              </>
+                            ) : (
+                              <>
+                                <Eye size={14} />
+                                Show
+                              </>
+                            )}
+                          </Button>
                         )}
                       </div>
-                      <Badge variant="secondary" className="capitalize whitespace-nowrap flex-shrink-0">
-                        {card.tag}
-                      </Badge>
-                    </div>
-                  </motion.div>
-                ))
+                    </motion.div>
+                  );
+                })
               ) : (
                 <div className="text-center py-12">
                   <p className="text-slate-500">No words in this category</p>
