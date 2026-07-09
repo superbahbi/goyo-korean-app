@@ -41,13 +41,19 @@ export default function Home() {
   useEffect(() => {
     if (!state) return;
 
-    // Get cards that haven't been studied yet
-    const newCards = VOCABULARY_DATA.filter((c) => !state.cardStates[c.id]);
     const dailyGoal = state.settings.dailyGoal;
-    const cardsToStudy = newCards.slice(0, dailyGoal);
-
-    setQueue(cardsToStudy);
-  }, [state?.cardStates]);
+    const cardsStudiedToday = state.stats.cardsStudiedToday;
+    
+    // If daily goal not reached, show only new cards
+    if (cardsStudiedToday < dailyGoal) {
+      const newCards = VOCABULARY_DATA.filter((c) => !state.cardStates[c.id]);
+      const cardsToStudy = newCards.slice(0, dailyGoal - cardsStudiedToday);
+      setQueue(cardsToStudy);
+    } else {
+      // Daily goal reached - allow repeating all cards for practice
+      setQueue(VOCABULARY_DATA);
+    }
+  }, [state?.cardStates, state?.stats.cardsStudiedToday]);
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy") => {
     gradeCard(cardId, rating);
@@ -55,7 +61,6 @@ export default function Home() {
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
     if (state && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
       setTimeout(() => {
-        setIsStudying(false);
         toast.success("Daily goal reached! 🎉", {
           description: `You've earned ${xpGain} XP and maintained your streak!`,
         });
@@ -260,7 +265,7 @@ export default function Home() {
           queue={queue}
           onGrade={handleGrade}
           onClose={() => setIsStudying(false)}
-          allowRepeat={state.stats.cardsStudiedToday >= state.settings.dailyGoal}
+          allowRepeat={dailyGoalReached}
         />
       )}
 
