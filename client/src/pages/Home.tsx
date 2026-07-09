@@ -30,6 +30,7 @@ interface CardState {
   interval: number;
   timesReviewed: number;
   timesCorrect: number;
+  lastReviewDate: string;
 }
 
 interface UserState {
@@ -40,6 +41,7 @@ interface UserState {
     streak: number;
     lastStudyDate: string;
     highestStreak: number;
+    cardsStudiedToday: number;
   };
   settings: {
     dailyGoal: number;
@@ -64,7 +66,7 @@ function speakKorean(text: string) {
   window.speechSynthesis.speak(utterance);
 }
 
-function StudySessionComponent({ queue, cardStates, onGrade, onClose }: any) {
+function StudySessionComponent({ queue, onGrade, onClose }: any) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [showRoman, setShowRoman] = useState(false);
@@ -81,8 +83,10 @@ function StudySessionComponent({ queue, cardStates, onGrade, onClose }: any) {
   }, [index, currentCard, flipped]);
 
   const handleGrade = (rating: "again" | "good" | "easy") => {
-    onGrade(rating);
-    if (index < queue.length - 1) {
+    const isLastCard = index >= queue.length - 1;
+    onGrade(rating, currentCard.id);
+    
+    if (!isLastCard) {
       setIndex(index + 1);
       setFlipped(false);
       setShowRoman(false);
@@ -234,9 +238,13 @@ export default function Home() {
   const [isStudying, setIsStudying] = useState(false);
   const [showBrowse, setShowBrowse] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [sessionQueue, setSessionQueue] = useState<any[]>([]);
 
+  // Initialize state from localStorage
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY);
+    const today = new Date().toISOString().slice(0, 10);
+    
     const initial: UserState = raw ? JSON.parse(raw) : {
       cardStates: {},
       stats: {
@@ -244,7 +252,8 @@ export default function Home() {
         level: 1,
         streak: 0,
         lastStudyDate: "",
-        highestStreak: 0
+        highestStreak: 0,
+        cardsStudiedToday: 0
       },
       settings: {
         dailyGoal: 10,
@@ -252,46 +261,109 @@ export default function Home() {
         autoPlayAudio: true
       }
     };
+
+    // Reset daily counter if it's a new day
+    if (initial.stats.lastStudyDate !== today) {
+      initial.stats.cardsStudiedToday = 0;
+    }
+
     setState(initial);
   }, []);
 
+  // Save state to localStorage whenever it changes
   useEffect(() => {
     if (state) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
+  // Build queue of cards to study
   useEffect(() => {
     if (!state) return;
     const today = new Date().toISOString().slice(0, 10);
+    
+    // Get cards that haven't been studied yet or are due for review
     const newCards = VOCABULARY_DATA.filter(c => !state.cardStates[c.id]).slice(0, 10);
     setQueue(newCards);
   }, [state?.cardStates]);
 
-  const handleGrade = (rating: "again" | "good" | "easy") => {
+  // Handle grading a card
+  const handleGrade = (rating: "again" | "good" | "easy", cardId: string) => {
     if (!state) return;
     
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
     const today = new Date().toISOString().slice(0, 10);
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
     
-    setState({
+    // Determine if streak should continue
+    const lastDate = state.stats.lastStudyDate;
+    let newStreak = state.stats.streak;
+    
+    if (lastDate === today) {
+      // Same day, streak continues
+      newStreak = state.stats.streak;
+    } else if (lastDate === yesterday) {
+      // Consecutive day, increment streak
+      newStreak = state.stats.streak + 1;
+    } else {
+      // Gap in streak, reset to 1
+      newStreak = 1;
+    }
+
+    // Update highest streak
+    const newHighestStreak = Math.max(state.stats.highestStreak, newStreak);
+
+    // Create card state entry
+    const newCardState: CardState = {
+      id: cardId,
+      box: rating === "easy" ? 2 : rating === "good" ? 1 : 0,
+      due: today,
+      interval: rating === "easy" ? 4 : rating === "good" ? 2 : 1,
+      timesReviewed: 1,
+      timesCorrect: rating === "again" ? 0 : 1,
+      lastReviewDate: today
+    };
+
+    const newState: UserState = {
       ...state,
+      cardStates: {
+        ...state.cardStates,
+        [cardId]: newCardState
+      },
       stats: {
-        ...state.stats,
         totalXp: state.stats.totalXp + xpGain,
         level: Math.floor(Math.sqrt((state.stats.totalXp + xpGain) / 100)) + 1,
         lastStudyDate: today,
-        streak: state.stats.lastStudyDate === today ? state.stats.streak : state.stats.streak + 1
+        streak: newStreak,
+        highestStreak: newHighestStreak,
+        cardsStudiedToday: state.stats.cardsStudiedToday + 1
       }
-    });
+    };
 
-    setQueue(prev => prev.slice(1));
+    setState(newState);
     
-    if (queue.length === 1) {
-      setIsStudying(false);
-      toast.success("Daily session complete! 🎉");
+    // Check if session is complete
+    if (state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
+      setTimeout(() => {
+        setIsStudying(false);
+        toast.success("Daily goal reached! 🎉", {
+          description: `You've earned ${xpGain} XP and maintained your streak!`
+        });
+      }, 300);
     }
   };
 
+  // Start study session
+  const startSession = () => {
+    if (queue.length === 0) {
+      toast.info("No cards available to study");
+      return;
+    }
+    setSessionQueue([...queue]);
+    setIsStudying(true);
+  };
+
   if (!state) return null;
+
+  const cardsRemaining = Math.max(0, state.settings.dailyGoal - state.stats.cardsStudiedToday);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
@@ -332,16 +404,17 @@ export default function Home() {
             <CardHeader>
               <CardTitle className="text-2xl font-serif">Ready to practice?</CardTitle>
               <p className="text-emerald-50 opacity-90">
-                {queue.length > 0 
-                  ? `You have ${queue.length} cards ready to learn.` 
-                  : "You're all caught up! Come back tomorrow."}
+                {cardsRemaining > 0 
+                  ? `${cardsRemaining} cards left for today's goal` 
+                  : "Daily goal complete! Come back tomorrow."}
               </p>
             </CardHeader>
             <CardContent className="pt-4">
               <Button 
                 size="lg" 
-                className="w-full bg-white text-emerald-600 hover:bg-emerald-50 font-bold text-lg h-14"
-                onClick={() => setIsStudying(true)}
+                className="w-full bg-white text-emerald-600 hover:bg-emerald-50 font-bold text-lg h-14 disabled:opacity-50"
+                onClick={startSession}
+                disabled={cardsRemaining <= 0}
               >
                 <Play className="mr-2 fill-current" />
                 Start Daily Session
@@ -356,16 +429,16 @@ export default function Home() {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
                 <BookOpen size={16} />
-                Overall Progress
+                Today's Progress
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-slate-900">
-                {Object.keys(state.cardStates).length}
+                {state.stats.cardsStudiedToday}/{state.settings.dailyGoal}
               </div>
-              <Progress value={Math.min(100, (Object.keys(state.cardStates).length / 10) * 100)} className="h-2 mt-2 bg-slate-100" />
+              <Progress value={(state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100} className="h-2 mt-2 bg-slate-100" />
               <p className="text-xs text-slate-400 mt-2">
-                Cards started
+                Cards studied today
               </p>
             </CardContent>
           </Card>
@@ -412,10 +485,9 @@ export default function Home() {
       </main>
 
       {/* Study Session Modal */}
-      {isStudying && queue.length > 0 && (
+      {isStudying && sessionQueue.length > 0 && (
         <StudySessionComponent 
-          queue={queue}
-          cardStates={state.cardStates}
+          queue={sessionQueue}
           onGrade={handleGrade}
           onClose={() => setIsStudying(false)}
         />
