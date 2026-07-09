@@ -1,4 +1,5 @@
 {
-  "buildCommand": "pnpm build",
-  "outputDirectory": "dist/public"
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/public",
+  "installCommand": "npm install"
 }
