@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -248,37 +248,46 @@ export default function Home() {
 
       {/* Browse Dialog */}
       <Dialog open={showBrowse} onOpenChange={setShowBrowse}>
-        <DialogContent className="max-w-2xl h-[80vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle>
+        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
+          <DialogHeader className="px-6 py-4 border-b">
+            <DialogTitle className="text-2xl">
               {selectedCategory
                 ? `${CATEGORIES.find((c) => c.id === selectedCategory)?.name} Vocabulary`
                 : "Vocabulary Library"}
             </DialogTitle>
+            <p className="text-sm text-slate-500 font-normal mt-1">
+              {filteredCards.length} words
+            </p>
           </DialogHeader>
-          <ScrollArea className="flex-1 pr-4">
-            <div className="space-y-3">
-              {filteredCards.map((card) => (
-                <motion.div
-                  key={card.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="p-4 bg-white border rounded-xl hover:border-emerald-200 hover:bg-emerald-50 transition-all"
-                >
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
-                      <div className="text-lg font-bold text-slate-900">{card.front}</div>
-                      <div className="text-sm text-slate-500">{card.back}</div>
-                      {card.example && (
-                        <div className="text-xs text-slate-400 italic mt-2">"{card.example}"</div>
-                      )}
+          <ScrollArea className="flex-1">
+            <div className="space-y-2 p-6">
+              {filteredCards.length > 0 ? (
+                filteredCards.map((card) => (
+                  <motion.div
+                    key={card.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-4 bg-white border border-slate-100 rounded-xl hover:border-emerald-300 hover:bg-emerald-50 transition-all cursor-pointer"
+                  >
+                    <div className="flex justify-between items-start gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-lg font-bold text-slate-900">{card.front}</div>
+                        <div className="text-sm text-slate-600 font-medium">{card.back}</div>
+                        {card.example && (
+                          <div className="text-xs text-slate-500 italic mt-2 line-clamp-2">\"{ card.example}\"</div>
+                        )}
+                      </div>
+                      <Badge variant="secondary" className="capitalize whitespace-nowrap flex-shrink-0">
+                        {card.tag}
+                      </Badge>
                     </div>
-                    <Badge variant="secondary" className="capitalize whitespace-nowrap">
-                      {card.tag}
-                    </Badge>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-slate-500">No words in this category</p>
+                </div>
+              )}
             </div>
           </ScrollArea>
         </DialogContent>
