@@ -10,9 +10,10 @@ interface StudySessionProps {
   queue: VocabularyCard[];
   onGrade: (cardId: string, rating: "again" | "good" | "easy") => void;
   onClose: () => void;
+  allowRepeat?: boolean;
 }
 
-export function StudySession({ queue, onGrade, onClose }: StudySessionProps) {
+export function StudySession({ queue, onGrade, onClose, allowRepeat = false }: StudySessionProps) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
@@ -24,6 +25,10 @@ export function StudySession({ queue, onGrade, onClose }: StudySessionProps) {
 
     if (!isLastCard) {
       setIndex(index + 1);
+      setFlipped(false);
+    } else if (allowRepeat) {
+      // Allow repeating the session
+      setIndex(0);
       setFlipped(false);
     } else {
       onClose();
@@ -44,6 +49,7 @@ export function StudySession({ queue, onGrade, onClose }: StudySessionProps) {
         </div>
         <div className="text-sm font-medium text-slate-500 min-w-[60px] text-right">
           {index + 1} / {queue.length}
+          {allowRepeat && <span className="text-xs text-emerald-600 block">Repeatable</span>}
         </div>
       </header>
 

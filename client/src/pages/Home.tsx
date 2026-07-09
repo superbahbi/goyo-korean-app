@@ -75,6 +75,7 @@ export default function Home() {
 
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - state.stats.cardsStudiedToday);
   const progressPercent = (state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100;
+  const dailyGoalReached = state.stats.cardsStudiedToday >= state.settings.dailyGoal;
   const filteredCards = selectedCategory
     ? VOCABULARY_DATA.filter((c) => c.tag === selectedCategory)
     : VOCABULARY_DATA;
@@ -259,6 +260,7 @@ export default function Home() {
           queue={queue}
           onGrade={handleGrade}
           onClose={() => setIsStudying(false)}
+          allowRepeat={state.stats.cardsStudiedToday >= state.settings.dailyGoal}
         />
       )}
 
