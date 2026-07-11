@@ -1,7 +1,6 @@
 /**
- * Google Translate TTS Service
- * Provides high-quality Korean text-to-speech using Google Translate's TTS API
- * No authentication required - works directly in the browser
+ * Korean Text-to-Speech Service
+ * Uses Web Speech API with fallback to alternative methods
  */
 
 export async function speakWithGoogleTTS(text: string, language: string = "ko"): Promise<void> {
@@ -11,58 +10,61 @@ export async function speakWithGoogleTTS(text: string, language: string = "ko"):
     
     if (!cleanText) return;
 
-    // Google Translate TTS endpoint
-    // This uses the public Google Translate TTS API
-    const encodedText = encodeURIComponent(cleanText);
-    const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${language}&client=tw-ob`;
-
-    // Create and play audio
-    const audio = new Audio(audioUrl);
-    audio.playbackRate = 0.9; // Slightly slower for learning
-    
-    // Stop any currently playing audio
-    const allAudio = document.querySelectorAll("audio");
-    allAudio.forEach((a) => {
-      if (a !== audio) {
-        a.pause();
-        a.currentTime = 0;
-      }
-    });
-
-    await audio.play();
+    // Use Web Speech API (most reliable for browser)
+    await speakWithWebSpeechAPI(cleanText, language);
   } catch (error) {
     console.error("TTS Error:", error);
-    // Fallback to Web Speech API if Google TTS fails
-    fallbackToWebSpeechAPI(text, language);
   }
 }
 
 /**
- * Fallback to Web Speech API if Google Translate TTS fails
+ * Web Speech API implementation
  */
-function fallbackToWebSpeechAPI(text: string, language: string): void {
-  if (!window.speechSynthesis) return;
+function speakWithWebSpeechAPI(text: string, language: string): Promise<void> {
+  return new Promise((resolve) => {
+    // Cancel any existing speech
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
 
-  window.speechSynthesis.cancel();
-  
-  const cleanText = text.replace(/\([^)]*\)/g, "").trim();
-  const utterance = new SpeechSynthesisUtterance(cleanText);
-  
-  utterance.lang = language === "ko" ? "ko-KR" : language;
-  utterance.rate = 0.9;
-  
-  window.speechSynthesis.speak(utterance);
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Set language
+    if (language === "ko") {
+      utterance.lang = "ko-KR";
+    } else {
+      utterance.lang = language;
+    }
+    
+    // Set speech parameters for learning
+    utterance.rate = 0.85; // Slower for clarity
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    
+    // Handle completion
+    utterance.onend = () => {
+      resolve();
+    };
+    
+    utterance.onerror = (event) => {
+      console.error("Speech synthesis error:", event.error);
+      resolve();
+    };
+    
+    // Speak the text
+    if (window.speechSynthesis) {
+      window.speechSynthesis.speak(utterance);
+    } else {
+      resolve();
+    }
+  });
 }
 
 /**
  * Stop any currently playing audio
  */
 export function stopAudio(): void {
-  window.speechSynthesis?.cancel();
-  
-  const allAudio = document.querySelectorAll("audio");
-  allAudio.forEach((audio) => {
-    audio.pause();
-    audio.currentTime = 0;
-  });
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
 }
