@@ -12,6 +12,7 @@ import { useStudyState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
+import { speakWithGoogleTTS } from "@/lib/googleTts";
 
 export default function Home() {
   const { state, gradeCard } = useStudyState();
@@ -23,16 +24,15 @@ export default function Home() {
   const [showAlphabet, setShowAlphabet] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const speakKorean = (text: string) => {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const match = text.match(/^([^(]+)/);
-    const cleanText = match ? match[1].trim() : text;
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = "ko-KR";
-    utterance.rate = 0.9;
-    window.speechSynthesis.speak(utterance);
+  const speakKorean = async (text: string) => {
+    setIsSpeaking(true);
+    try {
+      await speakWithGoogleTTS(text, "ko");
+    } finally {
+      setIsSpeaking(false);
+    }
   };
 
   const getRomanization = (card: typeof VOCABULARY_DATA[0]) => {
@@ -335,11 +335,12 @@ export default function Home() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                          disabled={isSpeaking}
+                          className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-50"
                           onClick={() => speakKorean(card.front)}
                         >
                           <Volume2 size={14} />
-                          Speak
+                          {isSpeaking ? "Playing..." : "Speak"}
                         </Button>
                         {romanization && (
                           <Button

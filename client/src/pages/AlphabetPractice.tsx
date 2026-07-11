@@ -5,6 +5,7 @@ import { ArrowLeft, Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { AlphabetCard } from "@/components/AlphabetCard";
 import { ALPHABET_DATA, ALPHABET_CATEGORIES, AlphabetCard as AlphabetCardType } from "@/lib/alphabet";
+import { speakWithGoogleTTS } from "@/lib/googleTts";
 
 interface AlphabetPracticeProps {
   onClose: () => void;
@@ -13,14 +14,19 @@ interface AlphabetPracticeProps {
 export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
   const [selectedType, setSelectedType] = useState<"consonants" | "vowels" | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const speakHangul = (text: string) => {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ko-KR";
-    utterance.rate = 0.8;
-    window.speechSynthesis.speak(utterance);
+  const handleSpeak = async (text: string) => {
+    setIsSpeaking(true);
+    try {
+      await speakHangul(text);
+    } finally {
+      setIsSpeaking(false);
+    }
+  };
+
+  const speakHangul = async (text: string) => {
+    await speakWithGoogleTTS(text, "ko");
   };
 
   if (!selectedType) {
@@ -165,14 +171,14 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
         <div className="max-w-2xl w-full">
           <AlphabetCard
             card={currentCard}
-            onSpeak={speakHangul}
+            onSpeak={handleSpeak}
           />
 
           {/* Navigation Buttons */}
           <div className="flex gap-4 mt-8 justify-center">
             <Button
               onClick={handlePrev}
-              disabled={currentIndex === 0}
+              disabled={currentIndex === 0 || isSpeaking}
               variant="outline"
               className="px-6 py-2 rounded-xl"
             >
@@ -180,7 +186,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
             </Button>
             <Button
               onClick={handleNext}
-              disabled={currentIndex === cards.length - 1}
+              disabled={currentIndex === cards.length - 1 || isSpeaking}
               className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl"
             >
               Next →
