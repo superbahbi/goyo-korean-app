@@ -24,6 +24,7 @@ async function loadAudioIndex(): Promise<AudioIndex> {
     const response = await fetch("/audio/index.json");
     if (!response.ok) throw new Error("Failed to load audio index");
     audioIndex = await response.json();
+    console.log("Audio index loaded:", audioIndex);
     return audioIndex;
   } catch (error) {
     console.error("Error loading audio index:", error);
@@ -36,6 +37,7 @@ async function loadAudioIndex(): Promise<AudioIndex> {
  */
 export async function playVocabularyAudio(wordId: string): Promise<void> {
   try {
+    console.log("Playing vocabulary audio for:", wordId);
     const index = await loadAudioIndex();
     const audioFile = index.vocabulary[wordId];
 
@@ -44,6 +46,7 @@ export async function playVocabularyAudio(wordId: string): Promise<void> {
       return;
     }
 
+    console.log("Audio file:", audioFile);
     await playAudioFile(`/audio/${audioFile}`);
   } catch (error) {
     console.error("Error playing vocabulary audio:", error);
@@ -58,6 +61,7 @@ export async function playAlphabetAudio(
   type: "consonant" | "vowel"
 ): Promise<void> {
   try {
+    console.log("Playing alphabet audio for:", characterId, type);
     const index = await loadAudioIndex();
     const audioFile =
       type === "consonant"
@@ -69,6 +73,7 @@ export async function playAlphabetAudio(
       return;
     }
 
+    console.log("Audio file:", audioFile);
     await playAudioFile(`/audio/${audioFile}`);
   } catch (error) {
     console.error("Error playing alphabet audio:", error);
@@ -78,9 +83,11 @@ export async function playAlphabetAudio(
 /**
  * Play an audio file from the given path
  */
-async function playAudioFile(audioPath: string): Promise<void> {
+function playAudioFile(audioPath: string): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
+      console.log("Playing audio from:", audioPath);
+
       // Stop any currently playing audio
       if (currentAudio) {
         currentAudio.pause();
@@ -88,26 +95,59 @@ async function playAudioFile(audioPath: string): Promise<void> {
       }
 
       // Create new audio element
-      currentAudio = new Audio(audioPath);
+      currentAudio = new Audio();
+      currentAudio.src = audioPath;
       currentAudio.playbackRate = 0.9; // Slightly slower for learning
+      currentAudio.volume = 1.0;
 
       // Handle completion
-      currentAudio.onended = () => {
+      const onEnded = () => {
+        console.log("Audio playback ended");
+        cleanup();
         resolve();
       };
 
       // Handle errors
-      currentAudio.onerror = (error) => {
-        console.error("Audio playback error:", error);
-        reject(error);
+      const onError = () => {
+        console.error("Audio playback error:", currentAudio?.error);
+        cleanup();
+        reject(new Error(`Failed to play audio: ${currentAudio?.error?.message}`));
       };
 
+      // Handle abort
+      const onAbort = () => {
+        console.log("Audio playback aborted");
+        cleanup();
+        reject(new Error("Audio playback aborted"));
+      };
+
+      const cleanup = () => {
+        if (currentAudio) {
+          currentAudio.removeEventListener("ended", onEnded);
+          currentAudio.removeEventListener("error", onError);
+          currentAudio.removeEventListener("abort", onAbort);
+        }
+      };
+
+      currentAudio.addEventListener("ended", onEnded);
+      currentAudio.addEventListener("error", onError);
+      currentAudio.addEventListener("abort", onAbort);
+
       // Play the audio
-      currentAudio.play().catch((error) => {
-        console.error("Failed to play audio:", error);
-        reject(error);
-      });
+      const playPromise = currentAudio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            console.log("Audio started playing");
+          })
+          .catch((error) => {
+            console.error("Failed to play audio:", error);
+            cleanup();
+            reject(error);
+          });
+      }
     } catch (error) {
+      console.error("Error in playAudioFile:", error);
       reject(error);
     }
   });
