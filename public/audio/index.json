@@ -1,0 +1,62 @@
+{
+  "vocabulary": {
+    "hello": "hello.mp3",
+    "thank_you": "thank_you.mp3",
+    "yes": "yes.mp3",
+    "no": "no.mp3",
+    "sorry": "sorry.mp3",
+    "excuse_me": "excuse_me.mp3",
+    "help": "help.mp3",
+    "bathroom": "bathroom.mp3",
+    "hospital": "hospital.mp3",
+    "police": "police.mp3",
+    "good_morning": "good_morning.mp3",
+    "good_night": "good_night.mp3",
+    "how_are_you": "how_are_you.mp3",
+    "nice_to_meet": "nice_to_meet.mp3",
+    "my_name": "my_name.mp3",
+    "one": "one.mp3",
+    "two": "two.mp3",
+    "three": "three.mp3",
+    "four": "four.mp3",
+    "five": "five.mp3",
+    "water": "water.mp3",
+    "rice": "rice.mp3",
+    "kimchi": "kimchi.mp3",
+    "soup": "soup.mp3",
+    "meat": "meat.mp3"
+  },
+  "alphabet": {
+    "consonants": {
+      "ga": "alphabet_ga.mp3",
+      "na": "alphabet_na.mp3",
+      "da": "alphabet_da.mp3",
+      "ra": "alphabet_ra.mp3",
+      "ma": "alphabet_ma.mp3",
+      "ba": "alphabet_ba.mp3",
+      "sa": "alphabet_sa.mp3",
+      "a_consonant": "alphabet_a_consonant.mp3",
+      "ja": "alphabet_ja.mp3",
+      "cha": "alphabet_cha.mp3",
+      "cha2": "alphabet_cha2.mp3",
+      "kha": "alphabet_kha.mp3",
+      "ta": "alphabet_ta.mp3",
+      "pha": "alphabet_pha.mp3",
+      "ha": "alphabet_ha.mp3"
+    },
+    "vowels": {
+      "a": "alphabet_a.mp3",
+      "ya": "alphabet_ya.mp3",
+      "eo": "alphabet_eo.mp3",
+      "yeo": "alphabet_yeo.mp3",
+      "o": "alphabet_o.mp3",
+      "yo": "alphabet_yo.mp3",
+      "u": "alphabet_u.mp3",
+      "yu": "alphabet_yu.mp3",
+      "eu": "alphabet_eu.mp3",
+      "i": "alphabet_i.mp3",
+      "ae": "alphabet_ae.mp3",
+      "e": "alphabet_e.mp3"
+    }
+  }
+}

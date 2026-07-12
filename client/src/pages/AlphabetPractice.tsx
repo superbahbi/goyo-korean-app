@@ -5,7 +5,7 @@ import { ArrowLeft, Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { AlphabetCard } from "@/components/AlphabetCard";
 import { ALPHABET_DATA, ALPHABET_CATEGORIES, AlphabetCard as AlphabetCardType } from "@/lib/alphabet";
-import { speakWithGoogleTTS } from "@/lib/googleTts";
+import { playAlphabetAudio } from "@/lib/audioPlayer";
 
 interface AlphabetPracticeProps {
   onClose: () => void;
@@ -25,8 +25,8 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     }
   };
 
-  const speakHangul = async (text: string) => {
-    await speakWithGoogleTTS(text, "ko");
+  const speakHangul = async (characterId: string, type: "consonant" | "vowel") => {
+    await playAlphabetAudio(characterId, type);
   };
 
   if (!selectedType) {

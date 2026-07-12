@@ -12,7 +12,7 @@ import { useStudyState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
-import { speakWithGoogleTTS } from "@/lib/googleTts";
+import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 
 export default function Home() {
   const { state, gradeCard } = useStudyState();
@@ -26,10 +26,10 @@ export default function Home() {
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const speakKorean = async (text: string) => {
+  const speakKorean = async (wordId: string) => {
     setIsSpeaking(true);
     try {
-      await speakWithGoogleTTS(text, "ko");
+      await playVocabularyAudio(wordId);
     } finally {
       setIsSpeaking(false);
     }
@@ -337,7 +337,7 @@ export default function Home() {
                           size="sm"
                           disabled={isSpeaking}
                           className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-50"
-                          onClick={() => speakKorean(card.front)}
+                          onClick={() => speakKorean(card.id)}
                         >
                           <Volume2 size={14} />
                           {isSpeaking ? "Playing..." : "Speak"}
