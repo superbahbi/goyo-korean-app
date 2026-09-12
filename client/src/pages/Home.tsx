@@ -26,10 +26,10 @@ export default function Home() {
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const speakKorean = async (wordId: string) => {
+  const speakKorean = async (wordId: string, fallbackText?: string) => {
     setIsSpeaking(true);
     try {
-      await playVocabularyAudio(wordId);
+      await playVocabularyAudio(wordId, fallbackText);
     } finally {
       setIsSpeaking(false);
     }
@@ -337,7 +337,7 @@ export default function Home() {
                           size="sm"
                           disabled={isSpeaking}
                           className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-50"
-                          onClick={() => speakKorean(card.id)}
+                          onClick={() => speakKorean(card.id, card.front)}
                         >
                           <Volume2 size={14} />
                           {isSpeaking ? "Playing..." : "Speak"}

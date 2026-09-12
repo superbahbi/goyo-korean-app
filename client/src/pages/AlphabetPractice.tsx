@@ -16,10 +16,10 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const handleSpeak = async (text: string) => {
+  const handleSpeak = async (characterId: string, type: "consonant" | "vowel") => {
     setIsSpeaking(true);
     try {
-      await speakHangul(text);
+      await speakHangul(characterId, type);
     } finally {
       setIsSpeaking(false);
     }
