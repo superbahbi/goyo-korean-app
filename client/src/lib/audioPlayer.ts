@@ -109,9 +109,7 @@ export async function playVocabularyAudio(wordId: string, fallbackText?: string)
     const audioFile = index.vocabulary[key];
 
     if (!audioFile) {
-      if (fallbackText) {
-        await speakWithBrowserFallback(fallbackText);
-      }
+      if (fallbackText) await speakWithBrowserFallback(fallbackText);
       return;
     }
 
