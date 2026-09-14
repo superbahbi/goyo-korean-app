@@ -105,8 +105,8 @@ function speakWithBrowserFallback(text: string): Promise<void> {
 export async function playVocabularyAudio(wordId: string, fallbackText?: string): Promise<void> {
   try {
     const index = await loadAudioIndex();
-    const key = vocabularyAudioAliases[wordId] ?? wordId;
-    const audioFile = index.vocabulary[key];
+    const legacyKey = vocabularyAudioAliases[wordId];
+    const audioFile = index.vocabulary[wordId] ?? (legacyKey ? index.vocabulary[legacyKey] : undefined);
 
     if (!audioFile) {
       if (fallbackText) await speakWithBrowserFallback(fallbackText);

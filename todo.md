@@ -1,14 +1,12 @@
-# Audio playback fix
+# Complete vocabulary audio
 
-- [x] Inspect the audio index keys and generated filenames.
-- [x] Inspect Browse Deck audio calls and vocabulary IDs.
-- [x] Inspect Hangul audio calls and alphabet IDs/types.
-- [x] Correct shared mapping or component integration without regressing daily lesson audio.
-- [x] Run type checking/build and verify the relevant UI flows.
-- [ ] Save a checkpoint and push the fix to the connected GitHub repository.
+- [x] Audit every vocabulary card against the current audio index.
+- [x] Generate a high-quality Korean MP3 for each missing vocabulary card.
+- [x] Add every generated file to the audio index using stable vocabulary IDs.
+- [x] Update lookup logic so all vocabulary cards resolve directly without aliases.
+- [x] Verify file existence, served URLs, type checking, and production build.
+- [ ] Save a checkpoint and push the completed audio library to GitHub.
 
-## Notes
+## Requirements
 
-- Daily lesson audio currently works.
-- Browse Deck and Hangul audio do not play.
-- Preserve score, XP, and existing study behavior.
+All vocabulary cards must have a Korean pronunciation file. Existing daily-session behavior, scores, XP, and alphabet audio must remain unchanged.
