@@ -1,12 +1,11 @@
-# Complete vocabulary audio
+# Active vocabulary audio state
 
-- [x] Audit every vocabulary card against the current audio index.
-- [x] Generate a high-quality Korean MP3 for each missing vocabulary card.
-- [x] Add every generated file to the audio index using stable vocabulary IDs.
-- [x] Update lookup logic so all vocabulary cards resolve directly without aliases.
-- [x] Verify file existence, served URLs, type checking, and production build.
-- [ ] Save a checkpoint and push the completed audio library to GitHub.
+- [x] Audit the current audio player API and Browse Deck card rendering.
+- [x] Add a reliable active-card playback state that resets on end, error, or stop.
+- [x] Add an accessible animated highlight and visible playing label.
+- [x] Verify reduced-motion behavior, type checking, production build, and responsive layout.
+- [ ] Save a checkpoint and push the enhancement to GitHub.
 
 ## Requirements
 
-All vocabulary cards must have a Korean pronunciation file. Existing daily-session behavior, scores, XP, and alphabet audio must remain unchanged.
+The effect must not change XP, scores, vocabulary data, or audio behavior. It should be visible on the card currently playing and remain readable on mobile.

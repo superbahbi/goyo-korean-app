@@ -25,13 +25,16 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [playingCardId, setPlayingCardId] = useState<string | null>(null);
 
   const speakKorean = async (wordId: string, fallbackText?: string) => {
     setIsSpeaking(true);
+    setPlayingCardId(wordId);
     try {
       await playVocabularyAudio(wordId, fallbackText);
     } finally {
       setIsSpeaking(false);
+      setPlayingCardId(null);
     }
   };
 
@@ -306,12 +309,18 @@ export default function Home() {
                 filteredCards.map((card) => {
                   const romanization = getRomanization(card);
                   const isShowingRoman = showRomanization[card.id];
+                  const isCardPlaying = playingCardId === card.id;
                   return (
                     <motion.div
                       key={card.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="p-4 bg-white border border-slate-100 rounded-xl hover:border-emerald-300 hover:bg-emerald-50 transition-all"
+                      aria-busy={isCardPlaying}
+                      className={`p-4 rounded-xl transition-all ${
+                        isCardPlaying
+                          ? "audio-card-playing border border-emerald-400 bg-emerald-50/80 ring-2 ring-emerald-200 shadow-lg shadow-emerald-100"
+                          : "bg-white border border-slate-100 hover:border-emerald-300 hover:bg-emerald-50"
+                      }`}
                     >
                       <div className="flex justify-between items-start gap-3 mb-3">
                         <div className="flex-1 min-w-0">
@@ -327,20 +336,33 @@ export default function Home() {
                             <div className="text-xs text-slate-500 italic mt-2 line-clamp-2">"{ card.example}"</div>
                           )}
                         </div>
-                        <Badge variant="secondary" className="capitalize whitespace-nowrap flex-shrink-0">
-                          {card.tag}
-                        </Badge>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          {isCardPlaying && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                              <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" aria-hidden="true" />
+                              Playing
+                            </span>
+                          )}
+                          <Badge variant="secondary" className="capitalize whitespace-nowrap">
+                            {card.tag}
+                          </Badge>
+                        </div>
                       </div>
                       <div className="flex gap-2 pt-2 border-t border-slate-100">
                         <Button
                           variant="ghost"
                           size="sm"
                           disabled={isSpeaking}
-                          className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100 disabled:opacity-50"
+                          className={`flex-1 h-8 text-xs gap-1 disabled:opacity-50 ${
+                            isCardPlaying
+                              ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                          }`}
                           onClick={() => speakKorean(card.id, card.front)}
+                          aria-label={isCardPlaying ? `Playing pronunciation for ${card.front}` : `Play pronunciation for ${card.front}`}
                         >
-                          <Volume2 size={14} />
-                          {isSpeaking ? "Playing..." : "Speak"}
+                          <Volume2 size={14} className={isCardPlaying ? "animate-pulse" : ""} />
+                          {isCardPlaying ? "Playing..." : "Speak"}
                         </Button>
                         {romanization && (
                           <Button

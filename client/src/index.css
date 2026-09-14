@@ -175,3 +175,24 @@
     }
   }
 }
+
+/* Goyo active-audio state: the playing card gets a calm jade glow without moving layout. */
+@keyframes goyo-audio-card-glow {
+  0%,
+  100% {
+    box-shadow: 0 10px 24px rgb(16 185 129 / 0.12), 0 0 0 2px rgb(110 231 183 / 0.5);
+  }
+  50% {
+    box-shadow: 0 14px 30px rgb(16 185 129 / 0.2), 0 0 0 4px rgb(110 231 183 / 0.28);
+  }
+}
+
+.audio-card-playing {
+  animation: goyo-audio-card-glow 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .audio-card-playing {
+    animation: none;
+  }
+}
