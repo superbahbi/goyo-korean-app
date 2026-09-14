@@ -1,11 +1,11 @@
-# Active vocabulary audio state
+# ElevenLabs Korean voice
 
-- [x] Audit the current audio player API and Browse Deck card rendering.
-- [x] Add a reliable active-card playback state that resets on end, error, or stop.
-- [x] Add an accessible animated highlight and visible playing label.
-- [x] Verify reduced-motion behavior, type checking, production build, and responsive layout.
-- [ ] Save a checkpoint and push the enhancement to GitHub.
+- [x] Confirm whether to use the ElevenLabs app connector or ElevenLabs API connector.
+- [x] Enable the selected connector or obtain the user's authorized connection.
+- [x] Generate and validate one Korean sample before bulk replacement.
+- [x] Generate the requested Korean audio set and update the indexed files.
+- [x] Verify playback and production build; GitHub sync is completed after the final checkpoint.
 
-## Requirements
+## Safety and quality
 
-The effect must not change XP, scores, vocabulary data, or audio behavior. It should be visible on the card currently playing and remain readable on mobile.
+Do not expose or echo API keys in chat or source files. Preserve the current audio library until the ElevenLabs output has been validated.

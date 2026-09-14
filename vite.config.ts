@@ -216,6 +216,9 @@ export default defineConfig({
   },
   envDir: path.resolve(import.meta.dirname),
   root: path.resolve(import.meta.dirname, "client"),
+  // Goyo keeps its large, GitHub-tracked pronunciation library in the project-level public directory.
+  // Serve that directory explicitly even though the Vite application root is client/.
+  publicDir: path.resolve(import.meta.dirname, "public"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
