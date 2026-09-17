@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-14T23:16:10.706Z",
-  "voiceId": "pNInz6obpgDQGcFmaJgB",
+  "generatedAt": "2026-09-17T23:15:20.096Z",
+  "voiceId": "ZJCNdZEjYwkOElxugmW2",
   "modelId": "eleven_multilingual_v2",
   "counts": {
-    "total": 163,
-    "generated": 163,
+    "total": 176,
+    "generated": 176,
     "skipped": 0,
     "failed": 0
   },
@@ -15,7 +15,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_001.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 13836
     },
     {
       "id": "body_002",
@@ -23,7 +23,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_002.mp3",
       "status": "generated",
-      "bytes": 17598
+      "bytes": 15926
     },
     {
       "id": "body_003",
@@ -31,7 +31,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_003.mp3",
       "status": "generated",
-      "bytes": 8403
+      "bytes": 12164
     },
     {
       "id": "body_004",
@@ -39,7 +39,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_004.mp3",
       "status": "generated",
-      "bytes": 7567
+      "bytes": 11328
     },
     {
       "id": "body_005",
@@ -47,7 +47,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_005.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 12164
     },
     {
       "id": "body_006",
@@ -55,7 +55,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_006.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 13000
     },
     {
       "id": "body_007",
@@ -63,7 +63,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_007.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 13836
     },
     {
       "id": "body_008",
@@ -71,7 +71,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_008.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 13836
     },
     {
       "id": "body_009",
@@ -79,7 +79,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_009.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 13000
     },
     {
       "id": "body_010",
@@ -95,7 +95,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_011.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 15090
     },
     {
       "id": "body_012",
@@ -103,7 +103,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_body_012.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 14254
     },
     {
       "id": "color_001",
@@ -111,7 +111,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_001.mp3",
       "status": "generated",
-      "bytes": 14254
+      "bytes": 16762
     },
     {
       "id": "color_002",
@@ -119,7 +119,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_002.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 14254
     },
     {
       "id": "color_003",
@@ -127,7 +127,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_003.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 15090
     },
     {
       "id": "color_004",
@@ -135,7 +135,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_004.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 14254
     },
     {
       "id": "color_005",
@@ -143,7 +143,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_005.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 16762
     },
     {
       "id": "color_006",
@@ -151,7 +151,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_006.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 13836
     },
     {
       "id": "color_007",
@@ -159,7 +159,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_007.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 22613
     },
     {
       "id": "color_008",
@@ -175,7 +175,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_009.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 13836
     },
     {
       "id": "color_010",
@@ -183,7 +183,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_color_010.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 15090
     },
     {
       "id": "daily_001",
@@ -199,7 +199,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_002.mp3",
       "status": "generated",
-      "bytes": 17598
+      "bytes": 18016
     },
     {
       "id": "daily_003",
@@ -207,7 +207,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_003.mp3",
       "status": "generated",
-      "bytes": 16762
+      "bytes": 18016
     },
     {
       "id": "daily_004",
@@ -223,7 +223,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_005.mp3",
       "status": "generated",
-      "bytes": 16762
+      "bytes": 18016
     },
     {
       "id": "daily_006",
@@ -231,7 +231,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_006.mp3",
       "status": "generated",
-      "bytes": 16762
+      "bytes": 18016
     },
     {
       "id": "daily_007",
@@ -239,7 +239,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_007.mp3",
       "status": "generated",
-      "bytes": 14254
+      "bytes": 17598
     },
     {
       "id": "daily_008",
@@ -247,7 +247,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_008.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 18016
     },
     {
       "id": "daily_009",
@@ -255,7 +255,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_009.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 17598
     },
     {
       "id": "daily_010",
@@ -263,7 +263,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_010.mp3",
       "status": "generated",
-      "bytes": 17598
+      "bytes": 18852
     },
     {
       "id": "daily_011",
@@ -271,7 +271,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_011.mp3",
       "status": "generated",
-      "bytes": 24285
+      "bytes": 20524
     },
     {
       "id": "daily_012",
@@ -279,7 +279,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_012.mp3",
       "status": "generated",
-      "bytes": 20942
+      "bytes": 22613
     },
     {
       "id": "daily_013",
@@ -287,7 +287,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_013.mp3",
       "status": "generated",
-      "bytes": 18852
+      "bytes": 22613
     },
     {
       "id": "daily_014",
@@ -295,7 +295,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_014.mp3",
       "status": "generated",
-      "bytes": 20524
+      "bytes": 19688
     },
     {
       "id": "daily_015",
@@ -303,7 +303,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_daily_015.mp3",
       "status": "generated",
-      "bytes": 21777
+      "bytes": 25539
     },
     {
       "id": "emot_001",
@@ -311,7 +311,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_001.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 18016
     },
     {
       "id": "emot_002",
@@ -319,7 +319,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_002.mp3",
       "status": "generated",
-      "bytes": 14254
+      "bytes": 18016
     },
     {
       "id": "emot_003",
@@ -327,7 +327,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_003.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 18016
     },
     {
       "id": "emot_004",
@@ -335,7 +335,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_004.mp3",
       "status": "generated",
-      "bytes": 18016
+      "bytes": 17598
     },
     {
       "id": "emot_005",
@@ -343,7 +343,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_005.mp3",
       "status": "generated",
-      "bytes": 18016
+      "bytes": 18852
     },
     {
       "id": "emot_006",
@@ -351,7 +351,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_006.mp3",
       "status": "generated",
-      "bytes": 20524
+      "bytes": 21777
     },
     {
       "id": "emot_007",
@@ -359,7 +359,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_007.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 18016
     },
     {
       "id": "emot_008",
@@ -367,7 +367,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_008.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 17598
     },
     {
       "id": "emot_009",
@@ -375,7 +375,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_009.mp3",
       "status": "generated",
-      "bytes": 16762
+      "bytes": 18852
     },
     {
       "id": "emot_010",
@@ -383,7 +383,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_010.mp3",
       "status": "generated",
-      "bytes": 14254
+      "bytes": 15926
     },
     {
       "id": "emot_011",
@@ -391,7 +391,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_011.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 17598
     },
     {
       "id": "emot_012",
@@ -399,7 +399,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_012.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 17598
     },
     {
       "id": "emot_013",
@@ -407,7 +407,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_013.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 17598
     },
     {
       "id": "emot_014",
@@ -415,7 +415,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_014.mp3",
       "status": "generated",
-      "bytes": 18852
+      "bytes": 19688
     },
     {
       "id": "emot_015",
@@ -423,7 +423,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_emot_015.mp3",
       "status": "generated",
-      "bytes": 18852
+      "bytes": 20942
     },
     {
       "id": "fam_001",
@@ -431,7 +431,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_001.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 13836
     },
     {
       "id": "fam_002",
@@ -439,7 +439,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_002.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 15090
     },
     {
       "id": "fam_003",
@@ -447,7 +447,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_003.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 13836
     },
     {
       "id": "fam_004",
@@ -455,7 +455,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_004.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 13836
     },
     {
       "id": "fam_005",
@@ -463,7 +463,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_005.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 13000
     },
     {
       "id": "fam_006",
@@ -471,7 +471,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_006.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 13000
     },
     {
       "id": "fam_007",
@@ -487,7 +487,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_008.mp3",
       "status": "generated",
-      "bytes": 16762
+      "bytes": 18016
     },
     {
       "id": "fam_009",
@@ -495,7 +495,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_009.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 15090
     },
     {
       "id": "fam_010",
@@ -503,7 +503,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_010.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 16762
     },
     {
       "id": "fam_011",
@@ -511,7 +511,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_011.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 15926
     },
     {
       "id": "fam_012",
@@ -519,7 +519,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_fam_012.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 13836
     },
     {
       "id": "food_001",
@@ -527,7 +527,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_001.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 13836
     },
     {
       "id": "food_002",
@@ -535,7 +535,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_002.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 13000
     },
     {
       "id": "food_003",
@@ -543,7 +543,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_003.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 15926
     },
     {
       "id": "food_004",
@@ -551,7 +551,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_004.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 12164
     },
     {
       "id": "food_005",
@@ -559,7 +559,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_005.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 13000
     },
     {
       "id": "food_006",
@@ -567,7 +567,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_006.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 16762
     },
     {
       "id": "food_007",
@@ -575,7 +575,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_007.mp3",
       "status": "generated",
-      "bytes": 14254
+      "bytes": 16762
     },
     {
       "id": "food_008",
@@ -583,7 +583,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_008.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 15926
     },
     {
       "id": "food_009",
@@ -599,7 +599,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_010.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 16762
     },
     {
       "id": "food_011",
@@ -607,7 +607,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_011.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 13836
     },
     {
       "id": "food_012",
@@ -615,7 +615,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_012.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 17598
     },
     {
       "id": "food_013",
@@ -623,7 +623,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_013.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 15090
     },
     {
       "id": "food_014",
@@ -631,7 +631,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_014.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 13836
     },
     {
       "id": "food_015",
@@ -639,7 +639,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_food_015.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 15926
     },
     {
       "id": "num_001",
@@ -647,7 +647,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_001.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 13000
     },
     {
       "id": "num_002",
@@ -655,7 +655,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_002.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 13836
     },
     {
       "id": "num_003",
@@ -663,7 +663,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_003.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 12164
     },
     {
       "id": "num_004",
@@ -679,7 +679,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_005.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 14254
     },
     {
       "id": "num_006",
@@ -687,7 +687,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_006.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 16762
     },
     {
       "id": "num_007",
@@ -695,7 +695,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_007.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 13836
     },
     {
       "id": "num_008",
@@ -711,7 +711,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_009.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 14254
     },
     {
       "id": "num_010",
@@ -719,7 +719,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_010.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 15090
     },
     {
       "id": "num_011",
@@ -727,7 +727,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_011.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 14254
     },
     {
       "id": "num_012",
@@ -735,7 +735,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_012.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 15090
     },
     {
       "id": "num_013",
@@ -743,7 +743,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_013.mp3",
       "status": "generated",
-      "bytes": 7567
+      "bytes": 11328
     },
     {
       "id": "num_014",
@@ -751,7 +751,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_014.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 13836
     },
     {
       "id": "num_015",
@@ -759,7 +759,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_015.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 14254
     },
     {
       "id": "num_016",
@@ -767,7 +767,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_016.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 15090
     },
     {
       "id": "num_017",
@@ -775,7 +775,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_017.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 14254
     },
     {
       "id": "num_018",
@@ -783,7 +783,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_018.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 16762
     },
     {
       "id": "num_019",
@@ -791,7 +791,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_019.mp3",
       "status": "generated",
-      "bytes": 15926
+      "bytes": 24703
     },
     {
       "id": "num_020",
@@ -799,7 +799,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_num_020.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 13836
     },
     {
       "id": "place_001",
@@ -815,7 +815,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_002.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 15090
     },
     {
       "id": "place_003",
@@ -823,7 +823,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_003.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 13836
     },
     {
       "id": "place_004",
@@ -831,7 +831,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_004.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 15926
     },
     {
       "id": "place_005",
@@ -839,7 +839,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_005.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 14254
     },
     {
       "id": "place_006",
@@ -847,7 +847,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_006.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 14254
     },
     {
       "id": "place_007",
@@ -855,7 +855,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_007.mp3",
       "status": "generated",
-      "bytes": 14254
+      "bytes": 21777
     },
     {
       "id": "place_008",
@@ -863,7 +863,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_008.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 16762
     },
     {
       "id": "place_009",
@@ -871,7 +871,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_009.mp3",
       "status": "generated",
-      "bytes": 21777
+      "bytes": 18852
     },
     {
       "id": "place_010",
@@ -879,7 +879,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_010.mp3",
       "status": "generated",
-      "bytes": 14254
+      "bytes": 15926
     },
     {
       "id": "place_011",
@@ -887,7 +887,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_011.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 13836
     },
     {
       "id": "place_012",
@@ -895,7 +895,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_place_012.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 13836
     },
     {
       "id": "surv_001",
@@ -903,7 +903,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_001.mp3",
       "status": "generated",
-      "bytes": 17598
+      "bytes": 18852
     },
     {
       "id": "surv_002",
@@ -919,7 +919,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_003.mp3",
       "status": "generated",
-      "bytes": 16762
+      "bytes": 18016
     },
     {
       "id": "surv_004",
@@ -927,7 +927,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_004.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 12164
     },
     {
       "id": "surv_005",
@@ -935,7 +935,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_005.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 14254
     },
     {
       "id": "surv_006",
@@ -943,7 +943,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_006.mp3",
       "status": "generated",
-      "bytes": 18852
+      "bytes": 19688
     },
     {
       "id": "surv_007",
@@ -951,7 +951,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_007.mp3",
       "status": "generated",
-      "bytes": 15090
+      "bytes": 18016
     },
     {
       "id": "surv_008",
@@ -959,7 +959,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_008.mp3",
       "status": "generated",
-      "bytes": 27211
+      "bytes": 27629
     },
     {
       "id": "surv_009",
@@ -967,7 +967,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_009.mp3",
       "status": "generated",
-      "bytes": 16762
+      "bytes": 18852
     },
     {
       "id": "surv_010",
@@ -975,7 +975,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_surv_010.mp3",
       "status": "generated",
-      "bytes": 24285
+      "bytes": 21777
     },
     {
       "id": "verb_001",
@@ -983,7 +983,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_001.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 14254
     },
     {
       "id": "verb_002",
@@ -999,7 +999,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_003.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 15926
     },
     {
       "id": "verb_004",
@@ -1007,7 +1007,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_004.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 16762
     },
     {
       "id": "verb_005",
@@ -1015,7 +1015,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_005.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 13836
     },
     {
       "id": "verb_006",
@@ -1023,7 +1023,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_006.mp3",
       "status": "generated",
-      "bytes": 14254
+      "bytes": 16762
     },
     {
       "id": "verb_007",
@@ -1031,7 +1031,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_007.mp3",
       "status": "generated",
-      "bytes": 16762
+      "bytes": 18852
     },
     {
       "id": "verb_008",
@@ -1039,7 +1039,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_008.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 15926
     },
     {
       "id": "verb_009",
@@ -1047,7 +1047,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_009.mp3",
       "status": "generated",
-      "bytes": 13836
+      "bytes": 15926
     },
     {
       "id": "verb_010",
@@ -1055,7 +1055,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_010.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 15090
     },
     {
       "id": "verb_011",
@@ -1063,7 +1063,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_011.mp3",
       "status": "generated",
-      "bytes": 12164
+      "bytes": 15926
     },
     {
       "id": "verb_012",
@@ -1071,7 +1071,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_012.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 14254
     },
     {
       "id": "verb_013",
@@ -1079,7 +1079,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_013.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 17598
     },
     {
       "id": "verb_014",
@@ -1087,7 +1087,7 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_014.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 14254
     },
     {
       "id": "verb_015",
@@ -1095,129 +1095,161 @@
       "group": "vocabulary",
       "filename": "elevenlabs_verb_015.mp3",
       "status": "generated",
-      "bytes": 13000
+      "bytes": 15926
     }
   ],
   "alphabet": [
     {
       "id": "cons_001",
-      "text": "가",
+      "text": "기역",
       "group": "alphabet",
       "filename": "elevenlabs_cons_001.mp3",
       "status": "generated",
-      "bytes": 7567
+      "bytes": 15090
     },
     {
       "id": "cons_002",
-      "text": "나",
+      "text": "니은",
       "group": "alphabet",
       "filename": "elevenlabs_cons_002.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 14254
     },
     {
       "id": "cons_003",
-      "text": "다",
+      "text": "디귿",
       "group": "alphabet",
       "filename": "elevenlabs_cons_003.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 15090
     },
     {
       "id": "cons_004",
-      "text": "라",
+      "text": "리을",
       "group": "alphabet",
       "filename": "elevenlabs_cons_004.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 18016
     },
     {
       "id": "cons_005",
-      "text": "마",
+      "text": "미음",
       "group": "alphabet",
       "filename": "elevenlabs_cons_005.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 15090
     },
     {
       "id": "cons_006",
-      "text": "바",
+      "text": "비읍",
       "group": "alphabet",
       "filename": "elevenlabs_cons_006.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 13000
     },
     {
       "id": "cons_007",
-      "text": "사",
+      "text": "시옷",
       "group": "alphabet",
       "filename": "elevenlabs_cons_007.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 14254
     },
     {
       "id": "cons_008",
-      "text": "아",
+      "text": "이응",
       "group": "alphabet",
       "filename": "elevenlabs_cons_008.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 15926
     },
     {
       "id": "cons_009",
-      "text": "자",
+      "text": "지읒",
       "group": "alphabet",
       "filename": "elevenlabs_cons_009.mp3",
       "status": "generated",
-      "bytes": 8403
+      "bytes": 14254
     },
     {
       "id": "cons_010",
-      "text": "짜",
+      "text": "치읓",
       "group": "alphabet",
       "filename": "elevenlabs_cons_010.mp3",
       "status": "generated",
-      "bytes": 10911
+      "bytes": 14254
     },
     {
       "id": "cons_011",
-      "text": "차",
+      "text": "키읔",
       "group": "alphabet",
       "filename": "elevenlabs_cons_011.mp3",
       "status": "generated",
-      "bytes": 11328
+      "bytes": 15926
     },
     {
       "id": "cons_012",
-      "text": "카",
+      "text": "티읕",
       "group": "alphabet",
       "filename": "elevenlabs_cons_012.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 13836
     },
     {
       "id": "cons_013",
-      "text": "타",
+      "text": "피읖",
       "group": "alphabet",
       "filename": "elevenlabs_cons_013.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 14254
     },
     {
       "id": "cons_014",
-      "text": "파",
+      "text": "히읗",
       "group": "alphabet",
       "filename": "elevenlabs_cons_014.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 13836
     },
     {
       "id": "cons_015",
-      "text": "하",
+      "text": "쌍기역",
       "group": "alphabet",
       "filename": "elevenlabs_cons_015.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 16762
+    },
+    {
+      "id": "cons_016",
+      "text": "쌍디귿",
+      "group": "alphabet",
+      "filename": "elevenlabs_cons_016.mp3",
+      "status": "generated",
+      "bytes": 17598
+    },
+    {
+      "id": "cons_017",
+      "text": "쌍비읍",
+      "group": "alphabet",
+      "filename": "elevenlabs_cons_017.mp3",
+      "status": "generated",
+      "bytes": 18016
+    },
+    {
+      "id": "cons_018",
+      "text": "쌍시옷",
+      "group": "alphabet",
+      "filename": "elevenlabs_cons_018.mp3",
+      "status": "generated",
+      "bytes": 18852
+    },
+    {
+      "id": "cons_019",
+      "text": "쌍지읒",
+      "group": "alphabet",
+      "filename": "elevenlabs_cons_019.mp3",
+      "status": "generated",
+      "bytes": 15926
     },
     {
       "id": "vowel_001",
@@ -1225,7 +1257,7 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_001.mp3",
       "status": "generated",
-      "bytes": 7149
+      "bytes": 10911
     },
     {
       "id": "vowel_002",
@@ -1233,7 +1265,7 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_002.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 12164
     },
     {
       "id": "vowel_003",
@@ -1241,7 +1273,7 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_003.mp3",
       "status": "generated",
-      "bytes": 9239
+      "bytes": 10911
     },
     {
       "id": "vowel_004",
@@ -1249,7 +1281,7 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_004.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 14254
     },
     {
       "id": "vowel_005",
@@ -1257,7 +1289,7 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_005.mp3",
       "status": "generated",
-      "bytes": 7567
+      "bytes": 10911
     },
     {
       "id": "vowel_006",
@@ -1265,7 +1297,7 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_006.mp3",
       "status": "generated",
-      "bytes": 7567
+      "bytes": 13836
     },
     {
       "id": "vowel_007",
@@ -1273,7 +1305,7 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_007.mp3",
       "status": "generated",
-      "bytes": 7567
+      "bytes": 10911
     },
     {
       "id": "vowel_008",
@@ -1281,11 +1313,11 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_008.mp3",
       "status": "generated",
-      "bytes": 10075
+      "bytes": 13836
     },
     {
       "id": "vowel_009",
-      "text": "은",
+      "text": "으",
       "group": "alphabet",
       "filename": "elevenlabs_vowel_009.mp3",
       "status": "generated",
@@ -1297,7 +1329,7 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_010.mp3",
       "status": "generated",
-      "bytes": 5477
+      "bytes": 11328
     },
     {
       "id": "vowel_011",
@@ -1305,15 +1337,87 @@
       "group": "alphabet",
       "filename": "elevenlabs_vowel_011.mp3",
       "status": "generated",
-      "bytes": 8403
+      "bytes": 13000
     },
     {
       "id": "vowel_012",
-      "text": "에",
+      "text": "얘",
       "group": "alphabet",
       "filename": "elevenlabs_vowel_012.mp3",
       "status": "generated",
-      "bytes": 8403
+      "bytes": 11328
+    },
+    {
+      "id": "vowel_013",
+      "text": "에",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_013.mp3",
+      "status": "generated",
+      "bytes": 10075
+    },
+    {
+      "id": "vowel_014",
+      "text": "예",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_014.mp3",
+      "status": "generated",
+      "bytes": 13836
+    },
+    {
+      "id": "vowel_015",
+      "text": "와",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_015.mp3",
+      "status": "generated",
+      "bytes": 10075
+    },
+    {
+      "id": "vowel_016",
+      "text": "왜",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_016.mp3",
+      "status": "generated",
+      "bytes": 11328
+    },
+    {
+      "id": "vowel_017",
+      "text": "외",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_017.mp3",
+      "status": "generated",
+      "bytes": 10911
+    },
+    {
+      "id": "vowel_018",
+      "text": "워",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_018.mp3",
+      "status": "generated",
+      "bytes": 13836
+    },
+    {
+      "id": "vowel_019",
+      "text": "웨",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_019.mp3",
+      "status": "generated",
+      "bytes": 13000
+    },
+    {
+      "id": "vowel_020",
+      "text": "위",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_020.mp3",
+      "status": "generated",
+      "bytes": 13000
+    },
+    {
+      "id": "vowel_021",
+      "text": "의",
+      "group": "alphabet",
+      "filename": "elevenlabs_vowel_021.mp3",
+      "status": "generated",
+      "bytes": 13000
     }
   ]
 }

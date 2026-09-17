@@ -8,7 +8,7 @@ const alphabetPath = path.join(projectRoot, "client", "src", "lib", "alphabet.ts
 const manifestPath = path.join(audioDir, "elevenlabs-manifest.json");
 
 const apiKey = process.env.ELEVENLABS_API_KEY;
-const voiceId = process.env.ELEVENLABS_VOICE_ID || "pNInz6obpgDQGcFmaJgB";
+const voiceId = process.env.ELEVENLABS_VOICE_ID || "ZJCNdZEjYwkOElxugmW2";
 const modelId = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
 const concurrency = Math.max(1, Math.min(5, Number(process.env.ELEVENLABS_CONCURRENCY || 3)));
 const force = process.argv.includes("--force");
@@ -27,9 +27,9 @@ const vocabulary = [...vocabularySource.matchAll(/\{ id: "([^"]+)", front: "([^"
   filename: `elevenlabs_${match[1]}.mp3`,
 }));
 
-const alphabet = [...alphabetSource.matchAll(/\{ id: "([^"]+)", hangul: "([^"]+)", romanization: "[^"]+", sound: "[^"]+", example: "([^"]+)/g)].map((match) => ({
+const alphabet = [...alphabetSource.matchAll(/\{ id: "([^"]+)", hangul: "([^"]+)", romanization: "[^"]+", sound: "[^"]+", ttsText: "([^"]+)"/g)].map((match) => ({
   id: match[1],
-  text: match[3].split(" ")[0],
+  text: match[3],
   group: "alphabet",
   filename: `elevenlabs_${match[1]}.mp3`,
 }));
