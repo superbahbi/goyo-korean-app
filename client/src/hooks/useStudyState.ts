@@ -27,6 +27,7 @@ export interface UserState {
     dailyGoal: number;
     ttsEnabled: boolean;
     autoPlayAudio: boolean;
+    audioSpeaker: "elevenlabs" | "system-female" | "system-male";
   };
 }
 
@@ -57,8 +58,15 @@ export function useStudyState() {
             dailyGoal: 10,
             ttsEnabled: true,
             autoPlayAudio: true,
+            audioSpeaker: "elevenlabs",
           },
         };
+
+    // Older saved progress did not include a speaker preference.
+    initial.settings = {
+      ...initial.settings,
+      audioSpeaker: initial.settings.audioSpeaker ?? "elevenlabs",
+    };
 
     // Reset daily counter if it's a new day
     if (initial.stats.lastStudyDate !== today) {

@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -12,10 +13,10 @@ import { useStudyState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
-import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
+import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
 export default function Home() {
-  const { state, gradeCard } = useStudyState();
+  const { state, gradeCard, updateSettings } = useStudyState();
   const [queue, setQueue] = useState<typeof VOCABULARY_DATA>([]);
   const [isStudying, setIsStudying] = useState(false);
   const [showBrowse, setShowBrowse] = useState(false);
@@ -26,6 +27,16 @@ export default function Home() {
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [playingCardId, setPlayingCardId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (state?.settings.audioSpeaker) setAudioSpeaker(state.settings.audioSpeaker);
+  }, [state?.settings.audioSpeaker]);
+
+  const handleSpeakerChange = (speaker: AudioSpeaker) => {
+    updateSettings({ audioSpeaker: speaker });
+    setAudioSpeaker(speaker);
+    toast.success("Speaker preference saved");
+  };
 
   const speakKorean = async (wordId: string, fallbackText?: string) => {
     setIsSpeaking(true);
@@ -448,6 +459,25 @@ export default function Home() {
               <div className="text-sm text-slate-500 mt-1">
                 {state.settings.ttsEnabled ? "Enabled" : "Disabled"}
               </div>
+            </div>
+            <div className="border-t pt-4 space-y-2">
+              <label className="text-sm font-medium text-slate-700" htmlFor="audio-speaker">Korean speaker</label>
+              <Select
+                value={state.settings.audioSpeaker}
+                onValueChange={(value) => handleSpeakerChange(value as AudioSpeaker)}
+              >
+                <SelectTrigger id="audio-speaker" className="w-full bg-white">
+                  <SelectValue placeholder="Choose a speaker" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="elevenlabs">Goyo Premium · ElevenLabs</SelectItem>
+                  <SelectItem value="system-female">System Korean · Feminine when available</SelectItem>
+                  <SelectItem value="system-male">System Korean · Masculine when available</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs leading-relaxed text-slate-500">
+                Premium recordings are the default. Alternate speakers use your device&apos;s Korean voice when available.
+              </p>
             </div>
           </div>
         </DialogContent>

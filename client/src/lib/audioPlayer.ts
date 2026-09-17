@@ -16,6 +16,8 @@ interface AudioIndex {
 
 let audioIndex: AudioIndex | null = null;
 let currentAudio: HTMLAudioElement | null = null;
+export type AudioSpeaker = "elevenlabs" | "system-female" | "system-male";
+let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
 const vocabularyAudioAliases: Record<string, string> = {
   surv_001: "hello",
@@ -93,6 +95,15 @@ function speakWithBrowserFallback(text: string): Promise<void> {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "ko-KR";
+    const koreanVoices = window.speechSynthesis
+      .getVoices()
+      .filter((voice) => voice.lang.toLowerCase().startsWith("ko"));
+    if (koreanVoices.length > 0) {
+      const preferredGender = selectedSpeaker === "system-female"
+        ? /female|woman|여성|여자/i
+        : /male|man|남성|남자/i;
+      utterance.voice = koreanVoices.find((voice) => preferredGender.test(voice.name)) ?? koreanVoices[0];
+    }
     utterance.rate = 0.88;
     utterance.pitch = 1;
     utterance.volume = 1;
@@ -104,6 +115,10 @@ function speakWithBrowserFallback(text: string): Promise<void> {
 
 export async function playVocabularyAudio(wordId: string, fallbackText?: string): Promise<void> {
   try {
+    if (selectedSpeaker !== "elevenlabs") {
+      if (fallbackText) await speakWithBrowserFallback(fallbackText);
+      return;
+    }
     const index = await loadAudioIndex();
     const legacyKey = vocabularyAudioAliases[wordId];
     const audioFile = index.vocabulary[wordId] ?? (legacyKey ? index.vocabulary[legacyKey] : undefined);
@@ -131,6 +146,13 @@ export async function playAlphabetAudio(
   type: "consonant" | "vowel"
 ): Promise<void> {
   try {
+    if (selectedSpeaker !== "elevenlabs") {
+      const character = type === "consonant"
+        ? consonantAudioAliases[characterId] ?? characterId
+        : vowelAudioAliases[characterId] ?? characterId;
+      await speakWithBrowserFallback(character);
+      return;
+    }
     const index = await loadAudioIndex();
     const aliases = type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
     const key = aliases[characterId] ?? characterId;
@@ -209,4 +231,13 @@ export function isAudioPlaying(): boolean {
 
 export function resetAudioIndex(): void {
   audioIndex = null;
+}
+
+export function setAudioSpeaker(speaker: AudioSpeaker): void {
+  selectedSpeaker = speaker;
+  stopAudio();
+}
+
+export function getAudioSpeaker(): AudioSpeaker {
+  return selectedSpeaker;
 }
