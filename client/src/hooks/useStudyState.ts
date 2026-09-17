@@ -27,7 +27,7 @@ export interface UserState {
     dailyGoal: number;
     ttsEnabled: boolean;
     autoPlayAudio: boolean;
-    audioSpeaker: "elevenlabs" | "system-female" | "system-male";
+    audioSpeaker: "elevenlabs" | "elevenlabs-female" | "system-female" | "system-male";
   };
 }
 

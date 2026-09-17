@@ -469,14 +469,15 @@ export default function Home() {
                 <SelectTrigger id="audio-speaker" className="w-full bg-white">
                   <SelectValue placeholder="Choose a speaker" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="elevenlabs">Goyo Premium · ElevenLabs</SelectItem>
+                  <SelectContent>
+                  <SelectItem value="elevenlabs">Hyuk · Cold &amp; Clear</SelectItem>
+                  <SelectItem value="elevenlabs-female">Jini · Warm &amp; Intelligent</SelectItem>
                   <SelectItem value="system-female">System Korean · Feminine when available</SelectItem>
                   <SelectItem value="system-male">System Korean · Masculine when available</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs leading-relaxed text-slate-500">
-                Premium recordings are the default. Alternate speakers use your device&apos;s Korean voice when available.
+                Premium recordings use ElevenLabs. Choose Jini for a warm female Korean voice, or use a system voice when available.
               </p>
             </div>
           </div>

@@ -5,7 +5,8 @@ const projectRoot = path.resolve(process.argv[2] ?? process.cwd());
 const audioDir = path.join(projectRoot, "public", "audio");
 const vocabularyPath = path.join(projectRoot, "client", "src", "lib", "vocabulary.ts");
 const alphabetPath = path.join(projectRoot, "client", "src", "lib", "alphabet.ts");
-const manifestPath = path.join(audioDir, "elevenlabs-manifest.json");
+const filePrefix = process.env.ELEVENLABS_FILE_PREFIX || "elevenlabs_";
+const manifestPath = path.join(audioDir, process.env.ELEVENLABS_MANIFEST_NAME || "elevenlabs-manifest.json");
 
 const apiKey = process.env.ELEVENLABS_API_KEY;
 const voiceId = process.env.ELEVENLABS_VOICE_ID || "ZJCNdZEjYwkOElxugmW2";
@@ -24,14 +25,14 @@ const vocabulary = [...vocabularySource.matchAll(/\{ id: "([^"]+)", front: "([^"
   id: match[1],
   text: match[2],
   group: "vocabulary",
-  filename: `elevenlabs_${match[1]}.mp3`,
+  filename: `${filePrefix}${match[1]}.mp3`,
 }));
 
 const alphabet = [...alphabetSource.matchAll(/\{ id: "([^"]+)", hangul: "([^"]+)", romanization: "[^"]+", sound: "[^"]+", ttsText: "([^"]+)"/g)].map((match) => ({
   id: match[1],
   text: match[3],
   group: "alphabet",
-  filename: `elevenlabs_${match[1]}.mp3`,
+  filename: `${filePrefix}${match[1]}.mp3`,
 }));
 
 const items = [...vocabulary, ...alphabet];

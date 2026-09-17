@@ -8,6 +8,13 @@
 
 interface AudioIndex {
   vocabulary: Record<string, string>;
+  female?: {
+    vocabulary: Record<string, string>;
+    alphabet: {
+      consonants: Record<string, string>;
+      vowels: Record<string, string>;
+    };
+  };
   alphabet: {
     consonants: Record<string, string>;
     vowels: Record<string, string>;
@@ -16,7 +23,7 @@ interface AudioIndex {
 
 let audioIndex: AudioIndex | null = null;
 let currentAudio: HTMLAudioElement | null = null;
-export type AudioSpeaker = "elevenlabs" | "system-female" | "system-male";
+export type AudioSpeaker = "elevenlabs" | "elevenlabs-female" | "system-female" | "system-male";
 let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
 const vocabularyAudioAliases: Record<string, string> = {
@@ -115,13 +122,14 @@ function speakWithBrowserFallback(text: string): Promise<void> {
 
 export async function playVocabularyAudio(wordId: string, fallbackText?: string): Promise<void> {
   try {
-    if (selectedSpeaker !== "elevenlabs") {
+    if (selectedSpeaker !== "elevenlabs" && selectedSpeaker !== "elevenlabs-female") {
       if (fallbackText) await speakWithBrowserFallback(fallbackText);
       return;
     }
     const index = await loadAudioIndex();
     const legacyKey = vocabularyAudioAliases[wordId];
-    const audioFile = index.vocabulary[wordId] ?? (legacyKey ? index.vocabulary[legacyKey] : undefined);
+    const vocabularyIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.vocabulary : index.vocabulary;
+    const audioFile = vocabularyIndex?.[wordId] ?? (legacyKey ? vocabularyIndex?.[legacyKey] : undefined);
 
     if (!audioFile) {
       if (fallbackText) await speakWithBrowserFallback(fallbackText);
@@ -146,7 +154,7 @@ export async function playAlphabetAudio(
   type: "consonant" | "vowel"
 ): Promise<void> {
   try {
-    if (selectedSpeaker !== "elevenlabs") {
+    if (selectedSpeaker !== "elevenlabs" && selectedSpeaker !== "elevenlabs-female") {
       const character = type === "consonant"
         ? consonantAudioAliases[characterId] ?? characterId
         : vowelAudioAliases[characterId] ?? characterId;
@@ -156,7 +164,9 @@ export async function playAlphabetAudio(
     const index = await loadAudioIndex();
     const aliases = type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
     const key = aliases[characterId] ?? characterId;
-    const files = type === "consonant" ? index.alphabet.consonants : index.alphabet.vowels;
+    const alphabetIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.alphabet : index.alphabet;
+    const files = type === "consonant" ? alphabetIndex?.consonants : alphabetIndex?.vowels;
+    if (!files) throw new Error("Female premium audio index is unavailable");
     const audioFile = files[key];
 
     if (!audioFile) {
