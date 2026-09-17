@@ -7,7 +7,7 @@ const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voic
   method: "POST",
   headers: { "xi-api-key": apiKey, "content-type": "application/json", accept: "audio/mpeg" },
   body: JSON.stringify({
-    text: "Speak Korean clearly. Say 넷 as the number four, with a short clipped final t sound, not an s sound: 넷.",
+    text: "넷",
     model_id: "eleven_multilingual_v2",
     language_code: "ko",
     voice_settings: { stability: 0.62, similarity_boost: 0.82, style: 0.1, use_speaker_boost: true },

@@ -1,0 +1,12 @@
+import { readFile, stat, writeFile } from "node:fs/promises";
+const path = "/home/ubuntu/goyo-korean-app/public/audio/elevenlabs-manifest.json";
+const manifest = JSON.parse(await readFile(path, "utf8"));
+const bytes = (await stat("/home/ubuntu/goyo-korean-app/public/audio/elevenlabs_num_004.mp3")).size;
+const item = manifest.vocabulary.find((entry) => entry.id === "num_004");
+if (!item) throw new Error("num_004 is missing from the manifest");
+item.text = "넷";
+item.bytes = bytes;
+item.status = "generated";
+manifest.generatedAt = new Date().toISOString();
+await writeFile(path, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+console.log({ id: item.id, bytes: item.bytes, text: item.text });
