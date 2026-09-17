@@ -4,19 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { AlphabetCard } from "@/components/AlphabetCard";
-import { ALPHABET_DATA, ALPHABET_CATEGORIES, AlphabetCard as AlphabetCardType } from "@/lib/alphabet";
-import { playAlphabetAudio } from "@/lib/audioPlayer";
+import { ALPHABET_DATA, ALPHABET_CATEGORIES, AlphabetCard as AlphabetCardType, NUMBER_DATA } from "@/lib/alphabet";
+import { playAlphabetAudio, playVocabularyAudio } from "@/lib/audioPlayer";
 
 interface AlphabetPracticeProps {
   onClose: () => void;
 }
 
 export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
-  const [selectedType, setSelectedType] = useState<"consonants" | "vowels" | null>(null);
+  const [selectedType, setSelectedType] = useState<"consonants" | "vowels" | "numbers" | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const handleSpeak = async (characterId: string, type: "consonant" | "vowel") => {
+  const handleSpeak = async (characterId: string, type: "consonant" | "vowel" | "number") => {
     setIsSpeaking(true);
     try {
       await speakHangul(characterId, type);
@@ -25,7 +25,12 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     }
   };
 
-  const speakHangul = async (characterId: string, type: "consonant" | "vowel") => {
+  const speakHangul = async (characterId: string, type: "consonant" | "vowel" | "number") => {
+    if (type === "number") {
+      const number = NUMBER_DATA.find((card) => card.id === characterId);
+      await playVocabularyAudio(characterId, number?.ttsText);
+      return;
+    }
     await playAlphabetAudio(characterId, type);
   };
 
@@ -55,15 +60,17 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                   key={category.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  onClick={() => setSelectedType(category.id as "consonants" | "vowels")}
+                  onClick={() => setSelectedType(category.id as "consonants" | "vowels" | "numbers")}
                   className={`p-8 rounded-2xl text-center transition-all hover:shadow-lg ${category.color}`}
                 >
                   <div className="text-5xl mb-4">{category.icon}</div>
                   <h2 className="text-2xl font-bold mb-2">{category.name}</h2>
                   <p className="text-sm opacity-75">
                     {category.id === "consonants"
-                      ? "15 consonant sounds"
-                      : "12 vowel sounds"}
+                      ? "19 letter names"
+                      : category.id === "vowels"
+                        ? "21 vowel sounds"
+                        : "1–10 in native Korean"}
                   </p>
                 </motion.button>
               ))}
@@ -94,7 +101,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm text-slate-600">
                   <p>
-                    1️⃣ Select either Consonants or Vowels to begin
+                    1️⃣ Select Consonants, Vowels, or Numbers to begin
                   </p>
                   <p>
                     2️⃣ Study each character with its pronunciation and example
@@ -114,9 +121,9 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     );
   }
 
-  const cards = ALPHABET_DATA.filter((c) =>
-    selectedType === "consonants" ? c.type === "consonant" : c.type === "vowel"
-  );
+  const cards = selectedType === "numbers"
+    ? NUMBER_DATA
+    : ALPHABET_DATA.filter((c) => selectedType === "consonants" ? c.type === "consonant" : c.type === "vowel");
 
   const currentCard = cards[currentIndex];
 
@@ -147,7 +154,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
               <ArrowLeft />
             </Button>
             <h1 className="text-2xl font-bold text-slate-900">
-              {selectedType === "consonants" ? "Consonants" : "Vowels"}
+              {selectedType === "consonants" ? "Consonants" : selectedType === "vowels" ? "Vowels" : "Numbers"}
             </h1>
           </div>
           <div className="text-right">

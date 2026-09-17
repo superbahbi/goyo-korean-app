@@ -1,4 +1,4 @@
-export interface AlphabetCard { id: string; hangul: string; romanization: string; sound: string; ttsText: string; example: string; type: "consonant" | "vowel"; }
+export interface AlphabetCard { id: string; hangul: string; romanization: string; sound: string; ttsText: string; example: string; type: "consonant" | "vowel" | "number"; }
 
 export const ALPHABET_DATA: AlphabetCard[] = [
   { id: "cons_001", hangul: "ㄱ", romanization: "g/k", sound: "기역", ttsText: "기역", example: "가 (ga - house)", type: "consonant" },
@@ -46,6 +46,20 @@ export const ALPHABET_DATA: AlphabetCard[] = [
 export const ALPHABET_CATEGORIES = [
   { id: "consonants", name: "Consonants", icon: "🔤", color: "bg-blue-100 text-blue-700" },
   { id: "vowels", name: "Vowels", icon: "🎵", color: "bg-purple-100 text-purple-700" },
+  { id: "numbers", name: "Numbers", icon: "123", color: "bg-emerald-100 text-emerald-700" },
+];
+
+export const NUMBER_DATA: AlphabetCard[] = [
+  { id: "num_001", hangul: "하나", romanization: "hana", sound: "One", ttsText: "하나", example: "하나, 둘, 셋", type: "number" },
+  { id: "num_002", hangul: "둘", romanization: "dul", sound: "Two", ttsText: "둘", example: "둘이 함께 갔어요.", type: "number" },
+  { id: "num_003", hangul: "셋", romanization: "set", sound: "Three", ttsText: "셋", example: "셋이 모였어요.", type: "number" },
+  { id: "num_004", hangul: "넷", romanization: "net", sound: "Four", ttsText: "넷", example: "넷은 너무 많아요.", type: "number" },
+  { id: "num_005", hangul: "다섯", romanization: "daseot", sound: "Five", ttsText: "다섯", example: "다섯 명이 왔어요.", type: "number" },
+  { id: "num_006", hangul: "여섯", romanization: "yeoseot", sound: "Six", ttsText: "여섯", example: "여섯 시간이 걸렸어요.", type: "number" },
+  { id: "num_007", hangul: "일곱", romanization: "ilgop", sound: "Seven", ttsText: "일곱", example: "일곱 살이 되었어요.", type: "number" },
+  { id: "num_008", hangul: "여덟", romanization: "yeodeol", sound: "Eight", ttsText: "여덟", example: "여덟 개를 샀어요.", type: "number" },
+  { id: "num_009", hangul: "아홉", romanization: "ahop", sound: "Nine", ttsText: "아홉", example: "아홉 번 했어요.", type: "number" },
+  { id: "num_010", hangul: "열", romanization: "yeol", sound: "Ten", ttsText: "열", example: "열 개를 주세요.", type: "number" },
 ];
 
 export const ALPHABET_COUNTS = { consonants: 19, vowels: 21, total: 40 } as const;

@@ -5,7 +5,7 @@ import { AlphabetCard as AlphabetCardType } from "@/lib/alphabet";
 
 interface AlphabetCardProps {
   card: AlphabetCardType;
-  onSpeak: (characterId: string, type: "consonant" | "vowel") => void;
+  onSpeak: (characterId: string, type: "consonant" | "vowel" | "number") => void;
 }
 
 export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
@@ -50,9 +50,11 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
         <span className={`inline-block px-4 py-1 rounded-full text-sm font-semibold ${
           card.type === "consonant"
             ? "bg-blue-100 text-blue-700"
-            : "bg-purple-100 text-purple-700"
+            : card.type === "vowel"
+              ? "bg-purple-100 text-purple-700"
+              : "bg-emerald-100 text-emerald-700"
         }`}>
-          {card.type === "consonant" ? "Consonant" : "Vowel"}
+          {card.type === "consonant" ? "Consonant" : card.type === "vowel" ? "Vowel" : "Native number"}
         </span>
       </div>
     </motion.div>
