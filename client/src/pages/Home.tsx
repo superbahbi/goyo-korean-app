@@ -471,13 +471,13 @@ export default function Home() {
                 </SelectTrigger>
                   <SelectContent>
                   <SelectItem value="elevenlabs">Hyuk · Cold &amp; Clear</SelectItem>
-                  <SelectItem value="elevenlabs-female">Jini · Warm &amp; Intelligent</SelectItem>
+                  <SelectItem value="elevenlabs-female">Anna Kim · Tender, Calm &amp; Clear</SelectItem>
                   <SelectItem value="system-female">System Korean · Feminine when available</SelectItem>
                   <SelectItem value="system-male">System Korean · Masculine when available</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs leading-relaxed text-slate-500">
-                Premium recordings use ElevenLabs. Choose Jini for a warm female Korean voice, or use a system voice when available.
+                Premium recordings use ElevenLabs. Choose Anna Kim for a tender, clear Seoul Korean voice, or use a system voice when available.
               </p>
             </div>
           </div>
