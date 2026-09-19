@@ -19,6 +19,7 @@ import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } fr
 export default function Home() {
   const { state, gradeCard, updateSettings } = useStudyState();
   const [queue, setQueue] = useState<typeof VOCABULARY_DATA>([]);
+  const [sessionQueue, setSessionQueue] = useState<typeof VOCABULARY_DATA>([]);
   const [isStudying, setIsStudying] = useState(false);
   const [showBrowse, setShowBrowse] = useState(false);
   const [showStats, setShowStats] = useState(false);
@@ -104,6 +105,7 @@ export default function Home() {
       toast.info("No cards available to study today");
       return;
     }
+    setSessionQueue(queue);
     setIsStudying(true);
   };
 
@@ -169,7 +171,7 @@ export default function Home() {
               <p className="text-emerald-50 opacity-90 mt-2">
                 {cardsRemaining > 0
                   ? `${overdueCount > 0 ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · ` : ""}${cardsRemaining} cards left for today's goal`
-                  : "Daily goal complete! Come back tomorrow."}
+                  : "Daily goal complete! Review your Korean or come back tomorrow."}
               </p>
             </CardHeader>
             <CardContent className="pt-4">
@@ -177,10 +179,10 @@ export default function Home() {
                 size="lg"
                 className="w-full bg-white text-emerald-600 hover:bg-emerald-50 font-bold text-lg h-14 disabled:opacity-50"
                 onClick={startSession}
-                disabled={cardsRemaining <= 0}
+                disabled={queue.length === 0}
               >
                 <Play className="mr-2 fill-current" size={20} />
-                Start Daily Session
+                {dailyGoalReached ? "Review What You Know" : "Start Daily Session"}
               </Button>
             </CardContent>
           </Card>
@@ -322,11 +324,14 @@ export default function Home() {
       </main>
 
       {/* Study Session Modal */}
-      {isStudying && queue.length > 0 && (
+      {isStudying && sessionQueue.length > 0 && (
         <StudySession
-          queue={queue}
+          queue={sessionQueue}
           onGrade={handleGrade}
-          onClose={() => setIsStudying(false)}
+          onClose={() => {
+            setIsStudying(false);
+            setSessionQueue([]);
+          }}
           allowRepeat={dailyGoalReached}
         />
       )}
