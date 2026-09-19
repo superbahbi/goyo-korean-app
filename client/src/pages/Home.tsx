@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones } from "lucide-react";
+import { Brain, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useStudyState } from "@/hooks/useStudyState";
@@ -20,6 +20,7 @@ export default function Home() {
   const { state, gradeCard, updateSettings } = useStudyState();
   const [queue, setQueue] = useState<typeof VOCABULARY_DATA>([]);
   const [sessionQueue, setSessionQueue] = useState<typeof VOCABULARY_DATA>([]);
+  const [sessionMode, setSessionMode] = useState<"daily" | "weak">("daily");
   const [isStudying, setIsStudying] = useState(false);
   const [showBrowse, setShowBrowse] = useState(false);
   const [showStats, setShowStats] = useState(false);
@@ -106,6 +107,17 @@ export default function Home() {
       return;
     }
     setSessionQueue(queue);
+    setSessionMode("daily");
+    setIsStudying(true);
+  };
+
+  const startWeakSession = () => {
+    if (weakCards.length === 0) {
+      toast.info("Review a few cards first to unlock Weak Words");
+      return;
+    }
+    setSessionQueue(weakCards);
+    setSessionMode("weak");
     setIsStudying(true);
   };
 
@@ -123,6 +135,16 @@ export default function Home() {
     const due = state.cardStates[card.id]?.due;
     return Boolean(due && due <= today);
   }).length;
+  const weakCards = VOCABULARY_DATA
+    .filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed))
+    .sort((a, b) => {
+      const aState = state.cardStates[a.id];
+      const bState = state.cardStates[b.id];
+      const aAccuracy = (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1);
+      const bAccuracy = (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
+      return aAccuracy - bAccuracy || (bState?.timesReviewed ?? 0) - (aState?.timesReviewed ?? 0);
+    })
+    .slice(0, 10);
   const filteredCards = selectedCategory
     ? VOCABULARY_DATA.filter((c) => c.tag === selectedCategory)
     : VOCABULARY_DATA;
@@ -279,6 +301,20 @@ export default function Home() {
           <div className="text-xs font-normal text-slate-300 mt-1">10 audio-first questions · earn XP through recall</div>
         </motion.button>
 
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          onClick={startWeakSession}
+          disabled={weakCards.length === 0}
+          className="w-full mb-6 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <div className="mb-1 flex items-center justify-center gap-2 text-2xl"><Brain size={25} /></div>
+          Weak Words
+          <div className="mt-1 text-xs font-normal text-amber-50">
+            {weakCards.length > 0 ? `${weakCards.length} cards selected from your lowest recall` : "Review a few cards to unlock personalized training"}
+          </div>
+        </motion.button>
+
         {/* Quick Links */}
         <div className="grid grid-cols-2 gap-4">
           <Button
@@ -332,7 +368,8 @@ export default function Home() {
             setIsStudying(false);
             setSessionQueue([]);
           }}
-          allowRepeat={dailyGoalReached}
+          allowRepeat={dailyGoalReached || sessionMode === "weak"}
+          title={sessionMode === "weak" ? "Weak Words" : "Daily Session"}
         />
       )}
 

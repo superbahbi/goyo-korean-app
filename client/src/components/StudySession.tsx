@@ -12,9 +12,10 @@ interface StudySessionProps {
   onGrade: (cardId: string, rating: "again" | "good" | "easy") => void;
   onClose: () => void;
   allowRepeat?: boolean;
+  title?: string;
 }
 
-export function StudySession({ queue, onGrade, onClose, allowRepeat = false }: StudySessionProps) {
+export function StudySession({ queue, onGrade, onClose, allowRepeat = false, title = "Daily Session" }: StudySessionProps) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -93,7 +94,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false }: S
         </div>
         <div className="text-sm font-medium text-slate-500 min-w-[60px] text-right">
           {index + 1} / {queue.length}
-          <span className="block text-xs text-slate-400">{flipped ? "Choose a rating" : "Recall first"}</span>
+          <span className="block text-xs text-slate-400">{title} · {flipped ? "Choose a rating" : "Recall first"}</span>
         </div>
       </header>
 
