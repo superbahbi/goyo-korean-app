@@ -42,9 +42,14 @@ export function ListeningPractice({ cards, onGrade, onClose }: ListeningPractice
 
   useEffect(() => () => stopAudio(), []);
 
+  const closePractice = () => {
+    stopAudio();
+    onClose();
+  };
+
   if (isComplete) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/40 p-4 backdrop-blur-sm">
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -58,9 +63,9 @@ export function ListeningPractice({ cards, onGrade, onClose }: ListeningPractice
           <p className="mt-3 text-slate-600">
             You recognized <strong>{correctCount}</strong> of {questions.length} Korean recordings.
           </p>
-          <div className="mt-7 flex gap-3">
-            <Button variant="outline" className="flex-1" onClick={onClose}>Done</Button>
-            <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700" onClick={() => {
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <Button variant="outline" className="min-h-12 flex-1" onClick={closePractice}>Done</Button>
+            <Button className="min-h-12 flex-1 bg-emerald-600 hover:bg-emerald-700" onClick={() => {
               setIndex(0);
               setCorrectCount(0);
               setSelectedAnswer(null);
@@ -102,9 +107,9 @@ export function ListeningPractice({ cards, onGrade, onClose }: ListeningPractice
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
-      <header className="flex items-center justify-between border-b border-slate-200 bg-white/80 px-4 py-4 backdrop-blur-md">
-        <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close listening practice">
+    <div className="fixed inset-0 z-50 flex h-[100dvh] max-h-[100dvh] min-h-0 flex-col overflow-hidden bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
+      <header className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white/80 px-3 py-3 backdrop-blur-md sm:px-4 sm:py-4">
+        <Button variant="ghost" size="icon" onClick={closePractice} aria-label="Close listening practice">
           <X size={20} />
         </Button>
         <div className="flex-1 px-5">
@@ -115,30 +120,31 @@ export function ListeningPractice({ cards, onGrade, onClose }: ListeningPractice
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center px-5 py-8">
-        <div className="mb-6 text-center">
+      <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 [scrollbar-gutter:stable] sm:px-5 sm:py-8">
+        <div className="mx-auto flex w-full max-w-2xl flex-col justify-start sm:min-h-full sm:justify-center">
+        <div className="mb-5 text-center sm:mb-6">
           <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">Listening practice</Badge>
-          <h1 className="mt-4 font-serif text-3xl text-slate-900">What did you hear?</h1>
-          <p className="mt-2 text-slate-500">Listen first. Choose the meaning that matches the Korean recording.</p>
+          <h1 className="mt-3 font-serif text-2xl text-slate-900 sm:mt-4 sm:text-3xl">What did you hear?</h1>
+          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500">Listen first. Choose the meaning that matches the Korean recording.</p>
         </div>
 
         <motion.div
           key={currentCard.id}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-3xl border border-emerald-100 bg-white p-7 text-center shadow-xl shadow-emerald-100/50"
+          className="rounded-3xl border border-emerald-100 bg-white p-5 text-center shadow-xl shadow-emerald-100/50 sm:p-7"
         >
           <Button
             size="lg"
             onClick={playCurrent}
             disabled={isPlaying}
-            className="mx-auto flex h-28 w-28 flex-col gap-2 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700"
+            className="mx-auto flex h-24 w-24 flex-col gap-1 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700 sm:h-28 sm:w-28 sm:gap-2"
             aria-label="Play Korean recording"
           >
             <Volume2 size={34} className={isPlaying ? "animate-pulse" : ""} />
             <span className="text-xs">{isPlaying ? "Playing" : "Play"}</span>
           </Button>
-          <p className="mt-5 text-sm text-slate-400">Replay as many times as you need</p>
+          <p className="mt-4 text-sm text-slate-400">Replay as many times as you need</p>
 
           {answerState !== "unanswered" && (
             <div className="mt-6 border-t border-slate-100 pt-5">
@@ -164,7 +170,7 @@ export function ListeningPractice({ cards, onGrade, onClose }: ListeningPractice
                 key={choice.id}
                 disabled={answerState !== "unanswered"}
                 onClick={() => chooseAnswer(choice.id)}
-                className={`flex items-center gap-3 rounded-2xl border-2 p-4 text-left text-sm font-semibold transition-all ${statusClass}`}
+                className={`flex min-h-14 items-center gap-3 rounded-2xl border-2 p-4 text-left text-sm font-semibold transition-all ${statusClass}`}
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500">
                   {String.fromCharCode(65 + choiceIndex)}
@@ -183,12 +189,13 @@ export function ListeningPractice({ cards, onGrade, onClose }: ListeningPractice
               {answerState === "correct" ? "Correct — nice listening." : `The answer is “${currentCard.back}”.`}
             </p>
             <p className="mt-1 text-sm text-slate-500">{currentCard.example}</p>
-            <Button onClick={nextQuestion} className="mt-4 w-full bg-slate-900 hover:bg-slate-800">
+            <Button onClick={nextQuestion} className="mt-4 min-h-12 w-full bg-slate-900 hover:bg-slate-800">
               {index === questions.length - 1 ? "See results" : "Next recording"}
               <ArrowLeft size={16} className="ml-2 rotate-180" />
             </Button>
           </motion.div>
         )}
+        </div>
       </main>
     </div>
   );
