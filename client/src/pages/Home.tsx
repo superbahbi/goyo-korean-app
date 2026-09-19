@@ -62,10 +62,23 @@ export default function Home() {
     const dailyGoal = state.settings.dailyGoal;
     const cardsStudiedToday = state.stats.cardsStudiedToday;
     
-    // If daily goal not reached, show only new cards
+    const today = new Date().toISOString().slice(0, 10);
+
+    // If daily goal is still in progress, review overdue cards first, then
+    // introduce new cards to fill the remaining places in the session.
     if (cardsStudiedToday < dailyGoal) {
-      const newCards = VOCABULARY_DATA.filter((c) => !state.cardStates[c.id]);
-      const cardsToStudy = newCards.slice(0, dailyGoal - cardsStudiedToday);
+      const sessionSize = dailyGoal - cardsStudiedToday;
+      const overdueCards = VOCABULARY_DATA
+        .filter((card) => state.cardStates[card.id]?.due && state.cardStates[card.id].due <= today)
+        .sort((a, b) => {
+          const aDue = state.cardStates[a.id]?.due ?? today;
+          const bDue = state.cardStates[b.id]?.due ?? today;
+          return aDue.localeCompare(bDue);
+        });
+      const newCards = VOCABULARY_DATA.filter((card) => !state.cardStates[card.id]);
+      const cardsToStudy = [...overdueCards, ...newCards]
+        .filter((card, position, allCards) => allCards.findIndex((item) => item.id === card.id) === position)
+        .slice(0, sessionSize);
       setQueue(cardsToStudy);
     } else {
       // Daily goal reached - allow repeating all cards for practice
@@ -103,6 +116,11 @@ export default function Home() {
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - state.stats.cardsStudiedToday);
   const progressPercent = (state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100;
   const dailyGoalReached = state.stats.cardsStudiedToday >= state.settings.dailyGoal;
+  const today = new Date().toISOString().slice(0, 10);
+  const overdueCount = VOCABULARY_DATA.filter((card) => {
+    const due = state.cardStates[card.id]?.due;
+    return Boolean(due && due <= today);
+  }).length;
   const filteredCards = selectedCategory
     ? VOCABULARY_DATA.filter((c) => c.tag === selectedCategory)
     : VOCABULARY_DATA;
@@ -150,7 +168,7 @@ export default function Home() {
               <CardTitle className="text-3xl font-serif">Ready to practice?</CardTitle>
               <p className="text-emerald-50 opacity-90 mt-2">
                 {cardsRemaining > 0
-                  ? `${cardsRemaining} cards left for today's goal`
+                  ? `${overdueCount > 0 ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · ` : ""}${cardsRemaining} cards left for today's goal`
                   : "Daily goal complete! Come back tomorrow."}
               </p>
             </CardHeader>

@@ -33,6 +33,12 @@ export interface UserState {
 
 const STORAGE_KEY = "goyo-progress-v2";
 
+function addDays(date: string, days: number): string {
+  const nextDate = new Date(`${date}T12:00:00Z`);
+  nextDate.setUTCDate(nextDate.getUTCDate() + days);
+  return nextDate.toISOString().slice(0, 10);
+}
+
 export function useStudyState() {
   const [state, setState] = useState<UserState | null>(null);
 
@@ -111,13 +117,20 @@ export function useStudyState() {
         newStreak
       );
 
-      // Create/update card state
+      // Create/update card state. Reviews are scheduled forward so the daily
+      // queue can prioritize overdue cards without repeatedly showing cards
+      // that were just answered.
       const existingCard = state.cardStates[cardId];
+      const interval = rating === "again"
+        ? 1
+        : rating === "easy"
+          ? Math.min(365, Math.max(4, (existingCard?.interval || 1) * 3))
+          : Math.min(365, Math.max(2, (existingCard?.interval || 1) * 2));
       const newCardState: CardState = {
         id: cardId,
         box: rating === "easy" ? 2 : rating === "good" ? 1 : 0,
-        due: today,
-        interval: rating === "easy" ? 4 : rating === "good" ? 2 : 1,
+        due: addDays(today, interval),
+        interval,
         timesReviewed: (existingCard?.timesReviewed || 0) + 1,
         timesCorrect:
           (existingCard?.timesCorrect || 0) + (rating === "again" ? 0 : 1),
