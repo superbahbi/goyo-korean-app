@@ -6,13 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff } from "lucide-react";
+import { Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useStudyState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
+import { ListeningPractice } from "@/components/ListeningPractice";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showAlphabet, setShowAlphabet] = useState(false);
+  const [showListening, setShowListening] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -90,6 +92,10 @@ export default function Home() {
       return;
     }
     setIsStudying(true);
+  };
+
+  const handleListeningGrade = (cardId: string, rating: "again" | "good") => {
+    gradeCard(cardId, rating);
   };
 
   if (!state) return null;
@@ -242,6 +248,17 @@ export default function Home() {
           Learn Hangul (Korean Alphabet)
         </motion.button>
 
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          onClick={() => setShowListening(true)}
+          className="w-full mb-6 p-4 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-950 text-white font-bold text-base hover:shadow-lg transition-all"
+        >
+          <div className="flex items-center justify-center gap-2 text-2xl mb-1"><Headphones size={25} /></div>
+          Listening Practice
+          <div className="text-xs font-normal text-slate-300 mt-1">10 audio-first questions · earn XP through recall</div>
+        </motion.button>
+
         {/* Quick Links */}
         <div className="grid grid-cols-2 gap-4">
           <Button
@@ -299,6 +316,14 @@ export default function Home() {
       {/* Alphabet Practice Modal */}
       {showAlphabet && (
         <AlphabetPractice onClose={() => setShowAlphabet(false)} />
+      )}
+
+      {showListening && (
+        <ListeningPractice
+          cards={VOCABULARY_DATA}
+          onGrade={handleListeningGrade}
+          onClose={() => setShowListening(false)}
+        />
       )}
 
       {/* Browse Dialog */}
