@@ -39,13 +39,20 @@ function addDays(date: string, days: number): string {
   return nextDate.toISOString().slice(0, 10);
 }
 
+export function getLocalDateKey(date = new Date()): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function useStudyState() {
   const [state, setState] = useState<UserState | null>(null);
 
   // Initialize from localStorage
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY);
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getLocalDateKey();
 
     const initial: UserState = raw
       ? JSON.parse(raw)
@@ -95,10 +102,8 @@ export function useStudyState() {
       if (!state) return;
 
       const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
-      const today = new Date().toISOString().slice(0, 10);
-      const yesterday = new Date(Date.now() - 86400000)
-        .toISOString()
-        .slice(0, 10);
+      const today = getLocalDateKey();
+      const yesterday = getLocalDateKey(new Date(Date.now() - 86400000));
 
       // Determine streak
       const lastDate = state.stats.lastStudyDate;

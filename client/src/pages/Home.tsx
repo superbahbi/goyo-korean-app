@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Brain, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { useStudyState } from "@/hooks/useStudyState";
+import { getLocalDateKey, useStudyState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
@@ -64,7 +64,7 @@ export default function Home() {
     const dailyGoal = state.settings.dailyGoal;
     const cardsStudiedToday = state.stats.cardsStudiedToday;
     
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getLocalDateKey();
 
     // If daily goal is still in progress, review overdue cards first, then
     // introduce new cards to fill the remaining places in the session.
@@ -89,10 +89,11 @@ export default function Home() {
   }, [state?.cardStates, state?.stats.cardsStudiedToday]);
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy") => {
+    const wasBelowGoal = Boolean(state && state.stats.cardsStudiedToday < state.settings.dailyGoal);
     gradeCard(cardId, rating);
 
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
-    if (state && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
+    if (state && wasBelowGoal && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
       setTimeout(() => {
         toast.success("Daily goal reached! 🎉", {
           description: `You've earned ${xpGain} XP and maintained your streak!`,
@@ -130,7 +131,7 @@ export default function Home() {
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - state.stats.cardsStudiedToday);
   const progressPercent = (state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100;
   const dailyGoalReached = state.stats.cardsStudiedToday >= state.settings.dailyGoal;
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getLocalDateKey();
   const overdueCount = VOCABULARY_DATA.filter((card) => {
     const due = state.cardStates[card.id]?.due;
     return Boolean(due && due <= today);
