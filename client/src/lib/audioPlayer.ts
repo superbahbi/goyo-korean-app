@@ -83,7 +83,7 @@ const vowelAudioAliases: Record<string, string> = {
 async function loadAudioIndex(): Promise<AudioIndex> {
   if (audioIndex) return audioIndex;
 
-  const response = await fetch("/audio/index.json", { cache: "force-cache" });
+  const response = await fetch(`/audio/index.json?v=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Audio index request failed (${response.status})`);
   }
@@ -97,7 +97,9 @@ export async function playVocabularyAudio(wordId: string, fallbackText?: string)
     const index = await loadAudioIndex();
     const legacyKey = vocabularyAudioAliases[wordId];
     const vocabularyIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.vocabulary : index.vocabulary;
-    const audioFile = vocabularyIndex?.[wordId] ?? (legacyKey ? vocabularyIndex?.[legacyKey] : undefined);
+    const audioFile = vocabularyIndex?.[wordId]
+      ?? (legacyKey ? vocabularyIndex?.[legacyKey] : undefined)
+      ?? (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${wordId}.mp3` : undefined);
 
     if (!audioFile) {
       throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
@@ -120,7 +122,8 @@ export async function playAlphabetAudio(
     const alphabetIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.alphabet : index.alphabet;
     const files = type === "consonant" ? alphabetIndex?.consonants : alphabetIndex?.vowels;
     if (!files) throw new Error("Female premium audio index is unavailable");
-    const audioFile = files[key];
+    const audioFile = files[key]
+      ?? (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${characterId}.mp3` : undefined);
 
     if (!audioFile) {
       throw new Error(`No generated audio mapped for ${type} ${characterId}`);
