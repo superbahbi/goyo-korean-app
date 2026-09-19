@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Volume2, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { playVocabularyAudio } from "@/lib/audioPlayer";
 
 interface FlashCardProps {
+  wordId: string;
   front: string;
   back: string;
   example?: string;
@@ -18,16 +20,8 @@ function cleanKoreanText(text: string): string {
   return match ? match[1].trim() : text.trim();
 }
 
-function speakKorean(text: string) {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "ko-KR";
-  utterance.rate = 0.9;
-  window.speechSynthesis.speak(utterance);
-}
-
 export function FlashCard({
+  wordId,
   front,
   back,
   example,
@@ -41,11 +35,11 @@ export function FlashCard({
   useEffect(() => {
     if (!flipped && autoSpeak) {
       const timer = setTimeout(() => {
-        speakKorean(cleanKoreanText(front));
+        void playVocabularyAudio(wordId, cleanKoreanText(front));
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [flipped, front, autoSpeak]);
+  }, [flipped, front, wordId, autoSpeak]);
 
   const handleFlip = () => {
     setFlipped(!flipped);
@@ -102,7 +96,7 @@ export function FlashCard({
               className="rounded-full w-12 h-12"
               onClick={(e) => {
                 e.stopPropagation();
-                speakKorean(cleanKoreanText(front));
+                void playVocabularyAudio(wordId, cleanKoreanText(front));
               }}
             >
               <Volume2 size={20} />

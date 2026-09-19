@@ -23,7 +23,7 @@ interface AudioIndex {
 
 let audioIndex: AudioIndex | null = null;
 let currentAudio: HTMLAudioElement | null = null;
-export type AudioSpeaker = "elevenlabs" | "elevenlabs-female" | "system-female" | "system-male";
+export type AudioSpeaker = "elevenlabs" | "elevenlabs-female";
 let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
 const vocabularyAudioAliases: Record<string, string> = {
@@ -92,60 +92,20 @@ async function loadAudioIndex(): Promise<AudioIndex> {
   return audioIndex;
 }
 
-function speakWithBrowserFallback(text: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
-      reject(new Error("No pre-generated file or browser speech synthesis is available"));
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "ko-KR";
-    const koreanVoices = window.speechSynthesis
-      .getVoices()
-      .filter((voice) => voice.lang.toLowerCase().startsWith("ko"));
-    if (koreanVoices.length > 0) {
-      const preferredGender = selectedSpeaker === "system-female"
-        ? /female|woman|여성|여자/i
-        : /male|man|남성|남자/i;
-      utterance.voice = koreanVoices.find((voice) => preferredGender.test(voice.name)) ?? koreanVoices[0];
-    }
-    utterance.rate = 0.88;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-    utterance.onend = () => resolve();
-    utterance.onerror = (event) => reject(new Error(`Browser speech failed: ${event.error}`));
-    window.speechSynthesis.speak(utterance);
-  });
-}
-
 export async function playVocabularyAudio(wordId: string, fallbackText?: string): Promise<void> {
   try {
-    if (selectedSpeaker !== "elevenlabs" && selectedSpeaker !== "elevenlabs-female") {
-      if (fallbackText) await speakWithBrowserFallback(fallbackText);
-      return;
-    }
     const index = await loadAudioIndex();
     const legacyKey = vocabularyAudioAliases[wordId];
     const vocabularyIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.vocabulary : index.vocabulary;
     const audioFile = vocabularyIndex?.[wordId] ?? (legacyKey ? vocabularyIndex?.[legacyKey] : undefined);
 
     if (!audioFile) {
-      if (fallbackText) await speakWithBrowserFallback(fallbackText);
-      return;
+      throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
     }
 
     await playAudioFile(`/audio/${audioFile}`);
   } catch (error) {
     console.error("Vocabulary audio failed:", error);
-    if (fallbackText) {
-      try {
-        await speakWithBrowserFallback(fallbackText);
-      } catch (fallbackError) {
-        console.error("Vocabulary browser fallback failed:", fallbackError);
-      }
-    }
   }
 }
 
@@ -154,13 +114,6 @@ export async function playAlphabetAudio(
   type: "consonant" | "vowel"
 ): Promise<void> {
   try {
-    if (selectedSpeaker !== "elevenlabs" && selectedSpeaker !== "elevenlabs-female") {
-      const character = type === "consonant"
-        ? consonantAudioAliases[characterId] ?? characterId
-        : vowelAudioAliases[characterId] ?? characterId;
-      await speakWithBrowserFallback(character);
-      return;
-    }
     const index = await loadAudioIndex();
     const aliases = type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
     const key = aliases[characterId] ?? characterId;
@@ -230,9 +183,6 @@ export function stopAudio(): void {
     currentAudio = null;
   }
 
-  if (typeof window !== "undefined" && "speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
 }
 
 export function isAudioPlaying(): boolean {

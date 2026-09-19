@@ -472,12 +472,10 @@ export default function Home() {
                   <SelectContent>
                   <SelectItem value="elevenlabs">Hyuk · Cold &amp; Clear</SelectItem>
                   <SelectItem value="elevenlabs-female">Anna Kim · Tender, Calm &amp; Clear</SelectItem>
-                  <SelectItem value="system-female">System Korean · Feminine when available</SelectItem>
-                  <SelectItem value="system-male">System Korean · Masculine when available</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs leading-relaxed text-slate-500">
-                Premium recordings use ElevenLabs. Choose Anna Kim for a tender, clear Seoul Korean voice, or use a system voice when available.
+                Goyo uses ElevenLabs recordings only. Choose Hyuk for a cold, clear delivery or Anna Kim for a tender, clear Seoul Korean voice.
               </p>
             </div>
           </div>

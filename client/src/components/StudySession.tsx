@@ -58,6 +58,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false }: S
         <AnimatePresence mode="wait">
           <FlashCard
             key={currentCard.id}
+            wordId={currentCard.id}
             front={currentCard.front}
             back={currentCard.back}
             example={currentCard.example}

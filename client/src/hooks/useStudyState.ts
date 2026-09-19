@@ -27,7 +27,7 @@ export interface UserState {
     dailyGoal: number;
     ttsEnabled: boolean;
     autoPlayAudio: boolean;
-    audioSpeaker: "elevenlabs" | "elevenlabs-female" | "system-female" | "system-male";
+    audioSpeaker: "elevenlabs" | "elevenlabs-female";
   };
 }
 
@@ -62,10 +62,11 @@ export function useStudyState() {
           },
         };
 
-    // Older saved progress did not include a speaker preference.
+    // Older saved progress may contain a removed system-voice preference.
+    const savedSpeaker = initial.settings.audioSpeaker;
     initial.settings = {
       ...initial.settings,
-      audioSpeaker: initial.settings.audioSpeaker ?? "elevenlabs",
+      audioSpeaker: savedSpeaker === "elevenlabs-female" ? "elevenlabs-female" : "elevenlabs",
     };
 
     // Reset daily counter if it's a new day
