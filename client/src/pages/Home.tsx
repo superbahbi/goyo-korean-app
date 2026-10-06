@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Brain, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones } from "lucide-react";
+import { Brain, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { getLocalDateKey, useStudyState } from "@/hooks/useStudyState";
@@ -149,6 +149,21 @@ export default function Home() {
   const filteredCards = selectedCategory
     ? VOCABULARY_DATA.filter((c) => c.tag === selectedCategory)
     : VOCABULARY_DATA;
+  const reviewedCards = VOCABULARY_DATA.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
+  const totalReviews = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
+  const totalCorrect = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
+  const overallAccuracy = totalReviews > 0 ? Math.round((totalCorrect / totalReviews) * 100) : 0;
+  const masteredCount = reviewedCards.filter((card) => {
+    const cardState = state.cardStates[card.id];
+    return (cardState?.timesReviewed ?? 0) >= 2 && (cardState?.timesCorrect ?? 0) / (cardState?.timesReviewed ?? 1) >= 0.8;
+  }).length;
+  const categoryMastery = CATEGORIES.map((category) => {
+    const cards = VOCABULARY_DATA.filter((card) => card.tag === category.id);
+    const reviewed = cards.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
+    const reviews = reviewed.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
+    const correct = reviewed.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
+    return { ...category, reviewed: reviewed.length, total: cards.length, accuracy: reviews > 0 ? Math.round((correct / reviews) * 100) : null };
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
@@ -502,9 +517,9 @@ export default function Home() {
 
       {/* Stats Dialog */}
       <Dialog open={showStats} onOpenChange={setShowStats}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Learning Statistics</DialogTitle>
+            <DialogTitle className="flex items-center gap-2"><Target size={18} className="text-emerald-600" /> Learning Statistics</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 py-4">
             <div className="p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl border border-yellow-200">
@@ -522,6 +537,50 @@ export default function Home() {
             <div className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
               <div className="text-xs text-emerald-600 font-medium">Current Streak</div>
               <div className="text-3xl font-bold text-emerald-700">{state.stats.streak}d</div>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-3 border-t border-slate-100 pt-4">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+              <div className="text-xs font-medium text-slate-500">Recall accuracy</div>
+              <div className="mt-1 text-2xl font-bold text-slate-900">{overallAccuracy}%</div>
+              <div className="mt-1 text-[11px] text-slate-400">{totalReviews} reviews</div>
+            </div>
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+              <div className="text-xs font-medium text-emerald-600">Mastered</div>
+              <div className="mt-1 text-2xl font-bold text-emerald-700">{masteredCount}</div>
+              <div className="mt-1 text-[11px] text-emerald-600">of {VOCABULARY_DATA.length} cards</div>
+            </div>
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
+              <div className="text-xs font-medium text-amber-600">Due now</div>
+              <div className="mt-1 text-2xl font-bold text-amber-700">{overdueCount}</div>
+              <div className="mt-1 text-[11px] text-amber-600">reviews</div>
+            </div>
+          </div>
+          <div className="mt-5 border-t border-slate-100 pt-4">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="font-semibold text-slate-800">Category mastery</h3>
+              <span className="text-xs text-slate-400">Accuracy · coverage</span>
+            </div>
+            <div className="max-h-56 space-y-2 overflow-y-auto pr-1">
+              {categoryMastery.map((category) => (
+                <div key={category.id} className="rounded-xl border border-slate-100 bg-white p-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span aria-hidden="true">{category.icon}</span>
+                      <span className="truncate text-sm font-medium text-slate-700">{category.name}</span>
+                    </div>
+                    <span className="text-xs font-semibold text-slate-500">
+                      {category.accuracy === null ? "Not started" : `${category.accuracy}% · ${category.reviewed}/${category.total}`}
+                    </span>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className={`h-full rounded-full ${category.accuracy === null ? "bg-slate-200" : category.accuracy >= 80 ? "bg-emerald-500" : category.accuracy >= 60 ? "bg-amber-400" : "bg-red-400"}`}
+                      style={{ width: `${category.accuracy ?? 0}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </DialogContent>
