@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, MapPin, Target } from "lucide-react";
+import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, MapPin, Search, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { getLocalDateKey, getMasteryState, useStudyState, type MasteryState } from "@/hooks/useStudyState";
@@ -32,6 +32,8 @@ export default function Home() {
   const [showScenarios, setShowScenarios] = useState(false);
   const [showShadowing, setShowShadowing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [browseQuery, setBrowseQuery] = useState("");
+  const [browseMastery, setBrowseMastery] = useState<MasteryState | "all">("all");
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [playingCardId, setPlayingCardId] = useState<string | null>(null);
@@ -227,9 +229,13 @@ export default function Home() {
       return (aState?.due ?? "9999-12-31").localeCompare(bState?.due ?? "9999-12-31");
     })
     .slice(0, 10);
-  const filteredCards = selectedCategory
-    ? VOCABULARY_DATA.filter((c) => c.tag === selectedCategory)
-    : VOCABULARY_DATA;
+  const normalizedBrowseQuery = browseQuery.trim().toLocaleLowerCase();
+  const filteredCards = VOCABULARY_DATA.filter((card) => {
+    const matchesCategory = !selectedCategory || card.tag === selectedCategory;
+    const matchesMastery = browseMastery === "all" || getMasteryState(state.cardStates[card.id]) === browseMastery;
+    const matchesQuery = !normalizedBrowseQuery || [card.front, card.back, card.romanization, card.example].some((value) => value.toLocaleLowerCase().includes(normalizedBrowseQuery));
+    return matchesCategory && matchesMastery && matchesQuery;
+  });
   const reviewedCards = VOCABULARY_DATA.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
   const totalReviews = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
   const totalCorrect = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
@@ -570,27 +576,47 @@ export default function Home() {
         </div>
 
         {/* Categories */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-slate-700">Categories</h3>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-            {CATEGORIES.map((cat) => (
-              <motion.button
-                key={cat.id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedCategory(selectedCategory === cat.id ? null : cat.id)}
-                className={`p-3 rounded-xl text-center transition-all ${
-                  selectedCategory === cat.id
-                    ? cat.color
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                <div className="text-lg mb-1">{cat.icon}</div>
-                <div className="text-xs font-medium">{cat.name}</div>
-              </motion.button>
-            ))}
+        <section className="space-y-4" aria-labelledby="categories-heading">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">Your library</p>
+              <h2 id="categories-heading" className="mt-1 font-serif text-2xl text-slate-900">Learn by theme</h2>
+            </div>
+            <button type="button" className="text-sm font-semibold text-emerald-700 hover:text-emerald-900" onClick={() => { setSelectedCategory(null); setBrowseMastery("all"); setShowBrowse(true); }}>
+              View all {VOCABULARY_DATA.length}
+            </button>
           </div>
-        </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {CATEGORIES.map((cat) => {
+              const category = categoryMastery.find((item) => item.id === cat.id);
+              const known = VOCABULARY_DATA.filter((card) => card.tag === cat.id && getMasteryState(state.cardStates[card.id]) === "known").length;
+              const coverage = category?.total ? Math.round((known / category.total) * 100) : 0;
+              return (
+                <button
+                  type="button"
+                  key={cat.id}
+                  onClick={() => { setSelectedCategory(cat.id); setBrowseMastery("all"); setBrowseQuery(""); setShowBrowse(true); }}
+                  className="group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className={`flex h-10 w-10 items-center justify-center rounded-xl text-lg ${cat.color}`} aria-hidden="true">{cat.icon}</span>
+                      <div>
+                        <h3 className="font-semibold text-slate-800 group-hover:text-emerald-700">{cat.name}</h3>
+                        <p className="text-xs text-slate-400">{category?.total ?? 0} cards</p>
+                      </div>
+                    </div>
+                    <span className="text-xs font-semibold text-emerald-700">{coverage}%</span>
+                  </div>
+                  <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-100">
+                    <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${coverage}%` }} />
+                  </div>
+                  <p className="mt-2 text-xs text-slate-400">{known} known · {category?.reviewed ?? 0} reviewed</p>
+                </button>
+              );
+            })}
+          </div>
+        </section>
       </main>
 
       {/* Study Session Modal */}
@@ -636,19 +662,45 @@ export default function Home() {
 
       {/* Browse Dialog */}
       <Dialog open={showBrowse} onOpenChange={setShowBrowse}>
-        <DialogContent className="w-full max-w-2xl max-h-[85vh] flex flex-col gap-0 p-0 overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-200 flex-shrink-0">
-            <h2 className="text-2xl font-bold text-slate-900">
-              {selectedCategory
-                ? `${CATEGORIES.find((c) => c.id === selectedCategory)?.name} Vocabulary`
-                : "Vocabulary Library"}
-            </h2>
-            <p className="text-sm text-slate-500 font-normal mt-1">
-              {filteredCards.length} words
-            </p>
+        <DialogContent className="flex max-h-[90vh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0">
+          <div className="shrink-0 border-b border-slate-200 bg-gradient-to-br from-emerald-50 to-white px-5 pb-4 pt-5 sm:px-6">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-2xl text-slate-900">
+                <BookOpen size={21} className="text-emerald-600" />
+                {selectedCategory ? `${CATEGORIES.find((c) => c.id === selectedCategory)?.name} library` : "Vocabulary library"}
+              </DialogTitle>
+            </DialogHeader>
+            <p className="mt-1 text-sm text-slate-500">Search Korean, meanings, examples, or romanization.</p>
+            <div className="relative mt-4">
+              <Search size={17} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                value={browseQuery}
+                onChange={(event) => setBrowseQuery(event.target.value)}
+                placeholder="Search the deck..."
+                aria-label="Search vocabulary library"
+                className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              />
+            </div>
+            <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+              {(["all", "new", "learning", "shaky", "known"] as const).map((filter) => (
+                <button
+                  type="button"
+                  key={filter}
+                  onClick={() => setBrowseMastery(filter)}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition ${browseMastery === filter ? "bg-slate-900 text-white" : "bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50"}`}
+                >
+                  {filter === "all" ? "All cards" : masteryLabels[filter]}
+                  <span className="ml-1 opacity-70">{filter === "all" ? VOCABULARY_DATA.length : masteryCounts[filter]}</span>
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
+              <span>{filteredCards.length} matching card{filteredCards.length === 1 ? "" : "s"}</span>
+              {(selectedCategory || browseQuery || browseMastery !== "all") && <button type="button" className="font-semibold text-emerald-700 hover:text-emerald-900" onClick={() => { setSelectedCategory(null); setBrowseQuery(""); setBrowseMastery("all"); }}>Clear filters</button>}
+            </div>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <div className="px-6 py-4 space-y-2">
+            <div className="space-y-3 px-5 py-4 sm:px-6">
               {filteredCards.length > 0 ? (
                 filteredCards.map((card) => {
                   const romanization = getRomanization(card);
@@ -661,16 +713,16 @@ export default function Home() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       aria-busy={isCardPlaying}
-                      className={`p-4 rounded-xl transition-all ${
+                      className={`rounded-2xl border p-4 transition-all ${
                         isCardPlaying
-                          ? "audio-card-playing border border-emerald-400 bg-emerald-50/80 ring-2 ring-emerald-200 shadow-lg shadow-emerald-100"
-                          : "bg-white border border-slate-100 hover:border-emerald-300 hover:bg-emerald-50"
+                          ? "audio-card-playing border-emerald-400 bg-emerald-50/80 ring-2 ring-emerald-200 shadow-lg shadow-emerald-100"
+                          : "border-slate-200 bg-white hover:border-emerald-300 hover:shadow-sm"
                       }`}
                     >
                       <div className="flex justify-between items-start gap-3 mb-3">
                         <div className="flex-1 min-w-0">
-                          <div className="text-lg font-bold text-slate-900">{card.front}</div>
-                          <div className="text-sm text-slate-600 font-medium">{card.back}</div>
+                          <div className="flex flex-wrap items-center gap-2"><div className="text-xl font-bold text-slate-900">{card.front}</div><span className="text-xs font-mono text-emerald-600">{romanization}</span></div>
+                          <div className="mt-1 text-sm font-medium text-slate-600">{card.back}</div>
                           {isShowingRoman && romanization && (
                             <div className="text-sm text-emerald-600 font-mono font-semibold mt-1">
                               <span className="text-xs text-slate-500 mr-2">Romanization:</span>
@@ -688,7 +740,7 @@ export default function Home() {
                               Playing
                             </span>
                           )}
-                          <Badge variant="secondary" className="capitalize whitespace-nowrap">
+                          <Badge variant="secondary" className="capitalize whitespace-nowrap bg-slate-100 text-slate-600">
                             {card.tag}
                           </Badge>
                           <Badge className={`whitespace-nowrap ${masteryStyles[mastery]}`}>
@@ -742,8 +794,10 @@ export default function Home() {
                   );
                 })
               ) : (
-                <div className="text-center py-12">
-                  <p className="text-slate-500">No words in this category</p>
+                <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
+                  <Search size={28} className="mx-auto text-slate-300" />
+                  <p className="mt-3 font-semibold text-slate-700">No matching cards</p>
+                  <p className="mt-1 text-sm text-slate-400">Try a different search or clear your filters.</p>
                 </div>
               )}
             </div>
@@ -753,38 +807,50 @@ export default function Home() {
 
       {/* Stats Dialog */}
       <Dialog open={showStats} onOpenChange={setShowStats}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><Target size={18} className="text-emerald-600" /> Learning Statistics</DialogTitle>
+            <DialogTitle className="flex items-center gap-2 text-2xl"><Target size={20} className="text-emerald-600" /> Your Korean ability</DialogTitle>
+            <p className="text-sm text-slate-500">Progress measured by recall, coverage, and durable review—not just completion.</p>
           </DialogHeader>
-          <div className="grid grid-cols-2 gap-4 py-4">
-            <div className="p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl border border-yellow-200">
+          <div className="mt-4 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 p-5 text-white shadow-lg shadow-emerald-100">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100">Current level</p>
+                <h3 className="mt-1 font-serif text-3xl">{levelTitle}</h3>
+              </div>
+              <div className="text-right"><div className="text-3xl font-bold">{state.stats.level}</div><div className="text-xs text-emerald-100">level</div></div>
+            </div>
+            <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full rounded-full bg-white transition-all" style={{ width: `${levelProgress}%` }} /></div>
+            <div className="mt-2 flex justify-between text-xs text-emerald-100"><span>{state.stats.totalXp} XP earned</span><span>{Math.max(0, nextLevelXp - state.stats.totalXp)} XP to next level</span></div>
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-4">
               <div className="text-xs text-yellow-600 font-medium">Total XP</div>
               <div className="text-3xl font-bold text-yellow-700">{state.stats.totalXp}</div>
             </div>
-            <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl border border-purple-200">
-              <div className="text-xs text-purple-600 font-medium">Current Level</div>
-              <div className="text-3xl font-bold text-purple-700">{state.stats.level}</div>
+            <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4">
+              <div className="text-xs font-medium text-orange-600">Streak</div>
+              <div className="text-3xl font-bold text-orange-700">{state.stats.streak}d</div>
             </div>
-            <div className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200">
-              <div className="text-xs text-orange-600 font-medium">Longest Streak</div>
-              <div className="text-3xl font-bold text-orange-700">{state.stats.highestStreak}d</div>
+            <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-4">
+              <div className="text-xs font-medium text-indigo-600">Recall</div>
+              <div className="text-3xl font-bold text-indigo-700">{overallAccuracy}%</div>
             </div>
-            <div className="p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
-              <div className="text-xs text-emerald-600 font-medium">Current Streak</div>
-              <div className="text-3xl font-bold text-emerald-700">{state.stats.streak}d</div>
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+              <div className="text-xs font-medium text-emerald-600">Known</div>
+              <div className="text-3xl font-bold text-emerald-700">{masteredCount}</div>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-3 border-t border-slate-100 pt-4">
+          <div className="mt-5 grid grid-cols-3 gap-3 border-t border-slate-100 pt-5">
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-              <div className="text-xs font-medium text-slate-500">Recall accuracy</div>
-              <div className="mt-1 text-2xl font-bold text-slate-900">{overallAccuracy}%</div>
-              <div className="mt-1 text-[11px] text-slate-400">{totalReviews} reviews</div>
+              <div className="text-xs font-medium text-slate-500">Reviews</div>
+              <div className="mt-1 text-2xl font-bold text-slate-900">{totalReviews}</div>
+              <div className="mt-1 text-[11px] text-slate-400">total attempts</div>
             </div>
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-              <div className="text-xs font-medium text-emerald-600">Mastered</div>
-              <div className="mt-1 text-2xl font-bold text-emerald-700">{masteredCount}</div>
-              <div className="mt-1 text-[11px] text-emerald-600">of {VOCABULARY_DATA.length} cards</div>
+            <div className="rounded-xl border border-blue-200 bg-blue-50 p-3">
+              <div className="text-xs font-medium text-blue-600">Learning</div>
+              <div className="mt-1 text-2xl font-bold text-blue-700">{masteryCounts.learning}</div>
+              <div className="mt-1 text-[11px] text-blue-600">cards in progress</div>
             </div>
             <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
               <div className="text-xs font-medium text-amber-600">Due now</div>
