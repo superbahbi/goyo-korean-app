@@ -138,6 +138,13 @@ export default function Home() {
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - state.stats.cardsStudiedToday);
   const progressPercent = (state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100;
   const dailyGoalReached = state.stats.cardsStudiedToday >= state.settings.dailyGoal;
+  const levelTitles = ["Beginner", "Explorer", "Builder", "Conversational", "Fluent", "Korean Sage"];
+  const levelTitle = levelTitles[Math.min(levelTitles.length - 1, Math.max(0, state.stats.level - 1))];
+  const currentLevelXp = Math.pow(Math.max(0, state.stats.level - 1), 2) * 100;
+  const nextLevelXp = Math.pow(state.stats.level, 2) * 100;
+  const levelProgress = nextLevelXp > currentLevelXp
+    ? Math.min(100, Math.max(0, ((state.stats.totalXp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100))
+    : 100;
   const today = getLocalDateKey();
   const overdueCount = VOCABULARY_DATA.filter((card) => {
     const due = state.cardStates[card.id]?.due;
@@ -288,9 +295,13 @@ export default function Home() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-slate-900">Expert</div>
-                <p className="text-xs text-slate-400 mt-2">
-                  {100 - (state.stats.totalXp % 100)} XP to next level
+                <div className="flex items-baseline justify-between gap-2">
+                  <div className="text-2xl font-bold text-slate-900">{levelTitle}</div>
+                  <div className="text-sm font-semibold text-emerald-600">Lv. {state.stats.level}</div>
+                </div>
+                <Progress value={levelProgress} className="mt-3 h-2 bg-slate-100" />
+                <p className="mt-2 text-xs text-slate-400">
+                  {Math.max(0, nextLevelXp - state.stats.totalXp)} XP to next level
                 </p>
               </CardContent>
             </Card>
