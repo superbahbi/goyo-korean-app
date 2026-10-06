@@ -42,6 +42,13 @@ export default function Home() {
     toast.success("Speaker preference saved");
   };
 
+  const handleDailyGoalChange = (value: string) => {
+    const dailyGoal = Number(value);
+    if (!Number.isFinite(dailyGoal) || dailyGoal < 1) return;
+    updateSettings({ dailyGoal });
+    toast.success(`Daily goal set to ${dailyGoal} cards`);
+  };
+
   const speakKorean = async (wordId: string, fallbackText?: string) => {
     setIsSpeaking(true);
     setPlayingCardId(wordId);
@@ -665,10 +672,21 @@ export default function Home() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div>
-              <label className="text-sm font-medium text-slate-700">Daily Goal</label>
-              <div className="text-2xl font-bold text-emerald-600 mt-1">
-                {state.settings.dailyGoal} cards
-              </div>
+              <label className="text-sm font-medium text-slate-700" htmlFor="daily-goal">Daily Goal</label>
+              <Select value={String(state.settings.dailyGoal)} onValueChange={handleDailyGoalChange}>
+                <SelectTrigger id="daily-goal" className="mt-2 w-full bg-white">
+                  <SelectValue placeholder="Choose a daily goal" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5 cards · Quick practice</SelectItem>
+                  <SelectItem value="10">10 cards · Balanced</SelectItem>
+                  <SelectItem value="15">15 cards · Focused</SelectItem>
+                  <SelectItem value="20">20 cards · Intensive</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                Choose a goal you can sustain. Consistent recall is more valuable than a large daily streak.
+              </p>
             </div>
             <div className="border-t pt-4">
               <label className="text-sm font-medium text-slate-700">Text-to-Speech</label>
