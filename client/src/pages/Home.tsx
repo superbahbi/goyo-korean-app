@@ -111,14 +111,30 @@ export default function Home() {
         .slice(0, sessionSize);
       setQueue(cardsToStudy);
     } else {
-      // Daily goal reached - allow repeating all cards for practice
-      setQueue(VOCABULARY_DATA);
+      // Keep post-goal practice useful without turning the dashboard into a
+      // full-deck session. Prioritize due cards, then the learner's weakest
+      // reviewed cards, and finally a small set of new cards.
+      const dueCards = VOCABULARY_DATA.filter((card) => {
+        const due = state.cardStates[card.id]?.due;
+        return Boolean(due && due <= today);
+      });
+      const fallbackCards = VOCABULARY_DATA
+        .filter((card) => !dueCards.some((dueCard) => dueCard.id === card.id))
+        .sort((a, b) => {
+          const aState = state.cardStates[a.id];
+          const bState = state.cardStates[b.id];
+          const aAccuracy = (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1);
+          const bAccuracy = (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
+          return aAccuracy - bAccuracy;
+        });
+      setQueue([...dueCards, ...fallbackCards].slice(0, dailyGoal));
     }
   }, [state?.cardStates, state?.stats.cardsStudiedToday, state?.settings.dailyGoal]);
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy") => {
-    const wasBelowGoal = Boolean(state && state.stats.cardsStudiedToday < state.settings.dailyGoal);
-    gradeCard(cardId, rating);
+    const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
+    const wasBelowGoal = Boolean(state && !isRepeatPractice && state.stats.cardsStudiedToday < state.settings.dailyGoal);
+    gradeCard(cardId, rating, { countProgress: !isRepeatPractice });
 
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
     if (state && wasBelowGoal && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
@@ -218,10 +234,7 @@ export default function Home() {
   const totalReviews = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
   const totalCorrect = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
   const overallAccuracy = totalReviews > 0 ? Math.round((totalCorrect / totalReviews) * 100) : 0;
-  const masteredCount = reviewedCards.filter((card) => {
-    const cardState = state.cardStates[card.id];
-    return (cardState?.timesReviewed ?? 0) >= 2 && (cardState?.timesCorrect ?? 0) / (cardState?.timesReviewed ?? 1) >= 0.8;
-  }).length;
+  const masteredCount = VOCABULARY_DATA.filter((card) => getMasteryState(state.cardStates[card.id]) === "known").length;
   const categoryMastery = CATEGORIES.map((category) => {
     const cards = VOCABULARY_DATA.filter((card) => card.tag === category.id);
     const reviewed = cards.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));

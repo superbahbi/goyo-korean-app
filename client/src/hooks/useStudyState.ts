@@ -108,10 +108,11 @@ export function useStudyState() {
   }, [state]);
 
   const gradeCard = useCallback(
-    (cardId: string, rating: "again" | "good" | "easy") => {
+    (cardId: string, rating: "again" | "good" | "easy", options?: { countProgress?: boolean }) => {
       if (!state) return;
 
-      const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
+      const countProgress = options?.countProgress !== false;
+      const xpGain = countProgress ? (rating === "easy" ? 15 : rating === "good" ? 10 : 5) : 0;
       const today = getLocalDateKey();
       const yesterday = getLocalDateKey(new Date(Date.now() - 86400000));
 
@@ -119,7 +120,9 @@ export function useStudyState() {
       const lastDate = state.stats.lastStudyDate;
       let newStreak = state.stats.streak;
 
-      if (lastDate === today) {
+      if (!countProgress) {
+        newStreak = state.stats.streak;
+      } else if (lastDate === today) {
         newStreak = state.stats.streak;
       } else if (lastDate === yesterday) {
         newStreak = state.stats.streak + 1;
@@ -165,11 +168,11 @@ export function useStudyState() {
           level: Math.floor(
             Math.sqrt((state.stats.totalXp + xpGain) / 100)
           ) + 1,
-          lastStudyDate: today,
+          lastStudyDate: countProgress ? today : state.stats.lastStudyDate,
           streak: newStreak,
           highestStreak: newHighestStreak,
-          cardsStudiedToday: state.stats.cardsStudiedToday + 1,
-          totalCardsLearned: isNewCard
+          cardsStudiedToday: countProgress ? state.stats.cardsStudiedToday + 1 : state.stats.cardsStudiedToday,
+          totalCardsLearned: countProgress && isNewCard
             ? state.stats.totalCardsLearned + 1
             : state.stats.totalCardsLearned,
         },
