@@ -110,6 +110,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
             tag={currentCard.tag}
             onFlip={setFlipped}
             autoSpeak={true}
+            audioFirst={true}
           />
         </AnimatePresence>
       </main>
@@ -121,7 +122,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
             className="h-14 w-full rounded-2xl bg-slate-900 text-lg font-bold transition-all hover:bg-slate-800 sm:h-16 sm:text-xl"
             onClick={() => setFlipped(true)}
           >
-            Reveal Answer
+            Reveal Korean &amp; Meaning
           </Button>
         ) : (
           <div>

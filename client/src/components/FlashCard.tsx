@@ -13,6 +13,7 @@ interface FlashCardProps {
   tag: string;
   onFlip?: (flipped: boolean) => void;
   autoSpeak?: boolean;
+  audioFirst?: boolean;
 }
 
 function cleanKoreanText(text: string): string {
@@ -28,6 +29,7 @@ export function FlashCard({
   tag,
   onFlip,
   autoSpeak = true,
+  audioFirst = false,
 }: FlashCardProps) {
   const [flipped, setFlipped] = useState(false);
   const [showRoman, setShowRoman] = useState(false);
@@ -76,10 +78,19 @@ export function FlashCard({
           <Badge variant="outline" className="mb-8 capitalize text-slate-500 font-medium bg-slate-50 border-slate-200">
             {tag}
           </Badge>
-          <h2 className="text-5xl font-bold text-slate-900 mb-6">
-            {cleanKoreanText(front)}
-          </h2>
-          {showRoman && romanization && (
+          {audioFirst ? (
+            <>
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                <Volume2 size={36} />
+              </div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Listen &amp; recall</p>
+              <h2 className="mt-3 text-2xl font-bold text-slate-800">What does this mean?</h2>
+              <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-500">Say the meaning silently before revealing the Korean and example.</p>
+            </>
+          ) : (
+            <h2 className="text-5xl font-bold text-slate-900 mb-6">{cleanKoreanText(front)}</h2>
+          )}
+          {!audioFirst && showRoman && romanization && (
             <motion.p
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -89,7 +100,7 @@ export function FlashCard({
               {romanization}
             </motion.p>
           )}
-          <div className="flex gap-4 mt-8">
+          <div className="mt-8 flex gap-4">
             <Button
               variant="secondary"
               size="icon"
@@ -101,7 +112,7 @@ export function FlashCard({
             >
               <Volume2 size={20} />
             </Button>
-            <Button
+            {!audioFirst && <Button
               variant="ghost"
               size="sm"
               className="text-slate-500 hover:text-slate-700"
@@ -111,10 +122,10 @@ export function FlashCard({
               }}
             >
               {showRoman ? "Hide" : "Show"} Romanization
-            </Button>
+            </Button>}
           </div>
-          <div className="absolute bottom-12 text-slate-300 flex items-center gap-2 text-sm animate-pulse">
-            Tap to reveal <ChevronRight size={16} />
+          <div className="absolute bottom-12 flex items-center gap-2 text-sm text-slate-300 animate-pulse">
+            {audioFirst ? "Tap to reveal meaning" : "Tap to reveal"} <ChevronRight size={16} />
           </div>
         </motion.div>
 
@@ -125,7 +136,8 @@ export function FlashCard({
           transition={{ duration: 0.3 }}
           className="absolute inset-0 bg-emerald-50 border-2 border-emerald-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
         >
-          <Badge className="mb-8 bg-emerald-500 text-white font-semibold">Meaning</Badge>
+          <Badge className="mb-6 bg-emerald-500 text-white font-semibold">{audioFirst ? "Korean + meaning" : "Meaning"}</Badge>
+          {audioFirst && <p className="mb-4 text-5xl font-bold text-slate-900">{cleanKoreanText(front)}</p>}
           <h2 className="text-3xl font-bold text-slate-900 mb-6">{back}</h2>
           {example && (
             <div className="mt-4 p-4 bg-white/70 rounded-2xl border border-emerald-200 max-w-xs">
