@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Brain, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, Target } from "lucide-react";
+import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { getLocalDateKey, useStudyState } from "@/hooks/useStudyState";
@@ -164,6 +164,24 @@ export default function Home() {
     const correct = reviewed.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
     return { ...category, reviewed: reviewed.length, total: cards.length, accuracy: reviews > 0 ? Math.round((correct / reviews) * 100) : null };
   });
+  const reviewForecast = Array.from({ length: 7 }, (_, offset) => {
+    const date = new Date();
+    date.setHours(12, 0, 0, 0);
+    date.setDate(date.getDate() + offset);
+    const key = getLocalDateKey(date);
+    return {
+      key,
+      label: offset === 0 ? "Today" : offset === 1 ? "Tomorrow" : date.toLocaleDateString(undefined, { weekday: "short" }),
+      count: VOCABULARY_DATA.filter((card) => {
+        const due = state.cardStates[card.id]?.due;
+        return offset === 0 ? Boolean(due && due <= key) : due === key;
+      }).length,
+    };
+  });
+  const nextScheduledReview = Object.values(state.cardStates)
+    .map((card) => card.due)
+    .filter((due) => due > today)
+    .sort()[0];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
@@ -294,6 +312,59 @@ export default function Home() {
             </Card>
           </motion.div>
         </div>
+
+        {/* Review Plan */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+        >
+          <Card className="overflow-hidden border-slate-100 bg-white shadow-sm">
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <CardTitle className="flex items-center gap-2 text-lg text-slate-800">
+                    <CalendarDays size={18} className="text-emerald-600" />
+                    Review Plan
+                  </CardTitle>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {overdueCount > 0
+                      ? `${overdueCount} card${overdueCount === 1 ? " is" : "s are"} ready for review today.`
+                      : nextScheduledReview
+                        ? `Your next scheduled review is ${new Date(`${nextScheduledReview}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" })}.`
+                        : "Complete a session to build your review plan."}
+                  </p>
+                </div>
+                <Badge className={overdueCount > 0 ? "bg-amber-100 text-amber-700 hover:bg-amber-100" : "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"}>
+                  {overdueCount > 0 ? "Focus today" : "On track"}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+                {reviewForecast.map((day) => {
+                  const isToday = day.key === today;
+                  const intensity = day.count === 0 ? "bg-slate-100 text-slate-400" : day.count <= 2 ? "bg-emerald-100 text-emerald-700" : day.count <= 5 ? "bg-amber-100 text-amber-700" : "bg-orange-200 text-orange-800";
+                  return (
+                    <div key={day.key} className="text-center">
+                      <div className={`mb-1 text-[10px] font-semibold ${isToday ? "text-emerald-700" : "text-slate-400"}`}>{day.label}</div>
+                      <div className={`flex h-10 items-center justify-center rounded-xl text-sm font-bold ${intensity} ${isToday ? "ring-2 ring-emerald-300 ring-offset-1" : ""}`}>
+                        {day.count}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs text-slate-400">Cards are scheduled automatically after each review.</p>
+                <Button size="sm" variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50" onClick={startSession} disabled={queue.length === 0}>
+                  <Play size={14} className="mr-2" />
+                  {overdueCount > 0 ? "Review due cards" : "Start a session"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Hangul Practice Button */}
         <motion.button
