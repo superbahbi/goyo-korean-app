@@ -262,8 +262,8 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white border-none shadow-xl overflow-hidden relative">
-            <div className="absolute top-0 right-0 p-8 opacity-10">
+            <Card className="relative overflow-hidden border-none bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-xl">
+            <div className="pointer-events-none absolute right-0 top-0 p-8 opacity-10">
               <Trophy size={140} />
             </div>
             <CardHeader>
@@ -275,14 +275,19 @@ export default function Home() {
               </p>
             </CardHeader>
             <CardContent className="pt-4">
-              <Button
-                size="lg"
-                className="w-full bg-white text-emerald-600 hover:bg-emerald-50 font-bold text-lg h-14 disabled:opacity-50"
-                onClick={startSession}
+              <button
+                type="button"
+                className="relative z-10 flex h-14 w-full touch-manipulation items-center justify-center rounded-lg bg-white px-6 text-lg font-bold text-emerald-600 shadow-sm transition-colors hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/60 active:scale-[0.99]"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  startSession();
+                }}
+                aria-label={dailyGoalReached ? "Review what you know" : "Start daily session"}
               >
-                <Play className="mr-2 fill-current" size={20} />
-                {dailyGoalReached ? "Review What You Know" : "Start Daily Session"}
-              </Button>
+                <Play className="pointer-events-none mr-2 fill-current" size={20} aria-hidden="true" />
+                <span className="pointer-events-none">{dailyGoalReached ? "Review What You Know" : "Start Daily Session"}</span>
+              </button>
             </CardContent>
           </Card>
         </motion.div>
