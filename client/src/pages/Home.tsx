@@ -15,6 +15,7 @@ import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
 import { ListeningPractice } from "@/components/ListeningPractice";
 import { ScenarioPractice } from "@/components/ScenarioPractice";
+import { ShadowingPractice } from "@/components/ShadowingPractice";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
 export default function Home() {
@@ -29,6 +30,7 @@ export default function Home() {
   const [showAlphabet, setShowAlphabet] = useState(false);
   const [showListening, setShowListening] = useState(false);
   const [showScenarios, setShowScenarios] = useState(false);
+  const [showShadowing, setShowShadowing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -136,6 +138,10 @@ export default function Home() {
   };
 
   const handleScenarioGrade = (cardId: string, rating: "again" | "good") => {
+    gradeCard(cardId, rating);
+  };
+
+  const handleShadowingGrade = (cardId: string, rating: "again" | "good") => {
     gradeCard(cardId, rating);
   };
 
@@ -426,6 +432,17 @@ export default function Home() {
         <motion.button
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
+          onClick={() => setShowShadowing(true)}
+          className="mb-6 w-full rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg"
+        >
+          <div className="mb-1 flex items-center justify-center gap-2 text-2xl"><Headphones size={25} /></div>
+          Shadowing Practice
+          <div className="mt-1 text-xs font-normal text-indigo-50">8 phrases · match Korean rhythm and pronunciation aloud</div>
+        </motion.button>
+
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           onClick={startWeakSession}
           disabled={weakCards.length === 0}
           className="w-full mb-6 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
@@ -512,6 +529,13 @@ export default function Home() {
         <ScenarioPractice
           onGrade={handleScenarioGrade}
           onClose={() => setShowScenarios(false)}
+        />
+      )}
+
+      {showShadowing && (
+        <ShadowingPractice
+          onGrade={handleShadowingGrade}
+          onClose={() => setShowShadowing(false)}
         />
       )}
 
