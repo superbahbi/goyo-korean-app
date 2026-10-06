@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { X, Check, Star } from "lucide-react";
+import { X, Check, Star, Mic2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FlashCard } from "./FlashCard";
 import { VocabularyCard } from "@/lib/vocabulary";
@@ -20,6 +21,8 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
   const [flipped, setFlipped] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [results, setResults] = useState({ again: 0, good: 0, easy: 0 });
+  const [productionAttempt, setProductionAttempt] = useState("");
+  const [productionDone, setProductionDone] = useState(false);
 
   const closeSession = () => {
     stopAudio();
@@ -36,6 +39,8 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
     if (!isLastCard) {
       setIndex(index + 1);
       setFlipped(false);
+      setProductionAttempt("");
+      setProductionDone(false);
     } else {
       setCompleted(true);
     }
@@ -46,6 +51,8 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
     setFlipped(false);
     setCompleted(false);
     setResults({ again: 0, good: 0, easy: 0 });
+    setProductionAttempt("");
+    setProductionDone(false);
   };
 
   if (completed) {
@@ -126,6 +133,32 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
           </Button>
         ) : (
           <div>
+            <div className="mb-4 rounded-2xl border border-indigo-100 bg-indigo-50/80 p-4 text-left">
+              <div className="flex items-center gap-2 text-sm font-semibold text-indigo-800">
+                <Mic2 size={16} />
+                Use it in a new situation
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-indigo-700">
+                Say a new sentence aloud with this Korean word or phrase. Writing your attempt is optional.
+              </p>
+              <div className="mt-3 flex gap-2">
+                <Input
+                  value={productionAttempt}
+                  onChange={(event) => setProductionAttempt(event.target.value)}
+                  placeholder="Your Korean sentence (optional)"
+                  className="h-10 border-indigo-200 bg-white"
+                  onClick={(event) => event.stopPropagation()}
+                />
+                <Button
+                  type="button"
+                  variant={productionDone ? "default" : "outline"}
+                  className={productionDone ? "h-10 shrink-0 bg-indigo-600 hover:bg-indigo-700" : "h-10 shrink-0 border-indigo-200 text-indigo-700 hover:bg-indigo-100"}
+                  onClick={() => setProductionDone(true)}
+                >
+                  {productionDone ? "Tried" : "Done"}
+                </Button>
+              </div>
+            </div>
             <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-400">How did that feel?</p>
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
             <motion.div
