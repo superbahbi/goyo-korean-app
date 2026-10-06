@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, Target } from "lucide-react";
+import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, MapPin, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { getLocalDateKey, useStudyState } from "@/hooks/useStudyState";
@@ -14,6 +14,7 @@ import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
 import { ListeningPractice } from "@/components/ListeningPractice";
+import { ScenarioPractice } from "@/components/ScenarioPractice";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
 export default function Home() {
@@ -27,6 +28,7 @@ export default function Home() {
   const [showSettings, setShowSettings] = useState(false);
   const [showAlphabet, setShowAlphabet] = useState(false);
   const [showListening, setShowListening] = useState(false);
+  const [showScenarios, setShowScenarios] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -130,6 +132,10 @@ export default function Home() {
   };
 
   const handleListeningGrade = (cardId: string, rating: "again" | "good") => {
+    gradeCard(cardId, rating);
+  };
+
+  const handleScenarioGrade = (cardId: string, rating: "again" | "good") => {
     gradeCard(cardId, rating);
   };
 
@@ -409,6 +415,17 @@ export default function Home() {
         <motion.button
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
+          onClick={() => setShowScenarios(true)}
+          className="mb-6 w-full rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg"
+        >
+          <div className="mb-1 flex items-center justify-center gap-2 text-2xl"><MapPin size={25} /></div>
+          Survival Scenarios
+          <div className="mt-1 text-xs font-normal text-rose-50">6 real-world situations · retrieve the phrase you would actually use</div>
+        </motion.button>
+
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
           onClick={startWeakSession}
           disabled={weakCards.length === 0}
           className="w-full mb-6 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
@@ -488,6 +505,13 @@ export default function Home() {
           cards={VOCABULARY_DATA}
           onGrade={handleListeningGrade}
           onClose={() => setShowListening(false)}
+        />
+      )}
+
+      {showScenarios && (
+        <ScenarioPractice
+          onGrade={handleScenarioGrade}
+          onClose={() => setShowScenarios(false)}
         />
       )}
 
