@@ -10,6 +10,16 @@ export interface CardState {
   lastReviewDate: string;
 }
 
+export type MasteryState = "new" | "learning" | "shaky" | "known";
+
+export function getMasteryState(cardState?: CardState): MasteryState {
+  if (!cardState || cardState.timesReviewed === 0) return "new";
+  const accuracy = cardState.timesCorrect / cardState.timesReviewed;
+  if (cardState.timesReviewed < 2 || accuracy < 0.5) return "learning";
+  if (cardState.timesReviewed < 3 || accuracy < 0.75 || cardState.interval < 7) return "shaky";
+  return "known";
+}
+
 export interface UserStats {
   totalXp: number;
   level: number;

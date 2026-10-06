@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, MapPin, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { getLocalDateKey, useStudyState } from "@/hooks/useStudyState";
+import { getLocalDateKey, getMasteryState, useStudyState, type MasteryState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
@@ -67,6 +67,23 @@ export default function Home() {
   const getRomanization = (card: typeof VOCABULARY_DATA[0]) => {
     return card.romanization || "";
   };
+
+  const masteryLabels: Record<MasteryState, string> = {
+    new: "New",
+    learning: "Learning",
+    shaky: "Shaky",
+    known: "Known",
+  };
+  const masteryStyles: Record<MasteryState, string> = {
+    new: "bg-slate-100 text-slate-600",
+    learning: "bg-blue-100 text-blue-700",
+    shaky: "bg-amber-100 text-amber-700",
+    known: "bg-emerald-100 text-emerald-700",
+  };
+  const masteryCounts = VOCABULARY_DATA.reduce<Record<MasteryState, number>>((counts, card) => {
+    counts[getMasteryState(state?.cardStates[card.id])] += 1;
+    return counts;
+  }, { new: 0, learning: 0, shaky: 0, known: 0 });
 
   // Build queue of cards to study
   useEffect(() => {
@@ -559,6 +576,7 @@ export default function Home() {
                   const romanization = getRomanization(card);
                   const isShowingRoman = showRomanization[card.id];
                   const isCardPlaying = playingCardId === card.id;
+                  const mastery = getMasteryState(state.cardStates[card.id]);
                   return (
                     <motion.div
                       key={card.id}
@@ -594,6 +612,9 @@ export default function Home() {
                           )}
                           <Badge variant="secondary" className="capitalize whitespace-nowrap">
                             {card.tag}
+                          </Badge>
+                          <Badge className={`whitespace-nowrap ${masteryStyles[mastery]}`}>
+                            {masteryLabels[mastery]}
                           </Badge>
                         </div>
                       </div>
@@ -692,6 +713,22 @@ export default function Home() {
               <div className="mt-1 text-2xl font-bold text-amber-700">{overdueCount}</div>
               <div className="mt-1 text-[11px] text-amber-600">reviews</div>
             </div>
+          </div>
+          <div className="mt-5 border-t border-slate-100 pt-4">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="font-semibold text-slate-800">Ability states</h3>
+              <span className="text-xs text-slate-400">Based on spaced recall</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {(["new", "learning", "shaky", "known"] as MasteryState[]).map((mastery) => (
+                <div key={mastery} className={`rounded-xl p-3 ${masteryStyles[mastery]}`}>
+                  <div className="text-xs font-semibold">{masteryLabels[mastery]}</div>
+                  <div className="mt-1 text-2xl font-bold">{masteryCounts[mastery]}</div>
+                  <div className="text-[11px] opacity-75">cards</div>
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 text-xs leading-relaxed text-slate-400">Known means at least three reviews with 75%+ recall and a review interval of seven days or more.</p>
           </div>
           <div className="mt-5 border-t border-slate-100 pt-4">
             <div className="mb-3 flex items-center justify-between">
