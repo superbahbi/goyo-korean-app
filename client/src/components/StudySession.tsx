@@ -113,9 +113,11 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
             wordId={currentCard.id}
             front={currentCard.front}
             back={currentCard.back}
+            romanization={currentCard.romanization}
             example={currentCard.example}
             tag={currentCard.tag}
             onFlip={setFlipped}
+            revealed={flipped}
             autoSpeak={true}
             audioFirst={true}
           />

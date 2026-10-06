@@ -114,7 +114,7 @@ export default function Home() {
       // Daily goal reached - allow repeating all cards for practice
       setQueue(VOCABULARY_DATA);
     }
-  }, [state?.cardStates, state?.stats.cardsStudiedToday]);
+  }, [state?.cardStates, state?.stats.cardsStudiedToday, state?.settings.dailyGoal]);
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy") => {
     const wasBelowGoal = Boolean(state && state.stats.cardsStudiedToday < state.settings.dailyGoal);
@@ -131,11 +131,12 @@ export default function Home() {
   };
 
   const startSession = () => {
-    if (queue.length === 0) {
+    const availableCards = queue.length > 0 ? queue : VOCABULARY_DATA;
+    if (availableCards.length === 0) {
       toast.info("No cards available to study today");
       return;
     }
-    setSessionQueue(queue);
+    setSessionQueue([...availableCards]);
     setSessionMode("daily");
     setIsStudying(true);
   };
@@ -278,7 +279,6 @@ export default function Home() {
                 size="lg"
                 className="w-full bg-white text-emerald-600 hover:bg-emerald-50 font-bold text-lg h-14 disabled:opacity-50"
                 onClick={startSession}
-                disabled={queue.length === 0}
               >
                 <Play className="mr-2 fill-current" size={20} />
                 {dailyGoalReached ? "Review What You Know" : "Start Daily Session"}
@@ -404,7 +404,7 @@ export default function Home() {
               </div>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-xs text-slate-400">Cards are scheduled automatically after each review.</p>
-                <Button size="sm" variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50" onClick={startSession} disabled={queue.length === 0}>
+                <Button size="sm" variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50" onClick={startSession}>
                   <Play size={14} className="mr-2" />
                   {overdueCount > 0 ? "Review due cards" : "Start a session"}
                 </Button>

@@ -11,9 +11,11 @@ interface FlashCardProps {
   back: string;
   example?: string;
   tag: string;
+  romanization?: string;
   onFlip?: (flipped: boolean) => void;
   autoSpeak?: boolean;
   audioFirst?: boolean;
+  revealed?: boolean;
 }
 
 function cleanKoreanText(text: string): string {
@@ -27,28 +29,33 @@ export function FlashCard({
   back,
   example,
   tag,
+  romanization: romanizationProp,
   onFlip,
   autoSpeak = true,
   audioFirst = false,
+  revealed,
 }: FlashCardProps) {
   const [flipped, setFlipped] = useState(false);
   const [showRoman, setShowRoman] = useState(false);
+  const isRevealed = revealed ?? flipped;
 
   useEffect(() => {
-    if (!flipped && autoSpeak) {
+    if (!isRevealed && autoSpeak) {
       const timer = setTimeout(() => {
         void playVocabularyAudio(wordId, cleanKoreanText(front));
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [flipped, front, wordId, autoSpeak]);
+  }, [isRevealed, front, wordId, autoSpeak]);
 
   const handleFlip = () => {
-    setFlipped(!flipped);
-    onFlip?.(!flipped);
+    const nextValue = !isRevealed;
+    setFlipped(nextValue);
+    onFlip?.(nextValue);
   };
 
   const getRomanization = () => {
+    if (romanizationProp) return romanizationProp;
     const match = front.match(/\(([^)]*)\)/);
     return match ? match[1] : "";
   };
@@ -64,14 +71,14 @@ export function FlashCard({
     >
       <div
         className={`w-full max-w-md aspect-[3/4] relative transition-all duration-500 cursor-pointer ${
-          flipped ? "scale-105" : ""
+          isRevealed ? "scale-105" : ""
         }`}
         onClick={handleFlip}
       >
         {/* Front */}
         <motion.div
           initial={false}
-          animate={{ opacity: flipped ? 0 : 1, pointerEvents: flipped ? "none" : "auto" }}
+          animate={{ opacity: isRevealed ? 0 : 1, pointerEvents: isRevealed ? "none" : "auto" }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 bg-white border-2 border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
         >
@@ -132,18 +139,24 @@ export function FlashCard({
         {/* Back */}
         <motion.div
           initial={false}
-          animate={{ opacity: flipped ? 1 : 0, pointerEvents: flipped ? "auto" : "none" }}
+          animate={{ opacity: isRevealed ? 1 : 0, pointerEvents: isRevealed ? "auto" : "none" }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 bg-emerald-50 border-2 border-emerald-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
+          className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-7 text-center shadow-xl sm:p-9"
         >
-          <Badge className="mb-6 bg-emerald-500 text-white font-semibold">{audioFirst ? "Korean + meaning" : "Meaning"}</Badge>
-          {audioFirst && <p className="mb-4 text-5xl font-bold text-slate-900">{cleanKoreanText(front)}</p>}
-          <h2 className="text-3xl font-bold text-slate-900 mb-6">{back}</h2>
+          <div className="flex min-h-full flex-col items-center justify-center">
+            <Badge className="mb-5 bg-emerald-600 text-white shadow-sm">{audioFirst ? "Korean + meaning" : "Meaning"}</Badge>
+            {audioFirst && <p className="text-5xl font-bold tracking-tight text-slate-900">{cleanKoreanText(front)}</p>}
+            {romanization && <p className="mt-3 font-mono text-lg font-semibold text-emerald-700">{romanization}</p>}
+            <div className="my-6 h-px w-full max-w-xs bg-emerald-200" />
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Meaning</p>
+            <h2 className="text-3xl font-bold leading-tight text-slate-900">{back}</h2>
           {example && (
-            <div className="mt-4 p-4 bg-white/70 rounded-2xl border border-emerald-200 max-w-xs">
-              <p className="text-sm text-slate-600 italic">\"{ example}\"</p>
+            <div className="mt-6 max-w-xs rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600">In context</p>
+              <p className="mt-2 text-sm italic leading-relaxed text-slate-600">“{example}”</p>
             </div>
           )}
+          </div>
         </motion.div>
       </div>
     </motion.div>
