@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Check, Eye, Headphones, RotateCcw, Volume2, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { VOCABULARY_DATA } from "@/lib/vocabulary";
+import { STUDY_READY_VOCABULARY } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 
 interface ShadowingPracticeProps {
@@ -14,7 +14,7 @@ interface ShadowingPracticeProps {
 
 export function ShadowingPractice({ onGrade, onClose }: ShadowingPracticeProps) {
   const cards = useMemo(
-    () => VOCABULARY_DATA.filter((card) => card.tag === "survival" || card.tag === "daily").slice(0, 8),
+    () => STUDY_READY_VOCABULARY.filter((card) => card.tag === "survival" || card.tag === "daily").slice(0, 8),
     [],
   );
   const [index, setIndex] = useState(0);

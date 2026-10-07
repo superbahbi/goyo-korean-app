@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { getLocalDateKey, getMasteryState, useStudyState, type MasteryState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
-import { VOCABULARY_DATA, CATEGORIES } from "@/lib/vocabulary";
+import { VOCABULARY_DATA, STUDY_READY_VOCABULARY, CATEGORIES } from "@/lib/vocabulary";
 import { AlphabetPractice } from "./AlphabetPractice";
 import { ListeningPractice } from "@/components/ListeningPractice";
 import { ScenarioPractice } from "@/components/ScenarioPractice";
@@ -100,14 +100,14 @@ export default function Home() {
     // introduce new cards to fill the remaining places in the session.
     if (cardsStudiedToday < dailyGoal) {
       const sessionSize = dailyGoal - cardsStudiedToday;
-      const overdueCards = VOCABULARY_DATA
+      const overdueCards = STUDY_READY_VOCABULARY
         .filter((card) => state.cardStates[card.id]?.due && state.cardStates[card.id].due <= today)
         .sort((a, b) => {
           const aDue = state.cardStates[a.id]?.due ?? today;
           const bDue = state.cardStates[b.id]?.due ?? today;
           return aDue.localeCompare(bDue);
         });
-      const newCards = VOCABULARY_DATA.filter((card) => !state.cardStates[card.id]);
+      const newCards = STUDY_READY_VOCABULARY.filter((card) => !state.cardStates[card.id]);
       const cardsToStudy = [...overdueCards, ...newCards]
         .filter((card, position, allCards) => allCards.findIndex((item) => item.id === card.id) === position)
         .slice(0, sessionSize);
@@ -116,11 +116,11 @@ export default function Home() {
       // Keep post-goal practice useful without turning the dashboard into a
       // full-deck session. Prioritize due cards, then the learner's weakest
       // reviewed cards, and finally a small set of new cards.
-      const dueCards = VOCABULARY_DATA.filter((card) => {
+      const dueCards = STUDY_READY_VOCABULARY.filter((card) => {
         const due = state.cardStates[card.id]?.due;
         return Boolean(due && due <= today);
       });
-      const fallbackCards = VOCABULARY_DATA
+      const fallbackCards = STUDY_READY_VOCABULARY
         .filter((card) => !dueCards.some((dueCard) => dueCard.id === card.id))
         .sort((a, b) => {
           const aState = state.cardStates[a.id];
@@ -149,7 +149,7 @@ export default function Home() {
   };
 
   const startSession = () => {
-    const availableCards = queue.length > 0 ? queue : VOCABULARY_DATA;
+    const availableCards = queue.length > 0 ? queue : STUDY_READY_VOCABULARY;
     if (availableCards.length === 0) {
       toast.info("No cards available to study today");
       return;
@@ -204,11 +204,11 @@ export default function Home() {
     ? Math.min(100, Math.max(0, ((state.stats.totalXp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100))
     : 100;
   const today = getLocalDateKey();
-  const overdueCount = VOCABULARY_DATA.filter((card) => {
+  const overdueCount = STUDY_READY_VOCABULARY.filter((card) => {
     const due = state.cardStates[card.id]?.due;
     return Boolean(due && due <= today);
   }).length;
-  const weakCards = VOCABULARY_DATA
+  const weakCards = STUDY_READY_VOCABULARY
     .filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed))
     .sort((a, b) => {
       const aState = state.cardStates[a.id];
@@ -218,7 +218,7 @@ export default function Home() {
       return aAccuracy - bAccuracy || (bState?.timesReviewed ?? 0) - (aState?.timesReviewed ?? 0);
     })
     .slice(0, 10);
-  const learningCards = VOCABULARY_DATA
+  const learningCards = STUDY_READY_VOCABULARY
     .filter((card) => {
       const mastery = getMasteryState(state.cardStates[card.id]);
       return mastery === "learning" || mastery === "shaky";
@@ -256,7 +256,7 @@ export default function Home() {
     return {
       key,
       label: offset === 0 ? "Today" : offset === 1 ? "Tomorrow" : date.toLocaleDateString(undefined, { weekday: "short" }),
-      count: VOCABULARY_DATA.filter((card) => {
+      count: STUDY_READY_VOCABULARY.filter((card) => {
         const due = state.cardStates[card.id]?.due;
         return offset === 0 ? Boolean(due && due <= key) : due === key;
       }).length,
@@ -423,7 +423,7 @@ export default function Home() {
                   {state.stats.totalCardsLearned}
                 </div>
                 <p className="text-xs text-slate-400 mt-2">
-                  {Math.round((state.stats.totalCardsLearned / VOCABULARY_DATA.length) * 100)}% of deck
+                  {Math.round((state.stats.totalCardsLearned / STUDY_READY_VOCABULARY.length) * 100)}% of study-ready deck
                 </p>
               </CardContent>
             </Card>
@@ -640,7 +640,7 @@ export default function Home() {
 
       {showListening && (
         <ListeningPractice
-          cards={VOCABULARY_DATA}
+                  cards={STUDY_READY_VOCABULARY}
           onGrade={handleListeningGrade}
           onClose={() => setShowListening(false)}
         />
@@ -746,23 +746,28 @@ export default function Home() {
                           <Badge className={`whitespace-nowrap ${masteryStyles[mastery]}`}>
                             {masteryLabels[mastery]}
                           </Badge>
+                          {card.audioReady === false && (
+                            <Badge variant="outline" className="whitespace-nowrap border-amber-200 bg-amber-50 text-amber-700">
+                              Audio pending
+                            </Badge>
+                          )}
                         </div>
                       </div>
                       <div className="flex gap-2 pt-2 border-t border-slate-100">
                         <Button
                           variant="ghost"
                           size="sm"
-                          disabled={isSpeaking}
+                          disabled={isSpeaking || card.audioReady === false}
                           className={`flex-1 h-8 text-xs gap-1 disabled:opacity-50 ${
                             isCardPlaying
                               ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
                               : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                           }`}
                           onClick={() => speakKorean(card.id, card.front)}
-                          aria-label={isCardPlaying ? `Playing pronunciation for ${card.front}` : `Play pronunciation for ${card.front}`}
+                          aria-label={card.audioReady === false ? `Audio pending for ${card.front}` : isCardPlaying ? `Playing pronunciation for ${card.front}` : `Play pronunciation for ${card.front}`}
                         >
                           <Volume2 size={14} className={isCardPlaying ? "animate-pulse" : ""} />
-                          {isCardPlaying ? "Playing..." : "Speak"}
+                          {card.audioReady === false ? "Audio pending" : isCardPlaying ? "Playing..." : "Speak"}
                         </Button>
                         {romanization && (
                           <Button

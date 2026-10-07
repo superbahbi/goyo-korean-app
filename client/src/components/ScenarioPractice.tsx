@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Check, ChevronRight, RotateCcw, Volume2, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { VOCABULARY_DATA, type VocabularyCard } from "@/lib/vocabulary";
+import { STUDY_READY_VOCABULARY, type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 
 interface Scenario {
@@ -36,12 +36,12 @@ export function ScenarioPractice({ onGrade, onClose }: ScenarioPracticeProps) {
 
   const scenarios = useMemo(() => [...SCENARIOS].sort(() => Math.random() - 0.5), []);
   const current = scenarios[index];
-  const cardMap = useMemo(() => new Map(VOCABULARY_DATA.map((card) => [card.id, card])), []);
+  const cardMap = useMemo(() => new Map(STUDY_READY_VOCABULARY.map((card) => [card.id, card])), []);
   const currentCard = current ? cardMap.get(current.cardId) : undefined;
 
   const choices = useMemo(() => {
     if (!currentCard) return [];
-    const distractors = VOCABULARY_DATA
+    const distractors = STUDY_READY_VOCABULARY
       .filter((card) => card.tag === "survival" && card.id !== currentCard.id)
       .sort(() => Math.random() - 0.5)
       .slice(0, 2);

@@ -7,9 +7,13 @@ export interface VocabularyCard {
   example: string;
   difficulty: "beginner" | "intermediate" | "advanced";
   partOfSpeech: string;
+  source?: string;
+  audioReady?: boolean;
 }
 
-export const VOCABULARY_DATA: VocabularyCard[] = [
+import { ESSENTIAL_WORDS } from "./essentialVocabulary";
+
+const CURATED_VOCABULARY_DATA: VocabularyCard[] = [
   // Survival Phrases (10 cards)
   { id: "surv_001", front: "안녕하세요", back: "Hello (polite/formal)", romanization: "annyeonghaseyo", tag: "survival", example: "안녕하세요, 저는 학생입니다.", difficulty: "beginner", partOfSpeech: "greeting" },
   { id: "surv_002", front: "감사합니다", back: "Thank you (formal)", romanization: "gamsahamnida", tag: "survival", example: "도와주셔서 감사합니다.", difficulty: "beginner", partOfSpeech: "expression" },
@@ -27,16 +31,16 @@ export const VOCABULARY_DATA: VocabularyCard[] = [
   { id: "daily_002", front: "잘 지내요?", back: "How are you doing?", romanization: "jal jinaeyo", tag: "daily", example: "요즘 잘 지내요?", difficulty: "beginner", partOfSpeech: "question" },
   { id: "daily_003", front: "좋아해요", back: "I like it", romanization: "joahaeyo", tag: "daily", example: "나는 한국 음식을 좋아해요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "daily_004", front: "싫어해요", back: "I dislike it", romanization: "silheohaeyo", tag: "daily", example: "나는 매운 음식을 싫어해요.", difficulty: "beginner", partOfSpeech: "verb" },
-  { id: "daily_005", front: "재미있어요", back: "It's fun/interesting", romanization: "jaemiisseowo", tag: "daily", example: "이 영화는 재미있어요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "daily_005", front: "재미있어요", back: "It's fun/interesting", romanization: "jaemiisseoyo", tag: "daily", example: "이 영화는 재미있어요.", difficulty: "beginner", partOfSpeech: "adjective" },
   { id: "daily_006", front: "지루해요", back: "It's boring", romanization: "jiruheyo", tag: "daily", example: "이 책은 지루해요.", difficulty: "beginner", partOfSpeech: "adjective" },
   { id: "daily_007", front: "피곤해요", back: "I'm tired", romanization: "pigonheyo", tag: "daily", example: "오늘 하루가 피곤해요.", difficulty: "beginner", partOfSpeech: "adjective" },
   { id: "daily_008", front: "행복해요", back: "I'm happy", romanization: "haengbokheyo", tag: "daily", example: "나는 행복해요.", difficulty: "beginner", partOfSpeech: "adjective" },
   { id: "daily_009", front: "슬퍼요", back: "I'm sad", romanization: "seulpeoyo", tag: "daily", example: "그 소식을 들으니 슬퍼요.", difficulty: "beginner", partOfSpeech: "adjective" },
-  { id: "daily_010", front: "화났어요", back: "I'm angry", romanization: "hwanasseowo", tag: "daily", example: "나는 화났어요.", difficulty: "beginner", partOfSpeech: "adjective" },
+  { id: "daily_010", front: "화났어요", back: "I'm angry", romanization: "hwanasseoyo", tag: "daily", example: "나는 화났어요.", difficulty: "beginner", partOfSpeech: "adjective" },
   { id: "daily_011", front: "뭐 하고 있어요?", back: "What are you doing?", romanization: "mwo hago isseowo", tag: "daily", example: "지금 뭐 하고 있어요?", difficulty: "beginner", partOfSpeech: "question" },
   { id: "daily_012", front: "뭘 먹고 싶어요?", back: "What do you want to eat?", romanization: "mwol meokgo sipeoyo", tag: "daily", example: "점심에 뭘 먹고 싶어요?", difficulty: "beginner", partOfSpeech: "question" },
   { id: "daily_013", front: "어디 가고 싶어요?", back: "Where do you want to go?", romanization: "eodi gago sipeoyo", tag: "daily", example: "주말에 어디 가고 싶어요?", difficulty: "beginner", partOfSpeech: "question" },
-  { id: "daily_014", front: "뭐라고 했어요?", back: "What did you say?", romanization: "mworago haesseowo", tag: "daily", example: "죄송하지만 뭐라고 했어요?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "daily_014", front: "뭐라고 했어요?", back: "What did you say?", romanization: "mworago haesseoyo", tag: "daily", example: "죄송하지만 뭐라고 했어요?", difficulty: "beginner", partOfSpeech: "question" },
   { id: "daily_015", front: "다시 말씀해 주세요", back: "Please say it again", romanization: "dasi malsseum hae juseyo", tag: "daily", example: "천천히 다시 말씀해 주세요.", difficulty: "beginner", partOfSpeech: "expression" },
 
   // Numbers & Time (20 cards)
@@ -107,20 +111,20 @@ export const VOCABULARY_DATA: VocabularyCard[] = [
   { id: "emot_012", front: "외로워요", back: "I'm lonely", romanization: "oerowoyo", tag: "emotions", example: "나는 외로워요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "emot_013", front: "편해요", back: "I'm comfortable", romanization: "pyeonhaeyo", tag: "emotions", example: "나는 편해요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "emot_014", front: "불편해요", back: "I'm uncomfortable", romanization: "bulpyeonhaeyo", tag: "emotions", example: "나는 불편해요.", difficulty: "beginner", partOfSpeech: "verb" },
-  { id: "emot_015", front: "감동했어요", back: "I was moved", romanization: "gamdonghaesseowo", tag: "emotions", example: "나는 감동했어요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "emot_015", front: "감동했어요", back: "I was moved", romanization: "gamdonghaesseoyo", tag: "emotions", example: "나는 감동했어요.", difficulty: "beginner", partOfSpeech: "verb" },
 
   // Common Verbs (15 cards)
   { id: "verb_001", front: "가요", back: "Go", romanization: "gayo", tag: "verbs", example: "나는 학교에 가요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_002", front: "와요", back: "Come", romanization: "wayo", tag: "verbs", example: "친구가 와요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_003", front: "먹어요", back: "Eat", romanization: "meogeoyo", tag: "verbs", example: "나는 밥을 먹어요.", difficulty: "beginner", partOfSpeech: "verb" },
-  { id: "verb_004", front: "마셔요", back: "Drink", romanization: "mashewoyo", tag: "verbs", example: "나는 물을 마셔요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_004", front: "마셔요", back: "Drink", romanization: "masyeoyo", tag: "verbs", example: "나는 물을 마셔요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_005", front: "자요", back: "Sleep", romanization: "jayo", tag: "verbs", example: "나는 밤에 자요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_006", front: "일어나요", back: "Wake up", romanization: "ireonayo", tag: "verbs", example: "나는 아침 7시에 일어나요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_007", front: "공부해요", back: "Study", romanization: "gongbuhaeyo", tag: "verbs", example: "나는 한국어를 공부해요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_008", front: "일해요", back: "Work", romanization: "ilhaeyo", tag: "verbs", example: "나는 회사에서 일해요.", difficulty: "beginner", partOfSpeech: "verb" },
-  { id: "verb_009", front: "놀아요", back: "Play", romanization: "noraayo", tag: "verbs", example: "아이들이 놀아요.", difficulty: "beginner", partOfSpeech: "verb" },
-  { id: "verb_010", front: "읽어요", back: "Read", romanization: "ilgeoya", tag: "verbs", example: "나는 책을 읽어요.", difficulty: "beginner", partOfSpeech: "verb" },
-  { id: "verb_011", front: "쓰세요", back: "Write", romanization: "sseusaeyo", tag: "verbs", example: "나는 편지를 써요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_009", front: "놀아요", back: "Play", romanization: "nolayo", tag: "verbs", example: "아이들이 놀아요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_010", front: "읽어요", back: "Read", romanization: "ilgeoyo", tag: "verbs", example: "나는 책을 읽어요.", difficulty: "beginner", partOfSpeech: "verb" },
+  { id: "verb_011", front: "쓰세요", back: "Write", romanization: "sseuseyo", tag: "verbs", example: "나는 편지를 써요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_012", front: "말해요", back: "Speak", romanization: "malhaeyo", tag: "verbs", example: "나는 한국어를 말해요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_013", front: "듣어요", back: "Listen", romanization: "deureoyo", tag: "verbs", example: "나는 음악을 들어요.", difficulty: "beginner", partOfSpeech: "verb" },
   { id: "verb_014", front: "봐요", back: "See/Watch", romanization: "bwayo", tag: "verbs", example: "나는 영화를 봐요.", difficulty: "beginner", partOfSpeech: "verb" },
@@ -178,4 +182,16 @@ export const CATEGORIES = [
   { id: "body", name: "Body", icon: "💪", color: "bg-indigo-100 text-indigo-700" },
   { id: "colors", name: "Colors", icon: "🎨", color: "bg-cyan-100 text-cyan-700" },
   { id: "places", name: "Places", icon: "📍", color: "bg-lime-100 text-lime-700" },
+  { id: "essential", name: "Essential 600", icon: "📚", color: "bg-emerald-100 text-emerald-700" },
 ];
+
+// Curated phrase cards remain the study-ready core. The imported inventory is
+// searchable immediately, but stays out of audio-first sessions until its
+// examples and ElevenLabs recordings have been reviewed and generated.
+const curatedFronts = new Set(CURATED_VOCABULARY_DATA.map((card) => card.front));
+export const VOCABULARY_DATA: VocabularyCard[] = [
+  ...CURATED_VOCABULARY_DATA.map((card) => ({ ...card, source: card.source ?? "Goyo curated", audioReady: card.audioReady ?? true })),
+  ...ESSENTIAL_WORDS.filter((card) => !curatedFronts.has(card.front)),
+];
+
+export const STUDY_READY_VOCABULARY = VOCABULARY_DATA.filter((card) => card.audioReady !== false);
