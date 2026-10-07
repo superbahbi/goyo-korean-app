@@ -7,13 +7,14 @@
 Findings:
 
 - 547 valid Korean–English rows were present.
-- 542 unique Korean headwords remained after deduplication.
-- Duplicate headwords were retained as one headword during import, with these source meanings:
+- 542 unique Korean headwords remained after normalizing the source typos; genuine homonyms remain as separate sense records.
+- Duplicate headwords were reviewed as separate senses where appropriate:
   - `차`: car (row 18) / tea (row 175)
   - `공`: ball (row 160) / zero; ball (row 375)
   - `병`: bottle (row 207) / disease; illness (row 282)
   - `눈`: eye (row 261) / snow; eye (row 291)
   - `달`: moon; month (row 292) / month (counter) (row 455)
+- Import cleanup trimmed repeated senses: `공` row 375 is now only `zero`, `눈` row 291 is now only `snow`, and the `달` month-counter row was merged into the row 292 entry as `moon; month (counter)`.
 - Two high-confidence source corrections were applied: `자정거` → `자전거` (row 20, bicycle) and `놉다` → `높다` (row 580, to be high).
 - The workbook does not provide romanization, example sentences, part of speech, or audio.
 
@@ -30,8 +31,8 @@ This prevents incomplete source data from entering the audio-first daily session
 
 ## Implemented
 
-- Added 542 deduplicated essential-word records.
-- 45 of those headwords overlap with existing curated cards; the library therefore adds 497 new unique cards rather than duplicating them.
+- Added 546 sense-aware essential-word records from the 547 valid source rows.
+- 45 headwords overlap with existing curated cards, but only 29 Korean-plus-meaning pairs are exact matches after case normalization. Those 29 duplicate senses are removed; distinct meanings remain as separate cards, producing 517 new imported sense cards.
 - Added deterministic romanization for library search and preview.
 - Added source metadata and audio readiness metadata to `VocabularyCard`.
 - Added the **Essential 600** library category.

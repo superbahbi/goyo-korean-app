@@ -188,10 +188,11 @@ export const CATEGORIES = [
 // Curated phrase cards remain the study-ready core. The imported inventory is
 // searchable immediately, but stays out of audio-first sessions until its
 // examples and ElevenLabs recordings have been reviewed and generated.
-const curatedFronts = new Set(CURATED_VOCABULARY_DATA.map((card) => card.front));
+const cardKey = (card: VocabularyCard) => `${card.front}::${card.back.trim().toLocaleLowerCase()}`;
+const curatedCards = new Set(CURATED_VOCABULARY_DATA.map(cardKey));
 export const VOCABULARY_DATA: VocabularyCard[] = [
   ...CURATED_VOCABULARY_DATA.map((card) => ({ ...card, source: card.source ?? "Goyo curated", audioReady: card.audioReady ?? true })),
-  ...ESSENTIAL_WORDS.filter((card) => !curatedFronts.has(card.front)),
+  ...ESSENTIAL_WORDS.filter((card) => !curatedCards.has(cardKey(card))),
 ];
 
 export const STUDY_READY_VOCABULARY = VOCABULARY_DATA.filter((card) => card.audioReady !== false);
