@@ -5,6 +5,8 @@ export interface VocabularyCard {
   romanization: string;
   tag: string;
   example: string;
+  exampleEnglish?: string;
+  usageNote?: string;
   difficulty: "beginner" | "intermediate" | "advanced";
   partOfSpeech: string;
   source?: string;

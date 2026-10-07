@@ -10,6 +10,8 @@ interface FlashCardProps {
   front: string;
   back: string;
   example?: string;
+  exampleEnglish?: string;
+  usageNote?: string;
   tag: string;
   romanization?: string;
   onFlip?: (flipped: boolean) => void;
@@ -28,6 +30,8 @@ export function FlashCard({
   front,
   back,
   example,
+  exampleEnglish,
+  usageNote,
   tag,
   romanization: romanizationProp,
   onFlip,
@@ -154,6 +158,13 @@ export function FlashCard({
             <div className="mt-6 max-w-xs rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm">
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600">In context</p>
               <p className="mt-2 text-sm italic leading-relaxed text-slate-600">“{example}”</p>
+              {exampleEnglish && <p className="mt-2 text-xs leading-relaxed text-slate-500">{exampleEnglish}</p>}
+            </div>
+          )}
+          {usageNote && (
+            <div className="mt-3 max-w-xs rounded-2xl border border-slate-200 bg-white/60 px-4 py-3 text-left">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Usage note</p>
+              <p className="mt-1 text-xs leading-relaxed text-slate-600">{usageNote}</p>
             </div>
           )}
           </div>
