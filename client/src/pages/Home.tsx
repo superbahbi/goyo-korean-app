@@ -18,6 +18,8 @@ import { ScenarioPractice } from "@/components/ScenarioPractice";
 import { ShadowingPractice } from "@/components/ShadowingPractice";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
+const BROWSE_PAGE_SIZE = 40;
+
 export default function Home() {
   const { state, gradeCard, updateSettings } = useStudyState();
   const [queue, setQueue] = useState<typeof VOCABULARY_DATA>([]);
@@ -34,6 +36,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [browseQuery, setBrowseQuery] = useState("");
   const [browseMastery, setBrowseMastery] = useState<MasteryState | "all">("all");
+  const [browseVisibleCount, setBrowseVisibleCount] = useState(BROWSE_PAGE_SIZE);
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [playingCardId, setPlayingCardId] = useState<string | null>(null);
@@ -41,6 +44,10 @@ export default function Home() {
   useEffect(() => {
     if (state?.settings.audioSpeaker) setAudioSpeaker(state.settings.audioSpeaker);
   }, [state?.settings.audioSpeaker]);
+
+  useEffect(() => {
+    setBrowseVisibleCount(BROWSE_PAGE_SIZE);
+  }, [browseQuery, browseMastery, selectedCategory]);
 
   const handleSpeakerChange = (speaker: AudioSpeaker) => {
     updateSettings({ audioSpeaker: speaker });
@@ -236,6 +243,7 @@ export default function Home() {
     const matchesQuery = !normalizedBrowseQuery || [card.front, card.back, card.romanization, card.example].some((value) => value.toLocaleLowerCase().includes(normalizedBrowseQuery));
     return matchesCategory && matchesMastery && matchesQuery;
   });
+  const visibleBrowseCards = filteredCards.slice(0, browseVisibleCount);
   const reviewedCards = VOCABULARY_DATA.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
   const totalReviews = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
   const totalCorrect = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
@@ -702,16 +710,14 @@ export default function Home() {
           <div className="flex-1 overflow-y-auto">
             <div className="space-y-3 px-5 py-4 sm:px-6">
               {filteredCards.length > 0 ? (
-                filteredCards.map((card) => {
+                visibleBrowseCards.map((card) => {
                   const romanization = getRomanization(card);
                   const isShowingRoman = showRomanization[card.id];
                   const isCardPlaying = playingCardId === card.id;
                   const mastery = getMasteryState(state.cardStates[card.id]);
                   return (
-                    <motion.div
+                    <div
                       key={card.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
                       aria-busy={isCardPlaying}
                       className={`rounded-2xl border p-4 transition-all ${
                         isCardPlaying
@@ -795,7 +801,7 @@ export default function Home() {
                           </Button>
                         )}
                       </div>
-                    </motion.div>
+                    </div>
                   );
                 })
               ) : (
@@ -803,7 +809,17 @@ export default function Home() {
                   <Search size={28} className="mx-auto text-slate-300" />
                   <p className="mt-3 font-semibold text-slate-700">No matching cards</p>
                   <p className="mt-1 text-sm text-slate-400">Try a different search or clear your filters.</p>
-                </div>
+                  </div>
+              )}
+              {visibleBrowseCards.length < filteredCards.length && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full rounded-xl border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                  onClick={() => setBrowseVisibleCount((count) => Math.min(count + BROWSE_PAGE_SIZE, filteredCards.length))}
+                >
+                  Load 40 more · {filteredCards.length - visibleBrowseCards.length} remaining
+                </Button>
               )}
             </div>
           </div>
