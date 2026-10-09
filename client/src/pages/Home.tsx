@@ -140,10 +140,10 @@ export default function Home() {
     }
   }, [state?.cardStates, state?.stats.cardsStudiedToday, state?.settings.dailyGoal]);
 
-  const handleGrade = (cardId: string, rating: "again" | "good" | "easy") => {
+  const handleGrade = (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => {
     const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
     const wasBelowGoal = Boolean(state && !isRepeatPractice && state.stats.cardsStudiedToday < state.settings.dailyGoal);
-    gradeCard(cardId, rating, { countProgress: !isRepeatPractice });
+    gradeCard(cardId, rating, { countProgress: !isRepeatPractice, responseTimeMs: options?.responseTimeMs });
 
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
     if (state && wasBelowGoal && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
@@ -248,6 +248,13 @@ export default function Home() {
   const totalReviews = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
   const totalCorrect = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
   const overallAccuracy = totalReviews > 0 ? Math.round((totalCorrect / totalReviews) * 100) : 0;
+  const responseTimes = reviewedCards
+    .map((card) => state.cardStates[card.id]?.lastResponseTimeMs)
+    .filter((time): time is number => typeof time === "number" && time > 0)
+    .sort((a, b) => a - b);
+  const medianResponseTime = responseTimes.length > 0
+    ? responseTimes[Math.floor(responseTimes.length / 2)]
+    : null;
   const masteredCount = VOCABULARY_DATA.filter((card) => getMasteryState(state.cardStates[card.id]) === "known").length;
   const categoryMastery = CATEGORIES.map((category) => {
     const cards = VOCABULARY_DATA.filter((card) => card.tag === category.id);
@@ -844,7 +851,7 @@ export default function Home() {
             <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/20"><div className="h-full rounded-full bg-white transition-all" style={{ width: `${levelProgress}%` }} /></div>
             <div className="mt-2 flex justify-between text-xs text-emerald-100"><span>{state.stats.totalXp} XP earned</span><span>{Math.max(0, nextLevelXp - state.stats.totalXp)} XP to next level</span></div>
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
             <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-4">
               <div className="text-xs text-yellow-600 font-medium">Total XP</div>
               <div className="text-3xl font-bold text-yellow-700">{state.stats.totalXp}</div>
@@ -860,6 +867,11 @@ export default function Home() {
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
               <div className="text-xs font-medium text-emerald-600">Known</div>
               <div className="text-3xl font-bold text-emerald-700">{masteredCount}</div>
+            </div>
+            <div className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4">
+              <div className="text-xs font-medium text-cyan-600">Recall tempo</div>
+              <div className="text-3xl font-bold text-cyan-700">{medianResponseTime ? `${Math.round(medianResponseTime / 1000)}s` : "—"}</div>
+              <div className="mt-1 text-[11px] text-cyan-600">median response</div>
             </div>
           </div>
           <div className="mt-5 grid grid-cols-3 gap-3 border-t border-slate-100 pt-5">

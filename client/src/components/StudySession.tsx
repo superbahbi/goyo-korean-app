@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
@@ -10,7 +10,7 @@ import { stopAudio } from "@/lib/audioPlayer";
 
 interface StudySessionProps {
   queue: VocabularyCard[];
-  onGrade: (cardId: string, rating: "again" | "good" | "easy") => void;
+  onGrade: (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => void;
   onClose: () => void;
   allowRepeat?: boolean;
   title?: string;
@@ -23,6 +23,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
   const [results, setResults] = useState({ again: 0, good: 0, easy: 0 });
   const [productionAttempt, setProductionAttempt] = useState("");
   const [productionDone, setProductionDone] = useState(false);
+  const cardStartedAt = useRef(Date.now());
 
   const closeSession = () => {
     stopAudio();
@@ -33,7 +34,8 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
   const isLastCard = index >= queue.length - 1;
 
   const handleGrade = (rating: "again" | "good" | "easy") => {
-    onGrade(currentCard.id, rating);
+    const responseTimeMs = Math.min(120000, Math.max(250, Date.now() - cardStartedAt.current));
+    onGrade(currentCard.id, rating, { responseTimeMs });
     setResults((current) => ({ ...current, [rating]: current[rating] + 1 }));
 
     if (!isLastCard) {
@@ -41,6 +43,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
       setFlipped(false);
       setProductionAttempt("");
       setProductionDone(false);
+      cardStartedAt.current = Date.now();
     } else {
       setCompleted(true);
     }
@@ -53,6 +56,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
     setResults({ again: 0, good: 0, easy: 0 });
     setProductionAttempt("");
     setProductionDone(false);
+    cardStartedAt.current = Date.now();
   };
 
   if (completed) {

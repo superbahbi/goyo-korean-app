@@ -7,6 +7,7 @@ export interface SrsCardState {
   easeFactor?: number;
   consecutiveCorrect?: number;
   lapseCount?: number;
+  lastResponseTimeMs?: number;
 }
 
 export interface SrsSchedule {
@@ -42,11 +43,13 @@ function roundInterval(days: number) {
 export function scheduleRecall(
   existing: SrsCardState | undefined,
   rating: SrsRating,
+  responseTimeMs?: number,
 ): SrsSchedule {
   const previousInterval = Math.max(0, existing?.interval ?? 0);
   const previousEase = clamp(existing?.easeFactor ?? DEFAULT_EASE, MIN_EASE, MAX_EASE);
   const previousCorrectStreak = Math.max(0, existing?.consecutiveCorrect ?? 0);
   const previousLapses = Math.max(0, existing?.lapseCount ?? 0);
+  const responseWasSlow = typeof responseTimeMs === "number" && responseTimeMs > 12000;
   const isFirstReview = !existing || (existing.timesReviewed ?? 0) === 0;
 
   if (rating === "again") {
@@ -60,7 +63,7 @@ export function scheduleRecall(
   }
 
   const nextEase = clamp(
-    previousEase + (rating === "easy" ? 0.15 : 0),
+    previousEase + (rating === "easy" ? 0.15 : 0) - (responseWasSlow ? 0.1 : 0),
     MIN_EASE,
     MAX_EASE,
   );
@@ -86,7 +89,7 @@ export function scheduleRecall(
     };
   }
 
-  const qualityMultiplier = rating === "easy" ? 1.3 : 1;
+  const qualityMultiplier = rating === "easy" ? (responseWasSlow ? 1.1 : 1.3) : responseWasSlow ? 0.9 : 1;
   const interval = roundInterval(
     Math.max(2, previousInterval || 1) * nextEase * qualityMultiplier,
   );

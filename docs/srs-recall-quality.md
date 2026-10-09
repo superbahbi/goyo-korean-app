@@ -12,6 +12,7 @@ Each reviewed card now tracks:
 - `easeFactor`: growth multiplier, bounded from 1.3 to 3.2;
 - `consecutiveCorrect`: uninterrupted successful recalls;
 - `lapseCount`: number of `Again` outcomes.
+- `lastResponseTimeMs`: the latest local response latency, used only as a gentle confidence signal.
 
 Existing saved cards continue to work. Missing fields use conservative defaults, so older progress is not lost or reset.
 
@@ -24,6 +25,8 @@ Existing saved cards continue to work. Missing fields use conservative defaults,
 | Easy | 4 days | previous interval × ease × 1.3 | Immediate, confident recall |
 
 Intervals are rounded and capped at 365 days. A lapse reduces ease by 0.2, while an Easy answer increases it by 0.15. This prevents both runaway scheduling and repeated failures being hidden by a large interval.
+
+Response time is deliberately secondary to the learner's rating. A response over 12 seconds slightly reduces growth and ease, while a quick response does not override a learner's honest `Again`. This avoids rewarding rushed guessing and avoids treating slower, careful learners as failures.
 
 ## Mastery interpretation
 

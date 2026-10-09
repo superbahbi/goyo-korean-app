@@ -19,6 +19,19 @@ const easy = scheduleRecall(
 assert.ok(easy.interval > secondGood.interval);
 assert.ok(easy.easeFactor > secondGood.easeFactor);
 
+const fastGood = scheduleRecall(
+  { ...secondGood, timesReviewed: 2, timesCorrect: 2 },
+  "good",
+  4000,
+);
+const slowGood = scheduleRecall(
+  { ...secondGood, timesReviewed: 2, timesCorrect: 2 },
+  "good",
+  13000,
+);
+assert.ok(slowGood.interval < fastGood.interval);
+assert.ok(slowGood.easeFactor < fastGood.easeFactor);
+
 const lapse = scheduleRecall(
   { ...easy, timesReviewed: 3, timesCorrect: 3 },
   "again",

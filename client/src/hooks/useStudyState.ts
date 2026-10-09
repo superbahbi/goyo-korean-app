@@ -12,6 +12,7 @@ export interface CardState {
   easeFactor?: number;
   consecutiveCorrect?: number;
   lapseCount?: number;
+  lastResponseTimeMs?: number;
 }
 
 export type MasteryState = "new" | "learning" | "shaky" | "known";
@@ -113,7 +114,7 @@ export function useStudyState() {
   }, [state]);
 
   const gradeCard = useCallback(
-    (cardId: string, rating: "again" | "good" | "easy", options?: { countProgress?: boolean }) => {
+    (cardId: string, rating: "again" | "good" | "easy", options?: { countProgress?: boolean; responseTimeMs?: number }) => {
       if (!state) return;
 
       const countProgress = options?.countProgress !== false;
@@ -141,7 +142,7 @@ export function useStudyState() {
       );
 
       const existingCard = state.cardStates[cardId];
-      const schedule = scheduleRecall(existingCard, rating);
+      const schedule = scheduleRecall(existingCard, rating, options?.responseTimeMs);
       const newCardState: CardState = {
         id: cardId,
         box: schedule.box,
@@ -154,6 +155,7 @@ export function useStudyState() {
         easeFactor: schedule.easeFactor,
         consecutiveCorrect: schedule.consecutiveCorrect,
         lapseCount: schedule.lapseCount,
+        lastResponseTimeMs: options?.responseTimeMs,
       };
 
       const isNewCard = !existingCard;
