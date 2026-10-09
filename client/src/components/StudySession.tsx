@@ -62,6 +62,11 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
   if (completed) {
     const total = results.again + results.good + results.easy;
     const remembered = results.good + results.easy;
+    const nextAction = results.again > 0
+      ? `${results.again} card${results.again === 1 ? " needs" : "s need"} a short rebuild tomorrow.`
+      : results.easy === total
+        ? "Excellent fluency signal—let the scheduler stretch these intervals."
+        : "Keep the rhythm: another short session will strengthen today's recall.";
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/40 p-4 backdrop-blur-sm">
         <motion.div
@@ -77,6 +82,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
           <p className="mt-3 text-slate-600">
             You remembered <strong>{remembered}</strong> of {total} cards.
           </p>
+          <p className="mt-3 rounded-2xl bg-indigo-50 px-4 py-3 text-sm leading-relaxed text-indigo-700">{nextAction}</p>
           <div className="mt-6 grid grid-cols-3 gap-2 text-center">
             <div className="rounded-2xl bg-red-50 p-3"><div className="text-2xl font-bold text-red-600">{results.again}</div><div className="text-xs text-red-700">Again</div></div>
             <div className="rounded-2xl bg-emerald-50 p-3"><div className="text-2xl font-bold text-emerald-600">{results.good}</div><div className="text-xs text-emerald-700">Good</div></div>

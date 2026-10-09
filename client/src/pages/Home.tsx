@@ -103,41 +103,28 @@ export default function Home() {
     
     const today = getLocalDateKey();
 
-    // If daily goal is still in progress, review overdue cards first, then
-    // introduce new cards to fill the remaining places in the session.
-    if (cardsStudiedToday < dailyGoal) {
-      const sessionSize = dailyGoal - cardsStudiedToday;
-      const overdueCards = STUDY_READY_VOCABULARY
-        .filter((card) => state.cardStates[card.id]?.due && state.cardStates[card.id].due <= today)
-        .sort((a, b) => {
-          const aDue = state.cardStates[a.id]?.due ?? today;
-          const bDue = state.cardStates[b.id]?.due ?? today;
-          return aDue.localeCompare(bDue);
-        });
-      const newCards = STUDY_READY_VOCABULARY.filter((card) => !state.cardStates[card.id]);
-      const cardsToStudy = [...overdueCards, ...newCards]
-        .filter((card, position, allCards) => allCards.findIndex((item) => item.id === card.id) === position)
-        .slice(0, sessionSize);
-      setQueue(cardsToStudy);
-    } else {
-      // Keep post-goal practice useful without turning the dashboard into a
-      // full-deck session. Prioritize due cards, then the learner's weakest
-      // reviewed cards, and finally a small set of new cards.
-      const dueCards = STUDY_READY_VOCABULARY.filter((card) => {
-        const due = state.cardStates[card.id]?.due;
-        return Boolean(due && due <= today);
+    const sessionSize = Math.max(0, dailyGoal - cardsStudiedToday);
+    const dueCards = STUDY_READY_VOCABULARY
+      .filter((card) => state.cardStates[card.id]?.due && state.cardStates[card.id].due <= today)
+      .sort((a, b) => (state.cardStates[a.id]?.due ?? today).localeCompare(state.cardStates[b.id]?.due ?? today));
+    const weakCards = STUDY_READY_VOCABULARY
+      .filter((card) => {
+        const cardState = state.cardStates[card.id];
+        const mastery = getMasteryState(cardState);
+        return Boolean(cardState?.timesReviewed) && mastery !== "known" && cardState.lastReviewDate !== today && !dueCards.some((dueCard) => dueCard.id === card.id);
+      })
+      .sort((a, b) => {
+        const aState = state.cardStates[a.id];
+        const bState = state.cardStates[b.id];
+        const aAccuracy = (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1);
+        const bAccuracy = (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
+        return aAccuracy - bAccuracy;
       });
-      const fallbackCards = STUDY_READY_VOCABULARY
-        .filter((card) => !dueCards.some((dueCard) => dueCard.id === card.id))
-        .sort((a, b) => {
-          const aState = state.cardStates[a.id];
-          const bState = state.cardStates[b.id];
-          const aAccuracy = (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1);
-          const bAccuracy = (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
-          return aAccuracy - bAccuracy;
-        });
-      setQueue([...dueCards, ...fallbackCards].slice(0, dailyGoal));
-    }
+    const newCards = STUDY_READY_VOCABULARY.filter((card) => !state.cardStates[card.id]).slice(0, 3);
+    const plannedCards = [...dueCards, ...weakCards, ...newCards]
+      .filter((card, position, allCards) => allCards.findIndex((item) => item.id === card.id) === position)
+      .slice(0, sessionSize || dailyGoal);
+    setQueue(plannedCards);
   }, [state?.cardStates, state?.stats.cardsStudiedToday, state?.settings.dailyGoal]);
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => {
@@ -156,12 +143,11 @@ export default function Home() {
   };
 
   const startSession = () => {
-    const availableCards = queue.length > 0 ? queue : STUDY_READY_VOCABULARY;
-    if (availableCards.length === 0) {
-      toast.info("No cards available to study today");
+    if (queue.length === 0) {
+      toast.info("Your planned reviews are complete", { description: "Come back tomorrow for the next new-word batch." });
       return;
     }
-    setSessionQueue([...availableCards]);
+    setSessionQueue([...queue]);
     setSessionMode("daily");
     setIsStudying(true);
   };
@@ -201,6 +187,7 @@ export default function Home() {
   if (!state) return null;
 
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - state.stats.cardsStudiedToday);
+  const plannedCards = queue.length;
   const progressPercent = (state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100;
   const dailyGoalReached = state.stats.cardsStudiedToday >= state.settings.dailyGoal;
   const levelTitles = ["Beginner", "Explorer", "Builder", "Conversational", "Fluent", "Korean Sage"];
@@ -366,7 +353,7 @@ export default function Home() {
               <CardTitle className="text-3xl font-serif">Ready to practice?</CardTitle>
               <p className="text-emerald-50 opacity-90 mt-2">
                 {cardsRemaining > 0
-                  ? `${overdueCount > 0 ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · ` : ""}${cardsRemaining} cards left for today's goal`
+                  ? `${overdueCount > 0 ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · ` : ""}${plannedCards || cardsRemaining} cards planned for today`
                   : "Daily goal complete! Review your Korean or come back tomorrow."}
               </p>
             </CardHeader>
@@ -407,7 +394,7 @@ export default function Home() {
                   {state.stats.cardsStudiedToday}/{state.settings.dailyGoal}
                 </div>
                 <Progress value={progressPercent} className="h-2 mt-3 bg-slate-100" />
-                <p className="text-xs text-slate-400 mt-2">Cards studied today</p>
+                <p className="text-xs text-slate-400 mt-2">Cards studied today · up to 3 new words per planned session</p>
               </CardContent>
             </Card>
           </motion.div>
