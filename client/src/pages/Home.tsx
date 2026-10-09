@@ -280,6 +280,11 @@ export default function Home() {
     (peak, day) => (day.count > peak.count ? day : peak),
     extendedReviewForecast[0],
   );
+  const workloadStatus = forecastPeak.count >= Math.max(6, state.settings.dailyGoal * 2)
+    ? "heavy"
+    : forecastPeak.count > state.settings.dailyGoal
+      ? "busy"
+      : "balanced";
   const nextScheduledReview = Object.values(state.cardStates)
     .map((card) => card.due)
     .filter((due) => due > today)
@@ -496,6 +501,10 @@ export default function Home() {
                   <Play size={14} className="mr-2" />
                   {overdueCount > 0 ? "Review due cards" : "Start a session"}
                 </Button>
+              </div>
+              <div className={`mt-3 rounded-xl border px-3 py-2.5 text-xs leading-relaxed ${workloadStatus === "heavy" ? "border-amber-200 bg-amber-50 text-amber-800" : workloadStatus === "busy" ? "border-indigo-100 bg-indigo-50 text-indigo-700" : "border-emerald-100 bg-emerald-50 text-emerald-700"}`} role="status">
+                <span className="font-semibold">{workloadStatus === "heavy" ? "Plan a lighter week." : workloadStatus === "busy" ? "A busier review day is coming." : "Your review load is balanced."}</span>{" "}
+                {forecastPeak.count > 0 ? `The peak is ${forecastPeak.count} scheduled review${forecastPeak.count === 1 ? "" : "s"} on ${forecastPeak.label}. Short, consistent sessions will keep it manageable.` : "New cards will be introduced gradually as you build your review history."}
               </div>
             </CardContent>
           </Card>
