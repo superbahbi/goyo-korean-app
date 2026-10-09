@@ -176,7 +176,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
                 onClick={() => handleGrade("again")}
               >
                 <X size={24} />
-                <span>Again</span><span className="text-[10px] font-normal text-red-400">Tomorrow</span>
+                <span>Again</span><span className="text-[10px] font-normal text-red-400">Rebuild tomorrow</span>
               </Button>
             </motion.div>
 
@@ -191,7 +191,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
                 onClick={() => handleGrade("good")}
               >
                 <Check size={24} />
-                <span>Good</span><span className="text-[10px] font-normal text-emerald-400">In 2 days</span>
+                <span>Good</span><span className="text-[10px] font-normal text-emerald-400">Build the interval</span>
               </Button>
             </motion.div>
 
@@ -206,7 +206,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
                 onClick={() => handleGrade("easy")}
               >
                 <Star size={24} />
-                <span>Easy</span><span className="text-[10px] font-normal text-blue-400">In 4 days</span>
+                <span>Easy</span><span className="text-[10px] font-normal text-blue-400">Stretch the interval</span>
               </Button>
             </motion.div>
             </div>

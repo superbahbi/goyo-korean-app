@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { scheduleRecall } from "@/lib/srs";
 
 export interface CardState {
   id: string;
@@ -8,6 +9,9 @@ export interface CardState {
   timesReviewed: number;
   timesCorrect: number;
   lastReviewDate: string;
+  easeFactor?: number;
+  consecutiveCorrect?: number;
+  lapseCount?: number;
 }
 
 export type MasteryState = "new" | "learning" | "shaky" | "known";
@@ -15,8 +19,9 @@ export type MasteryState = "new" | "learning" | "shaky" | "known";
 export function getMasteryState(cardState?: CardState): MasteryState {
   if (!cardState || cardState.timesReviewed === 0) return "new";
   const accuracy = cardState.timesCorrect / cardState.timesReviewed;
+  const consecutiveCorrect = cardState.consecutiveCorrect ?? Math.min(2, cardState.timesCorrect);
   if (cardState.timesReviewed < 2 || accuracy < 0.5) return "learning";
-  if (cardState.timesReviewed < 3 || accuracy < 0.75 || cardState.interval < 7) return "shaky";
+  if (cardState.timesReviewed < 3 || accuracy < 0.75 || cardState.interval < 7 || consecutiveCorrect < 2) return "shaky";
   return "known";
 }
 
@@ -135,24 +140,20 @@ export function useStudyState() {
         newStreak
       );
 
-      // Create/update card state. Reviews are scheduled forward so the daily
-      // queue can prioritize overdue cards without repeatedly showing cards
-      // that were just answered.
       const existingCard = state.cardStates[cardId];
-      const interval = rating === "again"
-        ? 1
-        : rating === "easy"
-          ? Math.min(365, Math.max(4, (existingCard?.interval || 1) * 3))
-          : Math.min(365, Math.max(2, (existingCard?.interval || 1) * 2));
+      const schedule = scheduleRecall(existingCard, rating);
       const newCardState: CardState = {
         id: cardId,
-        box: rating === "easy" ? 2 : rating === "good" ? 1 : 0,
-        due: addDays(today, interval),
-        interval,
+        box: schedule.box,
+        due: addDays(today, schedule.interval),
+        interval: schedule.interval,
         timesReviewed: (existingCard?.timesReviewed || 0) + 1,
         timesCorrect:
           (existingCard?.timesCorrect || 0) + (rating === "again" ? 0 : 1),
         lastReviewDate: today,
+        easeFactor: schedule.easeFactor,
+        consecutiveCorrect: schedule.consecutiveCorrect,
+        lapseCount: schedule.lapseCount,
       };
 
       const isNewCard = !existingCard;
