@@ -5,24 +5,25 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { Check, Eye, Headphones, RotateCcw, Volume2, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { STUDY_READY_VOCABULARY } from "@/lib/vocabulary";
+import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 
 interface ShadowingPracticeProps {
+  cards: VocabularyCard[];
   onGrade: (cardId: string, rating: "again" | "good") => void;
   onClose: () => void;
 }
 
-export function ShadowingPractice({ onGrade, onClose }: ShadowingPracticeProps) {
-  const cards = useMemo(
-    () => STUDY_READY_VOCABULARY.filter((card) => card.tag === "survival" || card.tag === "daily").slice(0, 8),
-    [],
+export function ShadowingPractice({ cards, onGrade, onClose }: ShadowingPracticeProps) {
+  const queue = useMemo(
+    () => cards.filter((card) => card.tag === "survival" || card.tag === "daily").slice(0, 8),
+    [cards],
   );
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [shadowed, setShadowed] = useState(false);
   const [complete, setComplete] = useState(false);
-  const currentCard = cards[index];
+  const currentCard = queue[index];
 
   useEffect(() => {
     if (!currentCard || complete) return;
@@ -38,7 +39,7 @@ export function ShadowingPractice({ onGrade, onClose }: ShadowingPracticeProps) 
   const next = () => {
     if (!currentCard) return;
     onGrade(currentCard.id, shadowed ? "good" : "again");
-    if (index === cards.length - 1) setComplete(true);
+    if (index === queue.length - 1) setComplete(true);
     else {
       setIndex((value) => value + 1);
       setVisible(false);
@@ -60,7 +61,7 @@ export function ShadowingPractice({ onGrade, onClose }: ShadowingPracticeProps) 
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600"><Check size={34} /></div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">Shadowing complete</p>
             <h2 className="mt-2 font-serif text-3xl text-slate-900">Your Korean had a voice</h2>
-            <p className="mt-3 text-slate-600">You practiced matching the rhythm and sound of {cards.length} Korean phrases.</p>
+            <p className="mt-3 text-slate-600">You practiced matching the rhythm and sound of {queue.length} Korean phrases.</p>
             <Button className="mt-7 min-h-12 w-full bg-emerald-600 hover:bg-emerald-700" onClick={close}>Return to dashboard</Button>
           </motion.div>
         </DialogContent>
@@ -81,8 +82,8 @@ export function ShadowingPractice({ onGrade, onClose }: ShadowingPracticeProps) 
         <DialogTitle className="sr-only">Match the model</DialogTitle>
         <header className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white/80 p-4 backdrop-blur-md">
           <Button variant="ghost" size="icon" onClick={close} aria-label="Close shadowing practice"><X size={20} /></Button>
-          <div className="max-w-xs flex-1 px-4"><Progress value={(index / cards.length) * 100} className="h-2" /></div>
-          <div className="min-w-[60px] text-right text-sm font-semibold text-slate-500">{index + 1} / {cards.length}<span className="block text-xs text-slate-400">Shadowing</span></div>
+          <div className="max-w-xs flex-1 px-4"><Progress value={(index / queue.length) * 100} className="h-2" /></div>
+          <div className="min-w-[60px] text-right text-sm font-semibold text-slate-500">{index + 1} / {queue.length}<span className="block text-xs text-slate-400">Shadowing</span></div>
         </header>
         <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-8">
           <div className="mx-auto max-w-xl text-center">
@@ -113,7 +114,7 @@ export function ShadowingPractice({ onGrade, onClose }: ShadowingPracticeProps) 
                 <Button variant="outline" className="border-slate-200 text-slate-600" onClick={() => setShadowed(false)}><X size={16} className="mr-2" /> Not yet</Button>
               </div>
             </div>
-            <Button onClick={next} className="mt-5 min-h-12 w-full bg-slate-900 hover:bg-slate-800">{index === cards.length - 1 ? "Finish shadowing" : "Next phrase"}<RotateCcw size={16} className="ml-2 rotate-180" /></Button>
+            <Button onClick={next} className="mt-5 min-h-12 w-full bg-slate-900 hover:bg-slate-800">{index === queue.length - 1 ? "Finish shadowing" : "Next phrase"}<RotateCcw size={16} className="ml-2 rotate-180" /></Button>
           </div>
         </main>
       </DialogContent>

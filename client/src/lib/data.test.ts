@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { VOCABULARY_DATA, STUDY_READY_VOCABULARY } from "./vocabulary";
+import { loadVocabularyDeck } from "./vocabulary";
 import { ESSENTIAL_WORDS } from "./essentialVocabulary";
 import { romanize } from "./romanize";
 
@@ -27,7 +27,9 @@ function hasGeminateRieul(text: string): boolean {
   });
 }
 
-describe("combined vocabulary deck", () => {
+describe("combined vocabulary deck", async () => {
+  const { vocabulary: VOCABULARY_DATA, studyReady: STUDY_READY_VOCABULARY } = await loadVocabularyDeck();
+
   it("has no duplicate ids", () => {
     const ids = VOCABULARY_DATA.map((card) => card.id);
     expect(new Set(ids).size).toBe(ids.length);
@@ -68,7 +70,9 @@ describe("combined vocabulary deck", () => {
   });
 });
 
-describe("Revised Romanization", () => {
+describe("Revised Romanization", async () => {
+  const { vocabulary: VOCABULARY_DATA } = await loadVocabularyDeck();
+
   it("transliterates known words", () => {
     const cases: [string, string][] = [
       ["집", "jip"],

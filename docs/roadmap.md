@@ -63,8 +63,8 @@ Each stage is done only when its gate passes.
 | 1 Tooling | Done | `71df8d7` | CI confirmed green on GitHub |
 | 2 Data and scheduling | Done | `b915f6c`, `e4cce03` | Reviewed in-repo (free reviewer quota ran out); 16 curated romanizations remain in the backlog |
 | 3 Accessibility | Done | `e0b8801` | Not independently reviewed; in-app browser re-check still outstanding |
-| 4 Export/import | In progress | — | |
-| 5 PWA | Not started | — | |
+| 4 Export/import | Done | `7443611` | Broken files cannot overwrite progress |
+| 5 PWA | Done | — | Installable, offline shell and audio; Essential 600 lazy-loaded |
 
 ## Who does what
 

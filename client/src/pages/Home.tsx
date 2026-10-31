@@ -11,7 +11,9 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { buildExportPayload, getLocalDateKey, getMasteryState, useStudyState, validateImportPayload, type MasteryState, type UserState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
-import { VOCABULARY_DATA, STUDY_READY_VOCABULARY, CATEGORIES } from "@/lib/vocabulary";
+import { CATEGORIES } from "@/lib/vocabulary";
+import { useVocabularyDeck } from "@/hooks/useVocabularyDeck";
+import { DownloadAllAudio } from "@/components/DownloadAllAudio";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
 const BROWSE_PAGE_SIZE = 40;
@@ -41,8 +43,9 @@ function ModalLoadingFallback() {
 
 export default function Home() {
   const { state, gradeCard, updateSettings, replaceState } = useStudyState();
-  const [queue, setQueue] = useState<typeof VOCABULARY_DATA>([]);
-  const [sessionQueue, setSessionQueue] = useState<typeof VOCABULARY_DATA>([]);
+  const { vocabulary, studyReady } = useVocabularyDeck();
+  const [queue, setQueue] = useState<typeof vocabulary>([]);
+  const [sessionQueue, setSessionQueue] = useState<typeof vocabulary>([]);
   const [sessionMode, setSessionMode] = useState<"daily" | "weak" | "learning">("daily");
   const [isStudying, setIsStudying] = useState(false);
   const [showBrowse, setShowBrowse] = useState(false);
@@ -144,7 +147,7 @@ export default function Home() {
     }
   };
 
-  const getRomanization = (card: typeof VOCABULARY_DATA[0]) => {
+  const getRomanization = (card: typeof vocabulary[0]) => {
     return card.romanization || "";
   };
 
@@ -160,7 +163,7 @@ export default function Home() {
     shaky: "bg-amber-100 text-amber-700",
     known: "bg-emerald-100 text-emerald-700",
   };
-  const masteryCounts = VOCABULARY_DATA.reduce<Record<MasteryState, number>>((counts, card) => {
+  const masteryCounts = vocabulary.reduce<Record<MasteryState, number>>((counts, card) => {
     counts[getMasteryState(state?.cardStates[card.id])] += 1;
     return counts;
   }, { new: 0, learning: 0, shaky: 0, known: 0 });
@@ -175,10 +178,10 @@ export default function Home() {
     const today = getLocalDateKey();
 
     const sessionSize = Math.max(0, dailyGoal - cardsStudiedToday);
-    const dueCards = STUDY_READY_VOCABULARY
+    const dueCards = studyReady
       .filter((card) => state.cardStates[card.id]?.due && state.cardStates[card.id].due <= today)
       .sort((a, b) => (state.cardStates[a.id]?.due ?? today).localeCompare(state.cardStates[b.id]?.due ?? today));
-    const weakCards = STUDY_READY_VOCABULARY
+    const weakCards = studyReady
       .filter((card) => {
         const cardState = state.cardStates[card.id];
         const mastery = getMasteryState(cardState);
@@ -191,12 +194,12 @@ export default function Home() {
         const bAccuracy = (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
         return aAccuracy - bAccuracy;
       });
-    const newCards = STUDY_READY_VOCABULARY.filter((card) => !state.cardStates[card.id]).slice(0, 3);
+    const newCards = studyReady.filter((card) => !state.cardStates[card.id]).slice(0, 3);
     const plannedCards = [...dueCards, ...weakCards, ...newCards]
       .filter((card, position, allCards) => allCards.findIndex((item) => item.id === card.id) === position)
       .slice(0, sessionSize || dailyGoal);
     setQueue(plannedCards);
-  }, [state?.cardStates, state?.stats.cardsStudiedToday, state?.settings.dailyGoal]);
+  }, [state?.cardStates, state?.stats.cardsStudiedToday, state?.settings.dailyGoal, studyReady]);
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => {
     const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
@@ -270,7 +273,7 @@ export default function Home() {
     ? Math.min(100, Math.max(0, ((state.stats.totalXp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100))
     : 100;
   const today = getLocalDateKey();
-  const overdueCount = STUDY_READY_VOCABULARY.filter((card) => {
+  const overdueCount = studyReady.filter((card) => {
     const due = state.cardStates[card.id]?.due;
     return Boolean(due && due <= today);
   }).length;
@@ -281,7 +284,7 @@ export default function Home() {
     return fresh.length > 0 ? fresh : cards;
   };
   const weakCards = preferNotReviewedToday(
-    STUDY_READY_VOCABULARY.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed)),
+    studyReady.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed)),
   )
     .sort((a, b) => {
       const aState = state.cardStates[a.id];
@@ -292,7 +295,7 @@ export default function Home() {
     })
     .slice(0, 10);
   const learningCards = preferNotReviewedToday(
-    STUDY_READY_VOCABULARY.filter((card) => {
+    studyReady.filter((card) => {
       const mastery = getMasteryState(state.cardStates[card.id]);
       return mastery === "learning" || mastery === "shaky";
     }),
@@ -304,14 +307,14 @@ export default function Home() {
     })
     .slice(0, 10);
   const normalizedBrowseQuery = browseQuery.trim().toLocaleLowerCase();
-  const filteredCards = VOCABULARY_DATA.filter((card) => {
+  const filteredCards = vocabulary.filter((card) => {
     const matchesCategory = !selectedCategory || card.tag === selectedCategory;
     const matchesMastery = browseMastery === "all" || getMasteryState(state.cardStates[card.id]) === browseMastery;
     const matchesQuery = !normalizedBrowseQuery || [card.front, card.back, card.romanization, card.example].some((value) => value.toLocaleLowerCase().includes(normalizedBrowseQuery));
     return matchesCategory && matchesMastery && matchesQuery;
   });
   const visibleBrowseCards = filteredCards.slice(0, browseVisibleCount);
-  const reviewedCards = VOCABULARY_DATA.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
+  const reviewedCards = vocabulary.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
   const totalReviews = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
   const totalCorrect = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
   const overallAccuracy = totalReviews > 0 ? Math.round((totalCorrect / totalReviews) * 100) : 0;
@@ -322,9 +325,9 @@ export default function Home() {
   const medianResponseTime = responseTimes.length > 0
     ? responseTimes[Math.floor(responseTimes.length / 2)]
     : null;
-  const masteredCount = VOCABULARY_DATA.filter((card) => getMasteryState(state.cardStates[card.id]) === "known").length;
+  const masteredCount = vocabulary.filter((card) => getMasteryState(state.cardStates[card.id]) === "known").length;
   const categoryMastery = CATEGORIES.map((category) => {
-    const cards = VOCABULARY_DATA.filter((card) => card.tag === category.id);
+    const cards = vocabulary.filter((card) => card.tag === category.id);
     const reviewed = cards.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
     const reviews = reviewed.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
     const correct = reviewed.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
@@ -338,7 +341,7 @@ export default function Home() {
     return {
       key,
       label: offset === 0 ? "Today" : offset === 1 ? "Tomorrow" : date.toLocaleDateString(undefined, { weekday: "short" }),
-      count: STUDY_READY_VOCABULARY.filter((card) => {
+      count: studyReady.filter((card) => {
         const due = state.cardStates[card.id]?.due;
         return offset === 0 ? Boolean(due && due <= key) : due === key;
       }).length,
@@ -352,7 +355,7 @@ export default function Home() {
     return {
       key,
       label: date.toLocaleDateString(undefined, { month: "short", day: "numeric" }),
-      count: STUDY_READY_VOCABULARY.filter((card) => state.cardStates[card.id]?.due === key).length,
+      count: studyReady.filter((card) => state.cardStates[card.id]?.due === key).length,
     };
   });
   const forecastTotal = extendedReviewForecast.reduce((sum, day) => sum + day.count, 0);
@@ -526,7 +529,7 @@ export default function Home() {
                   {state.stats.totalCardsLearned}
                 </div>
                 <p className="text-xs text-slate-400 mt-2">
-                  {Math.round((state.stats.totalCardsLearned / STUDY_READY_VOCABULARY.length) * 100)}% of study-ready deck
+                  {Math.round((state.stats.totalCardsLearned / studyReady.length) * 100)}% of study-ready deck
                 </p>
               </CardContent>
             </Card>
@@ -690,13 +693,13 @@ export default function Home() {
               <h2 id="categories-heading" className="mt-1 font-serif text-2xl text-slate-900">Learn by theme</h2>
             </div>
             <button type="button" className="text-sm font-semibold text-emerald-700 hover:text-emerald-900" onClick={() => { setSelectedCategory(null); setBrowseMastery("all"); setShowBrowse(true); }}>
-              View all {VOCABULARY_DATA.length}
+              View all {vocabulary.length}
             </button>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {CATEGORIES.map((cat) => {
               const category = categoryMastery.find((item) => item.id === cat.id);
-              const known = VOCABULARY_DATA.filter((card) => card.tag === cat.id && getMasteryState(state.cardStates[card.id]) === "known").length;
+              const known = vocabulary.filter((card) => card.tag === cat.id && getMasteryState(state.cardStates[card.id]) === "known").length;
               const coverage = category?.total ? Math.round((known / category.total) * 100) : 0;
               return (
                 <button
@@ -750,7 +753,7 @@ export default function Home() {
       {showListening && (
         <Suspense fallback={<ModalLoadingFallback />}>
           <ListeningPractice
-            cards={STUDY_READY_VOCABULARY}
+            cards={studyReady}
             onGrade={handleListeningGrade}
             onClose={() => setShowListening(false)}
           />
@@ -760,6 +763,7 @@ export default function Home() {
       {showScenarios && (
         <Suspense fallback={<ModalLoadingFallback />}>
           <ScenarioPractice
+            cards={studyReady}
             onGrade={handleScenarioGrade}
             onClose={() => setShowScenarios(false)}
           />
@@ -769,6 +773,7 @@ export default function Home() {
       {showShadowing && (
         <Suspense fallback={<ModalLoadingFallback />}>
           <ShadowingPractice
+            cards={studyReady}
             onGrade={handleShadowingGrade}
             onClose={() => setShowShadowing(false)}
           />
@@ -806,7 +811,7 @@ export default function Home() {
                   className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition ${browseMastery === filter ? "bg-slate-900 text-white" : "bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50"}`}
                 >
                   {filter === "all" ? "All cards" : masteryLabels[filter]}
-                  <span className="ml-1 opacity-70">{filter === "all" ? VOCABULARY_DATA.length : masteryCounts[filter]}</span>
+                  <span className="ml-1 opacity-70">{filter === "all" ? vocabulary.length : masteryCounts[filter]}</span>
                 </button>
               ))}
             </div>
@@ -1175,6 +1180,7 @@ export default function Home() {
                 </div>
               )}
             </div>
+            <DownloadAllAudio />
           </div>
         </DialogContent>
       </Dialog>

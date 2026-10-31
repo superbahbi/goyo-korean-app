@@ -13,8 +13,6 @@ export interface VocabularyCard {
   audioReady?: boolean;
 }
 
-import { ESSENTIAL_WORDS } from "./essentialVocabulary";
-
 const CURATED_VOCABULARY_DATA: VocabularyCard[] = [
   // Survival Phrases (10 cards)
   { id: "surv_001", front: "안녕하세요", back: "Hello (polite/formal)", romanization: "annyeonghaseyo", tag: "survival", example: "안녕하세요, 저는 학생입니다.", difficulty: "beginner", partOfSpeech: "greeting" },
@@ -190,10 +188,33 @@ export const CATEGORIES = [
 // Cards are study-ready unless audioReady is false. Imported cards are searchable
 // and study-ready once their ElevenLabs clips exist in public/audio/index.json.
 const cardKey = (card: VocabularyCard) => `${card.front}::${card.back.trim().toLocaleLowerCase()}`;
-const curatedCards = new Set(CURATED_VOCABULARY_DATA.map(cardKey));
-export const VOCABULARY_DATA: VocabularyCard[] = [
-  ...CURATED_VOCABULARY_DATA.map((card) => ({ ...card, source: card.source ?? "Goyo curated", audioReady: card.audioReady ?? true })),
-  ...ESSENTIAL_WORDS.filter((card) => !curatedCards.has(cardKey(card))),
-];
 
-export const STUDY_READY_VOCABULARY = VOCABULARY_DATA.filter((card) => card.audioReady !== false);
+export const CURATED_CARDS: VocabularyCard[] = CURATED_VOCABULARY_DATA.map((card) => ({
+  ...card,
+  source: card.source ?? "Goyo curated",
+  audioReady: card.audioReady ?? true,
+}));
+
+export const CURATED_STUDY_READY = CURATED_CARDS.filter((card) => card.audioReady !== false);
+
+export interface VocabularyDeck {
+  vocabulary: VocabularyCard[];
+  studyReady: VocabularyCard[];
+}
+
+let deckPromise: Promise<VocabularyDeck> | null = null;
+
+/**
+ * The curated deck ships with the app; the imported Essential 600 deck is a
+ * separate chunk loaded after first paint so the initial bundle stays small.
+ */
+export function loadVocabularyDeck(): Promise<VocabularyDeck> {
+  if (!deckPromise) {
+    deckPromise = import("./essentialVocabulary").then(({ ESSENTIAL_WORDS }) => {
+      const curatedCards = new Set(CURATED_CARDS.map(cardKey));
+      const vocabulary = [...CURATED_CARDS, ...ESSENTIAL_WORDS.filter((card) => !curatedCards.has(cardKey(card)))];
+      return { vocabulary, studyReady: vocabulary.filter((card) => card.audioReady !== false) };
+    });
+  }
+  return deckPromise;
+}

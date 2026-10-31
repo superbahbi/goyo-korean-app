@@ -1,14 +1,88 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 
 // =============================================================================
 // Goyo dev server
 // =============================================================================
 
+const ROOT = import.meta.dirname;
 
-const plugins = [react(), tailwindcss()];
+/**
+ * The Hangul and number clips are small and used from the very first session, so
+ * they are precached. The 26 MB vocabulary library stays on-demand: each clip is
+ * cached the first time it plays, and the Settings dialog can fetch the rest.
+ */
+function alphabetAudioEntries() {
+  const manifestPath = path.join(ROOT, "public", "audio", "index.json");
+  const index = JSON.parse(readFileSync(manifestPath, "utf8")) as {
+    alphabet: { consonants: Record<string, string>; vowels: Record<string, string> };
+    female?: { alphabet?: { consonants: Record<string, string>; vowels: Record<string, string> } };
+    vocabulary: Record<string, string>;
+  };
+
+  const files = new Set<string>();
+  const addAll = (map?: Record<string, string>) => {
+    for (const file of Object.values(map ?? {})) files.add(file);
+  };
+
+  addAll(index.alphabet.consonants);
+  addAll(index.alphabet.vowels);
+  addAll(index.female?.alphabet?.consonants);
+  addAll(index.female?.alphabet?.vowels);
+  for (const [id, file] of Object.entries(index.vocabulary)) {
+    if (id.startsWith("num_")) files.add(file);
+  }
+
+  return [...files].map((file) => ({ url: `/audio/${file}`, revision: null }));
+}
+
+const plugins = [
+  react(),
+  tailwindcss(),
+  VitePWA({
+    // "prompt" keeps a new worker waiting instead of reloading the page mid-session.
+    // The waiting worker activates on the next launch, which is the roadmap behaviour.
+    registerType: "prompt",
+    injectRegister: false,
+    manifest: {
+      name: "Goyo - Scientific Korean Practice",
+      short_name: "Goyo",
+      description: "Audio-first Korean vocabulary practice with spaced repetition.",
+      start_url: "/",
+      scope: "/",
+      display: "standalone",
+      background_color: "#f8fafc",
+      theme_color: "#059669",
+      icons: [
+        { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+        { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+        { src: "/icons/maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+      ],
+    },
+    workbox: {
+      globPatterns: ["**/*.{js,css,html,svg,png,ico,webmanifest}"],
+      additionalManifestEntries: alphabetAudioEntries(),
+      navigateFallback: "/index.html",
+      navigateFallbackDenylist: [/^\/audio\//, /^\/icons\//],
+      runtimeCaching: [
+        {
+          urlPattern: /\/audio\/.*\.mp3$/,
+          handler: "CacheFirst",
+          options: {
+            cacheName: "goyo-audio",
+            expiration: { maxEntries: 1800, maxAgeSeconds: 60 * 60 * 24 * 365 },
+            cacheableResponse: { statuses: [0, 200] },
+          },
+        },
+      ],
+    },
+    devOptions: { enabled: false },
+  }),
+];
 
 export default defineConfig({
   plugins,

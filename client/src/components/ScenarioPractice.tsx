@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Check, ChevronRight, RotateCcw, Volume2, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { STUDY_READY_VOCABULARY, type VocabularyCard } from "@/lib/vocabulary";
+import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 
 interface Scenario {
@@ -25,11 +25,12 @@ const SCENARIOS: Scenario[] = [
 ];
 
 interface ScenarioPracticeProps {
+  cards: VocabularyCard[];
   onGrade: (cardId: string, rating: "again" | "good") => void;
   onClose: () => void;
 }
 
-export function ScenarioPractice({ onGrade, onClose }: ScenarioPracticeProps) {
+export function ScenarioPractice({ cards, onGrade, onClose }: ScenarioPracticeProps) {
   const [index, setIndex] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -37,12 +38,12 @@ export function ScenarioPractice({ onGrade, onClose }: ScenarioPracticeProps) {
 
   const scenarios = useMemo(() => [...SCENARIOS].sort(() => Math.random() - 0.5), []);
   const current = scenarios[index];
-  const cardMap = useMemo(() => new Map(STUDY_READY_VOCABULARY.map((card) => [card.id, card])), []);
+  const cardMap = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
   const currentCard = current ? cardMap.get(current.cardId) : undefined;
 
   const choices = useMemo(() => {
     if (!currentCard) return [];
-    const distractors = STUDY_READY_VOCABULARY
+    const distractors = cards
       .filter((card) => card.tag === "survival" && card.id !== currentCard.id)
       .sort(() => Math.random() - 0.5)
       .slice(0, 2);

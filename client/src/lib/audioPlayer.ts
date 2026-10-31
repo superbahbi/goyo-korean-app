@@ -135,9 +135,30 @@ export async function playAlphabetAudio(
   }
 }
 
+/**
+ * Playback requests use range requests, which the service worker does not cache,
+ * so warm the offline cache with a plain fetch the first time a clip plays.
+ */
+function warmAudioCache(audioPath: string): void {
+  if (typeof window === "undefined" || !("caches" in window)) return;
+  void (async () => {
+    try {
+      const cache = await caches.open("goyo-audio");
+      if (await cache.match(audioPath)) return;
+      // The ?warm=1 suffix keeps this out of the service worker's mp3 rule, so the
+      // response is a complete 200 the Cache API can store under the real URL.
+      const response = await fetch(`${audioPath}?warm=1`);
+      if (response.status === 200) await cache.put(audioPath, response);
+    } catch {
+      /* offline caching is best effort */
+    }
+  })();
+}
+
 function playAudioFile(audioPath: string): Promise<void> {
   return new Promise((resolve, reject) => {
     stopAudio();
+    warmAudioCache(audioPath);
 
     const audio = new Audio();
     currentAudio = audio;
