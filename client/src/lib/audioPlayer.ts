@@ -129,12 +129,9 @@ function resolveVocabularyAudioFile(
     selectedSpeaker === "elevenlabs-female"
       ? index.female?.vocabulary
       : index.vocabulary;
-  return (
-    vocabularyIndex?.[wordId] ??
-    (selectedSpeaker === "elevenlabs-female"
-      ? `elevenlabs_female_${wordId}.mp3`
-      : undefined)
-  );
+  // Filenames carry a content hash, so the index is the only way to resolve a
+  // clip; there is no filename to guess when an entry is missing.
+  return vocabularyIndex?.[wordId];
 }
 
 function resolveAlphabetAudioFile(

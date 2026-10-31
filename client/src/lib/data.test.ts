@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { loadVocabularyDeck, CURATED_CARDS } from "./vocabulary";
 import { ESSENTIAL_WORDS } from "./essentialVocabulary";
@@ -90,9 +91,11 @@ describe("combined vocabulary deck", async () => {
     for (const card of STUDY_READY_VOCABULARY) {
       const male = manifest.vocabulary[card.id];
       const female = manifest.female.vocabulary[card.id];
-      expect(male, `male ${card.id}`).toBe(`elevenlabs_${card.id}.mp3`);
-      expect(female, `female ${card.id}`).toBe(
-        `elevenlabs_female_${card.id}.mp3`
+      expect(male, `male ${card.id}`).toMatch(
+        new RegExp(`^elevenlabs_${card.id}\\.[0-9a-f]{8}\\.mp3$`)
+      );
+      expect(female, `female ${card.id}`).toMatch(
+        new RegExp(`^elevenlabs_female_${card.id}\\.[0-9a-f]{8}\\.mp3$`)
       );
       expect(existsSync(path.join(REPO_ROOT, "public/audio", male)), male).toBe(
         true
@@ -101,6 +104,51 @@ describe("combined vocabulary deck", async () => {
         existsSync(path.join(REPO_ROOT, "public/audio", female)),
         female
       ).toBe(true);
+    }
+  });
+});
+
+describe("hashed audio library", () => {
+  const audioDir = path.join(REPO_ROOT, "public/audio");
+
+  it("names every clip by a hash of its bytes", () => {
+    const clips = readdirSync(audioDir).filter(file => file.endsWith(".mp3"));
+    expect(clips.length).toBeGreaterThan(0);
+    for (const clip of clips) {
+      const match = /^(.+)\.([0-9a-f]{8})\.mp3$/.exec(clip);
+      expect(match, clip).not.toBeNull();
+      const hash = createHash("sha256")
+        .update(readFileSync(path.join(audioDir, clip)))
+        .digest("hex")
+        .slice(0, 8);
+      expect(match?.[2], clip).toBe(hash);
+    }
+  });
+
+  it("points every index entry at a clip that exists", () => {
+    const fullIndex: unknown = JSON.parse(
+      readFileSync(path.join(audioDir, "index.json"), "utf8")
+    );
+    const filenames: string[] = [];
+    const collect = (node: unknown): void => {
+      if (Array.isArray(node)) {
+        node.forEach(collect);
+        return;
+      }
+      if (!node || typeof node !== "object") return;
+      for (const value of Object.values(node)) {
+        if (typeof value === "string") {
+          if (value.endsWith(".mp3")) filenames.push(value);
+        } else {
+          collect(value);
+        }
+      }
+    };
+    collect(fullIndex);
+
+    expect(filenames.length).toBeGreaterThan(0);
+    for (const filename of filenames) {
+      expect(existsSync(path.join(audioDir, filename)), filename).toBe(true);
     }
   });
 });

@@ -28,5 +28,7 @@ test("searches the library and plays a pronunciation clip", async ({
 
   // The first curated card is the one the search filtered down to, so the clip
   // requested must be its vocabulary audio rather than a Hangul or number file.
-  expect((await audioRequest).url()).toContain("elevenlabs_surv_001.mp3");
+  expect((await audioRequest).url()).toMatch(
+    /elevenlabs_surv_001\.[0-9a-f]{8}\.mp3$/
+  );
 });

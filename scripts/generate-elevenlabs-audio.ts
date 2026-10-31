@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert";
@@ -7,6 +7,7 @@ import {
   loadVocabularyDeck,
 } from "../client/src/lib/vocabulary";
 import { ALPHABET_DATA } from "../client/src/lib/alphabet";
+import { audioBaseName, hashAudioLibrary } from "./hash-audio.ts";
 
 export interface AudioItem {
   id: string;
@@ -104,18 +105,26 @@ const apiKey = process.env.ELEVENLABS_API_KEY;
 const sleep = (milliseconds: number) =>
   new Promise(resolve => setTimeout(resolve, milliseconds));
 
+// Clips are named by content hash, so an existing clip is not necessarily at
+// `<id>.mp3`. Filled from the audio directory before generation starts.
+const existingAudioFiles = new Map<string, string[]>();
+
 async function generateOne(item: AudioItem): Promise<AudioResult> {
   const outputPath = path.join(audioDir, item.filename);
   const temporaryPath = `${outputPath}.part`;
 
   if (!force) {
-    try {
-      const existing = await readFile(outputPath);
-      if (existing.length > 1000) {
-        return { ...item, status: "skipped", bytes: existing.length };
+    for (const candidate of existingAudioFiles.get(
+      audioBaseName(item.filename)
+    ) ?? []) {
+      try {
+        const existing = await readFile(path.join(audioDir, candidate));
+        if (existing.length > 1000) {
+          return { ...item, status: "skipped", bytes: existing.length };
+        }
+      } catch {
+        // A missing candidate just means this base still needs generating.
       }
-    } catch {
-      // The file does not exist yet; continue with generation.
     }
   }
 
@@ -231,6 +240,14 @@ export async function main() {
   }
 
   await mkdir(audioDir, { recursive: true });
+  for (const file of await readdir(audioDir)) {
+    if (!file.endsWith(".mp3")) continue;
+    const base = audioBaseName(file);
+    existingAudioFiles.set(base, [
+      ...(existingAudioFiles.get(base) ?? []),
+      file,
+    ]);
+  }
 
   const results: AudioResult[] = [];
   let cursor = 0;
@@ -251,6 +268,14 @@ export async function main() {
     Array.from({ length: Math.min(concurrency, items.length) }, worker)
   );
   results.sort((left, right) => left.id.localeCompare(right.id));
+
+  // Rename the new clips by content hash and point index.json at them. The
+  // manifests below record the hashed names that are actually on disk.
+  const { filenames } = await hashAudioLibrary(projectRoot);
+  for (const result of results) {
+    const resolved = filenames.get(audioBaseName(result.filename));
+    if (resolved) result.filename = resolved;
+  }
 
   const summary = {
     generatedAt: new Date().toISOString(),

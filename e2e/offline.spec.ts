@@ -1,4 +1,15 @@
 import { expect, test } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
+// Clips are content-hashed, so read the name the app itself will use.
+const index = JSON.parse(
+  readFileSync(
+    path.join(process.cwd(), "public", "audio", "index.json"),
+    "utf8"
+  )
+) as { alphabet: { consonants: Record<string, string> } };
+const hangulClip = index.alphabet.consonants.cons_001;
 
 test("reloads the shell and serves precached audio offline", async ({
   page,
@@ -30,7 +41,7 @@ test("reloads the shell and serves precached audio offline", async ({
     // The audio map and the Hangul clips are precached, so both must resolve
     // with no network at all. Retry briefly in case the restarted worker needs
     // a moment to answer its first request.
-    for (const url of ["/audio/index.json", "/audio/elevenlabs_cons_001.mp3"]) {
+    for (const url of ["/audio/index.json", `/audio/${hangulClip}`]) {
       await expect
         .poll(
           () =>

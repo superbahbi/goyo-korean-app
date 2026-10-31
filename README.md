@@ -57,10 +57,15 @@ docs/                     Improvement plan and generated content-audit sheets
 ## Audio
 
 Clips are pre-generated, not synthesized in the browser. `public/audio/index.json` maps card IDs to
-filenames for both voices and is the only file the app reads at runtime.
+filenames for both voices and is the only file the app reads at runtime. Every clip is named
+`<base>.<sha256-8>.mp3`, so a regenerated clip gets a new URL and neither the browser cache nor the
+service worker's audio cache can keep serving the old bytes.
 
 Regenerating audio needs an ElevenLabs key in `.env.local` (never commit it). See
 `scripts/generate-elevenlabs-audio.ts`; `tsx scripts/generate-elevenlabs-audio.ts` uses the full deck.
+The generator hashes and renames the new clips and rewrites `index.json` at the end of a run. After
+adding or replacing clips by hand, run `pnpm audio:hash` for the same result. `data.test.ts` fails
+when a filename's hash does not match its bytes or when `index.json` points at a missing file.
 Do not commit regenerated clips without checking their size and whether the existing ones are fine.
 
 The ~26 MB vocabulary library stays committed to git and is served as static files from
