@@ -23,7 +23,6 @@ const stats = {
 };
 const settings = {
   dailyGoal: 10,
-  ttsEnabled: true,
   autoPlayAudio: true,
   audioSpeaker: "elevenlabs",
 };
@@ -51,6 +50,12 @@ describe("saved progress schemaVersion", () => {
 
   it("starts from the current version when nothing is saved", () => {
     expect(parseSavedState(null).schemaVersion).toBe(SCHEMA_VERSION);
+  });
+
+  it("drops the removed ttsEnabled setting from older saves", () => {
+    const legacySettings = { ...settings, ttsEnabled: false };
+    const state = parseSavedState(JSON.stringify({ cardStates: { surv_001: card }, stats, settings: legacySettings }));
+    expect(state.settings).toEqual(settings);
   });
 
   it("ignores a legacy box field when loading saved cards", () => {
