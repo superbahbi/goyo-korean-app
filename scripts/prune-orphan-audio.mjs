@@ -17,7 +17,7 @@ for (const file of SOURCES) {
 }
 
 const manifest = JSON.parse(readFileSync(MANIFEST, "utf8"));
-const prune = (section) => {
+const prune = section => {
   const before = Object.keys(section).length;
   for (const key of Object.keys(section)) {
     if (ids.has(key)) continue;
@@ -29,10 +29,12 @@ const prune = (section) => {
 };
 
 const removedMale = prune(manifest.vocabulary);
-const removedFemale = manifest.female?.vocabulary ? prune(manifest.female.vocabulary) : 0;
+const removedFemale = manifest.female?.vocabulary
+  ? prune(manifest.female.vocabulary)
+  : 0;
 
 writeFileSync(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 console.log(
   `pruned ${removedMale} male and ${removedFemale} female entries; ` +
-    `now ${Object.keys(manifest.vocabulary).length} male, ${Object.keys(manifest.female.vocabulary).length} female`,
+    `now ${Object.keys(manifest.vocabulary).length} male, ${Object.keys(manifest.female.vocabulary).length} female`
 );

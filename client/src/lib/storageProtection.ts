@@ -16,7 +16,10 @@ export function isIosDevice(userAgent: string, maxTouchPoints = 0): boolean {
   return /Macintosh/.test(userAgent) && maxTouchPoints > 1;
 }
 
-export function isStandaloneApp(displayModeStandalone: boolean, navigatorStandalone = false): boolean {
+export function isStandaloneApp(
+  displayModeStandalone: boolean,
+  navigatorStandalone = false
+): boolean {
   return displayModeStandalone || navigatorStandalone;
 }
 
@@ -29,12 +32,14 @@ function readHintShown(): boolean {
 }
 
 export function shouldSuggestIosInstall(): boolean {
-  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
+  if (typeof window === "undefined" || typeof navigator === "undefined")
+    return false;
   if (!isIosDevice(navigator.userAgent, navigator.maxTouchPoints)) return false;
   const standalone =
     typeof window.matchMedia === "function" &&
     window.matchMedia("(display-mode: standalone)").matches;
-  const navigatorStandalone = (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  const navigatorStandalone =
+    (navigator as Navigator & { standalone?: boolean }).standalone === true;
   if (isStandaloneApp(Boolean(standalone), navigatorStandalone)) return false;
   return !readHintShown();
 }
@@ -56,7 +61,8 @@ export function requestPersistentStorage(): Promise<boolean | null> {
   if (persistRequest) return persistRequest;
   persistRequest = (async () => {
     try {
-      if (typeof navigator === "undefined" || !navigator.storage?.persist) return null;
+      if (typeof navigator === "undefined" || !navigator.storage?.persist)
+        return null;
       return await navigator.storage.persist();
     } catch {
       return null;

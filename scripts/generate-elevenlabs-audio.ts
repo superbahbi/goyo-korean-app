@@ -2,7 +2,10 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import assert from "node:assert";
-import { CURATED_CARDS, loadVocabularyDeck } from "../client/src/lib/vocabulary";
+import {
+  CURATED_CARDS,
+  loadVocabularyDeck,
+} from "../client/src/lib/vocabulary";
 import { ALPHABET_DATA } from "../client/src/lib/alphabet";
 
 export interface AudioItem {
@@ -25,18 +28,26 @@ interface RetryableError extends Error {
 const cliArgs = process.argv.slice(2);
 
 // CLI voice flag handling: --voice female | --voice=female | --voice <voiceId>
-const voiceArg = cliArgs.find((arg) => arg.startsWith("--voice="));
+const voiceArg = cliArgs.find(arg => arg.startsWith("--voice="));
 const voiceFlagIndex = cliArgs.indexOf("--voice");
 const voiceCli =
   voiceArg?.split("=")[1] ??
-  (voiceFlagIndex !== -1 && cliArgs[voiceFlagIndex + 1] && !cliArgs[voiceFlagIndex + 1].startsWith("--")
+  (voiceFlagIndex !== -1 &&
+  cliArgs[voiceFlagIndex + 1] &&
+  !cliArgs[voiceFlagIndex + 1].startsWith("--")
     ? cliArgs[voiceFlagIndex + 1]
     : undefined);
 
 // The first bare argument is an optional project root. The value following
 // `--voice` belongs to that flag, so it must not be mistaken for a path.
-const voiceValueIndex = voiceArg ? -1 : voiceFlagIndex !== -1 && voiceCli ? voiceFlagIndex + 1 : -1;
-const rootArg = cliArgs.find((arg, index) => index !== voiceValueIndex && !arg.startsWith("--"));
+const voiceValueIndex = voiceArg
+  ? -1
+  : voiceFlagIndex !== -1 && voiceCli
+    ? voiceFlagIndex + 1
+    : -1;
+const rootArg = cliArgs.find(
+  (arg, index) => index !== voiceValueIndex && !arg.startsWith("--")
+);
 const defaultRoot = path.resolve(fileURLToPath(import.meta.url), "../..");
 const projectRoot = rootArg ? path.resolve(rootArg) : defaultRoot;
 const audioDir = path.join(projectRoot, "public", "audio");
@@ -71,17 +82,27 @@ const VOICE_PRESETS: Record<string, VoicePreset> = {
   },
 };
 
-const activePreset = (voiceCli && VOICE_PRESETS[voiceCli]) || VOICE_PRESETS.male;
+const activePreset =
+  (voiceCli && VOICE_PRESETS[voiceCli]) || VOICE_PRESETS.male;
 
 const filePrefix = process.env.ELEVENLABS_FILE_PREFIX || activePreset.prefix;
-const manifestPath = path.join(audioDir, process.env.ELEVENLABS_MANIFEST_NAME || activePreset.manifest);
-const voiceId = process.env.ELEVENLABS_VOICE_ID || (voiceCli && !VOICE_PRESETS[voiceCli] ? voiceCli : activePreset.voiceId);
+const manifestPath = path.join(
+  audioDir,
+  process.env.ELEVENLABS_MANIFEST_NAME || activePreset.manifest
+);
+const voiceId =
+  process.env.ELEVENLABS_VOICE_ID ||
+  (voiceCli && !VOICE_PRESETS[voiceCli] ? voiceCli : activePreset.voiceId);
 const modelId = process.env.ELEVENLABS_MODEL_ID || activePreset.modelId;
-const concurrency = Math.max(1, Math.min(5, Number(process.env.ELEVENLABS_CONCURRENCY || 3)));
+const concurrency = Math.max(
+  1,
+  Math.min(5, Number(process.env.ELEVENLABS_CONCURRENCY || 3))
+);
 const force = process.argv.includes("--force");
 const apiKey = process.env.ELEVENLABS_API_KEY;
 
-const sleep = (milliseconds: number) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+const sleep = (milliseconds: number) =>
+  new Promise(resolve => setTimeout(resolve, milliseconds));
 
 async function generateOne(item: AudioItem): Promise<AudioResult> {
   const outputPath = path.join(audioDir, item.filename);
@@ -121,18 +142,23 @@ async function generateOne(item: AudioItem): Promise<AudioResult> {
               use_speaker_boost: true,
             },
           }),
-        },
+        }
       );
 
       if (!response.ok) {
         const detail = await response.text();
         const retryable = response.status === 429 || response.status >= 500;
-        throw Object.assign(new Error(`HTTP ${response.status}: ${detail.slice(0, 240)}`), { retryable });
+        throw Object.assign(
+          new Error(`HTTP ${response.status}: ${detail.slice(0, 240)}`),
+          { retryable }
+        );
       }
 
       const audio = Buffer.from(await response.arrayBuffer());
       if (audio.length < 1000) {
-        throw new Error(`Received an unexpectedly small audio response (${audio.length} bytes)`);
+        throw new Error(
+          `Received an unexpectedly small audio response (${audio.length} bytes)`
+        );
       }
 
       await writeFile(temporaryPath, audio);
@@ -157,7 +183,7 @@ export async function main() {
   const deck = await loadVocabularyDeck();
   const deckCards = deck.vocabulary;
 
-  const vocabulary: AudioItem[] = deckCards.map((card) => ({
+  const vocabulary: AudioItem[] = deckCards.map(card => ({
     id: card.id,
     text: card.front,
     group: "vocabulary",
@@ -168,14 +194,14 @@ export async function main() {
   assert.strictEqual(
     vocabulary.length,
     deckCards.length,
-    `Vocabulary item count mismatch: discovered ${vocabulary.length}, expected ${deckCards.length}`,
+    `Vocabulary item count mismatch: discovered ${vocabulary.length}, expected ${deckCards.length}`
   );
   assert.ok(
     deckCards.length >= CURATED_CARDS.length,
-    `Deck length (${deckCards.length}) must be at least curated cards count (${CURATED_CARDS.length})`,
+    `Deck length (${deckCards.length}) must be at least curated cards count (${CURATED_CARDS.length})`
   );
 
-  const alphabet: AudioItem[] = ALPHABET_DATA.map((card) => ({
+  const alphabet: AudioItem[] = ALPHABET_DATA.map(card => ({
     id: card.id,
     text: card.ttsText,
     group: "alphabet",
@@ -185,16 +211,18 @@ export async function main() {
   assert.strictEqual(
     alphabet.length,
     ALPHABET_DATA.length,
-    `Alphabet item count mismatch: discovered ${alphabet.length}, expected ${ALPHABET_DATA.length}`,
+    `Alphabet item count mismatch: discovered ${alphabet.length}, expected ${ALPHABET_DATA.length}`
   );
 
   const items = [...vocabulary, ...alphabet];
   if (vocabulary.length === 0 || alphabet.length === 0) {
-    throw new Error(`Could not parse source data. vocabulary=${vocabulary.length}, alphabet=${alphabet.length}`);
+    throw new Error(
+      `Could not parse source data. vocabulary=${vocabulary.length}, alphabet=${alphabet.length}`
+    );
   }
 
   console.log(
-    `Discovered ${items.length} audio items (${vocabulary.length} vocabulary across curated + imported decks, ${alphabet.length} alphabet).`,
+    `Discovered ${items.length} audio items (${vocabulary.length} vocabulary across curated + imported decks, ${alphabet.length} alphabet).`
   );
 
   if (!apiKey) {
@@ -212,11 +240,15 @@ export async function main() {
       const result = await generateOne(item);
       results.push(result);
       const completed = results.length;
-      console.log(`[${completed}/${items.length}] ${result.status} ${item.group}/${item.id} ${item.text}`);
+      console.log(
+        `[${completed}/${items.length}] ${result.status} ${item.group}/${item.id} ${item.text}`
+      );
     }
   }
 
-  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, worker));
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, worker)
+  );
   results.sort((left, right) => left.id.localeCompare(right.id));
 
   const summary = {
@@ -225,15 +257,19 @@ export async function main() {
     modelId,
     counts: {
       total: results.length,
-      generated: results.filter((result) => result.status === "generated").length,
-      skipped: results.filter((result) => result.status === "skipped").length,
-      failed: results.filter((result) => result.status === "failed").length,
+      generated: results.filter(result => result.status === "generated").length,
+      skipped: results.filter(result => result.status === "skipped").length,
+      failed: results.filter(result => result.status === "failed").length,
     },
-    vocabulary: results.filter((result) => result.group === "vocabulary"),
-    alphabet: results.filter((result) => result.group === "alphabet"),
+    vocabulary: results.filter(result => result.group === "vocabulary"),
+    alphabet: results.filter(result => result.group === "alphabet"),
   };
 
-  await writeFile(manifestPath, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
+  await writeFile(
+    manifestPath,
+    `${JSON.stringify(summary, null, 2)}\n`,
+    "utf8"
+  );
   console.log(JSON.stringify(summary.counts));
 
   if (summary.counts.failed > 0) {

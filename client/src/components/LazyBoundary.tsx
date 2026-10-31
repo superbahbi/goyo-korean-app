@@ -15,7 +15,10 @@ interface LazyBoundaryState {
  * Keeps a failed chunk download (stale deploy, offline) from unmounting the whole
  * dashboard through the root error boundary.
  */
-export class LazyBoundary extends Component<LazyBoundaryProps, LazyBoundaryState> {
+export class LazyBoundary extends Component<
+  LazyBoundaryProps,
+  LazyBoundaryState
+> {
   state: LazyBoundaryState = { failed: false };
 
   static getDerivedStateFromError(): LazyBoundaryState {
@@ -37,14 +40,22 @@ export class LazyBoundary extends Component<LazyBoundaryProps, LazyBoundaryState
       >
         <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="mt-0.5 shrink-0 text-amber-500" size={20} aria-hidden="true" />
+            <AlertTriangle
+              className="mt-0.5 shrink-0 text-amber-500"
+              size={20}
+              aria-hidden="true"
+            />
             <div>
-              <h2 id="lazy-boundary-title" className="text-lg font-semibold text-slate-900">
+              <h2
+                id="lazy-boundary-title"
+                className="text-lg font-semibold text-slate-900"
+              >
                 This practice mode could not load
               </h2>
               <p className="mt-1 text-sm leading-relaxed text-slate-500">
-                The page may have been updated while it was open, or the connection dropped. Try again, and refresh the
-                page if it keeps failing.
+                The page may have been updated while it was open, or the
+                connection dropped. Try again, and refresh the page if it keeps
+                failing.
               </p>
             </div>
           </div>
@@ -56,7 +67,12 @@ export class LazyBoundary extends Component<LazyBoundaryProps, LazyBoundaryState
             >
               Try again
             </Button>
-            <Button type="button" variant="outline" className="w-full bg-white sm:flex-1" onClick={this.props.onClose}>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full bg-white sm:flex-1"
+              onClick={this.props.onClose}
+            >
               Close
             </Button>
           </div>

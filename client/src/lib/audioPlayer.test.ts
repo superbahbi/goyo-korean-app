@@ -38,7 +38,10 @@ class FakeAudio {
 }
 
 function jsonResponse(body: unknown) {
-  return new Response(JSON.stringify(body), { status: 200, headers: { "content-type": "application/json" } });
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: { "content-type": "application/json" },
+  });
 }
 
 describe("playVocabularyAudio", () => {
@@ -55,7 +58,10 @@ describe("playVocabularyAudio", () => {
   });
 
   it("resolves true when the clip plays", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse(indexPayload)));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse(indexPayload))
+    );
 
     const { playVocabularyAudio } = await import("./audioPlayer");
 
@@ -63,7 +69,10 @@ describe("playVocabularyAudio", () => {
   });
 
   it("resolves false instead of throwing when the index cannot load", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => new Response("no", { status: 404 })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response("no", { status: 404 }))
+    );
 
     const { playVocabularyAudio } = await import("./audioPlayer");
 
@@ -71,7 +80,10 @@ describe("playVocabularyAudio", () => {
   });
 
   it("resolves false when the index has no clip for the card", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ ...indexPayload, vocabulary: {} })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse({ ...indexPayload, vocabulary: {} }))
+    );
 
     const { playVocabularyAudio } = await import("./audioPlayer");
 

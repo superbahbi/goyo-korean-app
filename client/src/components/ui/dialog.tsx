@@ -108,7 +108,7 @@ function DialogContent({
     (e: KeyboardEvent) => {
       // Check both the native isComposing property and our context state
       // This handles Safari's timing issues with composition events
-      const isCurrentlyComposing = (e as any).isComposing || isComposing();
+      const isCurrentlyComposing = e.isComposing || isComposing();
 
       // If IME is composing, prevent dialog from closing
       if (isCurrentlyComposing) {
@@ -132,11 +132,14 @@ function DialogContent({
           className
         )}
         onEscapeKeyDown={handleEscapeKeyDown}
-        onOpenAutoFocus={(event) => {
-          returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        onOpenAutoFocus={event => {
+          returnFocusRef.current =
+            document.activeElement instanceof HTMLElement
+              ? document.activeElement
+              : null;
           onOpenAutoFocus?.(event);
         }}
-        onCloseAutoFocus={(event) => {
+        onCloseAutoFocus={event => {
           onCloseAutoFocus?.(event);
           if (!event.defaultPrevented && returnFocusRef.current?.isConnected) {
             event.preventDefault();
@@ -219,6 +222,5 @@ export {
   DialogOverlay,
   DialogPortal,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 };
-

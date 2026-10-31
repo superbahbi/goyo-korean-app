@@ -21,8 +21,16 @@ const ROOT = import.meta.dirname;
 function alphabetAudioEntries() {
   const manifestPath = path.join(ROOT, "public", "audio", "index.json");
   const index = JSON.parse(readFileSync(manifestPath, "utf8")) as {
-    alphabet: { consonants: Record<string, string>; vowels: Record<string, string> };
-    female?: { alphabet?: { consonants: Record<string, string>; vowels: Record<string, string> } };
+    alphabet: {
+      consonants: Record<string, string>;
+      vowels: Record<string, string>;
+    };
+    female?: {
+      alphabet?: {
+        consonants: Record<string, string>;
+        vowels: Record<string, string>;
+      };
+    };
     vocabulary: Record<string, string>;
   };
 
@@ -41,9 +49,12 @@ function alphabetAudioEntries() {
 
   // A revision derived from the file itself means a regenerated clip is
   // re-fetched instead of being served from an old precache entry.
-  return [...files].map((file) => {
+  return [...files].map(file => {
     const stats = statSync(path.join(ROOT, "public", "audio", file));
-    return { url: `/audio/${file}`, revision: `${stats.size}-${Math.round(stats.mtimeMs)}` };
+    return {
+      url: `/audio/${file}`,
+      revision: `${stats.size}-${Math.round(stats.mtimeMs)}`,
+    };
   });
 }
 
@@ -58,7 +69,8 @@ const plugins = [
     manifest: {
       name: "Goyo - Scientific Korean Practice",
       short_name: "Goyo",
-      description: "Audio-first Korean vocabulary practice with spaced repetition.",
+      description:
+        "Audio-first Korean vocabulary practice with spaced repetition.",
       start_url: "/",
       scope: "/",
       display: "standalone",
@@ -67,7 +79,12 @@ const plugins = [
       icons: [
         { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
         { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
-        { src: "/icons/maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+        {
+          src: "/icons/maskable-512.png",
+          sizes: "512x512",
+          type: "image/png",
+          purpose: "maskable",
+        },
       ],
     },
     workbox: {
@@ -115,10 +132,7 @@ export default defineConfig({
     port: 3000,
     strictPort: false, // Will find next available port if 3000 is busy
     host: true,
-    allowedHosts: [
-      "localhost",
-      "127.0.0.1",
-    ],
+    allowedHosts: ["localhost", "127.0.0.1"],
     fs: {
       strict: true,
       deny: ["**/.*"],

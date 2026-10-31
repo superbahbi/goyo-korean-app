@@ -40,7 +40,8 @@ behaviour checks still need a real browser, screen reader and iPhone.
 - **Branch and PR for everything.** No direct commits to `main`.
   `feat/…`, `fix/…`, `chore/…`, `docs/…`. One concern per PR.
 - **PR size:** aim for under ~400 changed lines. If a task is bigger, split it.
-- **Gate for every PR:** `pnpm check`, `pnpm test`, `pnpm build` all pass, run locally and in CI.
+- **Gate for every PR:** `pnpm check`, `pnpm lint`, `pnpm format:check`, `pnpm test` and
+  `pnpm build` all pass, run locally and in CI.
   Behaviour tests cannot cover (UI, audio, PWA, iOS) is checked in a browser before merge.
 - **Authors and reviewers:** the coder is a cheap model (Haiku 5.5; escalate to Gemini 3.8 Flash if a
   task fails its gate twice). The reviewer is a different model (DeepSeek V4.1 Flash). Never the same
@@ -55,7 +56,7 @@ behaviour checks still need a real browser, screen reader and iPhone.
 | ------------------------------- | ------------------------------------------------------------ |
 | 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding          |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open |
-| 2 Structure                     | In progress; item 2 done, bundle target still open           |
+| 2 Structure                     | In progress; items 2–3 done, bundle target still open        |
 | 3 Content                       | Not started                                                  |
 | 4 Delivery and accessibility    | Not started                                                  |
 | 5 Tune from data                | Blocked on 30 days of use                                    |

@@ -16,7 +16,9 @@ describe("msUntilNextLocalMidnight", () => {
   it("counts down to the next local midnight", () => {
     const now = new Date(2026, 9, 31, 23, 59, 30, 250);
     const nextMidnight = new Date(2026, 10, 1, 0, 0, 0, 0);
-    expect(msUntilNextLocalMidnight(now)).toBe(nextMidnight.getTime() - now.getTime());
+    expect(msUntilNextLocalMidnight(now)).toBe(
+      nextMidnight.getTime() - now.getTime()
+    );
   });
 
   it("aims at tomorrow's midnight when the day has just started", () => {
@@ -25,8 +27,12 @@ describe("msUntilNextLocalMidnight", () => {
     const next = new Date(now.getTime() + delay);
 
     expect(delay).toBeGreaterThan(0);
-    expect([next.getDate(), next.getHours(), next.getMinutes(), next.getSeconds(), next.getMilliseconds()]).toEqual([
-      1, 0, 0, 0, 0,
-    ]);
+    expect([
+      next.getDate(),
+      next.getHours(),
+      next.getMinutes(),
+      next.getSeconds(),
+      next.getMilliseconds(),
+    ]).toEqual([1, 0, 0, 0, 0]);
   });
 });

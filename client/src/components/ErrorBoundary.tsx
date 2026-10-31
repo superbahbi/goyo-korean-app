@@ -47,8 +47,9 @@ class ErrorBoundary extends Component<Props, State> {
 
             <h2 className="text-xl mb-2">Something went wrong.</h2>
             <p className="text-sm text-muted-foreground text-center mb-6">
-              Try reloading the page. If the problem keeps happening, you can reset
-              your local progress, which erases saved study history on this device.
+              Try reloading the page. If the problem keeps happening, you can
+              reset your local progress, which erases saved study history on
+              this device.
             </p>
 
             <div className="flex flex-wrap justify-center gap-3">

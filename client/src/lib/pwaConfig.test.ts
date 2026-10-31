@@ -10,6 +10,6 @@ describe("service worker precache", () => {
   });
 
   it("keeps the app shell in the precache", () => {
-    expect(PRECACHE_GLOBS.some((glob) => glob.includes("js"))).toBe(true);
+    expect(PRECACHE_GLOBS.some(glob => glob.includes("js"))).toBe(true);
   });
 });

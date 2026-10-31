@@ -22,7 +22,7 @@ interface FlashCardProps {
 }
 
 function cleanKoreanText(text: string): string {
-  const match = text.match(/^([^\(]+)/);
+  const match = text.match(/^([^(]+)/);
   return match ? match[1].trim() : text.trim();
 }
 
@@ -70,7 +70,7 @@ function FlashCardBase({
     if (!isRevealed && autoSpeak && lastAutoPlayedId.current !== wordId) {
       const timer = setTimeout(() => {
         lastAutoPlayedId.current = wordId;
-        void playVocabularyAudio(wordId).then((played) => {
+        void playVocabularyAudio(wordId).then(played => {
           if (!played) markAudioFailed(true);
         });
       }, 300);
@@ -112,11 +112,17 @@ function FlashCardBase({
         <motion.div
           initial={false}
           inert={isRevealed}
-          animate={{ opacity: isRevealed ? 0 : 1, pointerEvents: isRevealed ? "none" : "auto" }}
+          animate={{
+            opacity: isRevealed ? 0 : 1,
+            pointerEvents: isRevealed ? "none" : "auto",
+          }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 overflow-y-auto bg-white border-2 border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
         >
-          <Badge variant="outline" className="mb-8 capitalize text-slate-500 font-medium bg-slate-50 border-slate-200">
+          <Badge
+            variant="outline"
+            className="mb-8 capitalize text-slate-500 font-medium bg-slate-50 border-slate-200"
+          >
             {tag}
           </Badge>
           {audioFirst ? (
@@ -124,20 +130,31 @@ function FlashCardBase({
               <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                 <Volume2 size={36} />
               </div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Listen &amp; recall</p>
-              <h2 className="mt-3 text-2xl font-bold text-slate-800">What does this mean?</h2>
-              <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-500">Say the meaning silently before revealing the Korean and example.</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                Listen &amp; recall
+              </p>
+              <h2 className="mt-3 text-2xl font-bold text-slate-800">
+                What does this mean?
+              </h2>
+              <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-500">
+                Say the meaning silently before revealing the Korean and
+                example.
+              </p>
               {audioFailed && (
-                <div role="status" className="mt-5 flex max-w-xs flex-col items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+                <div
+                  role="status"
+                  className="mt-5 flex max-w-xs flex-col items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3"
+                >
                   <p className="text-xs leading-relaxed text-amber-800">
-                    Audio isn&apos;t available, so you can&apos;t hear this card. Reveal it to keep going.
+                    Audio isn&apos;t available, so you can&apos;t hear this
+                    card. Reveal it to keep going.
                   </p>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
                     className="border-amber-300 bg-white text-amber-900 hover:bg-amber-100"
-                    onClick={(event) => {
+                    onClick={event => {
                       event.stopPropagation();
                       handleFlip();
                     }}
@@ -148,7 +165,9 @@ function FlashCardBase({
               )}
             </>
           ) : (
-            <h2 className="text-5xl font-bold text-slate-900 mb-6">{cleanKoreanText(front)}</h2>
+            <h2 className="text-5xl font-bold text-slate-900 mb-6">
+              {cleanKoreanText(front)}
+            </h2>
           )}
           {!audioFirst && showRoman && romanization && (
             <motion.p
@@ -166,29 +185,32 @@ function FlashCardBase({
               size="icon"
               className="rounded-full w-12 h-12"
               aria-label={`Play pronunciation for ${cleanKoreanText(front)}`}
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
-                void playVocabularyAudio(wordId).then((played) => {
+                void playVocabularyAudio(wordId).then(played => {
                   if (!played) markAudioFailed(true);
                 });
               }}
             >
               <Volume2 size={20} />
             </Button>
-            {!audioFirst && <Button
-              variant="ghost"
-              size="sm"
-              className="text-slate-500 hover:text-slate-700"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowRoman(!showRoman);
-              }}
-            >
-              {showRoman ? "Hide" : "Show"} Romanization
-            </Button>}
+            {!audioFirst && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-slate-500 hover:text-slate-700"
+                onClick={e => {
+                  e.stopPropagation();
+                  setShowRoman(!showRoman);
+                }}
+              >
+                {showRoman ? "Hide" : "Show"} Romanization
+              </Button>
+            )}
           </div>
           <div className="absolute bottom-12 flex items-center gap-2 text-sm text-slate-300 animate-pulse">
-            {audioFirst ? "Tap to reveal meaning" : "Tap to reveal"} <ChevronRight size={16} />
+            {audioFirst ? "Tap to reveal meaning" : "Tap to reveal"}{" "}
+            <ChevronRight size={16} />
           </div>
         </motion.div>
 
@@ -196,30 +218,59 @@ function FlashCardBase({
         <motion.div
           initial={false}
           inert={!isRevealed}
-          animate={{ opacity: isRevealed ? 1 : 0, pointerEvents: isRevealed ? "auto" : "none" }}
+          animate={{
+            opacity: isRevealed ? 1 : 0,
+            pointerEvents: isRevealed ? "auto" : "none",
+          }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-7 text-center shadow-xl sm:p-9"
         >
           <div className="flex min-h-full flex-col items-center justify-center">
-            <Badge className="mb-5 bg-emerald-600 text-white shadow-sm">{audioFirst ? "Korean + meaning" : "Meaning"}</Badge>
-            {audioFirst && <p className="text-5xl font-bold tracking-tight text-slate-900">{cleanKoreanText(front)}</p>}
-            {romanization && <p className="mt-3 font-mono text-lg font-semibold text-emerald-700">{romanization}</p>}
+            <Badge className="mb-5 bg-emerald-600 text-white shadow-sm">
+              {audioFirst ? "Korean + meaning" : "Meaning"}
+            </Badge>
+            {audioFirst && (
+              <p className="text-5xl font-bold tracking-tight text-slate-900">
+                {cleanKoreanText(front)}
+              </p>
+            )}
+            {romanization && (
+              <p className="mt-3 font-mono text-lg font-semibold text-emerald-700">
+                {romanization}
+              </p>
+            )}
             <div className="my-6 h-px w-full max-w-xs bg-emerald-200" />
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Meaning</p>
-            <h2 className="text-3xl font-bold leading-tight text-slate-900">{back}</h2>
-          {example && (
-            <div className="mt-6 max-w-xs rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600">In context</p>
-              <p className="mt-2 text-sm italic leading-relaxed text-slate-600">“{example}”</p>
-              {exampleEnglish && <p className="mt-2 text-xs leading-relaxed text-slate-500">{exampleEnglish}</p>}
-            </div>
-          )}
-          {usageNote && (
-            <div className="mt-3 max-w-xs rounded-2xl border border-slate-200 bg-white/60 px-4 py-3 text-left">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Usage note</p>
-              <p className="mt-1 text-xs leading-relaxed text-slate-600">{usageNote}</p>
-            </div>
-          )}
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+              Meaning
+            </p>
+            <h2 className="text-3xl font-bold leading-tight text-slate-900">
+              {back}
+            </h2>
+            {example && (
+              <div className="mt-6 max-w-xs rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
+                  In context
+                </p>
+                <p className="mt-2 text-sm italic leading-relaxed text-slate-600">
+                  “{example}”
+                </p>
+                {exampleEnglish && (
+                  <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                    {exampleEnglish}
+                  </p>
+                )}
+              </div>
+            )}
+            {usageNote && (
+              <div className="mt-3 max-w-xs rounded-2xl border border-slate-200 bg-white/60 px-4 py-3 text-left">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                  Usage note
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                  {usageNote}
+                </p>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

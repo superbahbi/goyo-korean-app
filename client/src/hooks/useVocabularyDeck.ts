@@ -20,12 +20,12 @@ export function useVocabularyDeck(): VocabularyDeck & { ready: boolean } {
   useEffect(() => {
     let active = true;
     loadVocabularyDeck()
-      .then((loaded) => {
+      .then(loaded => {
         if (!active) return;
         setDeck(loaded);
         setReady(true);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Failed to load the imported vocabulary deck:", error);
         if (active) setReady(true);
       });

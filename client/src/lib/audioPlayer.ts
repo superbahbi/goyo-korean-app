@@ -66,20 +66,22 @@ const vowelAudioAliases: Record<string, string> = {
 
 function fetchAudioIndex(): Promise<AudioIndex> {
   if (typeof window === "undefined" || typeof fetch === "undefined") {
-    return Promise.reject(new Error("Audio index fetch called outside browser"));
+    return Promise.reject(
+      new Error("Audio index fetch called outside browser")
+    );
   }
 
   // No cache-busting query and no `no-store`: the service worker precaches this
   // exact URL, and a query string would miss that entry and fail offline. A
   // regenerated index gets a new precache revision on the next deploy.
   return fetch("/audio/index.json")
-    .then((response) => {
+    .then(response => {
       if (!response.ok) {
         throw new Error(`Audio index request failed (${response.status})`);
       }
       return response.json() as Promise<AudioIndex>;
     })
-    .then((data) => {
+    .then(data => {
       audioIndex = data;
       return data;
     });
@@ -87,7 +89,7 @@ function fetchAudioIndex(): Promise<AudioIndex> {
 
 // Module-level prefetch: begin loading immediately so the index is typically resolved by first tap
 if (typeof window !== "undefined") {
-  audioIndexPromise = fetchAudioIndex().catch((err) => {
+  audioIndexPromise = fetchAudioIndex().catch(err => {
     audioIndexPromise = null;
     throw err;
   });
@@ -99,7 +101,7 @@ if (typeof window !== "undefined") {
 async function loadAudioIndex(): Promise<AudioIndex> {
   if (audioIndex) return audioIndex;
   if (!audioIndexPromise) {
-    audioIndexPromise = fetchAudioIndex().catch((err) => {
+    audioIndexPromise = fetchAudioIndex().catch(err => {
       audioIndexPromise = null;
       throw err;
     });
@@ -107,11 +109,19 @@ async function loadAudioIndex(): Promise<AudioIndex> {
   return audioIndexPromise;
 }
 
-function resolveVocabularyAudioFile(index: AudioIndex, wordId: string): string | undefined {
-  const vocabularyIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.vocabulary : index.vocabulary;
+function resolveVocabularyAudioFile(
+  index: AudioIndex,
+  wordId: string
+): string | undefined {
+  const vocabularyIndex =
+    selectedSpeaker === "elevenlabs-female"
+      ? index.female?.vocabulary
+      : index.vocabulary;
   return (
     vocabularyIndex?.[wordId] ??
-    (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${wordId}.mp3` : undefined)
+    (selectedSpeaker === "elevenlabs-female"
+      ? `elevenlabs_female_${wordId}.mp3`
+      : undefined)
   );
 }
 
@@ -120,9 +130,14 @@ function resolveAlphabetAudioFile(
   characterId: string,
   type: "consonant" | "vowel"
 ): string | undefined {
-  const aliases = type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
-  const alphabetIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.alphabet : index.alphabet;
-  const files = type === "consonant" ? alphabetIndex?.consonants : alphabetIndex?.vowels;
+  const aliases =
+    type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
+  const alphabetIndex =
+    selectedSpeaker === "elevenlabs-female"
+      ? index.female?.alphabet
+      : index.alphabet;
+  const files =
+    type === "consonant" ? alphabetIndex?.consonants : alphabetIndex?.vowels;
   if (!files) throw new Error("Premium audio index is unavailable");
   // The male index keys alphabet clips by mnemonic, the female index by ID.
   // Try the ID first (both indexes include it), then the mnemonic alias.
@@ -203,7 +218,10 @@ async function warmAudioCache(audioPath: string): Promise<void> {
     const response = await fetch(`${audioPath}?warm=1`);
     // A missing clip falls back to index.html with a 200, which must never be
     // stored as audio or the service worker will serve it forever.
-    if (response.status === 200 && (response.headers.get("content-type") ?? "").startsWith("audio/")) {
+    if (
+      response.status === 200 &&
+      (response.headers.get("content-type") ?? "").startsWith("audio/")
+    ) {
       await cache.put(audioPath, response);
     }
   } catch {
@@ -283,7 +301,7 @@ function playAudioFile(audioPath: string): Promise<void> {
         reject(new Error("Audio playback was stopped"));
       };
       audio.src = src;
-      audio.play().catch((error) => {
+      audio.play().catch(error => {
         void recover(id, String(error));
       });
     };
@@ -306,7 +324,6 @@ export function stopAudio(): void {
     currentAudio.load();
     currentAudio = null;
   }
-
 }
 
 export function isAudioPlaying(): boolean {

@@ -15,7 +15,8 @@ const updateSW = registerSW({
     toast("A new version of Goyo is ready", {
       id: "pwa-update",
       duration: Infinity,
-      description: "Reload to use the latest version. Your saved progress is kept.",
+      description:
+        "Reload to use the latest version. Your saved progress is kept.",
       action: {
         label: "Reload",
         onClick: () => {

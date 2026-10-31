@@ -7,10 +7,21 @@ import { romanize } from "./romanize";
 
 // Genuine homonyms kept as separate cards: 차 car/tea, 눈 eye/snow, 배 boat-pear/stomach,
 // 다리 bridge/leg, 열 ten/fever, 분 minute/honorific person, 공 ball/zero, 병 bottle/illness.
-const HOMONYM_FRONTS = ["공", "눈", "다리", "배", "병", "분", "열", "차"].sort();
+const HOMONYM_FRONTS = [
+  "공",
+  "눈",
+  "다리",
+  "배",
+  "병",
+  "분",
+  "열",
+  "차",
+].sort();
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..", "..", "..");
-const manifest = JSON.parse(readFileSync(path.join(REPO_ROOT, "public/audio/index.json"), "utf8")) as {
+const manifest = JSON.parse(
+  readFileSync(path.join(REPO_ROOT, "public/audio/index.json"), "utf8")
+) as {
   vocabulary: Record<string, string>;
   female: { vocabulary: Record<string, string> };
 };
@@ -23,15 +34,21 @@ function hasGeminateRieul(text: string): boolean {
   return chars.some((ch, i) => {
     const first = syllableCode(ch);
     const second = i + 1 < chars.length ? syllableCode(chars[i + 1]) : -1;
-    return isSyllable(first) && isSyllable(second) && first % 28 === 8 && Math.floor(second / 588) === 5;
+    return (
+      isSyllable(first) &&
+      isSyllable(second) &&
+      first % 28 === 8 &&
+      Math.floor(second / 588) === 5
+    );
   });
 }
 
 describe("combined vocabulary deck", async () => {
-  const { vocabulary: VOCABULARY_DATA, studyReady: STUDY_READY_VOCABULARY } = await loadVocabularyDeck();
+  const { vocabulary: VOCABULARY_DATA, studyReady: STUDY_READY_VOCABULARY } =
+    await loadVocabularyDeck();
 
   it("has no duplicate ids", () => {
-    const ids = VOCABULARY_DATA.map((card) => card.id);
+    const ids = VOCABULARY_DATA.map(card => card.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
@@ -46,14 +63,18 @@ describe("combined vocabulary deck", async () => {
 
   it("has no duplicate fronts except the homonym allowlist", () => {
     const counts = new Map<string, number>();
-    for (const card of VOCABULARY_DATA) counts.set(card.front, (counts.get(card.front) ?? 0) + 1);
-    const duplicates = [...counts].filter(([, count]) => count > 1).map(([front]) => front).sort();
+    for (const card of VOCABULARY_DATA)
+      counts.set(card.front, (counts.get(card.front) ?? 0) + 1);
+    const duplicates = [...counts]
+      .filter(([, count]) => count > 1)
+      .map(([front]) => front)
+      .sort();
     expect(duplicates).toEqual(HOMONYM_FRONTS);
   });
 
   it("finds 집 and 학교 in the curated deck with Revised Romanization", () => {
-    const house = VOCABULARY_DATA.find((card) => card.front === "집");
-    const school = VOCABULARY_DATA.find((card) => card.front === "학교");
+    const house = VOCABULARY_DATA.find(card => card.front === "집");
+    const school = VOCABULARY_DATA.find(card => card.front === "학교");
     expect(house?.romanization).toBe("jip");
     expect(school?.romanization).toBe("hakgyo");
   });
@@ -63,9 +84,16 @@ describe("combined vocabulary deck", async () => {
       const male = manifest.vocabulary[card.id];
       const female = manifest.female.vocabulary[card.id];
       expect(male, `male ${card.id}`).toBe(`elevenlabs_${card.id}.mp3`);
-      expect(female, `female ${card.id}`).toBe(`elevenlabs_female_${card.id}.mp3`);
-      expect(existsSync(path.join(REPO_ROOT, "public/audio", male)), male).toBe(true);
-      expect(existsSync(path.join(REPO_ROOT, "public/audio", female)), female).toBe(true);
+      expect(female, `female ${card.id}`).toBe(
+        `elevenlabs_female_${card.id}.mp3`
+      );
+      expect(existsSync(path.join(REPO_ROOT, "public/audio", male)), male).toBe(
+        true
+      );
+      expect(
+        existsSync(path.join(REPO_ROOT, "public/audio", female)),
+        female
+      ).toBe(true);
     }
   });
 });
@@ -90,7 +118,8 @@ describe("Revised Romanization", async () => {
       ["많다", "manta"],
       ["어디입니까?", "eodiimnikka?"],
     ];
-    for (const [front, expected] of cases) expect(romanize(front), front).toBe(expected);
+    for (const [front, expected] of cases)
+      expect(romanize(front), front).toBe(expected);
   });
 
   it("keeps every imported romanization in line with the transliterator", () => {
@@ -100,20 +129,25 @@ describe("Revised Romanization", async () => {
   });
 
   it("keeps curated romanizations in line with the transliterator", () => {
-    const normalize = (value: string) => value.toLowerCase().replace(/[^a-z]/g, "");
+    const normalize = (value: string) =>
+      value.toLowerCase().replace(/[^a-z]/g, "");
     for (const card of CURATED_CARDS) {
       const hangul = card.front.replace(/[^가-힣\s]/g, "").trim();
-      expect(normalize(card.romanization), `${card.id} ${card.front}`).toBe(normalize(romanize(hangul)));
+      expect(normalize(card.romanization), `${card.id} ${card.front}`).toBe(
+        normalize(romanize(hangul))
+      );
     }
   });
 
   it("never writes iii", () => {
-    for (const card of VOCABULARY_DATA) expect(card.romanization, card.id).not.toMatch(/iii/);
+    for (const card of VOCABULARY_DATA)
+      expect(card.romanization, card.id).not.toMatch(/iii/);
   });
 
   it("writes ll only for a geminate ㄹㄹ in the Hangul", () => {
     for (const card of VOCABULARY_DATA) {
-      if (/ll/.test(card.romanization)) expect(hasGeminateRieul(card.front), card.id).toBe(true);
+      if (/ll/.test(card.romanization))
+        expect(hasGeminateRieul(card.front), card.id).toBe(true);
     }
   });
 });

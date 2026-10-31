@@ -2,10 +2,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { ArrowLeft, Volume2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { AlphabetCard } from "@/components/AlphabetCard";
-import { ALPHABET_DATA, ALPHABET_CATEGORIES, AlphabetCard as AlphabetCardType, NUMBER_DATA } from "@/lib/alphabet";
+import {
+  ALPHABET_DATA,
+  ALPHABET_CATEGORIES,
+  NUMBER_DATA,
+} from "@/lib/alphabet";
 import { playAlphabetAudio, playVocabularyAudio } from "@/lib/audioPlayer";
 
 interface AlphabetPracticeProps {
@@ -13,11 +17,16 @@ interface AlphabetPracticeProps {
 }
 
 export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
-  const [selectedType, setSelectedType] = useState<"consonants" | "vowels" | "numbers" | null>(null);
+  const [selectedType, setSelectedType] = useState<
+    "consonants" | "vowels" | "numbers" | null
+  >(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const handleSpeak = async (characterId: string, type: "consonant" | "vowel" | "number") => {
+  const handleSpeak = async (
+    characterId: string,
+    type: "consonant" | "vowel" | "number"
+  ) => {
     setIsSpeaking(true);
     try {
       await speakHangul(characterId, type);
@@ -26,7 +35,10 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     }
   };
 
-  const speakHangul = async (characterId: string, type: "consonant" | "vowel" | "number") => {
+  const speakHangul = async (
+    characterId: string,
+    type: "consonant" | "vowel" | "number"
+  ) => {
     if (type === "number") {
       await playVocabularyAudio(characterId);
       return;
@@ -36,7 +48,12 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
 
   if (!selectedType) {
     return (
-      <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Dialog
+        open
+        onOpenChange={open => {
+          if (!open) onClose();
+        }}
+      >
         <DialogContent
           aria-modal="true"
           aria-describedby={undefined}
@@ -63,14 +80,16 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
           <main className="flex-1 overflow-auto p-6">
             <div className="max-w-2xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {ALPHABET_CATEGORIES.map((category) => (
+                {ALPHABET_CATEGORIES.map(category => (
                   <motion.button
                     key={category.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     onClick={() => {
                       setCurrentIndex(0);
-                      setSelectedType(category.id as "consonants" | "vowels" | "numbers");
+                      setSelectedType(
+                        category.id as "consonants" | "vowels" | "numbers"
+                      );
                     }}
                     className={`p-8 rounded-2xl text-center transition-all hover:shadow-lg ${category.color}`}
                   >
@@ -95,13 +114,18 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm text-slate-600">
                     <p>
-                      🎯 <strong>Foundation:</strong> Hangul is the Korean alphabet. Learning it is the first step to reading and writing Korean.
+                      🎯 <strong>Foundation:</strong> Hangul is the Korean
+                      alphabet. Learning it is the first step to reading and
+                      writing Korean.
                     </p>
                     <p>
-                      🔊 <strong>Pronunciation:</strong> Each character has a consistent sound, making Korean pronunciation logical and learnable.
+                      🔊 <strong>Pronunciation:</strong> Each character has a
+                      consistent sound, making Korean pronunciation logical and
+                      learnable.
                     </p>
                     <p>
-                      ⚡ <strong>Quick to Learn:</strong> Most people can learn Hangul in just a few hours!
+                      ⚡ <strong>Quick to Learn:</strong> Most people can learn
+                      Hangul in just a few hours!
                     </p>
                   </CardContent>
                 </Card>
@@ -111,18 +135,12 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                     <CardTitle className="text-lg">How to Practice</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm text-slate-600">
-                    <p>
-                      1️⃣ Select Consonants, Vowels, or Numbers to begin
-                    </p>
+                    <p>1️⃣ Select Consonants, Vowels, or Numbers to begin</p>
                     <p>
                       2️⃣ Study each character with its pronunciation and example
                     </p>
-                    <p>
-                      3️⃣ Click "Hear Pronunciation" to listen to the sound
-                    </p>
-                    <p>
-                      4️⃣ Navigate through all characters at your own pace
-                    </p>
+                    <p>3️⃣ Click "Hear Pronunciation" to listen to the sound</p>
+                    <p>4️⃣ Navigate through all characters at your own pace</p>
                   </CardContent>
                 </Card>
               </div>
@@ -133,9 +151,14 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     );
   }
 
-  const cards = selectedType === "numbers"
-    ? NUMBER_DATA
-    : ALPHABET_DATA.filter((c) => selectedType === "consonants" ? c.type === "consonant" : c.type === "vowel");
+  const cards =
+    selectedType === "numbers"
+      ? NUMBER_DATA
+      : ALPHABET_DATA.filter(c =>
+          selectedType === "consonants"
+            ? c.type === "consonant"
+            : c.type === "vowel"
+        );
 
   const currentCard = cards[currentIndex] ?? cards[0];
 
@@ -151,10 +174,20 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     }
   };
 
-  const sectionTitle = selectedType === "consonants" ? "Consonants" : selectedType === "vowels" ? "Vowels" : "Numbers";
+  const sectionTitle =
+    selectedType === "consonants"
+      ? "Consonants"
+      : selectedType === "vowels"
+        ? "Vowels"
+        : "Numbers";
 
   return (
-    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Dialog
+      open
+      onOpenChange={open => {
+        if (!open) onClose();
+      }}
+    >
       <DialogContent
         aria-modal="true"
         aria-describedby={undefined}
@@ -199,10 +232,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
         <main className="flex-1 flex flex-col items-center justify-center p-6 overflow-auto">
           <div className="max-w-2xl w-full">
             {currentCard && (
-              <AlphabetCard
-                card={currentCard}
-                onSpeak={handleSpeak}
-              />
+              <AlphabetCard card={currentCard} onSpeak={handleSpeak} />
             )}
 
             {/* Navigation Buttons */}
@@ -226,7 +256,9 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
 
             {/* Quick Reference Grid */}
             <div className="mt-12">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">Quick Reference</h2>
+              <h2 className="text-lg font-bold text-slate-900 mb-4">
+                Quick Reference
+              </h2>
               <div className="grid grid-cols-5 md:grid-cols-8 gap-2">
                 {cards.map((card, idx) => (
                   <motion.button
