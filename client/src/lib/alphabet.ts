@@ -381,7 +381,7 @@ export const NUMBER_DATA: AlphabetCard[] = [
     hangul: "넷",
     romanization: "net",
     sound: "Four",
-    example: "넷은 너무 많아요.",
+    example: "우리 가족은 넷이에요.",
     type: "number",
   },
   {
