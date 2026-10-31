@@ -130,7 +130,12 @@ function resolveAlphabetAudioFile(
   return files[characterId] ?? (alias ? files[alias] : undefined);
 }
 
-export async function playVocabularyAudio(wordId: string): Promise<void> {
+/**
+ * Resolves true when the clip played to the end, false when it could not start
+ * or failed midway. Callers that can show a fallback (the study card) use the
+ * result; callers that treat audio as optional may ignore it.
+ */
+export async function playVocabularyAudio(wordId: string): Promise<boolean> {
   try {
     // When the index is already loaded, resolve and trigger playback synchronously
     // without awaiting first, so mobile Safari retains user gesture activation.
@@ -140,7 +145,7 @@ export async function playVocabularyAudio(wordId: string): Promise<void> {
         throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
       }
       await playAudioFile(`/audio/${audioFile}`);
-      return;
+      return true;
     }
 
     const index = await loadAudioIndex();
@@ -150,8 +155,10 @@ export async function playVocabularyAudio(wordId: string): Promise<void> {
     }
 
     await playAudioFile(`/audio/${audioFile}`);
+    return true;
   } catch (error) {
     console.error("Vocabulary audio failed:", error);
+    return false;
   }
 }
 
