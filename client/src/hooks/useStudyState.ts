@@ -43,7 +43,6 @@ export interface UserState {
   stats: UserStats;
   settings: {
     dailyGoal: number;
-    ttsEnabled: boolean;
     autoPlayAudio: boolean;
     audioSpeaker: "elevenlabs" | "elevenlabs-female";
   };
@@ -79,7 +78,6 @@ function createDefaultState(): UserState {
     },
     settings: {
       dailyGoal: 10,
-      ttsEnabled: true,
       autoPlayAudio: true,
       audioSpeaker: "elevenlabs",
     },
@@ -158,7 +156,7 @@ export function parseSavedState(raw: string | null): UserState {
     const dailyGoal = nonNegativeNumber(savedSettings.dailyGoal, defaults.settings.dailyGoal);
     const settings: UserState["settings"] = {
       dailyGoal: dailyGoal >= 1 ? dailyGoal : defaults.settings.dailyGoal,
-      ttsEnabled: typeof savedSettings.ttsEnabled === "boolean" ? savedSettings.ttsEnabled : defaults.settings.ttsEnabled,
+      // `ttsEnabled` was a dead system-voice toggle; unknown keys in old saves are ignored.
       autoPlayAudio: typeof savedSettings.autoPlayAudio === "boolean" ? savedSettings.autoPlayAudio : defaults.settings.autoPlayAudio,
       // Older saved progress may contain a removed system-voice preference.
       audioSpeaker: savedSettings.audioSpeaker === "elevenlabs-female" ? "elevenlabs-female" : "elevenlabs",

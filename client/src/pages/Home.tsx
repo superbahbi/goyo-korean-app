@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, MapPin, Search, Target, Download, Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -84,6 +85,11 @@ export default function Home() {
     if (!Number.isFinite(dailyGoal) || dailyGoal < 1) return;
     updateSettings({ dailyGoal });
     toast.success(`Daily goal set to ${dailyGoal} cards`);
+  };
+
+  const handleAutoPlayChange = (autoPlayAudio: boolean) => {
+    updateSettings({ autoPlayAudio });
+    if (!autoPlayAudio) stopAudio();
   };
 
   const handleExportProgress = () => {
@@ -759,6 +765,7 @@ export default function Home() {
             setSessionQueue([]);
           }}
           allowRepeat={dailyGoalReached || sessionMode === "weak" || sessionMode === "learning"}
+          autoPlayAudio={state.settings.autoPlayAudio}
           title={sessionMode === "weak" ? "Weak Words" : sessionMode === "learning" ? "Learning Review" : "Daily Session"}
         />
       )}
@@ -1157,9 +1164,18 @@ export default function Home() {
               </p>
             </div>
             <div className="border-t pt-4">
-              <label className="text-sm font-medium text-slate-700">Text-to-Speech</label>
-              <div className="text-sm text-slate-500 mt-1">
-                {state.settings.ttsEnabled ? "Enabled" : "Disabled"}
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <label className="text-sm font-medium text-slate-700" htmlFor="auto-play-audio">Auto-play pronunciation</label>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                    Play the clip as each card appears. Off leaves audio to the speaker button, so nothing plays until you tap.
+                  </p>
+                </div>
+                <Switch
+                  id="auto-play-audio"
+                  checked={state.settings.autoPlayAudio}
+                  onCheckedChange={(checked) => handleAutoPlayChange(checked)}
+                />
               </div>
             </div>
             <div className="border-t pt-4 space-y-2">

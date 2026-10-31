@@ -14,10 +14,18 @@ interface StudySessionProps {
   onGrade: (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => void;
   onClose: () => void;
   allowRepeat?: boolean;
+  autoPlayAudio?: boolean;
   title?: string;
 }
 
-export function StudySession({ queue, onGrade, onClose, allowRepeat = false, title = "Daily Session" }: StudySessionProps) {
+export function StudySession({
+  queue,
+  onGrade,
+  onClose,
+  allowRepeat = false,
+  autoPlayAudio = true,
+  title = "Daily Session",
+}: StudySessionProps) {
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -176,7 +184,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
               tag={currentCard.tag}
               onFlip={handleFlip}
               revealed={flipped}
-              autoSpeak={true}
+              autoSpeak={autoPlayAudio}
               audioFirst={true}
             />
           </AnimatePresence>
