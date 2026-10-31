@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
+import { shuffle } from "@/lib/shuffle";
 
 interface Scenario {
   id: string;
@@ -54,10 +55,6 @@ const SCENARIOS: Scenario[] = [
   },
 ];
 
-function shuffleChoices<T>(items: T[]): T[] {
-  return [...items].sort(() => Math.random() - 0.5);
-}
-
 interface ScenarioPracticeProps {
   cards: VocabularyCard[];
   onGrade: (cardId: string, rating: "again" | "good") => void;
@@ -85,7 +82,7 @@ export function ScenarioPractice({
     [cardMap]
   );
   const scenarios = useMemo(
-    () => [...availableScenarios].sort(() => Math.random() - 0.5),
+    () => shuffle(availableScenarios),
     [availableScenarios]
   );
   const current = scenarios[index];
@@ -93,9 +90,7 @@ export function ScenarioPractice({
 
   const choices = useMemo(() => {
     if (!currentCard) return [];
-    const pool = shuffleChoices(
-      cards.filter(card => card.id !== currentCard.id)
-    );
+    const pool = shuffle(cards.filter(card => card.id !== currentCard.id));
     // Prefer survival phrases, then any reviewed card, and never repeat a phrase.
     const ordered = [
       ...pool.filter(card => card.tag === "survival"),
@@ -109,7 +104,7 @@ export function ScenarioPractice({
       distractors.push(card);
       if (distractors.length === 2) break;
     }
-    return shuffleChoices([currentCard, ...distractors]);
+    return shuffle([currentCard, ...distractors]);
   }, [cards, currentCard]);
 
   const closePractice = () => {

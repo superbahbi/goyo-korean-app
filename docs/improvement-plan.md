@@ -56,7 +56,7 @@ behaviour checks still need a real browser, screen reader and iPhone.
 | ------------------------------- | ------------------------------------------------------------ |
 | 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding          |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open |
-| 2 Structure                     | In progress (item 3 done)                                    |
+| 2 Structure                     | In progress; items 2–3 done, bundle target still open        |
 | 3 Content                       | Not started                                                  |
 | 4 Delivery and accessibility    | Not started                                                  |
 | 5 Tune from data                | Blocked on 30 days of use                                    |
@@ -150,10 +150,15 @@ The reason retention is the metric: right now the app cannot measure whether any
 1. Split `client/src/pages/Home.tsx` into `pages/Home.tsx` (layout and state), `components/BrowseDialog.tsx`,
    `components/StatsDialog.tsx`, `components/SettingsDialog.tsx`, and `lib/queue.ts` (Phase 1) and
    `lib/xp.ts` (level math shared with `useStudyState`). Target: no file over 300 lines.
-2. Delete the 37 unused `client/src/components/ui/*` files and the dependencies only they use
+2. Delete the unused `client/src/components/ui/*` files and the dependencies only they use
    (recharts, react-hook-form, @hookform/resolvers, zod, embla-carousel-react, cmdk, input-otp,
    react-day-picker, react-resizable-panels, vaul, nanoid, and `workbox-window` if unused).
    Re-check the bundle after each batch. Target: under 400 kB raw main chunk.
+   - Done: 41 files were unused by then (not 37), leaving the 12 that the app reaches. The 30 matching
+     dependencies are gone. `workbox-window` stays: `virtual:pwa-register` imports it at build time.
+   - The main JS chunk is unchanged at 604 kB because dead files were never bundled, but the CSS
+     chunk fell from 141 kB to 79 kB (22 to 13 kB gzipped) once Tailwind stopped scanning them.
+     Under 400 kB needs the item 1 split plus lazy loading.
 3. Add ESLint (`typescript-eslint` + `react-hooks`) and `prettier --check` to CI. Run
    `prettier --write` once in its own commit (36 files are currently unformatted).
 4. Read saved state synchronously (`useState(loadState)`) so the first paint is not a blank screen,

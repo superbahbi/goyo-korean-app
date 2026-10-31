@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
+import { shuffle } from "@/lib/shuffle";
 
 interface ListeningPracticeProps {
   cards: VocabularyCard[];
@@ -24,10 +25,6 @@ interface ListeningPracticeProps {
 const QUESTION_COUNT = 10;
 
 type AnswerState = "unanswered" | "correct" | "incorrect";
-
-function shuffle<T>(items: T[]): T[] {
-  return [...items].sort(() => Math.random() - 0.5);
-}
 
 export function ListeningPractice({
   cards,

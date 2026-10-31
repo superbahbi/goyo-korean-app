@@ -433,12 +433,9 @@ export function applyGrade(
 }
 
 export function useStudyState() {
-  const [state, setState] = useState<UserState | null>(null);
-
-  // Initialize from localStorage
-  useEffect(() => {
-    setState(loadState());
-  }, []);
+  // Read the save during the first render so the dashboard never flashes blank
+  // while an effect catches up.
+  const [state, setState] = useState<UserState>(loadState);
 
   // Another tab wrote progress: adopt it instead of overwriting it later.
   useEffect(() => {
@@ -454,12 +451,10 @@ export function useStudyState() {
 
   // Persist to localStorage
   useEffect(() => {
-    if (state) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (error) {
-        console.error("Failed to save progress:", error);
-      }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      console.error("Failed to save progress:", error);
     }
   }, [state]);
 
@@ -469,26 +464,23 @@ export function useStudyState() {
       rating: "again" | "good" | "easy",
       options?: GradeOptions
     ) => {
-      if (!state) return;
-
       // Persist storage is granted per origin and cannot be requested repeatedly
       // for effect; ask on the first real use, not on first paint.
       void requestPersistentStorage();
 
-      setState(applyGrade(state, cardId, rating, options));
+      setState(current => applyGrade(current, cardId, rating, options));
     },
-    [state]
+    []
   );
 
   const updateSettings = useCallback(
     (settings: Partial<UserState["settings"]>) => {
-      if (!state) return;
-      setState({
-        ...state,
-        settings: { ...state.settings, ...settings },
-      });
+      setState(current => ({
+        ...current,
+        settings: { ...current.settings, ...settings },
+      }));
     },
-    [state]
+    []
   );
 
   const replaceState = useCallback((next: UserState) => {
