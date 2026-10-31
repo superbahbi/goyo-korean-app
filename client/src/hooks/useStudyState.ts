@@ -182,19 +182,69 @@ function loadState(): UserState {
   }
 }
 
+function resetDailyCountIfNewDay(state: UserState): UserState {
+  if (state.stats.lastStudyDate === getLocalDateKey()) return state;
+  return { ...state, stats: { ...state.stats, cardsStudiedToday: 0 } };
+}
+
+export function buildExportPayload(state: UserState, exportedAt = new Date()) {
+  return {
+    schemaVersion: state.schemaVersion,
+    exportedAt: exportedAt.toISOString(),
+    cardStates: state.cardStates,
+    stats: state.stats,
+    settings: state.settings,
+  };
+}
+
+export type ImportValidation =
+  | { ok: true; state: UserState; exportedAt: string | null }
+  | { ok: false; reason: string };
+
+// Rejects anything that is not a complete progress save. Missing or unknown
+// top-level keys beyond the required ones are ignored, and parseSavedState
+// decides how each saved field is sanitized.
+export function validateImportPayload(raw: string): ImportValidation {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return { ok: false, reason: "The file is not valid JSON." };
+  }
+
+  if (!isRecord(parsed)) {
+    return { ok: false, reason: "The file does not contain a progress object." };
+  }
+
+  if (parsed.schemaVersion !== undefined) {
+    if (typeof parsed.schemaVersion !== "number" || !Number.isInteger(parsed.schemaVersion) || parsed.schemaVersion < 1) {
+      return { ok: false, reason: "The schemaVersion field is not a valid version number." };
+    }
+    if (parsed.schemaVersion > SCHEMA_VERSION) {
+      return {
+        ok: false,
+        reason: `This file came from a newer version of Goyo (save format ${parsed.schemaVersion}; this app supports up to ${SCHEMA_VERSION}). Update the app before importing it.`,
+      };
+    }
+  }
+
+  const missing = (["cardStates", "stats", "settings"] as const).filter((key) => !isRecord(parsed[key]));
+  if (missing.length > 0) {
+    return { ok: false, reason: `The file is missing ${missing.join(", ")} (each must be an object).` };
+  }
+
+  const exportedAt =
+    typeof parsed.exportedAt === "string" && !Number.isNaN(Date.parse(parsed.exportedAt)) ? parsed.exportedAt : null;
+
+  return { ok: true, state: parseSavedState(raw), exportedAt };
+}
+
 export function useStudyState() {
   const [state, setState] = useState<UserState | null>(null);
 
   // Initialize from localStorage
   useEffect(() => {
-    const initial = loadState();
-
-    // Reset daily counter if it's a new day
-    if (initial.stats.lastStudyDate !== getLocalDateKey()) {
-      initial.stats.cardsStudiedToday = 0;
-    }
-
-    setState(initial);
+    setState(resetDailyCountIfNewDay(loadState()));
   }, []);
 
   // Persist to localStorage
@@ -297,5 +347,9 @@ export function useStudyState() {
     [state]
   );
 
-  return { state, gradeCard, updateSettings };
+  const replaceState = useCallback((next: UserState) => {
+    setState(resetDailyCountIfNewDay(next));
+  }, []);
+
+  return { state, gradeCard, updateSettings, replaceState };
 }
