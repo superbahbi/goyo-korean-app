@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { scheduleReview } from "@/lib/srs";
+import { requestPersistentStorage } from "@/lib/storageProtection";
 
 export const SCHEMA_VERSION = 2;
 
@@ -269,6 +270,10 @@ export function useStudyState() {
   const gradeCard = useCallback(
     (cardId: string, rating: "again" | "good" | "easy", options?: { countProgress?: boolean; responseTimeMs?: number }) => {
       if (!state) return;
+
+      // Persist storage is granted per origin and cannot be requested repeatedly
+      // for effect; ask on the first real use, not on first paint.
+      void requestPersistentStorage();
 
       const requestedProgress = options?.countProgress !== false;
       const today = getLocalDateKey();

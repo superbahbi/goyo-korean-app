@@ -15,6 +15,8 @@ import { CATEGORIES } from "@/lib/vocabulary";
 import { useVocabularyDeck } from "@/hooks/useVocabularyDeck";
 import { DownloadAllAudio } from "@/components/DownloadAllAudio";
 import { LazyBoundary } from "@/components/LazyBoundary";
+import { describeBackupAge, getLastBackupAt, isBackupOverdue, recordBackup } from "@/lib/backupStatus";
+import { markIosInstallHintShown, shouldSuggestIosInstall } from "@/lib/storageProtection";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
 const BROWSE_PAGE_SIZE = 40;
@@ -63,7 +65,11 @@ export default function Home() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [playingCardId, setPlayingCardId] = useState<string | null>(null);
   const [pendingImport, setPendingImport] = useState<{ state: UserState; exportedAt: string | null; fileName: string } | null>(null);
+  const [lastBackupAt, setLastBackupAt] = useState<Date | null>(() => getLastBackupAt());
   const importInputRef = useRef<HTMLInputElement>(null);
+  // Baseline for "did the user just grade a card", so loading an existing save
+  // never triggers the one-time iPhone install hint.
+  const cardsStudiedTodayRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (state?.settings.audioSpeaker) setAudioSpeaker(state.settings.audioSpeaker);
@@ -72,6 +78,22 @@ export default function Home() {
   useEffect(() => {
     setBrowseVisibleCount(BROWSE_PAGE_SIZE);
   }, [browseQuery, browseMastery, selectedCategory]);
+
+  // One gentle nudge per device: on iPhone the installable app is the only way
+  // to get storage the browser will not evict.
+  useEffect(() => {
+    if (!state) return;
+    const count = state.stats.cardsStudiedToday;
+    const previous = cardsStudiedTodayRef.current;
+    cardsStudiedTodayRef.current = count;
+    if (previous === null || count <= previous) return;
+    if (!shouldSuggestIosInstall()) return;
+    markIosInstallHintShown();
+    toast.info("Add Goyo to your Home Screen", {
+      description: "Tap Share, then Add to Home Screen. Safari can clear a website's saved progress after a week unused.",
+      duration: 12000,
+    });
+  }, [state]);
 
   const handleSpeakerChange = (speaker: AudioSpeaker) => {
     updateSettings({ audioSpeaker: speaker });
@@ -99,6 +121,8 @@ export default function Home() {
     anchor.click();
     anchor.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+    recordBackup();
+    setLastBackupAt(new Date());
 
     const cardCount = Object.keys(state.cardStates).length;
     if (cardCount === 0) {
@@ -1185,6 +1209,14 @@ export default function Home() {
               <p className="text-xs leading-relaxed text-slate-500">
                 Progress is saved only in this browser. Export a JSON file to move it to another device, then import that file there.
               </p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs leading-relaxed text-slate-500">{describeBackupAge(lastBackupAt)}</p>
+                {isBackupOverdue(lastBackupAt) && (
+                  <Button type="button" variant="ghost" size="sm" className="shrink-0 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800" onClick={handleExportProgress}>
+                    Export now
+                  </Button>
+                )}
+              </div>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button type="button" variant="outline" className="w-full bg-white sm:flex-1" onClick={handleExportProgress}>
                   <Download aria-hidden="true" />
