@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { buildExportPayload, parseSavedState, SCHEMA_VERSION, validateImportPayload } from "./useStudyState";
+import {
+  applyGrade,
+  buildExportPayload,
+  parseSavedState,
+  SCHEMA_VERSION,
+  validateImportPayload,
+} from "./useStudyState";
 
 const card = {
   id: "surv_001",
@@ -26,15 +32,28 @@ const settings = {
   autoPlayAudio: true,
   audioSpeaker: "elevenlabs",
 };
+const reviewLog = {
+  schemaVersion: 1,
+  entries: [
+    {
+      cardId: "surv_001",
+      at: "2026-10-30T12:00:00.000Z",
+      rating: "good",
+      responseTimeMs: 3200,
+      mode: "daily",
+    },
+  ],
+};
 
 describe("saved progress schemaVersion", () => {
   it("loads a save without schemaVersion as the current version", () => {
     const state = parseSavedState(JSON.stringify({ cardStates: { surv_001: card }, stats, settings }));
-    expect(SCHEMA_VERSION).toBe(2);
+    expect(SCHEMA_VERSION).toBe(3);
     expect(state.schemaVersion).toBe(SCHEMA_VERSION);
     expect(state.cardStates.surv_001).toEqual(card);
     expect(state.stats).toEqual(stats);
     expect(state.settings).toEqual(settings);
+    expect(state.reviewLog).toEqual({ schemaVersion: 1, entries: [] });
   });
 
   it("treats an older schemaVersion as current without migrating the data", () => {
@@ -44,7 +63,7 @@ describe("saved progress schemaVersion", () => {
   });
 
   it("loads a save with the current schemaVersion unchanged", () => {
-    const saved = { schemaVersion: SCHEMA_VERSION, cardStates: { surv_001: card }, stats, settings };
+    const saved = { schemaVersion: SCHEMA_VERSION, cardStates: { surv_001: card }, stats, settings, reviewLog };
     expect(parseSavedState(JSON.stringify(saved))).toEqual(saved);
   });
 
@@ -76,6 +95,29 @@ describe("progress export and import", () => {
     expect(payload).toEqual({ ...save, exportedAt: "2026-10-30T12:00:00.000Z" });
   });
 
+  it("leaves the review log out of the export by default", () => {
+    const state = parseSavedState(JSON.stringify({ ...save, reviewLog }));
+    const payload = buildExportPayload(state, new Date("2026-10-30T12:00:00Z"));
+    expect(payload).not.toHaveProperty("reviewLog");
+  });
+
+  it("includes the review log when asked", () => {
+    const state = parseSavedState(JSON.stringify({ ...save, reviewLog }));
+    const payload = buildExportPayload(state, new Date("2026-10-30T12:00:00Z"), { includeReviewLog: true });
+    expect(payload).toEqual({ ...save, reviewLog, exportedAt: "2026-10-30T12:00:00.000Z" });
+  });
+
+  it("round-trips an export that includes the review log", () => {
+    const state = parseSavedState(JSON.stringify({ ...save, reviewLog }));
+    const payload = buildExportPayload(state, new Date("2026-10-30T12:00:00Z"), { includeReviewLog: true });
+    const result = validateImportPayload(JSON.stringify(payload));
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.hasReviewLog).toBe(true);
+      expect(result.state.reviewLog).toEqual(reviewLog);
+    }
+  });
+
   it("accepts a valid current-version file", () => {
     const result = validateImportPayload(JSON.stringify(save));
     expect(result.ok).toBe(true);
@@ -84,7 +126,25 @@ describe("progress export and import", () => {
       expect(result.state.stats).toEqual(stats);
       expect(result.state.settings).toEqual(settings);
       expect(result.exportedAt).toBeNull();
+      expect(result.hasReviewLog).toBe(false);
     }
+  });
+
+  it("logs one entry per grade with the mode and response time", () => {
+    const state = parseSavedState(JSON.stringify(save));
+    const at = new Date("2026-10-31T09:30:00.000Z");
+    const first = applyGrade(state, "surv_001", "good", { mode: "daily", responseTimeMs: 2500 }, at);
+    const second = applyGrade(first, "surv_001", "again", { mode: "weak" }, at);
+
+    expect(second.reviewLog.entries).toHaveLength(2);
+    expect(second.reviewLog.entries[0]).toMatchObject({
+      cardId: "surv_001",
+      rating: "good",
+      responseTimeMs: 2500,
+      mode: "daily",
+      at: "2026-10-31T09:30:00.000Z",
+    });
+    expect(second.reviewLog.entries[1]).toMatchObject({ rating: "again", responseTimeMs: null, mode: "weak" });
   });
 
   it("returns the exportedAt value when present", () => {

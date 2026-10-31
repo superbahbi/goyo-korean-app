@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, MapPin, Search, Target, Download, Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -65,7 +66,13 @@ export default function Home() {
   const [showRomanization, setShowRomanization] = useState<Record<string, boolean>>({});
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [playingCardId, setPlayingCardId] = useState<string | null>(null);
-  const [pendingImport, setPendingImport] = useState<{ state: UserState; exportedAt: string | null; fileName: string } | null>(null);
+  const [pendingImport, setPendingImport] = useState<{
+    state: UserState;
+    exportedAt: string | null;
+    fileName: string;
+    hasReviewLog: boolean;
+  } | null>(null);
+  const [includeReviewLog, setIncludeReviewLog] = useState(false);
   const [lastBackupAt, setLastBackupAt] = useState<Date | null>(() => getLastBackupAt());
   const importInputRef = useRef<HTMLInputElement>(null);
   // Baseline for "did the user just grade a card", so loading an existing save
@@ -116,7 +123,7 @@ export default function Home() {
 
   const handleExportProgress = () => {
     if (!state) return;
-    const payload = buildExportPayload(state);
+    const payload = buildExportPayload(state, new Date(), { includeReviewLog });
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const fileName = `goyo-progress-${getLocalDateKey()}.json`;
@@ -155,12 +162,23 @@ export default function Home() {
       toast.error("Import failed", { description: result.reason });
       return;
     }
-    setPendingImport({ state: result.state, exportedAt: result.exportedAt, fileName: file.name });
+    setPendingImport({
+      state: result.state,
+      exportedAt: result.exportedAt,
+      fileName: file.name,
+      hasReviewLog: result.hasReviewLog,
+    });
   };
 
   const confirmImport = () => {
     if (!pendingImport) return;
-    replaceState(pendingImport.state);
+    // A progress-only file must not wipe the local review log.
+    replaceState({
+      ...pendingImport.state,
+      reviewLog: pendingImport.hasReviewLog
+        ? pendingImport.state.reviewLog
+        : state?.reviewLog ?? pendingImport.state.reviewLog,
+    });
     const cardCount = Object.keys(pendingImport.state.cardStates).length;
     setPendingImport(null);
     toast.success(`Imported progress for ${cardCount} ${cardCount === 1 ? "card" : "cards"}`);
@@ -266,7 +284,11 @@ export default function Home() {
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => {
     const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
     const wasBelowGoal = Boolean(state && !isRepeatPractice && state.stats.cardsStudiedToday < state.settings.dailyGoal);
-    gradeCard(cardId, rating, { countProgress: !isRepeatPractice, responseTimeMs: options?.responseTimeMs });
+    gradeCard(cardId, rating, {
+      countProgress: !isRepeatPractice,
+      responseTimeMs: options?.responseTimeMs,
+      mode: sessionMode,
+    });
 
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
     const isSameDayRepeat = state?.cardStates[cardId]?.lastReviewDate === getLocalDateKey();
@@ -310,15 +332,15 @@ export default function Home() {
   };
 
   const handleListeningGrade = (cardId: string, rating: "again" | "good") => {
-    gradeCard(cardId, rating);
+    gradeCard(cardId, rating, { mode: "listening" });
   };
 
   const handleScenarioGrade = (cardId: string, rating: "again" | "good") => {
-    gradeCard(cardId, rating);
+    gradeCard(cardId, rating, { mode: "scenario" });
   };
 
   const handleShadowingGrade = (cardId: string, rating: "again" | "good") => {
-    gradeCard(cardId, rating);
+    gradeCard(cardId, rating, { mode: "shadowing" });
   };
 
   if (!state) return null;
@@ -1233,6 +1255,18 @@ export default function Home() {
                   </Button>
                 )}
               </div>
+              <label className="flex items-start gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
+                <Checkbox
+                  id="include-review-log"
+                  checked={includeReviewLog}
+                  onCheckedChange={(checked) => setIncludeReviewLog(checked === true)}
+                  className="mt-0.5"
+                />
+                <span className="text-xs leading-relaxed text-slate-600">
+                  <span className="block text-sm font-medium text-slate-700">Include review log</span>
+                  Adds {state.reviewLog.entries.length} {state.reviewLog.entries.length === 1 ? "entry" : "entries"} of grade history for analysis. Leave it off to keep the file small; it is not needed to restore progress.
+                </span>
+              </label>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Button type="button" variant="outline" className="w-full bg-white sm:flex-1" onClick={handleExportProgress}>
                   <Download aria-hidden="true" />
