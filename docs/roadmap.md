@@ -56,6 +56,16 @@ Each stage is done only when its gate passes.
 4. **Export/import** of progress as JSON.
 5. **PWA**, including lazy-loading the Essential 600 data to shrink the first load.
 
+## Status
+
+| Stage | State | Commit | Notes |
+|---|---|---|---|
+| 1 Tooling | Done | `71df8d7` | CI confirmed green on GitHub |
+| 2 Data and scheduling | Done | `b915f6c`, `e4cce03` | Reviewed in-repo (free reviewer quota ran out); 16 curated romanizations remain in the backlog |
+| 3 Accessibility | Done | `e0b8801` | Not independently reviewed; in-app browser re-check still outstanding |
+| 4 Export/import | In progress | — | |
+| 5 PWA | Not started | — | |
+
 ## Who does what
 
 - **Coder:** Claude Haiku 5.5. If it fails a stage's gate twice, escalate to Gemini 3.8 Flash. Use Sonnet or Opus only with the maintainer's approval for a specific task.
