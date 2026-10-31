@@ -939,11 +939,11 @@
     },
     {
       "id": "essential_073",
-      "text": "오랜지색",
+      "text": "오렌지색",
       "group": "vocabulary",
       "filename": "elevenlabs_female_essential_073.mp3",
-      "status": "skipped",
-      "bytes": 17597
+      "status": "generated",
+      "bytes": 16343
     },
     {
       "id": "essential_074",
@@ -3059,11 +3059,11 @@
     },
     {
       "id": "essential_370",
-      "text": "첫번째",
+      "text": "첫 번째",
       "group": "vocabulary",
       "filename": "elevenlabs_female_essential_370.mp3",
-      "status": "skipped",
-      "bytes": 13835
+      "status": "generated",
+      "bytes": 15089
     },
     {
       "id": "essential_371",
@@ -5451,5 +5451,10 @@
       "status": "skipped",
       "bytes": 13835
     }
-  ]
+  ],
+  "partialRegeneration": {
+    "at": "2026-10-31",
+    "ids": ["essential_073", "essential_370"],
+    "reason": "Headword corrections (오랜지색 → 오렌지색, 첫번째 → 첫 번째)."
+  }
 }

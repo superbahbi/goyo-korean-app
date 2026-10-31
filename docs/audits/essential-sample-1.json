@@ -28,7 +28,9 @@
     "pass": 35,
     "fix": 15,
     "errorRate": 0.3,
-    "decision": "15 of 50 fail (30%, above the 6% threshold), so audit a second 50 before scoping fixes."
+    "decision": "15 of 50 fail (30%, above the 6% threshold), so audit a second 50 before scoping fixes.",
+    "resolved": 15,
+    "openFix": 0
   },
   "systemicIssues": [
     {
@@ -96,7 +98,9 @@
           "category": "usage-note",
           "detail": "\"used like 다른 색깔 표현\" is garbled; replace it with a concrete usage note."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Headword corrected to 오렌지색 (romanization orenjisaek); example and usage note rewritten; both audio clips regenerated."
     },
     {
       "id": "essential_077",
@@ -165,7 +169,9 @@
           "category": "translation",
           "detail": "Update exampleEnglish with the Korean: \"a few drops of lemon juice\"."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Example uses 레몬즙 (lemon juice) instead of the fruit as a liquid; English updated."
     },
     {
       "id": "essential_200",
@@ -188,7 +194,9 @@
           "category": "translation",
           "detail": "The back says \"coffee table\", but 탁자 is a general table; the usage note says so. Use \"table\"."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Back is now 'table'; the usage note explains 커피 테이블; English updated."
     },
     {
       "id": "essential_213",
@@ -211,7 +219,9 @@
           "category": "usage-note",
           "detail": "\"can also mean email in casual speech\" is false; email is 이메일/메일. Rewrite the note."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Usage note now says email is 이메일 or 메일, never 편지."
     },
     {
       "id": "essential_235",
@@ -280,7 +290,9 @@
           "category": "translation",
           "detail": "Update exampleEnglish to match the rewritten example."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Example rewritten to 밤에는 캠프파이어 불이 꺼지지 않게 조심해요; English updated."
     },
     {
       "id": "essential_313",
@@ -355,7 +367,9 @@
           "category": "naturalness",
           "detail": "\"버스 멈추자마자\" drops the subject particle; a written example should use 버스가 멈추자마자."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Example now keeps 버스가; the usage note gives 계획이 서다 instead of 'to be scheduled'."
     },
     {
       "id": "essential_464",
@@ -378,7 +392,9 @@
           "category": "part-of-speech",
           "detail": "길다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_498",
@@ -389,7 +405,9 @@
           "category": "part-of-speech",
           "detail": "건조하다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_500",
@@ -400,7 +418,9 @@
           "category": "part-of-speech",
           "detail": "건강하다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_504",
@@ -411,7 +431,9 @@
           "category": "part-of-speech",
           "detail": "슬프다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_505",
@@ -430,7 +452,9 @@
           "category": "usage-note",
           "detail": "\"verb in Korean grammar\" is misleading; Korean adjectives are 형용사, a separate category from verbs."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective, the example uses polite 아름다워요, and the usage note explains 형용사."
     },
     {
       "id": "essential_506",
@@ -441,7 +465,9 @@
           "category": "part-of-speech",
           "detail": "못생기다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_516",
@@ -452,7 +478,9 @@
           "category": "part-of-speech",
           "detail": "평탄하다 is an adjective (형용사), not a verb; the usage note already calls it an adjective."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_518",
@@ -469,7 +497,9 @@
           "category": "part-of-speech",
           "detail": "헐렁하다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_520",
@@ -480,7 +510,15 @@
           "category": "part-of-speech",
           "detail": "높다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     }
-  ]
+  ],
+  "reaudit": {
+    "reauditedAt": "2026-10-31",
+    "openFixes": 0,
+    "method": "Every fixed card was re-read against the same five-point rubric after the edit, then the committed sheet was regenerated from the same seed.",
+    "result": "No remaining errors found in the 50-card sample."
+  }
 }

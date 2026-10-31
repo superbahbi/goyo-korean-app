@@ -13,6 +13,8 @@ interface AuditVerdict {
   source: string;
   verdict: "pass" | "fix";
   issues: AuditIssue[];
+  resolvedAt?: string;
+  resolution?: string;
 }
 
 interface AuditFile {
@@ -27,6 +29,14 @@ interface AuditFile {
     fix: number;
     errorRate: number;
     decision: string;
+    resolved?: number;
+    openFix?: number;
+  };
+  reaudit?: {
+    reauditedAt: string;
+    openFixes: number;
+    method: string;
+    result: string;
   };
   combined?: {
     samples: number;
@@ -130,6 +140,23 @@ for (const { file, audit, sheetIds } of audits) {
       if (audit.sample === 2)
         expect(audit.summary.decision).toMatch(/scope fixes/i);
     });
+
+    it("resolves every fix and leaves no open verdicts", () => {
+      const fixes = audit.verdicts.filter(verdict => verdict.verdict === "fix");
+
+      expect(audit.summary.resolved).toBe(fixes.length);
+      expect(audit.summary.openFix).toBe(0);
+      expect(audit.reaudit, file).toBeDefined();
+      expect(audit.reaudit!.openFixes).toBe(0);
+      expect(audit.reaudit!.reauditedAt).not.toBe("");
+      expect(audit.reaudit!.method.trim()).not.toBe("");
+      expect(audit.reaudit!.result.trim()).not.toBe("");
+
+      for (const verdict of fixes) {
+        expect(verdict.resolvedAt, verdict.id).not.toBeUndefined();
+        expect(verdict.resolution?.trim(), verdict.id).toBeTruthy();
+      }
+    });
   });
 }
 
@@ -158,5 +185,34 @@ describe("combined audit evidence", () => {
     expect(second.combined!.errorRate).toBeCloseTo(fixes / merged.size, 2);
     expect(second.combined!.overlapIds).toHaveLength(4);
     expect(second.combined!.overlapAgreement).toBe("4/4");
+  });
+});
+
+describe("resolved sample fixes", () => {
+  it("keeps the corrected headwords that require new audio", () => {
+    expect(deck.get("essential_073")?.front).toBe("오렌지색");
+    expect(deck.get("essential_370")?.front).toBe("첫 번째");
+  });
+
+  it("keeps the corrected parts of speech", () => {
+    const adjectives = [
+      "essential_478",
+      "essential_487",
+      "essential_498",
+      "essential_500",
+      "essential_504",
+      "essential_505",
+      "essential_506",
+      "essential_516",
+      "essential_519",
+      "essential_520",
+      "essential_525",
+    ];
+
+    for (const id of adjectives)
+      expect(deck.get(id)?.partOfSpeech, id).toBe("adjective");
+
+    expect(deck.get("essential_350")?.partOfSpeech).toBe("adverb");
+    expect(deck.get("essential_370")?.partOfSpeech).toBe("number");
   });
 });

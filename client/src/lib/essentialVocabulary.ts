@@ -977,16 +977,16 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
   },
   {
     id: "essential_073",
-    front: "오랜지색",
+    front: "오렌지색",
     back: "orange",
-    romanization: "oraenjisaek",
+    romanization: "orenjisaek",
     tag: "essential",
-    example: "저는 오랜지색 스웨터를 샀어요.",
+    example: "저는 오렌지색 스웨터를 샀어요.",
     difficulty: "beginner",
     partOfSpeech: "noun",
     exampleEnglish: "I bought an orange sweater.",
     usageNote:
-      "오랜지색 = the color orange (loanword); used like 다른 색깔 표현.",
+      "오렌지색 is the color orange (오렌지 + 색); other colors follow the same pattern, such as 파란색 and 검은색.",
     source: "600 essential words · row 79",
     audioReady: true,
   },
@@ -1710,11 +1710,11 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "paper money (bill)",
     romanization: "jipye",
     tag: "essential",
-    example: "자동판매기에서는 동전만 되고 지폐는 안 써요.",
+    example: "자동판매기에서는 동전만 받고 지폐는 안 받아요.",
     difficulty: "beginner",
     partOfSpeech: "noun",
     exampleEnglish:
-      "The vending machine only takes coins and doesn't accept paper money (bills).",
+      "The vending machine only accepts coins, not paper money (bills).",
     usageNote: "Refers specifically to paper banknotes (bills), not coins.",
     source: "600 essential words · row 138",
     audioReady: true,
@@ -2440,11 +2440,11 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "lemon",
     romanization: "remon",
     tag: "essential",
-    example: "레몬을 차에 몇 방울 넣으면 향이 좋아져요.",
+    example: "레몬즙을 차에 몇 방울 넣으면 향이 좋아져요.",
     difficulty: "beginner",
     partOfSpeech: "noun",
     exampleEnglish:
-      "If you put a few drops of lemon in the tea, the aroma improves.",
+      "If you add a few drops of lemon juice to the tea, the aroma improves.",
     usageNote:
       "Common noun for the fruit; also used to mean lemon flavor or juice in cooking and drinks.",
     source: "600 essential words · row 191",
@@ -2665,16 +2665,15 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
   {
     id: "essential_204",
     front: "탁자",
-    back: "coffee table",
+    back: "table",
     romanization: "takja",
     tag: "essential",
     example: "커피를 마시면서 탁자에 책을 올려놓았어요.",
     difficulty: "beginner",
     partOfSpeech: "noun",
-    exampleEnglish:
-      "I placed a book on the coffee table while drinking coffee.",
+    exampleEnglish: "I placed a book on the table while drinking coffee.",
     usageNote:
-      "탁자 generally means a table; '탁자' can be any table but '커피 테이블' specifies a low coffee table.",
+      "탁자 is a general word for a table; use 커피 테이블 for a low coffee table.",
     source: "600 essential words · row 210",
     audioReady: true,
   },
@@ -2793,7 +2792,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I'm preparing dinner in the kitchen.",
     usageNote:
-      "Common everyday noun for the room where cooking is done; informal variant: 주방 (more formal).",
+      "부엌 is the everyday native Korean word for kitchen; 주방 is the Sino-Korean word and sounds more formal.",
     source: "600 essential words · row 218",
     audioReady: true,
   },
@@ -2942,7 +2941,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I sent a letter to my friend yesterday.",
     usageNote:
-      "편지 = physical or written letter; can also mean email in casual speech but primarily physical.",
+      "편지 means a written letter; email is 이메일 or 메일, never 편지.",
     source: "600 essential words · row 228",
     audioReady: true,
   },
@@ -3592,7 +3591,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "My knee hurts, so I go down the stairs slowly.",
     usageNote:
-      "무릎 is the body part 'knee'; also appears in compounds (무릎팍, 무릎담요) and casual expressions.",
+      "무릎 is the body part 'knee'; it also appears in compounds such as 무릎담요 (knee blanket).",
     source: "600 essential words · row 280",
     audioReady: true,
   },
@@ -4057,10 +4056,10 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "fire",
     romanization: "bul",
     tag: "essential",
-    example: "밤에 캠프파이어 불을 조심해서 지켜요.",
+    example: "밤에는 캠프파이어 불이 꺼지지 않게 조심해요.",
     difficulty: "beginner",
     partOfSpeech: "noun",
-    exampleEnglish: "Be careful and watch the campfire at night.",
+    exampleEnglish: "At night, be careful not to let the campfire go out.",
     usageNote:
       "불 mainly means 'fire' (flame); can also refer to heat or combustion contexts.",
     source: "600 essential words · row 311",
@@ -4553,7 +4552,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I heard a strange sound outside the window at night.",
     usageNote:
-      "'소리' means audible sound; also used figuratively (e.g., reputation) — here it's literal audible noise.",
+      "소리 means an audible sound or noise; in 그런 소리 it can also mean remarks like that.",
     source: "600 essential words · row 344",
     audioReady: true,
   },
@@ -4701,10 +4700,10 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "책상 위에 컵을 두었습니다.",
     difficulty: "beginner",
-    partOfSpeech: "noun",
+    partOfSpeech: "adverb",
     exampleEnglish: "I put a cup on top of the desk.",
     usageNote:
-      "위에 indicates spatial position 'on/above' and follows a noun (location).",
+      "위에 is 위 (top) plus the location particle 에; it means 'on/above' and follows a noun.",
     source: "600 essential words · row 356",
     audioReady: true,
   },
@@ -4997,16 +4996,16 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
   },
   {
     id: "essential_370",
-    front: "첫번째",
+    front: "첫 번째",
     back: "first",
-    romanization: "cheotbeonjjae",
+    romanization: "cheot beonjjae",
     tag: "essential",
-    example: "첫번째 선물은 아주 특별해요.",
+    example: "첫 번째 선물은 아주 특별해요.",
     difficulty: "beginner",
-    partOfSpeech: "noun",
+    partOfSpeech: "number",
     exampleEnglish: "The first gift is very special.",
     usageNote:
-      "첫번째 is a written form; 첫 번째 (with a space) is common for ordinal counting in Korean.",
+      "첫 번째 is the ordinal word for 'first'; write it with a space.",
     source: "600 essential words · row 429",
     audioReady: true,
   },
@@ -5936,13 +5935,13 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "to stand",
     romanization: "seoda",
     tag: "essential",
-    example: "버스 멈추자마자 모두 일어서서 줄을 섰어요.",
+    example: "버스가 멈추자마자 모두 일어서서 줄을 섰어요.",
     difficulty: "beginner",
     partOfSpeech: "verb",
     exampleEnglish:
       "As soon as the bus stopped, everyone stood up and lined up.",
     usageNote:
-      "서다 also means 'to be scheduled' or 'to stop'; here it means 'to stand' in a physical sense.",
+      "서다 means 'to stand'; 계획이 서다 means a plan takes shape, not that something is scheduled.",
     source: "600 essential words · row 494",
     audioReady: true,
   },
@@ -6605,7 +6604,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 도로는 길어서 운전하는 데 시간이 오래 걸려요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This road is long, so it takes a long time to drive.",
     usageNote:
       "길다 describes physical or temporal length/duration; can also be used figuratively.",
@@ -6743,7 +6742,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "수프가 너무 뜨거워서 바로 먹을 수 없어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The soup is too hot, so I can't eat it right away.",
     usageNote:
       "Used for describing high temperature (objects, liquids); not for spicy heat.",
@@ -6844,7 +6843,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
   {
     id: "essential_494",
     front: "늙다",
-    back: "to be old (person)",
+    back: "to grow old; to age",
     romanization: "neukda",
     tag: "essential",
     example: "할아버지는 요즘 건강 때문에 많이 늙으셨어요.",
@@ -6910,7 +6909,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "오늘 날씨가 건조해서 목이 자주 아파요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The weather is dry today, so my throat often hurts.",
     usageNote:
       "Used for dry conditions (weather, skin); also describes fabric or materials; not a transitive 'to dry'.",
@@ -6940,7 +6939,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "요즘은 매일 운동해서 몸이 건강해요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "These days I exercise every day, so my body is healthy.",
     usageNote:
       "Used to describe physical or mental well-being; often with 있다/되다 or adjectives like 건강하다.",
@@ -7000,7 +6999,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "그 소식을 듣고 저는 정말 슬펐어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "I was really sad when I heard that news.",
     usageNote:
       "Describes feeling sad; common adjective-like verb used with past/present forms (슬펐어요, 슬퍼요).",
@@ -7013,12 +7012,12 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "to be beautiful",
     romanization: "areumdapda",
     tag: "essential",
-    example: "그 꽃은 정말 아름답다.",
+    example: "그 꽃은 정말 아름다워요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "That flower is really beautiful.",
     usageNote:
-      "Descriptive adjective (verb in Korean grammar); often used for people, nature, art; polite contexts use -어요/습니다 forms.",
+      "아름답다 is an adjective (형용사) meaning 'to be beautiful'; use the polite 아름다워요 form in speech.",
     source: "600 essential words · row 565",
     audioReady: true,
   },
@@ -7030,7 +7029,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "그 배우는 사진보다 실제로 더 못생겨 보여요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "That actor looks uglier in person than in photos.",
     usageNote: "Informal/neutral; can be rude—use carefully in conversation.",
     source: "600 essential words · row 566",
@@ -7183,7 +7182,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 길은 공사 후에 아주 평탄해졌어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This road became very smooth/flat after the construction.",
     usageNote:
       "Formal adjective often used for surfaces or terrain; not for emotional 'smoothness'.",
@@ -7229,7 +7228,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 바지는 허리가 너무 헐렁해서 떨어질 것 같아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "These pants are so loose at the waist that they feel like they will fall down.",
     usageNote:
@@ -7245,7 +7244,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 건물은 주변 건물보다 훨씬 높아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "This building is much taller than the surrounding buildings.",
     usageNote:
@@ -7322,7 +7321,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 호수는 물이 얕아서 아이들이 안전하게 놀 수 있어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "The water in this lake is shallow, so children can play safely.",
     usageNote:
