@@ -1,4 +1,4 @@
-import { memo, useState, useEffect, type KeyboardEvent } from "react";
+import { memo, useState, useEffect, useRef, type KeyboardEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Volume2, ChevronRight } from "lucide-react";
@@ -42,11 +42,15 @@ function FlashCardBase({
   const [flipped, setFlipped] = useState(false);
   const [showRoman, setShowRoman] = useState(false);
   const isRevealed = revealed ?? flipped;
+  // Auto-play at most once per word per mount: flipping back to the front must
+  // not replay the pronunciation.
+  const lastAutoPlayedId = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!isRevealed && autoSpeak) {
+    if (!isRevealed && autoSpeak && lastAutoPlayedId.current !== wordId) {
       const timer = setTimeout(() => {
-        void playVocabularyAudio(wordId, cleanKoreanText(front));
+        lastAutoPlayedId.current = wordId;
+        void playVocabularyAudio(wordId);
       }, 300);
       return () => clearTimeout(timer);
     }
@@ -123,7 +127,7 @@ function FlashCardBase({
               aria-label={`Play pronunciation for ${cleanKoreanText(front)}`}
               onClick={(e) => {
                 e.stopPropagation();
-                void playVocabularyAudio(wordId, cleanKoreanText(front));
+                void playVocabularyAudio(wordId);
               }}
             >
               <Volume2 size={20} />

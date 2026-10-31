@@ -27,7 +27,7 @@ export function ShadowingPractice({ cards, onGrade, onClose }: ShadowingPractice
 
   useEffect(() => {
     if (!currentCard || complete) return;
-    const timer = window.setTimeout(() => void playVocabularyAudio(currentCard.id, currentCard.front), 300);
+    const timer = window.setTimeout(() => void playVocabularyAudio(currentCard.id), 300);
     return () => window.clearTimeout(timer);
   }, [currentCard, complete]);
 
@@ -91,7 +91,7 @@ export function ShadowingPractice({ cards, onGrade, onClose }: ShadowingPractice
             <h1 className="mt-4 font-serif text-3xl text-slate-900">Match the model</h1>
             <p className="mx-auto mt-2 max-w-md text-slate-500">Listen once, then speak at the same time. Reveal the text only when you need support.</p>
             <div className="mt-8 rounded-3xl border border-indigo-100 bg-white p-6 shadow-xl shadow-indigo-100/40 sm:p-8">
-              <Button onClick={() => void playVocabularyAudio(currentCard.id, currentCard.front)} className="mx-auto flex h-28 w-28 flex-col gap-2 rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-200 hover:bg-indigo-700">
+              <Button onClick={() => void playVocabularyAudio(currentCard.id)} className="mx-auto flex h-28 w-28 flex-col gap-2 rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-200 hover:bg-indigo-700">
                 <Volume2 size={36} />
                 <span className="text-xs">Play model</span>
               </Button>

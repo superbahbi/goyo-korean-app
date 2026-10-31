@@ -98,7 +98,7 @@ export function ListeningPractice({ cards, onGrade, onClose }: ListeningPractice
     if (isPlaying || !currentCard) return;
     setIsPlaying(true);
     try {
-      await playVocabularyAudio(currentCard.id, currentCard.front);
+      await playVocabularyAudio(currentCard.id);
     } finally {
       setIsPlaying(false);
     }

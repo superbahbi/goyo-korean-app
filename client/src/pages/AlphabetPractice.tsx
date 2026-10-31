@@ -28,8 +28,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
 
   const speakHangul = async (characterId: string, type: "consonant" | "vowel" | "number") => {
     if (type === "number") {
-      const number = NUMBER_DATA.find((card) => card.id === characterId);
-      await playVocabularyAudio(characterId, number?.ttsText);
+      await playVocabularyAudio(characterId);
       return;
     }
     await playAlphabetAudio(characterId, type);

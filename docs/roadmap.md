@@ -79,17 +79,11 @@ Accounts and sync, push reminders, sentence-level audio, grammar content, Playwr
 
 ## Backlog
 
-Items from the review that remain. Completed: stop-audio promise settling, lazy-load error boundary, Browse stopping audio, two-tab sync, orphaned manifest ids, curated romanizations, headword typos, and the script cleanup (portable paths, atomic manifest, real deck import, `reset-alphabet-file.py` removed).
+Items from the review that remain. Completed: stop-audio promise settling, lazy-load error boundary, Browse stopping audio, two-tab sync, orphaned manifest ids, curated romanizations, headword typos, and the script cleanup (portable paths, atomic manifest, real deck import, `reset-alphabet-file.py` removed), dead audio aliases, StudySession double-submit guard, FlashCard auto-play dedupe, and stale audio-ready docs.
 
-- `audioPlayer.ts`: `fallbackText`, `ttsEnabled` and `autoPlayAudio` are accepted but never used. Implement them or remove them.
 - `audioPlayer.ts`: the female alphabet index uses ID keys and the male index uses mnemonic keys. Use one scheme.
-- `audioPlayer.ts`: `vocabularyAudioAliases` is dead code.
 - `Home.tsx`: dashboard aggregates recompute on every render. The forecasts are single-pass now, but mastery counts and category totals are not memoized.
 - `Home.tsx`: the session queue is derived state copied into `useState` by an effect.
 - `Home.tsx`: the Browse romanization toggle duplicates text that is already shown.
 - `useStudyState.ts`: `totalCardsLearned` counts a new card graded "again".
-- `StudySession.tsx`: no guard against a double click on a rating button, and the completion screen does not stop audio.
-- `FlashCard.tsx`: auto-play re-fires when flipping back to the front.
 - `srs.ts`: `box` is written but never read.
-- `vite.config.ts`: remove the `@assets` alias and the `*.manus*` entries in `allowedHosts`.
-- `client/src/lib/vocabulary.ts` and `docs/phase-1-content-audit.md` still say imported cards are not audio-ready.

@@ -31,27 +31,6 @@ let settleStoppedPlayback: (() => void) | null = null;
 export type AudioSpeaker = "elevenlabs" | "elevenlabs-female";
 let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
-const vocabularyAudioAliases: Record<string, string> = {
-  surv_001: "hello",
-  surv_002: "thank_you",
-  surv_003: "sorry",
-  surv_004: "yes",
-  surv_005: "no",
-  surv_007: "help",
-  surv_008: "bathroom",
-  daily_001: "nice_to_meet",
-  daily_002: "how_are_you",
-  num_001: "one",
-  num_002: "two",
-  num_003: "three",
-  num_004: "four",
-  num_005: "five",
-  food_001: "rice",
-  food_002: "water",
-  food_011: "soup",
-  food_014: "meat",
-};
-
 const consonantAudioAliases: Record<string, string> = {
   cons_001: "ga",
   cons_002: "na",
@@ -126,11 +105,9 @@ async function loadAudioIndex(): Promise<AudioIndex> {
 }
 
 function resolveVocabularyAudioFile(index: AudioIndex, wordId: string): string | undefined {
-  const legacyKey = vocabularyAudioAliases[wordId];
   const vocabularyIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.vocabulary : index.vocabulary;
   return (
     vocabularyIndex?.[wordId] ??
-    (legacyKey ? vocabularyIndex?.[legacyKey] : undefined) ??
     (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${wordId}.mp3` : undefined)
   );
 }
@@ -148,7 +125,7 @@ function resolveAlphabetAudioFile(
   return files[key] ?? (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${characterId}.mp3` : undefined);
 }
 
-export async function playVocabularyAudio(wordId: string, fallbackText?: string): Promise<void> {
+export async function playVocabularyAudio(wordId: string): Promise<void> {
   try {
     // When the index is already loaded, resolve and trigger playback synchronously
     // without awaiting first, so mobile Safari retains user gesture activation.

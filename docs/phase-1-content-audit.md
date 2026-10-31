@@ -20,14 +20,9 @@ Findings:
 
 ## Integration decision
 
-The existing 136-card curated phrase deck remains the study-ready deck because it already has reviewed examples and ElevenLabs audio. The imported essential-word inventory is available in the Vocabulary Library under **Essential 600**, but is marked `audioReady: false` until each word receives:
+The existing 136-card curated phrase deck remains the study-ready deck because it already has reviewed examples and ElevenLabs audio. The imported essential-word inventory is available in the Vocabulary Library under **Essential 600**, and every imported record is study-ready: each word has a reviewed meaning and usage note, a natural example sentence, a learner-facing romanization, and verified ElevenLabs Korean pronunciation recordings.
 
-1. a content-reviewed meaning and usage note;
-2. a natural example sentence;
-3. a verified learner-facing romanization;
-4. verified ElevenLabs Korean pronunciation recordings.
-
-This prevents incomplete source data from entering the audio-first daily session or producing silent/broken practice cards.
+Cards with `audioReady: false` stay out of study-ready practice, so incomplete source data cannot enter the audio-first daily session or produce silent/broken practice cards.
 
 ## Implemented
 
@@ -37,7 +32,7 @@ This prevents incomplete source data from entering the audio-first daily session
 - Added a natural Korean example, English translation, usage note, and corrected part-of-speech metadata for all 546 imported records.
 - Added source metadata and audio readiness metadata to `VocabularyCard`.
 - Added the **Essential 600** library category.
-- Kept audio-first Daily, Listening, Scenario, and Shadowing practice restricted to study-ready cards.
+- Audio-first Daily, Listening, Scenario, and Shadowing practice draw from all study-ready cards, including the imported Essential 600 deck.
 - Generated and verified 1,092 word-level ElevenLabs recordings: 546 with **Hyuk - Cold and Clear** and 546 with **Anna Kim - Tender, Calm and Clear**.
 - Marked all 546 imported records audio-ready and mapped both speakers in `public/audio/index.json`.
 - Browse Deck now shows the imported records as playable rather than audio-pending.

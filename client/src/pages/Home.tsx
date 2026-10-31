@@ -137,11 +137,11 @@ export default function Home() {
     toast.success(`Imported progress for ${cardCount} ${cardCount === 1 ? "card" : "cards"}`);
   };
 
-  const speakKorean = async (wordId: string, fallbackText?: string) => {
+  const speakKorean = async (wordId: string) => {
     setIsSpeaking(true);
     setPlayingCardId(wordId);
     try {
-      await playVocabularyAudio(wordId, fallbackText);
+      await playVocabularyAudio(wordId);
     } finally {
       setIsSpeaking(false);
       setPlayingCardId(null);
@@ -906,7 +906,7 @@ export default function Home() {
                               ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
                               : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                           }`}
-                          onClick={() => speakKorean(card.id, card.front)}
+                          onClick={() => speakKorean(card.id)}
                           aria-label={card.audioReady === false ? `Audio pending for ${card.front}` : isCardPlaying ? `Playing pronunciation for ${card.front}` : `Play pronunciation for ${card.front}`}
                         >
                           <Volume2 size={14} className={isCardPlaying ? "animate-pulse" : ""} />

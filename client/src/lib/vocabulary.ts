@@ -185,8 +185,8 @@ export const CATEGORIES = [
   { id: "essential", name: "Essential 600", icon: "📚", color: "bg-emerald-100 text-emerald-700" },
 ];
 
-// Cards are study-ready unless audioReady is false. Imported cards are searchable
-// and study-ready once their ElevenLabs clips exist in public/audio/index.json.
+// Cards are study-ready unless audioReady is false. Every imported card ships
+// with its ElevenLabs clips in public/audio/index.json.
 const cardKey = (card: VocabularyCard) => `${card.front}::${card.back.trim().toLocaleLowerCase()}`;
 
 export const CURATED_CARDS: VocabularyCard[] = CURATED_VOCABULARY_DATA.map((card) => ({

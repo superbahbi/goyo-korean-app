@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,18 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
   const cardStartedAt = useRef(Date.now());
   // Recall latency: card display to first reveal, excluding time spent on the back.
   const recallTimeMs = useRef<number | null>(null);
+  // Guards against a double click grading the same card twice. The lock is
+  // released only once the next card is on screen (or the session restarts).
+  const gradingLocked = useRef(false);
+
+  // Stop any lingering pronunciation when the session unmounts.
+  useEffect(() => () => stopAudio(), []);
+
+  // A new card unlocks grading; releasing it inside the click handler would let
+  // the second click of a double click through before React re-renders.
+  useEffect(() => {
+    gradingLocked.current = false;
+  }, [index]);
 
   const closeSession = () => {
     stopAudio();
@@ -44,6 +56,9 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
   };
 
   const handleGrade = (rating: "again" | "good" | "easy") => {
+    if (gradingLocked.current) return;
+    gradingLocked.current = true;
+
     const responseTimeMs = Math.min(120000, Math.max(250, recallTimeMs.current ?? Date.now() - cardStartedAt.current));
     onGrade(currentCard.id, rating, { responseTimeMs });
     setResults((current) => ({ ...current, [rating]: current[rating] + 1 }));
@@ -56,11 +71,15 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
       cardStartedAt.current = Date.now();
       recallTimeMs.current = null;
     } else {
+      // The summary replaces the card immediately, so the last pronunciation
+      // must not keep playing behind it.
+      stopAudio();
       setCompleted(true);
     }
   };
 
   const restartSession = () => {
+    gradingLocked.current = false;
     setIndex(0);
     setFlipped(false);
     setCompleted(false);
