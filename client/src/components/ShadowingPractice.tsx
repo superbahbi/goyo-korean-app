@@ -160,13 +160,16 @@ export function ShadowingPractice({
               </p>
               {visible ? (
                 <div className="mt-7 border-t border-slate-100 pt-6">
-                  <p className="text-4xl font-bold tracking-wide text-slate-900">
+                  <p
+                    className="text-4xl font-bold tracking-wide text-slate-900"
+                    lang="ko"
+                  >
                     {currentCard.front}
                   </p>
                   <p className="mt-2 font-mono text-emerald-600">
                     {currentCard.romanization}
                   </p>
-                  <p className="mt-4 text-sm italic text-slate-500">
+                  <p className="mt-4 text-sm italic text-slate-500" lang="ko">
                     {currentCard.example}
                   </p>
                 </div>

@@ -639,6 +639,7 @@ export default function Home() {
             <div
               className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-xl font-bold text-white shadow-md shadow-emerald-200/70"
               aria-hidden="true"
+              lang="ko"
             >
               고요
             </div>
@@ -837,7 +838,7 @@ export default function Home() {
                   value={progressPercent}
                   className="h-2 mt-3 bg-slate-100"
                 />
-                <p className="text-xs text-slate-400 mt-2">
+                <p className="text-xs text-slate-500 mt-2">
                   Cards studied today · up to {state.settings.newCardsPerDay}{" "}
                   new {state.settings.newCardsPerDay === 1 ? "word" : "words"}{" "}
                   per day
@@ -871,7 +872,7 @@ export default function Home() {
                   value={levelProgress}
                   className="mt-3 h-2 bg-slate-100"
                 />
-                <p className="mt-2 text-xs text-slate-400">
+                <p className="mt-2 text-xs text-slate-500">
                   {Math.max(0, nextLevelXp - state.stats.totalXp)} XP to next
                   level
                 </p>
@@ -895,7 +896,7 @@ export default function Home() {
                 <div className="text-3xl font-bold text-slate-900">
                   {state.stats.totalCardsLearned}
                 </div>
-                <p className="text-xs text-slate-400 mt-2">
+                <p className="text-xs text-slate-500 mt-2">
                   {Math.round(
                     (state.stats.totalCardsLearned / studyReady.length) * 100
                   )}
@@ -968,7 +969,7 @@ export default function Home() {
                 })}
               </div>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500">
                   Cards are scheduled automatically after each review.
                 </p>
                 <Button
@@ -1173,7 +1174,7 @@ export default function Home() {
                         <h3 className="font-semibold text-slate-800 group-hover:text-emerald-700">
                           {cat.name}
                         </h3>
-                        <p className="text-xs text-slate-400">
+                        <p className="text-xs text-slate-500">
                           {category?.total ?? 0} cards
                         </p>
                       </div>
@@ -1188,7 +1189,7 @@ export default function Home() {
                       style={{ width: `${coverage}%` }}
                     />
                   </div>
-                  <p className="mt-2 text-xs text-slate-400">
+                  <p className="mt-2 text-xs text-slate-500">
                     {known} known · {category?.reviewed ?? 0} reviewed
                   </p>
                 </button>
@@ -1289,9 +1290,9 @@ export default function Home() {
                   : "Vocabulary library"}
               </DialogTitle>
             </DialogHeader>
-            <p className="mt-1 text-sm text-slate-500">
+            <DialogDescription className="mt-1 text-sm text-slate-500">
               Search Korean, meanings, examples, or romanization.
-            </p>
+            </DialogDescription>
             <div className="relative mt-4">
               <Search
                 size={17}
@@ -1325,7 +1326,7 @@ export default function Home() {
                 )
               )}
             </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
+            <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
               <span>
                 {filteredCards.length} matching card
                 {filteredCards.length === 1 ? "" : "s"}
@@ -1366,7 +1367,10 @@ export default function Home() {
                       <div className="flex justify-between items-start gap-3 mb-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-center gap-2">
-                            <div className="text-xl font-bold text-slate-900">
+                            <div
+                              className="text-xl font-bold text-slate-900"
+                              lang="ko"
+                            >
                               {card.front}
                             </div>
                             {isShowingRoman && romanization && (
@@ -1387,7 +1391,10 @@ export default function Home() {
                             </div>
                           )}
                           {card.example && (
-                            <div className="text-xs text-slate-500 italic mt-2 line-clamp-2">
+                            <div
+                              className="text-xs text-slate-500 italic mt-2 line-clamp-2"
+                              lang="ko"
+                            >
                               "{card.example}"
                             </div>
                           )}
@@ -1489,7 +1496,7 @@ export default function Home() {
                   <p className="mt-3 font-semibold text-slate-700">
                     No matching cards
                   </p>
-                  <p className="mt-1 text-sm text-slate-400">
+                  <p className="mt-1 text-sm text-slate-500">
                     Try a different search or clear your filters.
                   </p>
                 </div>

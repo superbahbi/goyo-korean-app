@@ -301,7 +301,9 @@ export function ScenarioPractice({
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500">
                       {String.fromCharCode(65 + choiceIndex)}
                     </span>
-                    <span className="flex-1">{choice.front}</span>
+                    <span className="flex-1" lang="ko">
+                      {choice.front}
+                    </span>
                     {answered && correct && <Check size={20} />}
                     {answered && chosen && !correct && <X size={20} />}
                   </button>
@@ -313,12 +315,18 @@ export function ScenarioPractice({
                 <p
                   className={`font-semibold ${isCorrect ? "text-emerald-700" : "text-red-700"}`}
                 >
-                  {isCorrect
-                    ? "That fits the situation."
-                    : `A useful answer is “${currentCard.front}”.`}
+                  {isCorrect ? (
+                    "That fits the situation."
+                  ) : (
+                    <>
+                      A useful answer is “
+                      <span lang="ko">{currentCard.front}</span>”.
+                    </>
+                  )}
                 </p>
                 <p className="mt-2 text-sm text-slate-500">
-                  {currentCard.back} · {currentCard.example}
+                  {currentCard.back} ·{" "}
+                  <span lang="ko">{currentCard.example}</span>
                 </p>
                 <Button
                   className="mt-4 min-h-12 w-full bg-slate-900 hover:bg-slate-800"

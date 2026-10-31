@@ -236,7 +236,10 @@ export function ListeningPractice({
 
               {answerState !== "unanswered" && (
                 <div className="mt-6 border-t border-slate-100 pt-5">
-                  <p className="text-4xl font-bold tracking-wide text-slate-900">
+                  <p
+                    className="text-4xl font-bold tracking-wide text-slate-900"
+                    lang="ko"
+                  >
                     {currentCard.front}
                   </p>
                   <p className="mt-2 font-mono text-emerald-600">
@@ -294,7 +297,7 @@ export function ListeningPractice({
                       ? "Correct — nice listening."
                       : `The answer is “${currentCard.back}”.`}
                   </p>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-slate-500" lang="ko">
                     {currentCard.example}
                   </p>
                   <Button

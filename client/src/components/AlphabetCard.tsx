@@ -20,10 +20,13 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
     >
       {/* Main Hangul Character */}
       <div className="text-center mb-8">
-        <div className="text-8xl font-bold text-emerald-600 mb-4 font-serif">
+        <div
+          className="text-8xl font-bold text-emerald-600 mb-4 font-serif"
+          lang="ko"
+        >
           {card.hangul}
         </div>
-        <div className="text-2xl font-bold text-slate-900 mb-2">
+        <div className="text-2xl font-bold text-slate-900 mb-2" lang="ko">
           {card.sound}
         </div>
         <div className="text-lg text-slate-600">{card.romanization}</div>
