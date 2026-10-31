@@ -218,7 +218,16 @@ function decompose(word: string): Syllable[] {
   });
 }
 
+// Lexical exceptions where spelling alone cannot produce the standard
+// pronunciation. 나뭇잎 is [나문닙] under 표준 발음법 (ㄴ 첨가), so RR is namunnip.
+const WORD_EXCEPTIONS: Record<string, string> = {
+  나뭇잎: "namunnip",
+};
+
 function romanizeWord(word: string): string {
+  const exception = WORD_EXCEPTIONS[word];
+  if (exception !== undefined) return exception;
+
   const syls = decompose(word);
   const count = syls.length;
   const coda: string[] = new Array(count).fill("");
