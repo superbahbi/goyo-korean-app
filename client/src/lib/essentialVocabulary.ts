@@ -6863,7 +6863,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "The food at this restaurant is really good.",
     usageNote:
-      "좋다 is the descriptive verb 'to be good'. The verb 'to like' is a separate word, 좋아하다.",
+      "좋다 is the adjective (형용사) 'to be good'. The verb 'to like' is a separate word, 좋아하다.",
     source: "600 essential words · row 555",
     audioReady: true,
   },
@@ -6938,7 +6938,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "adjective",
     exampleEnglish: "These days I exercise every day, so my body is healthy.",
     usageNote:
-      "건강하다 means to be healthy. It is a descriptive verb, so the polite form is 건강해요.",
+      "건강하다 means to be healthy. It is an adjective (형용사), so the polite form is 건강해요.",
     source: "600 essential words · row 560",
     audioReady: true,
   },
