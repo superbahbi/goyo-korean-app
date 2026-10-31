@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { loadVocabularyDeck } from "./vocabulary";
+import { loadVocabularyDeck, CURATED_CARDS } from "./vocabulary";
 import { ESSENTIAL_WORDS } from "./essentialVocabulary";
 import { romanize } from "./romanize";
 
@@ -96,6 +96,14 @@ describe("Revised Romanization", async () => {
   it("keeps every imported romanization in line with the transliterator", () => {
     for (const card of ESSENTIAL_WORDS) {
       expect(card.romanization, card.id).toBe(romanize(card.front));
+    }
+  });
+
+  it("keeps curated romanizations in line with the transliterator", () => {
+    const normalize = (value: string) => value.toLowerCase().replace(/[^a-z]/g, "");
+    for (const card of CURATED_CARDS) {
+      const hangul = card.front.replace(/[^가-힣\s]/g, "").trim();
+      expect(normalize(card.romanization), `${card.id} ${card.front}`).toBe(normalize(romanize(hangul)));
     }
   });
 

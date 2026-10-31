@@ -100,5 +100,4 @@ Items from the DeepSeek review that are not in the stages above. Pick them up wh
 - `public/audio/index.json`: 29 orphaned IDs belong to cards that were deduplicated out of the deck.
 - `client/src/lib/vocabulary.ts` and `docs/phase-1-content-audit.md` still say imported cards are not audio-ready.
 - Curated romanization errors: `surv_008`, `surv_009`, `color_001`.
-- Remaining curated romanizations that disagree with the transliterator (16): `surv_006` moreugessumnida → moreugetseumnida, `daily_011` isseowo → isseoyo, `num_018` jeomshim → jeomsim, `fam_007`/`fam_008` -seang → -saeng, `emot_006` jarangseueowoyo → jarangseureowoyo, `emot_003` duryeowwoyo → duryeowoyo, `verb_009` nolayo → norayo, the `-heyo` endings on `daily_006/007/008` and `emot_002`, `emot_008`/`emot_009` -daeyo → -deyo, and `verb_013` 듣어요, whose headword is likely 들어요.
-- `essentialVocabulary.ts`: `essential_337` uses `가벼운` instead of `가볍다` and is labelled a noun.
+- Headword typos `essential_306` 어름 → 얼음, `essential_488` 차겁다 → 차갑다, and `verb_013` 듣어요 → 들어요 are fixed, with audio regenerated.
