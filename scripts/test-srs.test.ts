@@ -74,7 +74,7 @@ describe("SRS scheduling", () => {
     expect(legacyAgain.easeFactor).toBeLessThan(2.5);
   });
 
-  it("caps the interval at 365 days and clamps ease", () => {
+  it("caps the interval at 90 days and clamps ease", () => {
     const capped = scheduleRecall(
       {
         interval: 360,
@@ -85,7 +85,7 @@ describe("SRS scheduling", () => {
       },
       "easy",
     );
-    expect(capped.interval).toBe(365);
+    expect(capped.interval).toBe(90);
     expect(capped.easeFactor).toBe(3.2);
     const floored = scheduleRecall(
       {

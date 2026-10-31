@@ -23,14 +23,15 @@ export interface SrsSchedule {
 const MIN_EASE = 1.3;
 const DEFAULT_EASE = 2.35;
 const MAX_EASE = 3.2;
-const MAX_INTERVAL = 365;
+// Temporary 90-day cap. Revisit after 30 days of real data.
+const TEMPORARY_MAX_INTERVAL_DAYS = 90;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
 function roundInterval(days: number) {
-  return clamp(Math.round(days), 1, MAX_INTERVAL);
+  return clamp(Math.round(days), 1, TEMPORARY_MAX_INTERVAL_DAYS);
 }
 
 /**

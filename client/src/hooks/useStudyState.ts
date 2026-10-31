@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { scheduleReview } from "@/lib/srs";
 
+export const SCHEMA_VERSION = 2;
+
 export interface CardState {
   id: string;
   box: number;
@@ -37,6 +39,7 @@ export interface UserStats {
 }
 
 export interface UserState {
+  schemaVersion: number;
   cardStates: Record<string, CardState>;
   stats: UserStats;
   settings: {
@@ -64,6 +67,7 @@ export function getLocalDateKey(date = new Date()): string {
 
 function createDefaultState(): UserState {
   return {
+    schemaVersion: SCHEMA_VERSION,
     cardStates: {},
     stats: {
       totalXp: 0,
@@ -121,11 +125,11 @@ function sanitizeCardState(id: string, value: unknown): CardState | null {
   return card;
 }
 
-function loadState(): UserState {
+// A missing or older schemaVersion is treated as current. Pre-v2 saves are not migrated.
+export function parseSavedState(raw: string | null): UserState {
   const defaults = createDefaultState();
 
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return defaults;
 
     const parsed: unknown = JSON.parse(raw);
@@ -162,10 +166,19 @@ function loadState(): UserState {
       audioSpeaker: savedSettings.audioSpeaker === "elevenlabs-female" ? "elevenlabs-female" : "elevenlabs",
     };
 
-    return { cardStates, stats, settings };
+    return { schemaVersion: SCHEMA_VERSION, cardStates, stats, settings };
   } catch (error) {
     console.error("Failed to load saved progress, starting fresh:", error);
     return defaults;
+  }
+}
+
+function loadState(): UserState {
+  try {
+    return parseSavedState(localStorage.getItem(STORAGE_KEY));
+  } catch (error) {
+    console.error("Failed to load saved progress, starting fresh:", error);
+    return createDefaultState();
   }
 }
 

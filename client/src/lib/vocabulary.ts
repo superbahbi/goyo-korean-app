@@ -20,12 +20,12 @@ const CURATED_VOCABULARY_DATA: VocabularyCard[] = [
   { id: "surv_001", front: "안녕하세요", back: "Hello (polite/formal)", romanization: "annyeonghaseyo", tag: "survival", example: "안녕하세요, 저는 학생입니다.", difficulty: "beginner", partOfSpeech: "greeting" },
   { id: "surv_002", front: "감사합니다", back: "Thank you (formal)", romanization: "gamsahamnida", tag: "survival", example: "도와주셔서 감사합니다.", difficulty: "beginner", partOfSpeech: "expression" },
   { id: "surv_003", front: "죄송합니다", back: "I'm sorry / Excuse me", romanization: "joesonghamnida", tag: "survival", example: "늦어서 죄송합니다.", difficulty: "beginner", partOfSpeech: "expression" },
-  { id: "surv_004", front: "네", back: "Yes", romanization: "ne", tag: "survival", example: "네, 맞습니다.", difficulty: "beginner", partOfSpeech: "adverb" },
-  { id: "surv_005", front: "아니요", back: "No", romanization: "aniyo", tag: "survival", example: "아니요, 저는 학생이 아닙니다.", difficulty: "beginner", partOfSpeech: "adverb" },
+  { id: "surv_004", front: "네", back: "Yes (polite; also: I see, okay)", romanization: "ne", tag: "survival", example: "네, 맞습니다.", difficulty: "beginner", partOfSpeech: "adverb" },
+  { id: "surv_005", front: "아니요", back: "No (formal)", romanization: "aniyo", tag: "survival", example: "아니요, 저는 학생이 아닙니다.", difficulty: "beginner", partOfSpeech: "adverb" },
   { id: "surv_006", front: "모르겠습니다", back: "I don't know", romanization: "moreugessumnida", tag: "survival", example: "죄송하지만 모르겠습니다.", difficulty: "beginner", partOfSpeech: "expression" },
   { id: "surv_007", front: "도와주세요", back: "Help me please", romanization: "dowajuseyo", tag: "survival", example: "영어를 도와주세요.", difficulty: "beginner", partOfSpeech: "expression" },
-  { id: "surv_008", front: "화장실은 어디입니까?", back: "Where is the bathroom?", romanization: "hwajangsilun eodiiimnikka", tag: "survival", example: "화장실은 어디입니까?", difficulty: "beginner", partOfSpeech: "question" },
-  { id: "surv_009", front: "얼마입니까?", back: "How much is it?", romanization: "eolmaiimnikka", tag: "survival", example: "이 책은 얼마입니까?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "surv_008", front: "화장실은 어디입니까?", back: "Where is the bathroom?", romanization: "hwajangsireun eodiimnikka", tag: "survival", example: "화장실은 어디입니까?", difficulty: "beginner", partOfSpeech: "question" },
+  { id: "surv_009", front: "얼마입니까?", back: "How much is it?", romanization: "eolmaimnikka", tag: "survival", example: "이 책은 얼마입니까?", difficulty: "beginner", partOfSpeech: "question" },
   { id: "surv_010", front: "영어를 합니다", back: "I speak English", romanization: "yeongeoreul hamnida", tag: "survival", example: "저는 영어를 합니다.", difficulty: "beginner", partOfSpeech: "verb" },
 
   // Daily Conversation (15 cards)
@@ -56,15 +56,15 @@ const CURATED_VOCABULARY_DATA: VocabularyCard[] = [
   { id: "num_008", front: "여덟", back: "Eight", romanization: "yeodeol", tag: "numbers", example: "여덟 개를 샀어요.", difficulty: "beginner", partOfSpeech: "number" },
   { id: "num_009", front: "아홉", back: "Nine", romanization: "ahop", tag: "numbers", example: "아홉 번 했어요.", difficulty: "beginner", partOfSpeech: "number" },
   { id: "num_010", front: "열", back: "Ten", romanization: "yeol", tag: "numbers", example: "열 개를 주세요.", difficulty: "beginner", partOfSpeech: "number" },
-  { id: "num_011", front: "시간", back: "Hour", romanization: "sigan", tag: "numbers", example: "한 시간이 걸렸어요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_011", front: "시간", back: "Hour; time", romanization: "sigan", tag: "numbers", example: "한 시간이 걸렸어요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "num_012", front: "분", back: "Minute", romanization: "bun", tag: "numbers", example: "10분 기다려 주세요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "num_013", front: "초", back: "Second", romanization: "cho", tag: "numbers", example: "5초 기다려요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "num_014", front: "어제", back: "Yesterday", romanization: "eoje", tag: "numbers", example: "어제 뭐 했어요?", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "num_015", front: "오늘", back: "Today", romanization: "oneul", tag: "numbers", example: "오늘 날씨가 좋아요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "num_016", front: "내일", back: "Tomorrow", romanization: "naeil", tag: "numbers", example: "내일 만나요.", difficulty: "beginner", partOfSpeech: "noun" },
-  { id: "num_017", front: "아침", back: "Morning", romanization: "achim", tag: "numbers", example: "아침 7시에 일어나요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_017", front: "아침", back: "Morning; breakfast", romanization: "achim", tag: "numbers", example: "아침 7시에 일어나요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "num_018", front: "점심", back: "Lunch", romanization: "jeomshim", tag: "numbers", example: "점심 12시에 먹어요.", difficulty: "beginner", partOfSpeech: "noun" },
-  { id: "num_019", front: "저녁", back: "Evening", romanization: "jeonyeok", tag: "numbers", example: "저녁 6시에 만나요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "num_019", front: "저녁", back: "Evening; dinner", romanization: "jeonyeok", tag: "numbers", example: "저녁 6시에 만나요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "num_020", front: "밤", back: "Night", romanization: "bam", tag: "numbers", example: "밤 10시에 자요.", difficulty: "beginner", partOfSpeech: "noun" },
 
   // Food & Drinks (15 cards)
@@ -85,8 +85,8 @@ const CURATED_VOCABULARY_DATA: VocabularyCard[] = [
   { id: "food_015", front: "생선", back: "Fish", romanization: "saengseon", tag: "food", example: "생선이 건강해요.", difficulty: "beginner", partOfSpeech: "noun" },
 
   // Family & Relationships (12 cards)
-  { id: "fam_001", front: "엄마", back: "Mother", romanization: "eomma", tag: "family", example: "엄마를 사랑해요.", difficulty: "beginner", partOfSpeech: "noun" },
-  { id: "fam_002", front: "아빠", back: "Father", romanization: "appa", tag: "family", example: "아빠는 회사에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_001", front: "엄마", back: "Mother (mom)", romanization: "eomma", tag: "family", example: "엄마를 사랑해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "fam_002", front: "아빠", back: "Father (dad)", romanization: "appa", tag: "family", example: "아빠는 회사에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "fam_003", front: "오빠", back: "Older brother (for females)", romanization: "oppa", tag: "family", example: "오빠가 도와줘요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "fam_004", front: "언니", back: "Older sister (for females)", romanization: "eonni", tag: "family", example: "언니와 함께 가요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "fam_005", front: "형", back: "Older brother (for males)", romanization: "hyeong", tag: "family", example: "형이 학교에 가요.", difficulty: "beginner", partOfSpeech: "noun" },
@@ -147,7 +147,7 @@ const CURATED_VOCABULARY_DATA: VocabularyCard[] = [
   { id: "body_012", front: "등", back: "Back", romanization: "deung", tag: "body", example: "등이 아파요.", difficulty: "beginner", partOfSpeech: "noun" },
 
   // Colors (10 cards)
-  { id: "color_001", front: "빨강", back: "Red", romanization: "ppalgap", tag: "colors", example: "빨간 사과를 좋아해요.", difficulty: "beginner", partOfSpeech: "noun" },
+  { id: "color_001", front: "빨강", back: "Red", romanization: "ppalgang", tag: "colors", example: "빨간 사과를 좋아해요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "color_002", front: "파랑", back: "Blue", romanization: "parang", tag: "colors", example: "파란 하늘이 아름다워요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "color_003", front: "노랑", back: "Yellow", romanization: "norang", tag: "colors", example: "노란 꽃이 예뻐요.", difficulty: "beginner", partOfSpeech: "noun" },
   { id: "color_004", front: "초록", back: "Green", romanization: "chorok", tag: "colors", example: "초록 나무가 있어요.", difficulty: "beginner", partOfSpeech: "noun" },
@@ -187,9 +187,8 @@ export const CATEGORIES = [
   { id: "essential", name: "Essential 600", icon: "📚", color: "bg-emerald-100 text-emerald-700" },
 ];
 
-// Curated phrase cards remain the study-ready core. The imported inventory is
-// searchable immediately, but stays out of audio-first sessions until its
-// examples and ElevenLabs recordings have been reviewed and generated.
+// Cards are study-ready unless audioReady is false. Imported cards are searchable
+// and study-ready once their ElevenLabs clips exist in public/audio/index.json.
 const cardKey = (card: VocabularyCard) => `${card.front}::${card.back.trim().toLocaleLowerCase()}`;
 const curatedCards = new Set(CURATED_VOCABULARY_DATA.map(cardKey));
 export const VOCABULARY_DATA: VocabularyCard[] = [
