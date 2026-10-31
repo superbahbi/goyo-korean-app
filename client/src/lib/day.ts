@@ -12,3 +12,10 @@ export function addDays(date: string, days: number): string {
   nextDate.setUTCDate(nextDate.getUTCDate() + days);
   return nextDate.toISOString().slice(0, 10);
 }
+
+/** Milliseconds from `now` until the next local midnight, never negative. */
+export function msUntilNextLocalMidnight(now = new Date()): number {
+  const nextMidnight = new Date(now);
+  nextMidnight.setHours(24, 0, 0, 0);
+  return Math.max(0, nextMidnight.getTime() - now.getTime());
+}
