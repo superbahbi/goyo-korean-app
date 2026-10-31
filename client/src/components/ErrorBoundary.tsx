@@ -69,7 +69,8 @@ class ErrorBoundary extends Component<Props, State> {
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-lg",
                   "bg-primary text-primary-foreground",
-                  "hover:opacity-90 cursor-pointer"
+                  "hover:opacity-90 cursor-pointer",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 )}
               >
                 <RotateCcw size={16} />
@@ -86,7 +87,8 @@ class ErrorBoundary extends Component<Props, State> {
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-lg",
                   "border border-destructive text-destructive",
-                  "hover:bg-destructive/10 cursor-pointer"
+                  "hover:bg-destructive/10 cursor-pointer",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
                 )}
               >
                 {this.state.confirmingReset

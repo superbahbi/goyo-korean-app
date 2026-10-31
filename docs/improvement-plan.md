@@ -76,14 +76,14 @@ several practice views are still longer.
 
 ## Status
 
-| Phase                           | State                                                                                                                                   |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                     |
-| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                            |
-| 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                      |
-| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                         |
-| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels and reduced motion done; device checks, hashed audio and Playwright open |
-| 5 Tune from data                | Blocked on 30 days of use                                                                                                               |
+| Phase                           | State                                                                                                                                                |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                                  |
+| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                         |
+| 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                                   |
+| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                                      |
+| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels, reduced motion and focus rings done; device checks, hashed audio and Playwright open |
+| 5 Tune from data                | Blocked on 30 days of use                                                                                                                            |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its device checks — blocked
@@ -310,8 +310,11 @@ audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, devic
 1. Accessibility pass: contrast on `slate-300`/`slate-400` text at 9–11px, `lang="ko"` on Korean text,
    focus rings on the dashboard's `motion.button` cards, labelled icon-only controls, `aria-live` on
    grading feedback. Re-check in a real browser, including the practice overlays.
-   - Partly done: `lang="ko"`, `slate-500` for the small text, chart role/label, reduced-motion handling
-     and dialog descriptions shipped. The focus-ring, icon-control and browser/overlay checks remain.
+   - Partly done: `lang="ko"`, `slate-500` for the small text, chart role/label, reduced-motion handling,
+     dialog descriptions and explicit `focus-visible` rings on the dashboard cards, practice cards,
+     choice buttons and text links shipped. Every icon-only control already carries a label, and the
+     Scenario verdict now announces through `aria-live` like Listening and Study. The real-browser,
+     screen-reader and overlay checks remain.
 2. Vercel headers: long-lived immutable caching for `/assets/*` and hashed audio, a modest `max-age` for
    `sw.js`, and baseline security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`).
    - Done apart from hashed audio (item 3): `vercel.json` ships a CSP, `X-Content-Type-Options: nosniff`,

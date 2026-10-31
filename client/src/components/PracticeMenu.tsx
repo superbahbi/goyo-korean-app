@@ -30,7 +30,7 @@ export function PracticeMenu({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         onClick={onOpenAlphabet}
-        className="w-full mb-6 p-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-base hover:shadow-lg transition-all"
+        className="w-full mb-6 p-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-base hover:shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
       >
         <div className="text-2xl mb-1">🔤</div>
         Learn Hangul (Korean Alphabet)
@@ -40,7 +40,7 @@ export function PracticeMenu({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         onClick={onOpenListening}
-        className="w-full mb-6 p-4 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-950 text-white font-bold text-base hover:shadow-lg transition-all"
+        className="w-full mb-6 p-4 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-950 text-white font-bold text-base hover:shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
       >
         <div className="flex items-center justify-center gap-2 text-2xl mb-1">
           <Headphones size={25} />
@@ -55,7 +55,7 @@ export function PracticeMenu({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         onClick={onOpenScenarios}
-        className="mb-6 w-full rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg"
+        className="mb-6 w-full rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-4 text-base font-bold text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 hover:shadow-lg"
       >
         <div className="mb-1 flex items-center justify-center gap-2 text-2xl">
           <MapPin size={25} />
@@ -70,7 +70,7 @@ export function PracticeMenu({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         onClick={onOpenShadowing}
-        className="mb-6 w-full rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg"
+        className="mb-6 w-full rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 p-4 text-base font-bold text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 hover:shadow-lg"
       >
         <div className="mb-1 flex items-center justify-center gap-2 text-2xl">
           <Headphones size={25} />
@@ -86,7 +86,7 @@ export function PracticeMenu({
         animate={{ opacity: 1, y: 0 }}
         onClick={onStartWeakSession}
         disabled={weakCardCount === 0}
-        className="w-full mb-6 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full mb-6 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-4 text-base font-bold text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
       >
         <div className="mb-1 flex items-center justify-center gap-2 text-2xl">
           <Brain size={25} />
@@ -103,7 +103,7 @@ export function PracticeMenu({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         onClick={onStartLearningSession}
-        className="mb-6 w-full rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+        className="mb-6 w-full rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 p-4 text-base font-bold text-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
         disabled={learningCardCount === 0}
       >
         <div className="mb-1 flex items-center justify-center gap-2 text-2xl">

@@ -39,7 +39,7 @@ export function CategoryGrid({
         </div>
         <button
           type="button"
-          className="text-sm font-semibold text-emerald-700 hover:text-emerald-900"
+          className="rounded text-sm font-semibold text-emerald-700 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
           onClick={onViewAll}
         >
           View all {vocabularyCount}

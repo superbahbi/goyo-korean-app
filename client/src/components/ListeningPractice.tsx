@@ -270,7 +270,7 @@ export function ListeningPractice({
                     key={choice.id}
                     disabled={answerState !== "unanswered"}
                     onClick={() => chooseAnswer(choice.id)}
-                    className={`flex min-h-14 items-center gap-3 rounded-2xl border-2 p-4 text-left text-sm font-semibold transition-all ${statusClass}`}
+                    className={`flex min-h-14 items-center gap-3 rounded-2xl border-2 p-4 text-left text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${statusClass}`}
                   >
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500">
                       {String.fromCharCode(65 + choiceIndex)}

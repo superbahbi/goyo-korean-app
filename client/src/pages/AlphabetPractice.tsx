@@ -91,7 +91,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                         category.id as "consonants" | "vowels" | "numbers"
                       );
                     }}
-                    className={`p-8 rounded-2xl text-center transition-all hover:shadow-lg ${category.color}`}
+                    className={`p-8 rounded-2xl text-center transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 ${category.color}`}
                   >
                     <div className="text-5xl mb-4">{category.icon}</div>
                     <h2 className="text-2xl font-bold mb-2">{category.name}</h2>
@@ -267,7 +267,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.02 }}
-                    className={`aspect-square rounded-lg font-bold text-2xl transition-all ${
+                    className={`aspect-square rounded-lg font-bold text-2xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
                       idx === currentIndex
                         ? "bg-emerald-500 text-white shadow-lg scale-110"
                         : "bg-white text-slate-900 border-2 border-slate-200 hover:border-emerald-300"
