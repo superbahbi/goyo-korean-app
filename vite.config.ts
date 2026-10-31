@@ -5,6 +5,7 @@ import path from "node:path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { AUDIO_CACHE_NAME } from "./client/src/lib/audioCache";
+import { PRECACHE_GLOBS } from "./client/src/lib/pwaConfig";
 
 // =============================================================================
 // Goyo dev server
@@ -70,7 +71,10 @@ const plugins = [
       ],
     },
     workbox: {
-      globPatterns: ["**/*.{js,css,html,svg,png,ico,webmanifest}"],
+      // audio/index.json is precached with the shell: it is the map every clip is
+      // resolved through, so without it no audio can play offline, not even the
+      // Hangul clips that are themselves precached.
+      globPatterns: [...PRECACHE_GLOBS],
       additionalManifestEntries: alphabetAudioEntries(),
       navigateFallback: "/index.html",
       navigateFallbackDenylist: [/^\/audio\//, /^\/icons\//],
