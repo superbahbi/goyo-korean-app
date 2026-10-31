@@ -137,6 +137,50 @@ describe("SRS scheduling", () => {
     expect(goodAfterLapse.schedule.interval).toBe(1);
   });
 
+  it("caps recognition reviews so they never stretch an interval", () => {
+    const firstRecognition = scheduleReview(undefined, "easy", "2026-10-31", undefined, { recognition: true });
+    expect(firstRecognition.advanced).toBe(true);
+    expect(firstRecognition.schedule.interval).toBe(2);
+    expect(firstRecognition.schedule.consecutiveCorrect).toBe(0);
+
+    const mature = {
+      interval: 12,
+      easeFactor: 2.5,
+      consecutiveCorrect: 3,
+      timesReviewed: 4,
+      timesCorrect: 4,
+      lastReviewDate: "2026-10-29",
+    };
+    const reviewed = scheduleReview(mature, "good", "2026-10-31", undefined, { recognition: true });
+    expect(reviewed.advanced).toBe(true);
+    expect(reviewed.schedule.interval).toBe(12);
+    expect(reviewed.schedule.easeFactor).toBe(2.5);
+    expect(reviewed.schedule.consecutiveCorrect).toBe(3);
+
+    const recalled = scheduleReview(mature, "good", "2026-10-31");
+    expect(recalled.schedule.interval).toBeGreaterThan(12);
+  });
+
+  it("still records a lapse during recognition review", () => {
+    const lapse = scheduleReview(
+      {
+        interval: 12,
+        easeFactor: 2.5,
+        consecutiveCorrect: 3,
+        timesReviewed: 4,
+        timesCorrect: 4,
+        lastReviewDate: "2026-10-29",
+      },
+      "again",
+      "2026-10-31",
+      undefined,
+      { recognition: true },
+    );
+    expect(lapse.advanced).toBe(true);
+    expect(lapse.schedule.interval).toBe(1);
+    expect(lapse.schedule.lapseCount).toBe(1);
+  });
+
   it("records a lapse on again and recovers on a later good review", () => {
     const lapse = scheduleRecall(
       { ...easy, timesReviewed: 3, timesCorrect: 3 },

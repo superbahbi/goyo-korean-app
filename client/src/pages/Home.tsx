@@ -51,6 +51,9 @@ export default function Home() {
   const { state, gradeCard, updateSettings, replaceState } = useStudyState();
   const { vocabulary, studyReady } = useVocabularyDeck();
   const [sessionQueue, setSessionQueue] = useState<typeof vocabulary>([]);
+  // Snapshot of the reviewed cards chosen when a recognition mode opens, so a
+  // grade does not reshuffle the questions mid-session.
+  const [recognitionSessionCards, setRecognitionSessionCards] = useState<typeof vocabulary>([]);
   const [sessionMode, setSessionMode] = useState<"daily" | "weak" | "learning">("daily");
   const [isStudying, setIsStudying] = useState(false);
   const [showBrowse, setShowBrowse] = useState(false);
@@ -284,6 +287,42 @@ export default function Home() {
       .slice(0, sessionSize || dailyGoal);
   }, [cardStates, cardsStudiedToday, dailyGoal, studyReady, today]);
 
+  // Recognition practice never introduces a card: due and weak reviews come
+  // first, then the rest of the learner's existing cards.
+  const recognitionCards = useMemo(() => {
+    if (!cardStates) return [];
+    const reviewed = studyReady.filter((card) => Boolean(cardStates[card.id]?.timesReviewed));
+    const due = reviewed
+      .filter((card) => {
+        const dueDate = cardStates[card.id]?.due;
+        return Boolean(dueDate && dueDate <= today);
+      })
+      .sort((a, b) => (cardStates[a.id]?.due ?? today).localeCompare(cardStates[b.id]?.due ?? today));
+    const dueIds = new Set(due.map((card) => card.id));
+    const weak = reviewed
+      .filter((card) => !dueIds.has(card.id) && getMasteryState(cardStates[card.id]) !== "known")
+      .sort((a, b) => {
+        const aState = cardStates[a.id];
+        const bState = cardStates[b.id];
+        return (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1) -
+          (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
+      });
+    const weakIds = new Set(weak.map((card) => card.id));
+    const rest = reviewed.filter((card) => !dueIds.has(card.id) && !weakIds.has(card.id));
+    return [...due, ...weak, ...rest];
+  }, [cardStates, studyReady, today]);
+
+  const openRecognitionPractice = (open: () => void) => {
+    if (recognitionCards.length < 4) {
+      toast.info("Study a few cards first", {
+        description: "Listening and scenarios use cards you have already reviewed, so nothing new is introduced.",
+      });
+      return;
+    }
+    setRecognitionSessionCards(recognitionCards);
+    open();
+  };
+
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => {
     const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
     const wasBelowGoal = Boolean(state && !isRepeatPractice && cardsStudiedToday < state.settings.dailyGoal);
@@ -343,7 +382,7 @@ export default function Home() {
   };
 
   const handleShadowingGrade = (cardId: string, rating: "again" | "good") => {
-    gradeCard(cardId, rating, { mode: "shadowing" });
+    gradeCard(cardId, rating, { mode: "shadowing", practiceOnly: true });
   };
 
   if (!state) return null;
@@ -682,23 +721,23 @@ export default function Home() {
         <motion.button
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          onClick={() => setShowListening(true)}
+          onClick={() => openRecognitionPractice(() => setShowListening(true))}
           className="w-full mb-6 p-4 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-950 text-white font-bold text-base hover:shadow-lg transition-all"
         >
           <div className="flex items-center justify-center gap-2 text-2xl mb-1"><Headphones size={25} /></div>
           Listening Practice
-          <div className="text-xs font-normal text-slate-300 mt-1">10 audio-first questions · earn XP through recall</div>
+          <div className="text-xs font-normal text-slate-300 mt-1">10 audio-first questions · due and weak cards first</div>
         </motion.button>
 
         <motion.button
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          onClick={() => setShowScenarios(true)}
+          onClick={() => openRecognitionPractice(() => setShowScenarios(true))}
           className="mb-6 w-full rounded-2xl bg-gradient-to-br from-rose-500 to-pink-600 p-4 text-base font-bold text-white transition-all hover:shadow-lg"
         >
           <div className="mb-1 flex items-center justify-center gap-2 text-2xl"><MapPin size={25} /></div>
           Survival Scenarios
-          <div className="mt-1 text-xs font-normal text-rose-50">6 real-world situations · retrieve the phrase you would actually use</div>
+          <div className="mt-1 text-xs font-normal text-rose-50">Real-world situations · reviewed phrases only</div>
         </motion.button>
 
         <motion.button
@@ -709,7 +748,7 @@ export default function Home() {
         >
           <div className="mb-1 flex items-center justify-center gap-2 text-2xl"><Headphones size={25} /></div>
           Shadowing Practice
-          <div className="mt-1 text-xs font-normal text-indigo-50">8 phrases · match Korean rhythm and pronunciation aloud</div>
+          <div className="mt-1 text-xs font-normal text-indigo-50">8 phrases · practice only, your schedule stays put</div>
         </motion.button>
 
         <motion.button
@@ -832,7 +871,7 @@ export default function Home() {
         <Suspense fallback={<ModalLoadingFallback />}>
           <LazyBoundary onClose={() => setShowListening(false)}>
             <ListeningPractice
-            cards={studyReady}
+            cards={recognitionSessionCards}
             onGrade={handleListeningGrade}
             onClose={() => setShowListening(false)}
           />
@@ -844,7 +883,7 @@ export default function Home() {
         <Suspense fallback={<ModalLoadingFallback />}>
           <LazyBoundary onClose={() => setShowScenarios(false)}>
             <ScenarioPractice
-            cards={studyReady}
+            cards={recognitionSessionCards}
             onGrade={handleScenarioGrade}
             onClose={() => setShowScenarios(false)}
           />

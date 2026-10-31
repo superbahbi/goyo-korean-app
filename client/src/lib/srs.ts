@@ -117,12 +117,30 @@ export interface SrsReviewResult {
   advanced: boolean;
 }
 
+export interface ScheduleReviewOptions {
+  /**
+   * Listening and scenario practice test recognition, not recall. They may
+   * reinforce the schedule but must not stretch an interval or advance mastery.
+   */
+  recognition?: boolean;
+}
+
 /**
- * Schedule a review while protecting against same-day repeats. Re-grading a card
- * that was already reviewed today must not compound its interval, so only a
- * fresh lapse ("again") is allowed to change the schedule on the same day.
+ * Recognition success confirms the card is still familiar, so the interval may
+ * stay where it is but never grows; a first meeting lands on the 2-day
+ * reinforcer, and consecutive recall is left untouched.
  */
-export function scheduleReview(
+function capRecognitionSchedule(schedule: SrsSchedule, existing: SrsCardState | undefined): SrsSchedule {
+  const previousInterval = Math.max(0, existing?.interval ?? 0);
+  return {
+    interval: Math.min(schedule.interval, Math.max(2, previousInterval)),
+    easeFactor: clamp(existing?.easeFactor ?? schedule.easeFactor, MIN_EASE, MAX_EASE),
+    consecutiveCorrect: existing?.consecutiveCorrect ?? 0,
+    lapseCount: schedule.lapseCount,
+  };
+}
+
+function scheduleWithSameDayGuard(
   existing: SrsCardState | undefined,
   rating: SrsRating,
   today: string,
@@ -146,6 +164,23 @@ export function scheduleReview(
     },
     advanced: false,
   };
+}
+
+/**
+ * Schedule a review while protecting against same-day repeats. Re-grading a card
+ * that was already reviewed today must not compound its interval, so only a
+ * fresh lapse ("again") is allowed to change the schedule on the same day.
+ */
+export function scheduleReview(
+  existing: SrsCardState | undefined,
+  rating: SrsRating,
+  today: string,
+  responseTimeMs?: number,
+  options: ScheduleReviewOptions = {},
+): SrsReviewResult {
+  const result = scheduleWithSameDayGuard(existing, rating, today, responseTimeMs);
+  if (!options.recognition || !result.advanced || rating === "again") return result;
+  return { ...result, schedule: capRecognitionSchedule(result.schedule, existing) };
 }
 
 export function getRecallAccuracy(state?: SrsCardState) {

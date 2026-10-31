@@ -72,6 +72,8 @@ export interface GradeOptions {
   countProgress?: boolean;
   responseTimeMs?: number;
   mode?: StudyMode;
+  /** Shadowing is self-reported, so it is logged but never touches the schedule. */
+  practiceOnly?: boolean;
 }
 
 const STORAGE_KEY = "goyo-progress-v2";
@@ -279,9 +281,25 @@ export function applyGrade(
 ): UserState {
   const requestedProgress = options.countProgress !== false;
   const today = getLocalDateKey(now);
+  const logEntry = {
+    cardId,
+    at: now.toISOString(),
+    rating,
+    responseTimeMs: typeof options.responseTimeMs === "number" ? options.responseTimeMs : null,
+    mode: options.mode ?? "daily",
+  } as const;
+
+  // Self-reported practice still belongs in the log, but it must not move the
+  // schedule, earn XP, or count toward the daily goal.
+  if (options.practiceOnly) {
+    return { ...state, reviewLog: appendReviewEntry(state.reviewLog, logEntry) };
+  }
 
   const existingCard = state.cardStates[cardId];
-  const { schedule, advanced } = scheduleReview(existingCard, rating, today, options.responseTimeMs);
+  const recognition = options.mode === "listening" || options.mode === "scenario";
+  const { schedule, advanced } = scheduleReview(existingCard, rating, today, options.responseTimeMs, {
+    recognition,
+  });
   // Re-grading a card already reviewed today earns no progress or XP.
   const countProgress = requestedProgress && advanced;
   const xpGain = countProgress ? (rating === "easy" ? 15 : rating === "good" ? 10 : 5) : 0;
@@ -329,13 +347,7 @@ export function applyGrade(
     studyDays,
     // Every grade is logged, including a same-day repeat. The scheduler still
     // owns whether the schedule moves; the log records what the learner did.
-    reviewLog: appendReviewEntry(state.reviewLog, {
-      cardId,
-      at: now.toISOString(),
-      rating,
-      responseTimeMs: typeof responseTimeMs === "number" ? responseTimeMs : null,
-      mode: options.mode ?? "daily",
-    }),
+    reviewLog: appendReviewEntry(state.reviewLog, logEntry),
   };
 }
 

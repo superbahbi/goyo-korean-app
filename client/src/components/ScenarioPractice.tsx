@@ -24,6 +24,10 @@ const SCENARIOS: Scenario[] = [
   { id: "repair", place: "Conversation repair", prompt: "You did not understand someone. Tell them you do not know.", cardId: "surv_006" },
 ];
 
+function shuffleChoices<T>(items: T[]): T[] {
+  return [...items].sort(() => Math.random() - 0.5);
+}
+
 interface ScenarioPracticeProps {
   cards: VocabularyCard[];
   onGrade: (cardId: string, rating: "again" | "good") => void;
@@ -36,24 +40,56 @@ export function ScenarioPractice({ cards, onGrade, onClose }: ScenarioPracticePr
   const [score, setScore] = useState(0);
   const [complete, setComplete] = useState(false);
 
-  const scenarios = useMemo(() => [...SCENARIOS].sort(() => Math.random() - 0.5), []);
-  const current = scenarios[index];
   const cardMap = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
+  // Scenarios only use cards the learner has already met, so this mode never
+  // introduces a brand-new phrase.
+  const availableScenarios = useMemo(() => SCENARIOS.filter((scenario) => cardMap.has(scenario.cardId)), [cardMap]);
+  const scenarios = useMemo(() => [...availableScenarios].sort(() => Math.random() - 0.5), [availableScenarios]);
+  const current = scenarios[index];
   const currentCard = current ? cardMap.get(current.cardId) : undefined;
 
   const choices = useMemo(() => {
     if (!currentCard) return [];
-    const distractors = cards
-      .filter((card) => card.tag === "survival" && card.id !== currentCard.id)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 2);
-    return [currentCard, ...distractors].sort(() => Math.random() - 0.5);
-  }, [currentCard]);
+    const pool = shuffleChoices(cards.filter((card) => card.id !== currentCard.id));
+    // Prefer survival phrases, then any reviewed card, and never repeat a phrase.
+    const ordered = [...pool.filter((card) => card.tag === "survival"), ...pool.filter((card) => card.tag !== "survival")];
+    const seen = new Set([currentCard.front]);
+    const distractors: VocabularyCard[] = [];
+    for (const card of ordered) {
+      if (seen.has(card.front)) continue;
+      seen.add(card.front);
+      distractors.push(card);
+      if (distractors.length === 2) break;
+    }
+    return shuffleChoices([currentCard, ...distractors]);
+  }, [cards, currentCard]);
 
   const closePractice = () => {
     stopAudio();
     onClose();
   };
+
+  if (scenarios.length === 0) {
+    return (
+      <Dialog open onOpenChange={(open) => { if (!open) closePractice(); }}>
+        <DialogContent
+          aria-modal="true"
+          aria-describedby={undefined}
+          showCloseButton={false}
+          className="max-w-md rounded-3xl"
+        >
+          <DialogTitle>Nothing to practice yet</DialogTitle>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
+            Scenarios reuse phrases you have already studied, so nothing new is introduced here. Review a few survival
+            phrases in a daily session, then come back.
+          </p>
+          <Button className="mt-5 min-h-12 w-full" onClick={closePractice}>
+            Back to dashboard
+          </Button>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   if (complete) {
     return (
