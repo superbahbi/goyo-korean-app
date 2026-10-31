@@ -11,7 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Brain, CalendarDays, Flame, Star, Trophy, Play, BookOpen, BarChart2, Settings, TrendingUp, Zap, Volume2, Eye, EyeOff, Headphones, MapPin, Search, Target, Download, Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { buildExportPayload, getLocalDateKey, getMasteryState, useStudyState, validateImportPayload, type MasteryState, type UserState } from "@/hooks/useStudyState";
+import { buildExportPayload, getMasteryState, useStudyState, validateImportPayload, type MasteryState, type UserState } from "@/hooks/useStudyState";
+import { useLocalDayKey } from "@/hooks/useLocalDay";
 import { StudySession } from "@/components/StudySession";
 import { CATEGORIES } from "@/lib/vocabulary";
 import { useVocabularyDeck } from "@/hooks/useVocabularyDeck";
@@ -58,6 +59,8 @@ function ModalLoadingFallback() {
 
 export default function Home() {
   const { state, gradeCard, updateSettings, replaceState } = useStudyState();
+  // Recomputes at local midnight so an app left open overnight rolls over too.
+  const today = useLocalDayKey();
   const { vocabulary, studyReady } = useVocabularyDeck();
   const [sessionQueue, setSessionQueue] = useState<typeof vocabulary>([]);
   // Snapshot of the reviewed cards chosen when a recognition mode opens, so a
@@ -93,8 +96,8 @@ export default function Home() {
   const cardsStudiedTodayRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (state?.settings.audioSpeaker) setAudioSpeaker(state.settings.audioSpeaker);
-  }, [state?.settings.audioSpeaker]);
+    setAudioSpeaker(state.settings.audioSpeaker);
+  }, [state.settings.audioSpeaker]);
 
   useEffect(() => {
     setBrowseVisibleCount(BROWSE_PAGE_SIZE);
@@ -103,8 +106,7 @@ export default function Home() {
   // One gentle nudge per device: on iPhone the installable app is the only way
   // to get storage the browser will not evict.
   useEffect(() => {
-    if (!state) return;
-    const count = state.studyDays[getLocalDateKey()]?.cards ?? 0;
+    const count = state.studyDays[today]?.cards ?? 0;
     const previous = cardsStudiedTodayRef.current;
     cardsStudiedTodayRef.current = count;
     if (previous === null || count <= previous) return;
@@ -114,7 +116,7 @@ export default function Home() {
       description: "Tap Share, then Add to Home Screen. Safari can clear a website's saved progress after a week unused.",
       duration: 12000,
     });
-  }, [state]);
+  }, [state, today]);
 
   const handleSpeakerChange = (speaker: AudioSpeaker) => {
     updateSettings({ audioSpeaker: speaker });
@@ -142,11 +144,10 @@ export default function Home() {
   };
 
   const handleExportProgress = () => {
-    if (!state) return;
     const payload = buildExportPayload(state, new Date(), { includeReviewLog });
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const fileName = `goyo-progress-${getLocalDateKey()}.json`;
+    const fileName = `goyo-progress-${today}.json`;
     const anchor = document.createElement("a");
     anchor.href = url;
     anchor.download = fileName;
@@ -197,7 +198,7 @@ export default function Home() {
       ...pendingImport.state,
       reviewLog: pendingImport.hasReviewLog
         ? pendingImport.state.reviewLog
-        : state?.reviewLog ?? pendingImport.state.reviewLog,
+        : state.reviewLog,
     });
     const cardCount = Object.keys(pendingImport.state.cardStates).length;
     setPendingImport(null);
@@ -231,12 +232,11 @@ export default function Home() {
     shaky: "bg-amber-100 text-amber-700",
     known: "bg-emerald-100 text-emerald-700",
   };
-  const cardStates = state?.cardStates;
-  const today = getLocalDateKey();
-  const cardsStudiedToday = state?.studyDays[today]?.cards ?? 0;
-  const dailyGoal = state?.settings.dailyGoal ?? 0;
-  const daysStudied7 = state ? daysStudiedWithin(state.studyDays, today, 7) : 0;
-  const daysStudied30 = state ? daysStudiedWithin(state.studyDays, today, 30) : 0;
+  const cardStates = state.cardStates;
+  const cardsStudiedToday = state.studyDays[today]?.cards ?? 0;
+  const dailyGoal = state.settings.dailyGoal;
+  const daysStudied7 = daysStudiedWithin(state.studyDays, today, 7);
+  const daysStudied30 = daysStudiedWithin(state.studyDays, today, 30);
 
   const masteryCounts = useMemo(
     () =>
@@ -278,21 +278,19 @@ export default function Home() {
 
   // Derived from saved progress, so it is current on the same render as a grade.
   const queue = useMemo(() => {
-    if (!cardStates) return [];
     return buildDailyQueue(
       studyReady,
       cardStates,
       today,
       dailyGoal,
       cardsStudiedToday,
-      state?.settings.newCardsPerDay,
+      state.settings.newCardsPerDay,
     );
-  }, [cardStates, cardsStudiedToday, dailyGoal, studyReady, today, state?.settings.newCardsPerDay]);
+  }, [cardStates, cardsStudiedToday, dailyGoal, studyReady, today, state.settings.newCardsPerDay]);
 
   // Recognition practice never introduces a card: due and weak reviews come
   // first, then the rest of the learner's existing cards.
   const recognitionCards = useMemo(() => {
-    if (!cardStates) return [];
     const reviewed = studyReady.filter((card) => Boolean(cardStates[card.id]?.timesReviewed));
     const due = reviewed
       .filter((card) => {
@@ -327,7 +325,7 @@ export default function Home() {
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => {
     const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
-    const wasBelowGoal = Boolean(state && !isRepeatPractice && cardsStudiedToday < state.settings.dailyGoal);
+    const wasBelowGoal = !isRepeatPractice && cardsStudiedToday < state.settings.dailyGoal;
     gradeCard(cardId, rating, {
       countProgress: !isRepeatPractice,
       responseTimeMs: options?.responseTimeMs,
@@ -335,8 +333,8 @@ export default function Home() {
     });
 
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
-    const isSameDayRepeat = state?.cardStates[cardId]?.lastReviewDate === getLocalDateKey();
-    if (state && wasBelowGoal && !isSameDayRepeat && cardsStudiedToday + 1 >= state.settings.dailyGoal) {
+    const isSameDayRepeat = state.cardStates[cardId]?.lastReviewDate === today;
+    if (wasBelowGoal && !isSameDayRepeat && cardsStudiedToday + 1 >= state.settings.dailyGoal) {
       setTimeout(() => {
         toast.success("Daily goal reached! 🎉", {
           description: `You've earned ${xpGain} XP and maintained your streak!`,
@@ -386,8 +384,6 @@ export default function Home() {
   const handleShadowingGrade = (cardId: string, rating: "again" | "good") => {
     gradeCard(cardId, rating, { mode: "shadowing", practiceOnly: true });
   };
-
-  if (!state) return null;
 
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - cardsStudiedToday);
   const plannedCards = queue.length;
