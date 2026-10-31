@@ -1,3 +1,4 @@
+import { AUDIO_CACHE_NAME } from "./audioCache";
 /**
  * Plays pre-generated Korean audio from /public/audio.
  *
@@ -142,33 +143,47 @@ export async function playAlphabetAudio(
  * Playback requests use range requests, which the service worker does not cache,
  * so warm the offline cache with a plain fetch the first time a clip plays.
  */
-function warmAudioCache(audioPath: string): void {
+async function warmAudioCache(audioPath: string): Promise<void> {
   if (typeof window === "undefined" || !("caches" in window)) return;
-  void (async () => {
-    try {
-      const cache = await caches.open("goyo-audio");
-      if (await cache.match(audioPath)) return;
-      // The ?warm=1 suffix keeps this out of the service worker's mp3 rule, so the
-      // response is a complete 200 the Cache API can store under the real URL.
-      const response = await fetch(`${audioPath}?warm=1`);
-      if (response.status === 200) await cache.put(audioPath, response);
-    } catch {
-      /* offline caching is best effort */
+  try {
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    if (await cache.match(audioPath)) return;
+    // The ?warm=1 suffix keeps this out of the service worker's mp3 rule, so the
+    // response is a complete 200 the Cache API can store under the real URL.
+    const response = await fetch(`${audioPath}?warm=1`);
+    // A missing clip falls back to index.html with a 200, which must never be
+    // stored as audio or the service worker will serve it forever.
+    if (response.status === 200 && (response.headers.get("content-type") ?? "").startsWith("audio/")) {
+      await cache.put(audioPath, response);
     }
-  })();
+  } catch {
+    /* offline caching is best effort */
+  }
+}
+
+async function forgetCachedAudio(audioPath: string): Promise<void> {
+  if (typeof window === "undefined" || !("caches" in window)) return;
+  try {
+    const cache = await caches.open(AUDIO_CACHE_NAME);
+    await cache.delete(audioPath);
+  } catch {
+    /* best effort */
+  }
 }
 
 function playAudioFile(audioPath: string): Promise<void> {
   return new Promise((resolve, reject) => {
     stopAudio();
-    warmAudioCache(audioPath);
+    void warmAudioCache(audioPath);
 
     const audio = new Audio();
     currentAudio = audio;
     audio.preload = "auto";
-    audio.src = audioPath;
     audio.playbackRate = 0.9;
     audio.volume = 1;
+    let retried = false;
+    // Each attach gets an id so a superseded attempt's late errors are ignored.
+    let attemptId = 0;
 
     const cleanup = () => {
       audio.onended = null;
@@ -183,24 +198,47 @@ function playAudioFile(audioPath: string): Promise<void> {
       reject(new Error("Audio playback was stopped"));
     };
 
-    audio.onended = () => {
-      cleanup();
-      resolve();
-    };
-    audio.onerror = () => {
-      const message = audio.error?.message || `Unable to load ${audioPath}`;
-      cleanup();
-      reject(new Error(message));
-    };
-    audio.onabort = () => {
-      cleanup();
-      reject(new Error("Audio playback was stopped"));
+    // A cached response can be stale or corrupt (for example HTML saved from a
+    // fallback route). Drop it and retry once from the network, bypassing the
+    // service worker by adding a query string to the URL.
+    const recover = async (id: number, message: string) => {
+      if (id !== attemptId) return;
+      // Delete first: the retry must not race the service worker and re-read the bad entry.
+      await forgetCachedAudio(audioPath);
+      if (id !== attemptId) return;
+      if (retried) {
+        cleanup();
+        reject(new Error(message));
+        return;
+      }
+      retried = true;
+      // Repopulate the cache with the real clip once the poisoned entry is gone.
+      void warmAudioCache(audioPath);
+      attach(`${audioPath}?retry=1`);
     };
 
-    audio.play().catch((error) => {
-      cleanup();
-      reject(error);
-    });
+    const attach = (src: string) => {
+      const id = ++attemptId;
+      audio.onended = () => {
+        if (id !== attemptId) return;
+        cleanup();
+        resolve();
+      };
+      audio.onerror = () => {
+        void recover(id, audio.error?.message || `Unable to load ${audioPath}`);
+      };
+      audio.onabort = () => {
+        if (id !== attemptId) return;
+        cleanup();
+        reject(new Error("Audio playback was stopped"));
+      };
+      audio.src = src;
+      audio.play().catch((error) => {
+        void recover(id, String(error));
+      });
+    };
+
+    attach(audioPath);
   });
 }
 

@@ -3,8 +3,8 @@ import { WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { AUDIO_CACHE_NAME } from "@/lib/audioCache";
 
-const AUDIO_CACHE = "goyo-audio";
 const BATCH_SIZE = 6;
 
 interface DownloadState {
@@ -61,7 +61,7 @@ export function DownloadAllAudio() {
     try {
       const response = await fetch("/audio/index.json");
       const urls = audioManifestUrls(await response.json());
-      const cache = await caches.open(AUDIO_CACHE);
+      const cache = await caches.open(AUDIO_CACHE_NAME);
       setDownload({ total: urls.length, done: 0, cancelled: false });
 
       let done = 0;
@@ -72,7 +72,8 @@ export function DownloadAllAudio() {
           batch.map(async (url) => {
             if (await cache.match(url)) return;
             const clip = await fetch(`${url}?warm=1`);
-            if (clip.status === 200) await cache.put(url, clip);
+            const type = clip.headers.get("content-type") ?? "";
+            if (clip.status === 200 && type.startsWith("audio/")) await cache.put(url, clip);
           }),
         );
         done += batch.length;

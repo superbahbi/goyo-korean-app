@@ -58,14 +58,6 @@ function FlashCardBase({
     onFlip?.(nextValue);
   };
 
-  const handleRevealKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.target !== event.currentTarget) return;
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      handleFlip();
-    }
-  };
-
   const getRomanization = () => {
     if (romanizationProp) return romanizationProp;
     const match = front.match(/\(([^)]*)\)/);
@@ -81,15 +73,14 @@ function FlashCardBase({
       transition={{ duration: 0.3 }}
       className="w-full h-full flex flex-col items-center justify-center"
     >
+      {/* Mouse-only shortcut for flipping. The keyboard path is the labelled reveal
+          button in the session footer, so this surface stays a plain div and the
+          card never nests interactive controls inside a button role. */}
       <div
-        role="button"
-        tabIndex={0}
-        aria-label={isRevealed ? "Hide meaning" : "Reveal meaning"}
         className={`w-full max-w-md aspect-[3/4] relative transition-all duration-500 cursor-pointer ${
           isRevealed ? "scale-105" : ""
         }`}
         onClick={handleFlip}
-        onKeyDown={handleRevealKeyDown}
       >
         {/* Front */}
         <motion.div

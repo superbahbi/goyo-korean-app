@@ -1,9 +1,10 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import { AUDIO_CACHE_NAME } from "./client/src/lib/audioCache";
 
 // =============================================================================
 // Goyo dev server
@@ -37,7 +38,12 @@ function alphabetAudioEntries() {
     if (id.startsWith("num_")) files.add(file);
   }
 
-  return [...files].map((file) => ({ url: `/audio/${file}`, revision: null }));
+  // A revision derived from the file itself means a regenerated clip is
+  // re-fetched instead of being served from an old precache entry.
+  return [...files].map((file) => {
+    const stats = statSync(path.join(ROOT, "public", "audio", file));
+    return { url: `/audio/${file}`, revision: `${stats.size}-${Math.round(stats.mtimeMs)}` };
+  });
 }
 
 const plugins = [
@@ -73,7 +79,7 @@ const plugins = [
           urlPattern: /\/audio\/.*\.mp3$/,
           handler: "CacheFirst",
           options: {
-            cacheName: "goyo-audio",
+            cacheName: AUDIO_CACHE_NAME,
             expiration: { maxEntries: 1800, maxAgeSeconds: 60 * 60 * 24 * 365 },
             cacheableResponse: { statuses: [0, 200] },
           },

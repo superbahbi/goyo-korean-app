@@ -247,6 +247,16 @@ export function useStudyState() {
     setState(resetDailyCountIfNewDay(loadState()));
   }, []);
 
+  // Another tab wrote progress: adopt it instead of overwriting it later.
+  useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== STORAGE_KEY) return;
+      setState(event.newValue ? parseSavedState(event.newValue) : createDefaultState());
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
   // Persist to localStorage
   useEffect(() => {
     if (state) {
