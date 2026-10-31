@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
+  "packageManager": "pnpm@10.15.1",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
     "start": "vite preview --host",
     "check": "tsc --noEmit",
+    "test": "vitest run",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -57,7 +59,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
-    "wouter": "^3.3.5",
+    "wouter": "^3.10.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -69,7 +71,6 @@
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.20",
     "esbuild": "^0.25.0",
-    "pnpm": "^10.15.1",
     "postcss": "^8.4.47",
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.14",
