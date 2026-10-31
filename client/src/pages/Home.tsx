@@ -307,7 +307,7 @@ export default function Home() {
     })
     .slice(0, 10);
   const normalizedBrowseQuery = browseQuery.trim().toLocaleLowerCase();
-  const filteredCards = vocabulary.filter((card) => {
+  const filteredCards = !showBrowse ? [] : vocabulary.filter((card) => {
     const matchesCategory = !selectedCategory || card.tag === selectedCategory;
     const matchesMastery = browseMastery === "all" || getMasteryState(state.cardStates[card.id]) === browseMastery;
     const matchesQuery = !normalizedBrowseQuery || [card.front, card.back, card.romanization, card.example].some((value) => value.toLocaleLowerCase().includes(normalizedBrowseQuery));
@@ -333,6 +333,15 @@ export default function Home() {
     const correct = reviewed.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
     return { ...category, reviewed: reviewed.length, total: cards.length, accuracy: reviews > 0 ? Math.round((correct / reviews) * 100) : null };
   });
+  // One pass over the deck feeds both forecasts instead of scanning it per day.
+  const dueCounts = new Map<string, number>();
+  let overdueTotal = 0;
+  for (const card of studyReady) {
+    const due = state.cardStates[card.id]?.due;
+    if (!due) continue;
+    dueCounts.set(due, (dueCounts.get(due) ?? 0) + 1);
+    if (due <= today) overdueTotal += 1;
+  }
   const reviewForecast = Array.from({ length: 7 }, (_, offset) => {
     const date = new Date();
     date.setHours(12, 0, 0, 0);
@@ -341,10 +350,7 @@ export default function Home() {
     return {
       key,
       label: offset === 0 ? "Today" : offset === 1 ? "Tomorrow" : date.toLocaleDateString(undefined, { weekday: "short" }),
-      count: studyReady.filter((card) => {
-        const due = state.cardStates[card.id]?.due;
-        return offset === 0 ? Boolean(due && due <= key) : due === key;
-      }).length,
+      count: offset === 0 ? overdueTotal : dueCounts.get(key) ?? 0,
     };
   });
   const extendedReviewForecast = Array.from({ length: 30 }, (_, offset) => {
@@ -355,13 +361,13 @@ export default function Home() {
     return {
       key,
       label: date.toLocaleDateString(undefined, { month: "short", day: "numeric" }),
-      count: studyReady.filter((card) => state.cardStates[card.id]?.due === key).length,
+      count: dueCounts.get(key) ?? 0,
     };
   });
   const forecastTotal = extendedReviewForecast.reduce((sum, day) => sum + day.count, 0);
   const forecastPeak = extendedReviewForecast.reduce(
     (peak, day) => (day.count > peak.count ? day : peak),
-    extendedReviewForecast[0],
+    extendedReviewForecast[0] ?? { key: today, label: today, count: 0 },
   );
   const workloadStatus = forecastPeak.count >= Math.max(6, state.settings.dailyGoal * 2)
     ? "heavy"
@@ -781,7 +787,16 @@ export default function Home() {
       )}
 
       {/* Browse Dialog */}
-      <Dialog open={showBrowse} onOpenChange={setShowBrowse}>
+      <Dialog
+        open={showBrowse}
+        onOpenChange={(open) => {
+          if (!open) {
+            stopAudio();
+            setPlayingCardId(null);
+          }
+          setShowBrowse(open);
+        }}
+      >
         <DialogContent className="flex max-h-[90vh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0">
           <div className="shrink-0 border-b border-slate-200 bg-gradient-to-br from-emerald-50 to-white px-5 pb-4 pt-5 sm:px-6">
             <DialogHeader>

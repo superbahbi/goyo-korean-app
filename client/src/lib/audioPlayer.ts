@@ -23,6 +23,9 @@ interface AudioIndex {
 
 let audioIndex: AudioIndex | null = null;
 let currentAudio: HTMLAudioElement | null = null;
+// Settles the in-flight playback promise when it is stopped from outside, so
+// callers awaiting playAudioFile never hang.
+let settleStoppedPlayback: (() => void) | null = null;
 export type AudioSpeaker = "elevenlabs" | "elevenlabs-female";
 let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
@@ -172,6 +175,12 @@ function playAudioFile(audioPath: string): Promise<void> {
       audio.onerror = null;
       audio.onabort = null;
       if (currentAudio === audio) currentAudio = null;
+      settleStoppedPlayback = null;
+    };
+
+    settleStoppedPlayback = () => {
+      cleanup();
+      reject(new Error("Audio playback was stopped"));
     };
 
     audio.onended = () => {
@@ -196,6 +205,9 @@ function playAudioFile(audioPath: string): Promise<void> {
 }
 
 export function stopAudio(): void {
+  settleStoppedPlayback?.();
+  settleStoppedPlayback = null;
+
   if (currentAudio) {
     currentAudio.onended = null;
     currentAudio.onerror = null;
