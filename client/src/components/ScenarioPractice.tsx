@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
+import { shuffle } from "@/lib/shuffle";
 
 interface Scenario {
   id: string;
@@ -24,10 +25,6 @@ const SCENARIOS: Scenario[] = [
   { id: "repair", place: "Conversation repair", prompt: "You did not understand someone. Tell them you do not know.", cardId: "surv_006" },
 ];
 
-function shuffleChoices<T>(items: T[]): T[] {
-  return [...items].sort(() => Math.random() - 0.5);
-}
-
 interface ScenarioPracticeProps {
   cards: VocabularyCard[];
   onGrade: (cardId: string, rating: "again" | "good") => void;
@@ -44,13 +41,13 @@ export function ScenarioPractice({ cards, onGrade, onClose }: ScenarioPracticePr
   // Scenarios only use cards the learner has already met, so this mode never
   // introduces a brand-new phrase.
   const availableScenarios = useMemo(() => SCENARIOS.filter((scenario) => cardMap.has(scenario.cardId)), [cardMap]);
-  const scenarios = useMemo(() => [...availableScenarios].sort(() => Math.random() - 0.5), [availableScenarios]);
+  const scenarios = useMemo(() => shuffle(availableScenarios), [availableScenarios]);
   const current = scenarios[index];
   const currentCard = current ? cardMap.get(current.cardId) : undefined;
 
   const choices = useMemo(() => {
     if (!currentCard) return [];
-    const pool = shuffleChoices(cards.filter((card) => card.id !== currentCard.id));
+    const pool = shuffle(cards.filter((card) => card.id !== currentCard.id));
     // Prefer survival phrases, then any reviewed card, and never repeat a phrase.
     const ordered = [...pool.filter((card) => card.tag === "survival"), ...pool.filter((card) => card.tag !== "survival")];
     const seen = new Set([currentCard.front]);
@@ -61,7 +58,7 @@ export function ScenarioPractice({ cards, onGrade, onClose }: ScenarioPracticePr
       distractors.push(card);
       if (distractors.length === 2) break;
     }
-    return shuffleChoices([currentCard, ...distractors]);
+    return shuffle([currentCard, ...distractors]);
   }, [cards, currentCard]);
 
   const closePractice = () => {
