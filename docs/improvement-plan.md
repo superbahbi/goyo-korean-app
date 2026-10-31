@@ -26,7 +26,7 @@ Verified on 2026-10-31 on `main` (`5d07010`):
 | `tsc --noEmit`     | Passes                                                                                                                                                           |
 | `eslint .`         | Passes                                                                                                                                                           |
 | `prettier --check` | Passes                                                                                                                                                           |
-| `vitest run`       | 134 tests pass in 13 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio)                                                         |
+| `vitest run`       | 146 tests pass in 14 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler)                                          |
 | `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk |
 | CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                              |
 
@@ -80,7 +80,7 @@ still longer.
 | 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                     |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                            |
 | 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                      |
-| 3 Content                       | In progress; next phase. Plan below: audit harness, 50-card baseline, sample fixes, systemic batches, weak-example rewrites             |
+| 3 Content                       | In progress; audit harness done, 50-card baseline audit next                                                                            |
 | 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels and reduced motion done; device checks, hashed audio and Playwright open |
 | 5 Tune from data                | Blocked on 30 days of use                                                                                                               |
 
@@ -227,6 +227,11 @@ task is one PR.
    - Write only under `docs/audits/`; never modify deck data.
    - Acceptance: two runs with the same seed produce identical rows; the sheet contains exactly `limit`
      ids that exist in the deck.
+   - Done: `pnpm audit:content --limit 50 --seed 1` writes a Markdown table from a seeded
+     Fisher–Yates shuffle, and the writer refuses any path outside `docs/audits/`. The seed-1 sheet is
+     committed as `docs/audits/essential-sample-1.md` so the baseline audit works from a fixed sample.
+     `scripts/audit-content.test.ts` covers repeatability, sample size, deck membership and the path
+     guard.
 2. **Baseline audit of 50 imported cards.**
    - Score each card against a fixed five-point rubric: translation accuracy, Korean naturalness,
      politeness consistency, part of speech, and romanization/batchim.

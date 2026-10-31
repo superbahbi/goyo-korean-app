@@ -24,16 +24,17 @@ pnpm dev        # http://localhost:3000
 
 ## Scripts
 
-| Command             | What it does                                                             |
-| ------------------- | ------------------------------------------------------------------------ |
-| `pnpm dev`          | Dev server on port 3000                                                  |
-| `pnpm build`        | Production build into `dist/public`                                      |
-| `pnpm start`        | Preview the production build (`PORT=4175 pnpm start` to change the port) |
-| `pnpm check`        | Type check                                                               |
-| `pnpm lint`         | ESLint                                                                   |
-| `pnpm test`         | Vitest unit and data tests                                               |
-| `pnpm format`       | Prettier write                                                           |
-| `pnpm format:check` | Prettier check                                                           |
+| Command              | What it does                                                             |
+| -------------------- | ------------------------------------------------------------------------ |
+| `pnpm audit:content` | Sample imported cards into a Markdown audit sheet                        |
+| `pnpm dev`           | Dev server on port 3000                                                  |
+| `pnpm build`         | Production build into `dist/public`                                      |
+| `pnpm start`         | Preview the production build (`PORT=4175 pnpm start` to change the port) |
+| `pnpm check`         | Type check                                                               |
+| `pnpm lint`          | ESLint                                                                   |
+| `pnpm test`          | Vitest unit and data tests                                               |
+| `pnpm format`        | Prettier write                                                           |
+| `pnpm format:check`  | Prettier check                                                           |
 
 The gate for every change is `pnpm check && pnpm lint && pnpm format:check && pnpm test && pnpm build`.
 
@@ -48,7 +49,7 @@ client/src/lib/           Deck data, scheduler, queue, XP, audio player, persist
 client/src/hooks/         Dashboard state, study sessions, deck loading and saved state
 public/audio/             Pronunciation library plus index.json and manifests
 scripts/                  Audio generation and maintenance scripts
-docs/                     Improvement plan
+docs/                     Improvement plan and generated content-audit sheets
 ```
 
 ## Audio
