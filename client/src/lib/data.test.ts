@@ -61,6 +61,13 @@ describe("combined vocabulary deck", async () => {
     }
   });
 
+  it("gives every card a non-empty exampleEnglish that differs from its example", () => {
+    for (const card of VOCABULARY_DATA) {
+      expect(card.exampleEnglish?.trim(), card.id).toBeTruthy();
+      expect(card.exampleEnglish, card.id).not.toBe(card.example);
+    }
+  });
+
   it("has no duplicate fronts except the homonym allowlist", () => {
     const counts = new Map<string, number>();
     for (const card of VOCABULARY_DATA)
