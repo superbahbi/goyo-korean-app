@@ -20,6 +20,7 @@ import { LazyBoundary } from "@/components/LazyBoundary";
 import { describeBackupAge, getLastBackupAt, isBackupOverdue, recordBackup } from "@/lib/backupStatus";
 import { markIosInstallHintShown, shouldSuggestIosInstall } from "@/lib/storageProtection";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
+import { daysStudiedWithin } from "@/lib/studyDays";
 
 const BROWSE_PAGE_SIZE = 40;
 
@@ -91,7 +92,7 @@ export default function Home() {
   // to get storage the browser will not evict.
   useEffect(() => {
     if (!state) return;
-    const count = state.stats.cardsStudiedToday;
+    const count = state.studyDays[getLocalDateKey()]?.cards ?? 0;
     const previous = cardsStudiedTodayRef.current;
     cardsStudiedTodayRef.current = count;
     if (previous === null || count <= previous) return;
@@ -212,9 +213,11 @@ export default function Home() {
     known: "bg-emerald-100 text-emerald-700",
   };
   const cardStates = state?.cardStates;
-  const cardsStudiedToday = state?.stats.cardsStudiedToday ?? 0;
-  const dailyGoal = state?.settings.dailyGoal ?? 0;
   const today = getLocalDateKey();
+  const cardsStudiedToday = state?.studyDays[today]?.cards ?? 0;
+  const dailyGoal = state?.settings.dailyGoal ?? 0;
+  const daysStudied7 = state ? daysStudiedWithin(state.studyDays, today, 7) : 0;
+  const daysStudied30 = state ? daysStudiedWithin(state.studyDays, today, 30) : 0;
 
   const masteryCounts = useMemo(
     () =>
@@ -283,7 +286,7 @@ export default function Home() {
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => {
     const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
-    const wasBelowGoal = Boolean(state && !isRepeatPractice && state.stats.cardsStudiedToday < state.settings.dailyGoal);
+    const wasBelowGoal = Boolean(state && !isRepeatPractice && cardsStudiedToday < state.settings.dailyGoal);
     gradeCard(cardId, rating, {
       countProgress: !isRepeatPractice,
       responseTimeMs: options?.responseTimeMs,
@@ -292,7 +295,7 @@ export default function Home() {
 
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
     const isSameDayRepeat = state?.cardStates[cardId]?.lastReviewDate === getLocalDateKey();
-    if (state && wasBelowGoal && !isSameDayRepeat && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
+    if (state && wasBelowGoal && !isSameDayRepeat && cardsStudiedToday + 1 >= state.settings.dailyGoal) {
       setTimeout(() => {
         toast.success("Daily goal reached! 🎉", {
           description: `You've earned ${xpGain} XP and maintained your streak!`,
@@ -345,10 +348,10 @@ export default function Home() {
 
   if (!state) return null;
 
-  const cardsRemaining = Math.max(0, state.settings.dailyGoal - state.stats.cardsStudiedToday);
+  const cardsRemaining = Math.max(0, state.settings.dailyGoal - cardsStudiedToday);
   const plannedCards = queue.length;
-  const progressPercent = (state.stats.cardsStudiedToday / state.settings.dailyGoal) * 100;
-  const dailyGoalReached = state.stats.cardsStudiedToday >= state.settings.dailyGoal;
+  const progressPercent = (cardsStudiedToday / state.settings.dailyGoal) * 100;
+  const dailyGoalReached = cardsStudiedToday >= state.settings.dailyGoal;
   const levelTitles = ["Beginner", "Explorer", "Builder", "Conversational", "Fluent", "Korean Sage"];
   const levelTitle = levelTitles[Math.min(levelTitles.length - 1, Math.max(0, state.stats.level - 1))];
   const currentLevelXp = Math.pow(Math.max(0, state.stats.level - 1), 2) * 100;
@@ -551,7 +554,7 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-slate-900">
-                  {state.stats.cardsStudiedToday}/{state.settings.dailyGoal}
+                  {cardsStudiedToday}/{state.settings.dailyGoal}
                 </div>
                 <Progress value={progressPercent} className="h-2 mt-3 bg-slate-100" />
                 <p className="text-xs text-slate-400 mt-2">Cards studied today · up to 3 new words per planned session</p>
@@ -1092,6 +1095,18 @@ export default function Home() {
               <div className="text-xs font-medium text-amber-600">Due now</div>
               <div className="mt-1 text-2xl font-bold text-amber-700">{overdueCount}</div>
               <div className="mt-1 text-[11px] text-amber-600">reviews</div>
+            </div>
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-3">
+              <div className="text-xs font-medium text-indigo-600">Days studied · last 7</div>
+              <div className="mt-1 text-2xl font-bold text-indigo-700">{daysStudied7} / 7</div>
+              <div className="mt-1 text-[11px] text-indigo-600">days with a review</div>
+            </div>
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+              <div className="text-xs font-medium text-emerald-600">Days studied · last 30</div>
+              <div className="mt-1 text-2xl font-bold text-emerald-700">{daysStudied30} / 30</div>
+              <div className="mt-1 text-[11px] text-emerald-600">days with a review</div>
             </div>
           </div>
           <div className="mt-5 border-t border-slate-100 pt-4">

@@ -8,8 +8,18 @@ import {
   type ReviewLog,
   type StudyMode,
 } from "@/lib/reviewLog";
+import { addDays, getLocalDateKey } from "@/lib/day";
+import {
+  deriveStreak,
+  migrateLegacyDay,
+  recordStudyDay,
+  sanitizeStudyDays,
+  type StudyDays,
+} from "@/lib/studyDays";
 
-export const SCHEMA_VERSION = 3;
+export { getLocalDateKey };
+
+export const SCHEMA_VERSION = 4;
 
 export interface CardState {
   id: string;
@@ -41,7 +51,6 @@ export interface UserStats {
   streak: number;
   lastStudyDate: string;
   highestStreak: number;
-  cardsStudiedToday: number;
   totalCardsLearned: number;
 }
 
@@ -55,6 +64,8 @@ export interface UserState {
     audioSpeaker: "elevenlabs" | "elevenlabs-female";
   };
   reviewLog: ReviewLog;
+  /** One entry per studied day, keyed by local `YYYY-MM-DD`. */
+  studyDays: StudyDays;
 }
 
 export interface GradeOptions {
@@ -64,19 +75,6 @@ export interface GradeOptions {
 }
 
 const STORAGE_KEY = "goyo-progress-v2";
-
-function addDays(date: string, days: number): string {
-  const nextDate = new Date(`${date}T12:00:00Z`);
-  nextDate.setUTCDate(nextDate.getUTCDate() + days);
-  return nextDate.toISOString().slice(0, 10);
-}
-
-export function getLocalDateKey(date = new Date()): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
 
 function createDefaultState(): UserState {
   return {
@@ -88,7 +86,6 @@ function createDefaultState(): UserState {
       streak: 0,
       lastStudyDate: "",
       highestStreak: 0,
-      cardsStudiedToday: 0,
       totalCardsLearned: 0,
     },
     settings: {
@@ -97,6 +94,7 @@ function createDefaultState(): UserState {
       audioSpeaker: "elevenlabs",
     },
     reviewLog: createReviewLog(),
+    studyDays: {},
   };
 }
 
@@ -138,7 +136,7 @@ function sanitizeCardState(id: string, value: unknown): CardState | null {
 }
 
 // A missing or older schemaVersion is treated as current. Pre-v2 saves are not migrated.
-export function parseSavedState(raw: string | null): UserState {
+export function parseSavedState(raw: string | null, today = getLocalDateKey()): UserState {
   const defaults = createDefaultState();
 
   try {
@@ -157,14 +155,20 @@ export function parseSavedState(raw: string | null): UserState {
 
     const savedStats = isRecord(parsed.stats) ? parsed.stats : {};
     const totalXp = nonNegativeNumber(savedStats.totalXp, 0);
-    const streak = nonNegativeNumber(savedStats.streak, 0);
+    const lastStudyDate = typeof savedStats.lastStudyDate === "string" ? savedStats.lastStudyDate : "";
+    // v3 and older kept only today's counter. Fold it into the first day entry.
+    const studyDays = migrateLegacyDay(
+      sanitizeStudyDays(parsed.studyDays),
+      lastStudyDate,
+      nonNegativeNumber(savedStats.cardsStudiedToday, 0),
+    );
+    const streak = deriveStreak(studyDays, today);
     const stats: UserStats = {
       totalXp,
       level: Math.max(1, nonNegativeNumber(savedStats.level, Math.floor(Math.sqrt(totalXp / 100)) + 1)),
       streak,
-      lastStudyDate: typeof savedStats.lastStudyDate === "string" ? savedStats.lastStudyDate : "",
+      lastStudyDate,
       highestStreak: Math.max(streak, nonNegativeNumber(savedStats.highestStreak, 0)),
-      cardsStudiedToday: nonNegativeNumber(savedStats.cardsStudiedToday, 0),
       totalCardsLearned: nonNegativeNumber(savedStats.totalCardsLearned, 0),
     };
 
@@ -184,6 +188,7 @@ export function parseSavedState(raw: string | null): UserState {
       stats,
       settings,
       reviewLog: sanitizeReviewLog(parsed.reviewLog),
+      studyDays,
     };
   } catch (error) {
     console.error("Failed to load saved progress, starting fresh:", error);
@@ -200,11 +205,6 @@ function loadState(): UserState {
   }
 }
 
-function resetDailyCountIfNewDay(state: UserState): UserState {
-  if (state.stats.lastStudyDate === getLocalDateKey()) return state;
-  return { ...state, stats: { ...state.stats, cardsStudiedToday: 0 } };
-}
-
 export function buildExportPayload(
   state: UserState,
   exportedAt = new Date(),
@@ -216,6 +216,7 @@ export function buildExportPayload(
     cardStates: state.cardStates,
     stats: state.stats,
     settings: state.settings,
+    studyDays: state.studyDays,
   };
   // The review log is for local analysis: it is large and not needed to restore
   // progress, so it only travels when the learner asks for it.
@@ -278,7 +279,6 @@ export function applyGrade(
 ): UserState {
   const requestedProgress = options.countProgress !== false;
   const today = getLocalDateKey(now);
-  const yesterday = addDays(today, -1);
 
   const existingCard = state.cardStates[cardId];
   const { schedule, advanced } = scheduleReview(existingCard, rating, today, options.responseTimeMs);
@@ -286,23 +286,13 @@ export function applyGrade(
   const countProgress = requestedProgress && advanced;
   const xpGain = countProgress ? (rating === "easy" ? 15 : rating === "good" ? 10 : 5) : 0;
 
-  // Determine streak
-  const lastDate = state.stats.lastStudyDate;
-  let newStreak = state.stats.streak;
-
-  if (!countProgress) {
-    newStreak = state.stats.streak;
-  } else if (lastDate === today) {
-    newStreak = state.stats.streak;
-  } else if (lastDate === yesterday) {
-    newStreak = state.stats.streak + 1;
-  } else {
-    newStreak = 1;
-  }
-
+  const studyDays = recordStudyDay(state.studyDays, today, {
+    cardFirstSeenToday: existingCard?.lastReviewDate !== today,
+    scheduleAdvanced: advanced,
+  });
+  const newStreak = deriveStreak(studyDays, today);
   const newHighestStreak = Math.max(state.stats.highestStreak, newStreak);
 
-  const cardsStudiedToday = lastDate === today ? state.stats.cardsStudiedToday : 0;
   const responseTimeMs = options.responseTimeMs;
   const newCardState: CardState = {
     id: cardId,
@@ -328,15 +318,15 @@ export function applyGrade(
     stats: {
       totalXp: state.stats.totalXp + xpGain,
       level: Math.floor(Math.sqrt((state.stats.totalXp + xpGain) / 100)) + 1,
-      lastStudyDate: countProgress ? today : state.stats.lastStudyDate,
+      lastStudyDate: today,
       streak: newStreak,
       highestStreak: newHighestStreak,
-      cardsStudiedToday: countProgress ? cardsStudiedToday + 1 : cardsStudiedToday,
       totalCardsLearned:
         countProgress && isNewCard && rating !== "again"
           ? state.stats.totalCardsLearned + 1
           : state.stats.totalCardsLearned,
     },
+    studyDays,
     // Every grade is logged, including a same-day repeat. The scheduler still
     // owns whether the schedule moves; the log records what the learner did.
     reviewLog: appendReviewEntry(state.reviewLog, {
@@ -354,7 +344,7 @@ export function useStudyState() {
 
   // Initialize from localStorage
   useEffect(() => {
-    setState(resetDailyCountIfNewDay(loadState()));
+    setState(loadState());
   }, []);
 
   // Another tab wrote progress: adopt it instead of overwriting it later.
@@ -403,7 +393,7 @@ export function useStudyState() {
   );
 
   const replaceState = useCallback((next: UserState) => {
-    setState(resetDailyCountIfNewDay(next));
+    setState(next);
   }, []);
 
   return { state, gradeCard, updateSettings, replaceState };
