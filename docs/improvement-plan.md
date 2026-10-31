@@ -26,7 +26,7 @@ Verified on 2026-10-31 on `main` (`5d07010`):
 | `tsc --noEmit`     | Passes                                                                                                                                                           |
 | `eslint .`         | Passes                                                                                                                                                           |
 | `prettier --check` | Passes                                                                                                                                                           |
-| `vitest run`       | 151 tests pass in 15 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts)                          |
+| `vitest run`       | 157 tests pass in 15 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts)                          |
 | `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk |
 | CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                              |
 
@@ -48,8 +48,8 @@ cache; `lang="ko"`, the contrast fixes, chart labels, reduced motion, dialog des
 standalone meta tags and the Vercel security/cache headers are in place; CI runs every push; the PWA
 precaches the shell, the audio index, Hangul and number audio.
 
-What is open: the baseline content audit found 15 of 50 imported cards needing fixes (30%), so a
-second 50 and a Korean-speaker spot check come before any fixes (see Phase 3 — content trust);
+What is open: two content samples (96 unique imported cards) put the fix rate at 25%, so scoping fixes
+comes next; the Korean-speaker spot check is still pending (see Phase 3 — content trust);
 behaviour checks still need a real browser, screen reader and
 iPhone; there are no Playwright smokes; audio filenames are not content-hashed; and the repo is 48 MB
 with 26 MB of audio in git. The Phase 2 split is done, but its 300-line target is only met by
@@ -81,7 +81,7 @@ still longer.
 | 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                     |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                            |
 | 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                      |
-| 3 Content                       | In progress; baseline audit done — 15/50 fix, second 50 next                                                                            |
+| 3 Content                       | In progress; two samples audited — 24/96 fix (25%), scoping fixes next                                                                  |
 | 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels and reduced motion done; device checks, hashed audio and Playwright open |
 | 5 Tune from data                | Blocked on 30 days of use                                                                                                               |
 
@@ -247,11 +247,15 @@ task is one PR.
      the systemic fixes rather than auditing all 504.
    - Acceptance: a verdict exists for all 50 ids, a test asserts each id exists in the deck, and this
      section states the measured error rate.
-   - Result (2026-10-31): 15 of 50 fail (30%) — nine descriptive words tagged as verbs, four misleading
-     usage notes, and four unidiomatic examples or narrowed translations. That is well above the 6%
-     threshold, so a second 50 is required before scoping fixes. The verdicts are in
-     `docs/audits/essential-sample-1.json`; `scripts/audit-verdicts.test.ts` checks them against the
-     sheet and the deck. The Korean-speaker spot check of 10 cards is still pending.
+   - Result (2026-10-31): the first sample fails 15 of 50 (30%) — nine descriptive words tagged as
+     verbs, four misleading usage notes, and four unidiomatic examples or narrowed translations. The
+     second sample fails 11 of 50 (22%); combined, 24 of 96 unique cards fail (25%). Four cards appeared
+     in both samples and the verdicts agreed on all four. The same three systemic issues dominate
+     (11 unique adjectives tagged as verbs, 7 misleading usage notes, 6 unidiomatic examples or narrowed
+     translations), so the rate is confirmed and fixes are now in scope. The verdicts are in
+     `docs/audits/essential-sample-1.json` and `essential-sample-2.json`;
+     `scripts/audit-verdicts.test.ts` checks both against their sheets and the deck. The Korean-speaker
+     spot check of 10 cards is still pending.
 3. **Fix the audited sample.** One PR, split if it exceeds ~400 lines.
    - Fix every card marked `fix`, then re-run the sheet and mark the verdicts resolved (`resolvedAt` or
      `verdict: "pass"` with the issue list kept for the record).

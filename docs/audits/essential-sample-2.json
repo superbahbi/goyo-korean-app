@@ -1,0 +1,466 @@
+{
+  "sample": 2,
+  "sheet": "docs/audits/essential-sample-2.md",
+  "deck": "Essential 600 imported deck",
+  "deckSize": 504,
+  "seed": 2,
+  "limit": 50,
+  "auditedAt": "2026-10-31",
+  "auditor": "DeepSeek V4.1 Flash model pass; native-speaker spot check of 10 cards still pending.",
+  "rubric": [
+    "translation accuracy",
+    "Korean naturalness",
+    "politeness consistency",
+    "part of speech",
+    "romanization/batchim"
+  ],
+  "issueCategories": [
+    "translation",
+    "naturalness",
+    "politeness",
+    "part-of-speech",
+    "romanization",
+    "usage-note",
+    "spelling"
+  ],
+  "summary": {
+    "cards": 50,
+    "pass": 39,
+    "fix": 11,
+    "errorRate": 0.22,
+    "decision": "11 of 50 fail (22%); with sample 1 that is 24 of 96 unique cards (25%). The rate is confirmed, so scope fixes now: the 11 adjective-as-verb cards are the largest batch, and the sample fixes follow."
+  },
+  "combined": {
+    "samples": 2,
+    "uniqueCards": 96,
+    "uniqueFix": 24,
+    "errorRate": 0.25,
+    "overlapIds": [
+      "essential_213",
+      "essential_397",
+      "essential_434",
+      "essential_505"
+    ],
+    "overlapAgreement": "4/4",
+    "adjectiveVerbCards": 11,
+    "usageNoteCards": 7,
+    "exampleWordingCards": 6,
+    "headwordAudioCards": 2
+  },
+  "systemicIssues": [
+    {
+      "issue": "Descriptive words tagged as verbs",
+      "category": "part-of-speech",
+      "cards": 3,
+      "ids": ["essential_487", "essential_505", "essential_525"],
+      "detail": "This sample repeats sample 1's pattern: 뜨겁다, 얕다 and 아름답다 are all tagged verb. Across both samples 11 unique adjectives are mis-tagged."
+    },
+    {
+      "issue": "Usage notes with unsupported claims",
+      "category": "usage-note",
+      "cards": 5,
+      "ids": [
+        "essential_212",
+        "essential_274",
+        "essential_338",
+        "essential_434",
+        "essential_505"
+      ],
+      "detail": "부엌/주방 register is backwards, 무릎팍 is presented as standard, 소리 is said to mean reputation, and 434/505 repeat sample 1's errors."
+    },
+    {
+      "issue": "Unidiomatic examples and narrowed translations",
+      "category": "naturalness",
+      "cards": 3,
+      "ids": ["essential_132", "essential_434", "essential_494"],
+      "detail": "지폐's example mixes 되다 and 쓰다, 434 repeats the dropped subject particle, and 늙다 is translated as a state instead of an action."
+    }
+  ],
+  "notes": [
+    "essential_370 is the only new headword change in this sample; with 073 from sample 1, both require regenerating audio.",
+    "Four cards (essential_213, 397, 434, 505) appear in both samples, and the verdicts agree on all four.",
+    "The model pass screens grammar, tags and translations; it does not replace the Korean-speaker spot check.",
+    "No deck data was edited: this file records verdicts only."
+  ],
+  "verdicts": [
+    {
+      "id": "essential_016",
+      "source": "600 essential words · row 22",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_023",
+      "source": "600 essential words · row 29",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_035",
+      "source": "600 essential words · row 41",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_084",
+      "source": "600 essential words · row 90",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_085",
+      "source": "600 essential words · row 91",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_111",
+      "source": "600 essential words · row 117",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_131",
+      "source": "600 essential words · row 137",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_132",
+      "source": "600 essential words · row 138",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "\"동전만 되고 지폐는 안 써요\" mixes 되다 and 쓰다. Use one verb for both: \"동전만 되고 지폐는 안 돼요\" or \"동전만 받고 지폐는 안 받아요\"."
+        },
+        {
+          "category": "translation",
+          "detail": "Update exampleEnglish to match the rewritten Korean."
+        }
+      ]
+    },
+    {
+      "id": "essential_136",
+      "source": "600 essential words · row 142",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_152",
+      "source": "600 essential words · row 158",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_157",
+      "source": "600 essential words · row 163",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_187",
+      "source": "600 essential words · row 193",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_194",
+      "source": "600 essential words · row 200",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_210",
+      "source": "600 essential words · row 216",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_212",
+      "source": "600 essential words · row 218",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "\"informal variant: 주방 (more formal)\" contradicts itself. 부엌 is the everyday native word; 주방 is the Sino-Korean, more formal word."
+        }
+      ]
+    },
+    {
+      "id": "essential_213",
+      "source": "600 essential words · row 219",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_243",
+      "source": "600 essential words · row 249",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_248",
+      "source": "600 essential words · row 254",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_249",
+      "source": "600 essential words · row 255",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_265",
+      "source": "600 essential words · row 271",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_271",
+      "source": "600 essential words · row 277",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_274",
+      "source": "600 essential words · row 280",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "\"무릎팍\" is a colloquial variant, not a standard compound. Use 무릎뼈 or drop the example."
+        }
+      ]
+    },
+    {
+      "id": "essential_276",
+      "source": "600 essential words · row 282",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_284",
+      "source": "600 essential words · row 290",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_296",
+      "source": "600 essential words · row 302",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_300",
+      "source": "600 essential words · row 306",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_303",
+      "source": "600 essential words · row 309",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_308",
+      "source": "600 essential words · row 314",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_312",
+      "source": "600 essential words · row 318",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_320",
+      "source": "600 essential words · row 326",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_324",
+      "source": "600 essential words · row 330",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_338",
+      "source": "600 essential words · row 344",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "\"reputation\" is not a standard figurative sense of 소리. It can mean words or remarks (그런 소리), not reputation."
+        }
+      ]
+    },
+    {
+      "id": "essential_349",
+      "source": "600 essential words · row 355",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_350",
+      "source": "600 essential words · row 356",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "위에 is a locative phrase (noun 위 + particle 에), not a noun. Keep the headword and tag it as an adverb/locative, or change the headword to 위."
+        }
+      ]
+    },
+    {
+      "id": "essential_351",
+      "source": "600 essential words · row 357",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_353",
+      "source": "600 essential words · row 359",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_370",
+      "source": "600 essential words · row 429",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "spelling",
+          "detail": "The standard spelling is 첫 번째 with a space; the headword and example use 첫번째. Fixing the headword also requires regenerating both clips."
+        },
+        {
+          "category": "romanization",
+          "detail": "cheotbeonjjae follows the misspelling; the spaced form is cheot beonjjae."
+        },
+        {
+          "category": "part-of-speech",
+          "detail": "first is an ordinal number, not a noun; tag number for consistency with the numbers theme."
+        }
+      ]
+    },
+    {
+      "id": "essential_379",
+      "source": "600 essential words · row 438",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_381",
+      "source": "600 essential words · row 440",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_397",
+      "source": "600 essential words · row 457",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_434",
+      "source": "600 essential words · row 494",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "\"to be scheduled\" is not a standard sense of 서다; 계획이 서다 means a plan takes shape."
+        },
+        {
+          "category": "naturalness",
+          "detail": "\"버스 멈추자마자\" drops the subject particle; a written example should use 버스가 멈추자마자."
+        }
+      ]
+    },
+    {
+      "id": "essential_443",
+      "source": "600 essential words · row 503",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_451",
+      "source": "600 essential words · row 511",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_475",
+      "source": "600 essential words · row 535",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_477",
+      "source": "600 essential words · row 537",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_487",
+      "source": "600 essential words · row 547",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "뜨겁다 is an adjective (형용사), not a verb."
+        }
+      ]
+    },
+    {
+      "id": "essential_494",
+      "source": "600 essential words · row 554",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "translation",
+          "detail": "The back says \"to be old (person)\", but 늙다 means \"to grow old/age\"; the example is \"has aged a lot\". Use \"to grow old; to age\"."
+        }
+      ]
+    },
+    {
+      "id": "essential_505",
+      "source": "600 essential words · row 565",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "아름답다 is an adjective (형용사), not a verb."
+        },
+        {
+          "category": "politeness",
+          "detail": "The example uses plain 다 among polite 해요체 examples; use 아름다워요."
+        },
+        {
+          "category": "usage-note",
+          "detail": "\"verb in Korean grammar\" is misleading; Korean adjectives are 형용사, a separate category from verbs."
+        }
+      ]
+    },
+    {
+      "id": "essential_525",
+      "source": "600 essential words · row 585",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "얕다 is an adjective (형용사), not a verb."
+        }
+      ]
+    },
+    {
+      "id": "essential_539",
+      "source": "600 essential words · row 599",
+      "verdict": "pass",
+      "issues": []
+    }
+  ]
+}
