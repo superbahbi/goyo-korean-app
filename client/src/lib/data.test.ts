@@ -80,6 +80,11 @@ describe("Revised Romanization", () => {
       ["무릎", "mureup"],
       ["트럭", "teureok"],
       ["냄새를 맡다", "naemsaereul matda"],
+      ["앉다", "anta"],
+      ["앉아", "anja"],
+      ["짧다", "jjalda"],
+      ["많다", "manta"],
+      ["어디입니까?", "eodiimnikka?"],
     ];
     for (const [front, expected] of cases) expect(romanize(front), front).toBe(expected);
   });

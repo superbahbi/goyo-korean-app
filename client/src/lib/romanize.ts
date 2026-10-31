@@ -98,7 +98,11 @@ function romanizeWord(word: string): string {
     }
 
     const nextCho = next?.cho;
-    if (nextCho && H_FINAL_LEFT[jong] !== undefined && ASPIRATE[nextCho]) {
+    if (jong === "ㄵ" && nextCho === "ㄷ") {
+      // 앉다 is romanized anta: the ㄴ stays as coda and the ㅈ surfaces as t.
+      coda[i] = "n";
+      onsetOverride[i + 1] = "t";
+    } else if (nextCho && H_FINAL_LEFT[jong] !== undefined && ASPIRATE[nextCho]) {
       coda[i] = H_FINAL_LEFT[jong];
       onsetOverride[i + 1] = ASPIRATE[nextCho];
     } else if (nextCho === "ㄴ" || nextCho === "ㅁ") {
@@ -134,6 +138,7 @@ export function romanize(text: string): string {
   return text
     .trim()
     .split(/\s+/)
-    .map(romanizeWord)
+    // Romanize Hangul runs only, so punctuation and mixed text pass through.
+    .map((word) => word.replace(/[가-힣]+/g, romanizeWord))
     .join(" ");
 }
