@@ -19,16 +19,16 @@ Every stage is done only when its gate passes.
 
 ## Current state
 
-Verified on 2026-10-31 on `main` (`5d07010`):
+Verified on 2026-10-31 on `main` after Phase 3 (`4af340d` plus the Phase 3 batches):
 
-| Check              | Result                                                                                                                                                           |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tsc --noEmit`     | Passes                                                                                                                                                           |
-| `eslint .`         | Passes                                                                                                                                                           |
-| `prettier --check` | Passes                                                                                                                                                           |
-| `vitest run`       | 161 tests pass in 15 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts)                          |
-| `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk |
-| CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                              |
+| Check              | Result                                                                                                                                                                                          |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tsc --noEmit`     | Passes                                                                                                                                                                                          |
+| `eslint .`         | Passes                                                                                                                                                                                          |
+| `prettier --check` | Passes                                                                                                                                                                                          |
+| `vitest run`       | 172 tests pass in 18 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples) |
+| `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk                                |
+| CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                                                             |
 
 All gates pass.
 
@@ -46,12 +46,13 @@ overwritten; the learning loop retries failed cards and recognition modes cap in
 daily queue is due-only; audio survives blocked autoplay and intentional stops without evicting the
 cache; `lang="ko"`, the contrast fixes, chart labels, reduced motion, dialog descriptions, the iOS
 standalone meta tags and the Vercel security/cache headers are in place; CI runs every push; the PWA
-precaches the shell, the audio index, Hangul and number audio.
+precaches the shell, the audio index, Hangul and number audio; and the imported deck's part of speech
+and usage notes plus the curated examples are now guarded by tests.
 
-What is open: the 24 fixed sample cards now re-audit clean, so the systemic batches are next; the
-Korean-speaker spot check is still pending (see Phase 3 — content trust); behaviour checks still need a
-real browser, screen reader and iPhone; there are no Playwright smokes; audio filenames are not
-content-hashed; and the repo is 48 MB with 26 MB of audio in git. The Phase 2 split is done, but its
+What is open: the Korean-speaker spot check of the audited cards is still pending (see Phase 3 —
+content trust), and the Playwright, browser, screen-reader and iPhone checks still need a real device;
+audio filenames are not content-hashed; and the repo is 48 MB with 26 MB of audio in git. The Phase 2
+split is done, but its
 300-line target is only met by `Home.tsx` (274 lines): `SettingsDialog` (415), `StudySession` (446) and
 several practice views are still longer.
 
@@ -80,7 +81,7 @@ several practice views are still longer.
 | 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                     |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                            |
 | 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                      |
-| 3 Content                       | In progress; 24/96 sampled cards fixed and re-audited clean; systemic batches next                                                      |
+| 3 Content                       | Done; all five tasks complete; Korean-speaker spot check of the audited cards still pending                                             |
 | 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels and reduced motion done; device checks, hashed audio and Playwright open |
 | 5 Tune from data                | Blocked on 30 days of use                                                                                                               |
 
@@ -202,7 +203,7 @@ type checking, ESLint and Prettier; tests are type-checked too.
    (kept the generator), and moved `scripts/test-srs.test.ts` to `client/src/lib/srs.test.ts`.
 7. Keep the roadmap honest: this file is the backlog. No second list.
 
-## Phase 3: Content quality — content trust (next)
+## Phase 3: Content quality — content trust
 
 The imported Essential 600 examples, translations and usage notes were written by a model and have had
 no human review. That is the largest content risk: content is the only defect code cannot repair later
@@ -270,12 +271,23 @@ task is one PR.
    same rubric.
    - Acceptance: per batch, `data.test.ts` and the romanization lint pass, the batch re-audits clean,
      and the PR stays under ~400 lines.
+   - Done (2026-10-31): two batches. Batch 1 retagged the 40 remaining imported adjectives
+     (479–486, 488–496, 499, 501–503, 509–515, 521–524, 526–529, 531–535) from `verb` to `adjective`.
+     Batch 2 rewrote 50 misleading usage notes: false sense claims (새/새로, 약/약속, 공/공공, 쏘다/보내다,
+     밀다/미루다 and others), reversed or wrong register claims (양복/정장, 저의/제, 당신, the month names),
+     nonstandard forms presented as standard (노랑색, 쥬스, 볼팬, 얼음, 차겁다) and garbled notes.
+     `essentialPartOfSpeech.test.ts` and `usageNotes.test.ts` guard both batches. Review also repaired
+     examples with broken ㅂ-irregular conjugations (두껍아서, 어둡아요) and two nonsensical sentences.
 5. **Rewrite the weak curated examples.** `영어를 도와주세요`, `넷은 너무 많아요`, and the repeated
    `나는…` place sentences; keep `exampleEnglish` in sync.
    - Add a guard test: a banned-phrase list must not reappear, and the `나는 ` sentence template may
      not be used more than twice.
    - Acceptance: the named cards are rewritten with matching translations, and the guard test fails if
      a banned phrase returns.
+   - Done (2026-10-31): 40 curated examples were rewritten so `나는 ` opens 2 sentences instead of 40.
+     `surv_007` now reads `이 문제를 풀 수 있게 도와주세요.` and `num_004` reads `우리 가족은 넷이에요.`,
+     with the number example synced in `alphabet.ts`. `curatedExamples.test.ts` bans the old phrases
+     and caps the template at two.
 
 Already done, keep it: `data.test.ts` asserts that every study-ready card has a manifest entry and both
 audio files on disk, which covers the old item 5.
