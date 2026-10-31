@@ -1,0 +1,486 @@
+{
+  "sample": 1,
+  "sheet": "docs/audits/essential-sample-1.md",
+  "deck": "Essential 600 imported deck",
+  "deckSize": 504,
+  "seed": 1,
+  "limit": 50,
+  "auditedAt": "2026-10-31",
+  "auditor": "DeepSeek V4.1 Flash model pass; native-speaker spot check of 10 cards still pending.",
+  "rubric": [
+    "translation accuracy",
+    "Korean naturalness",
+    "politeness consistency",
+    "part of speech",
+    "romanization/batchim"
+  ],
+  "issueCategories": [
+    "translation",
+    "naturalness",
+    "politeness",
+    "part-of-speech",
+    "romanization",
+    "usage-note",
+    "spelling"
+  ],
+  "summary": {
+    "cards": 50,
+    "pass": 35,
+    "fix": 15,
+    "errorRate": 0.3,
+    "decision": "15 of 50 fail (30%, above the 6% threshold), so audit a second 50 before scoping fixes."
+  },
+  "systemicIssues": [
+    {
+      "issue": "Descriptive words tagged as verbs",
+      "category": "part-of-speech",
+      "cards": 9,
+      "ids": [
+        "essential_478",
+        "essential_498",
+        "essential_500",
+        "essential_504",
+        "essential_505",
+        "essential_506",
+        "essential_516",
+        "essential_519",
+        "essential_520"
+      ],
+      "detail": "Every descriptive -다/-하다 word in the sample is partOfSpeech: \"verb\"; Korean treats these as adjectives (형용사). This is the largest defect and is mechanical to fix."
+    },
+    {
+      "issue": "Usage notes with unsupported claims",
+      "category": "usage-note",
+      "cards": 4,
+      "ids": [
+        "essential_073",
+        "essential_222",
+        "essential_434",
+        "essential_505"
+      ],
+      "detail": "Notes claim 편지 means email, 서다 means 'to be scheduled', and Korean adjectives are verbs; 073's note is garbled. Beginners would learn the wrong thing."
+    },
+    {
+      "issue": "Unidiomatic examples and narrowed translations",
+      "category": "naturalness",
+      "cards": 4,
+      "ids": [
+        "essential_185",
+        "essential_204",
+        "essential_305",
+        "essential_434"
+      ],
+      "detail": "레몬을 몇 방울 (185), coffee table for 탁자 (204), 캠프파이어 불을 지키다 (305), and the dropped subject particle in 434."
+    }
+  ],
+  "notes": [
+    "essential_073 is the only headword change in the sample; it requires regenerating both audio clips.",
+    "The model pass screens grammar, tags and translations; it does not replace the Korean-speaker spot check.",
+    "No deck data was edited: this file records verdicts only."
+  ],
+  "verdicts": [
+    {
+      "id": "essential_073",
+      "source": "600 essential words · row 79",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "spelling",
+          "detail": "The headword and example spell 오랜지색; the standard spelling is 오렌지색. Fixing the headword also requires regenerating the male and female clips."
+        },
+        {
+          "category": "romanization",
+          "detail": "oraenjisaek reflects the misspelling; after the headword fix it becomes orenjisaek."
+        },
+        {
+          "category": "usage-note",
+          "detail": "\"used like 다른 색깔 표현\" is garbled; replace it with a concrete usage note."
+        }
+      ]
+    },
+    {
+      "id": "essential_077",
+      "source": "600 essential words · row 83",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_114",
+      "source": "600 essential words · row 120",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_117",
+      "source": "600 essential words · row 123",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_150",
+      "source": "600 essential words · row 156",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_151",
+      "source": "600 essential words · row 157",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_154",
+      "source": "600 essential words · row 160",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_162",
+      "source": "600 essential words · row 168",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_177",
+      "source": "600 essential words · row 183",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_181",
+      "source": "600 essential words · row 187",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_185",
+      "source": "600 essential words · row 191",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "\"레몬을 차에 몇 방울\" treats the fruit as a liquid; use 레몬즙을 (lemon juice)."
+        },
+        {
+          "category": "translation",
+          "detail": "Update exampleEnglish with the Korean: \"a few drops of lemon juice\"."
+        }
+      ]
+    },
+    {
+      "id": "essential_200",
+      "source": "600 essential words · row 206",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_202",
+      "source": "600 essential words · row 208",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_204",
+      "source": "600 essential words · row 210",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "translation",
+          "detail": "The back says \"coffee table\", but 탁자 is a general table; the usage note says so. Use \"table\"."
+        }
+      ]
+    },
+    {
+      "id": "essential_213",
+      "source": "600 essential words · row 219",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_216",
+      "source": "600 essential words · row 222",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_222",
+      "source": "600 essential words · row 228",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "\"can also mean email in casual speech\" is false; email is 이메일/메일. Rewrite the note."
+        }
+      ]
+    },
+    {
+      "id": "essential_235",
+      "source": "600 essential words · row 241",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_237",
+      "source": "600 essential words · row 243",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_262",
+      "source": "600 essential words · row 268",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_270",
+      "source": "600 essential words · row 276",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_280",
+      "source": "600 essential words · row 286",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_281",
+      "source": "600 essential words · row 287",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_282",
+      "source": "600 essential words · row 288",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_285",
+      "source": "600 essential words · row 291",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_304",
+      "source": "600 essential words · row 310",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_305",
+      "source": "600 essential words · row 311",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "\"캠프파이어 불\" is redundant and \"불을 조심해서 지켜요\" is unidiomatic; rewrite, e.g. 밤에는 캠프파이어 불이 꺼지지 않게 조심해요."
+        },
+        {
+          "category": "translation",
+          "detail": "Update exampleEnglish to match the rewritten example."
+        }
+      ]
+    },
+    {
+      "id": "essential_313",
+      "source": "600 essential words · row 319",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_317",
+      "source": "600 essential words · row 323",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_330",
+      "source": "600 essential words · row 336",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_334",
+      "source": "600 essential words · row 340",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_336",
+      "source": "600 essential words · row 342",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_391",
+      "source": "600 essential words · row 450",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_397",
+      "source": "600 essential words · row 457",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_399",
+      "source": "600 essential words · row 459",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_411",
+      "source": "600 essential words · row 471",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_412",
+      "source": "600 essential words · row 472",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_434",
+      "source": "600 essential words · row 494",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "\"to be scheduled\" is not a standard sense of 서다; 계획이 서다 means a plan takes shape."
+        },
+        {
+          "category": "naturalness",
+          "detail": "\"버스 멈추자마자\" drops the subject particle; a written example should use 버스가 멈추자마자."
+        }
+      ]
+    },
+    {
+      "id": "essential_464",
+      "source": "600 essential words · row 524",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_465",
+      "source": "600 essential words · row 525",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_478",
+      "source": "600 essential words · row 538",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "길다 is an adjective (형용사), not a verb."
+        }
+      ]
+    },
+    {
+      "id": "essential_498",
+      "source": "600 essential words · row 558",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "건조하다 is an adjective (형용사), not a verb."
+        }
+      ]
+    },
+    {
+      "id": "essential_500",
+      "source": "600 essential words · row 560",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "건강하다 is an adjective (형용사), not a verb."
+        }
+      ]
+    },
+    {
+      "id": "essential_504",
+      "source": "600 essential words · row 564",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "슬프다 is an adjective (형용사), not a verb."
+        }
+      ]
+    },
+    {
+      "id": "essential_505",
+      "source": "600 essential words · row 565",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "아름답다 is an adjective (형용사), not a verb."
+        },
+        {
+          "category": "politeness",
+          "detail": "The example uses plain 다 among polite 해요체 examples; use 아름다워요."
+        },
+        {
+          "category": "usage-note",
+          "detail": "\"verb in Korean grammar\" is misleading; Korean adjectives are 형용사, a separate category from verbs."
+        }
+      ]
+    },
+    {
+      "id": "essential_506",
+      "source": "600 essential words · row 566",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "못생기다 is an adjective (형용사), not a verb."
+        }
+      ]
+    },
+    {
+      "id": "essential_516",
+      "source": "600 essential words · row 576",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "평탄하다 is an adjective (형용사), not a verb; the usage note already calls it an adjective."
+        }
+      ]
+    },
+    {
+      "id": "essential_518",
+      "source": "600 essential words · row 578",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_519",
+      "source": "600 essential words · row 579",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "헐렁하다 is an adjective (형용사), not a verb."
+        }
+      ]
+    },
+    {
+      "id": "essential_520",
+      "source": "600 essential words · row 580",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "높다 is an adjective (형용사), not a verb."
+        }
+      ]
+    }
+  ]
+}
