@@ -152,7 +152,8 @@ export default function Home() {
     gradeCard(cardId, rating, { countProgress: !isRepeatPractice, responseTimeMs: options?.responseTimeMs });
 
     const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
-    if (state && wasBelowGoal && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
+    const isSameDayRepeat = state?.cardStates[cardId]?.lastReviewDate === getLocalDateKey();
+    if (state && wasBelowGoal && !isSameDayRepeat && state.stats.cardsStudiedToday + 1 >= state.settings.dailyGoal) {
       setTimeout(() => {
         toast.success("Daily goal reached! 🎉", {
           description: `You've earned ${xpGain} XP and maintained your streak!`,
@@ -221,8 +222,15 @@ export default function Home() {
     const due = state.cardStates[card.id]?.due;
     return Boolean(due && due <= today);
   }).length;
-  const weakCards = STUDY_READY_VOCABULARY
-    .filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed))
+  // Cards already reviewed today no longer move their schedule or earn XP, so
+  // prefer the rest; fall back to them only so the lists are still usable for practice.
+  const preferNotReviewedToday = <T extends { id: string }>(cards: T[]) => {
+    const fresh = cards.filter((card) => state.cardStates[card.id]?.lastReviewDate !== today);
+    return fresh.length > 0 ? fresh : cards;
+  };
+  const weakCards = preferNotReviewedToday(
+    STUDY_READY_VOCABULARY.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed)),
+  )
     .sort((a, b) => {
       const aState = state.cardStates[a.id];
       const bState = state.cardStates[b.id];
@@ -231,11 +239,12 @@ export default function Home() {
       return aAccuracy - bAccuracy || (bState?.timesReviewed ?? 0) - (aState?.timesReviewed ?? 0);
     })
     .slice(0, 10);
-  const learningCards = STUDY_READY_VOCABULARY
-    .filter((card) => {
+  const learningCards = preferNotReviewedToday(
+    STUDY_READY_VOCABULARY.filter((card) => {
       const mastery = getMasteryState(state.cardStates[card.id]);
       return mastery === "learning" || mastery === "shaky";
-    })
+    }),
+  )
     .sort((a, b) => {
       const aState = state.cardStates[a.id];
       const bState = state.cardStates[b.id];

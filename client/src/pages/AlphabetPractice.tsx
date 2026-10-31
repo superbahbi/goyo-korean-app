@@ -60,7 +60,10 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                   key={category.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  onClick={() => setSelectedType(category.id as "consonants" | "vowels" | "numbers")}
+                  onClick={() => {
+                    setCurrentIndex(0);
+                    setSelectedType(category.id as "consonants" | "vowels" | "numbers");
+                  }}
                   className={`p-8 rounded-2xl text-center transition-all hover:shadow-lg ${category.color}`}
                 >
                   <div className="text-5xl mb-4">{category.icon}</div>
@@ -125,7 +128,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     ? NUMBER_DATA
     : ALPHABET_DATA.filter((c) => selectedType === "consonants" ? c.type === "consonant" : c.type === "vowel");
 
-  const currentCard = cards[currentIndex];
+  const currentCard = cards[currentIndex] ?? cards[0];
 
   const handleNext = () => {
     if (currentIndex < cards.length - 1) {
@@ -176,10 +179,12 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center p-6 overflow-auto">
         <div className="max-w-2xl w-full">
-          <AlphabetCard
-            card={currentCard}
-            onSpeak={handleSpeak}
-          />
+          {currentCard && (
+            <AlphabetCard
+              card={currentCard}
+              onSpeak={handleSpeak}
+            />
+          )}
 
           {/* Navigation Buttons */}
           <div className="flex gap-4 mt-8 justify-center">

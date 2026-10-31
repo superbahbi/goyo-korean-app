@@ -29,6 +29,11 @@ const MIME_TYPES: Record<string, string> = {
 
 const staticPath = path.resolve(__dirname, "..", "dist", "public");
 
+function sendNotFound(res: import("http").ServerResponse) {
+  res.writeHead(404, { "Content-Type": "text/plain" });
+  res.end("Not found");
+}
+
 function sendFile(res: import("http").ServerResponse, filePath: string) {
   void readFile(filePath)
     .then((data) => {
@@ -48,11 +53,18 @@ async function startServer() {
 
   const server = createServer((req, res) => {
     const url = new URL(req.url ?? "/", `http://${req.headers.host ?? "localhost"}`);
-    const requestPath = decodeURIComponent(url.pathname);
+    let requestPath: string;
+    try {
+      requestPath = decodeURIComponent(url.pathname);
+    } catch {
+      res.writeHead(400, { "Content-Type": "text/plain" });
+      res.end("Bad request");
+      return;
+    }
     const resolved = path.normalize(path.join(staticPath, requestPath));
 
     // Prevent path traversal outside the static root.
-    if (!resolved.startsWith(staticPath)) {
+    if (resolved !== staticPath && !resolved.startsWith(staticPath + path.sep)) {
       res.writeHead(403, { "Content-Type": "text/plain" });
       res.end("Forbidden");
       return;
@@ -61,14 +73,22 @@ async function startServer() {
     void stat(resolved)
       .then((info) => {
         if (info.isDirectory()) {
-          sendFile(res, path.join(resolved, "index.html"));
+          const indexPath = path.join(resolved, "index.html");
+          void stat(indexPath)
+            .then(() => sendFile(res, indexPath))
+            .catch(() => sendNotFound(res));
         } else {
           sendFile(res, resolved);
         }
       })
       .catch(() => {
-        // Client-side routing fallback: serve index.html for all routes.
-        sendFile(res, path.join(staticPath, "index.html"));
+        // Client-side routing fallback: only for extensionless routes, so
+        // missing assets return 404 instead of HTML.
+        if (path.extname(requestPath)) {
+          sendNotFound(res);
+        } else {
+          sendFile(res, path.join(staticPath, "index.html"));
+        }
       });
   });
 

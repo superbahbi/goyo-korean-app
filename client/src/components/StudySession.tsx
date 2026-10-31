@@ -24,6 +24,8 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
   const [productionAttempt, setProductionAttempt] = useState("");
   const [productionDone, setProductionDone] = useState(false);
   const cardStartedAt = useRef(Date.now());
+  // Recall latency: card display to first reveal, excluding time spent on the back.
+  const recallTimeMs = useRef<number | null>(null);
 
   const closeSession = () => {
     stopAudio();
@@ -33,8 +35,15 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
   const currentCard = queue[index];
   const isLastCard = index >= queue.length - 1;
 
+  const handleFlip = (nextFlipped: boolean) => {
+    if (nextFlipped && recallTimeMs.current === null) {
+      recallTimeMs.current = Date.now() - cardStartedAt.current;
+    }
+    setFlipped(nextFlipped);
+  };
+
   const handleGrade = (rating: "again" | "good" | "easy") => {
-    const responseTimeMs = Math.min(120000, Math.max(250, Date.now() - cardStartedAt.current));
+    const responseTimeMs = Math.min(120000, Math.max(250, recallTimeMs.current ?? Date.now() - cardStartedAt.current));
     onGrade(currentCard.id, rating, { responseTimeMs });
     setResults((current) => ({ ...current, [rating]: current[rating] + 1 }));
 
@@ -44,6 +53,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
       setProductionAttempt("");
       setProductionDone(false);
       cardStartedAt.current = Date.now();
+      recallTimeMs.current = null;
     } else {
       setCompleted(true);
     }
@@ -57,6 +67,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
     setProductionAttempt("");
     setProductionDone(false);
     cardStartedAt.current = Date.now();
+    recallTimeMs.current = null;
   };
 
   if (completed) {
@@ -128,7 +139,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
             exampleEnglish={currentCard.exampleEnglish}
             usageNote={currentCard.usageNote}
             tag={currentCard.tag}
-            onFlip={setFlipped}
+            onFlip={handleFlip}
             revealed={flipped}
             autoSpeak={true}
             audioFirst={true}
@@ -141,7 +152,7 @@ export function StudySession({ queue, onGrade, onClose, allowRepeat = false, tit
         {!flipped ? (
           <Button
             className="h-14 w-full rounded-2xl bg-slate-900 text-lg font-bold transition-all hover:bg-slate-800 sm:h-16 sm:text-xl"
-            onClick={() => setFlipped(true)}
+            onClick={() => handleFlip(true)}
           >
             Reveal Korean &amp; Meaning
           </Button>

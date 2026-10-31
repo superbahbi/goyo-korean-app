@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { scheduleRecall } from "@/lib/srs";
+import { scheduleReview } from "@/lib/srs";
 
 export interface CardState {
   id: string;
@@ -62,44 +62,122 @@ export function getLocalDateKey(date = new Date()): string {
   return `${year}-${month}-${day}`;
 }
 
+function createDefaultState(): UserState {
+  return {
+    cardStates: {},
+    stats: {
+      totalXp: 0,
+      level: 1,
+      streak: 0,
+      lastStudyDate: "",
+      highestStreak: 0,
+      cardsStudiedToday: 0,
+      totalCardsLearned: 0,
+    },
+    settings: {
+      dailyGoal: 10,
+      ttsEnabled: true,
+      autoPlayAudio: true,
+      audioSpeaker: "elevenlabs",
+    },
+  };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function nonNegativeNumber(value: unknown, fallback: number): number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : fallback;
+}
+
+function optionalNonNegativeNumber(value: unknown): number | undefined {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : undefined;
+}
+
+function sanitizeCardState(id: string, value: unknown): CardState | null {
+  if (!isRecord(value)) return null;
+  if (typeof value.due !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.due)) return null;
+
+  const timesReviewed = nonNegativeNumber(value.timesReviewed, 0);
+  const card: CardState = {
+    id,
+    box: nonNegativeNumber(value.box, 0),
+    due: value.due,
+    interval: nonNegativeNumber(value.interval, 0),
+    timesReviewed,
+    timesCorrect: Math.min(timesReviewed, nonNegativeNumber(value.timesCorrect, 0)),
+    lastReviewDate: typeof value.lastReviewDate === "string" ? value.lastReviewDate : "",
+  };
+
+  const easeFactor = optionalNonNegativeNumber(value.easeFactor);
+  const consecutiveCorrect = optionalNonNegativeNumber(value.consecutiveCorrect);
+  const lapseCount = optionalNonNegativeNumber(value.lapseCount);
+  const lastResponseTimeMs = optionalNonNegativeNumber(value.lastResponseTimeMs);
+  if (easeFactor !== undefined) card.easeFactor = easeFactor;
+  if (consecutiveCorrect !== undefined) card.consecutiveCorrect = consecutiveCorrect;
+  if (lapseCount !== undefined) card.lapseCount = lapseCount;
+  if (lastResponseTimeMs !== undefined) card.lastResponseTimeMs = lastResponseTimeMs;
+  return card;
+}
+
+function loadState(): UserState {
+  const defaults = createDefaultState();
+
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaults;
+
+    const parsed: unknown = JSON.parse(raw);
+    if (!isRecord(parsed)) return defaults;
+
+    const cardStates: Record<string, CardState> = {};
+    if (isRecord(parsed.cardStates)) {
+      for (const [id, value] of Object.entries(parsed.cardStates)) {
+        const card = sanitizeCardState(id, value);
+        if (card) cardStates[id] = card;
+      }
+    }
+
+    const savedStats = isRecord(parsed.stats) ? parsed.stats : {};
+    const totalXp = nonNegativeNumber(savedStats.totalXp, 0);
+    const streak = nonNegativeNumber(savedStats.streak, 0);
+    const stats: UserStats = {
+      totalXp,
+      level: Math.max(1, nonNegativeNumber(savedStats.level, Math.floor(Math.sqrt(totalXp / 100)) + 1)),
+      streak,
+      lastStudyDate: typeof savedStats.lastStudyDate === "string" ? savedStats.lastStudyDate : "",
+      highestStreak: Math.max(streak, nonNegativeNumber(savedStats.highestStreak, 0)),
+      cardsStudiedToday: nonNegativeNumber(savedStats.cardsStudiedToday, 0),
+      totalCardsLearned: nonNegativeNumber(savedStats.totalCardsLearned, 0),
+    };
+
+    const savedSettings = isRecord(parsed.settings) ? parsed.settings : {};
+    const dailyGoal = nonNegativeNumber(savedSettings.dailyGoal, defaults.settings.dailyGoal);
+    const settings: UserState["settings"] = {
+      dailyGoal: dailyGoal >= 1 ? dailyGoal : defaults.settings.dailyGoal,
+      ttsEnabled: typeof savedSettings.ttsEnabled === "boolean" ? savedSettings.ttsEnabled : defaults.settings.ttsEnabled,
+      autoPlayAudio: typeof savedSettings.autoPlayAudio === "boolean" ? savedSettings.autoPlayAudio : defaults.settings.autoPlayAudio,
+      // Older saved progress may contain a removed system-voice preference.
+      audioSpeaker: savedSettings.audioSpeaker === "elevenlabs-female" ? "elevenlabs-female" : "elevenlabs",
+    };
+
+    return { cardStates, stats, settings };
+  } catch (error) {
+    console.error("Failed to load saved progress, starting fresh:", error);
+    return defaults;
+  }
+}
+
 export function useStudyState() {
   const [state, setState] = useState<UserState | null>(null);
 
   // Initialize from localStorage
   useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const today = getLocalDateKey();
-
-    const initial: UserState = raw
-      ? JSON.parse(raw)
-      : {
-          cardStates: {},
-          stats: {
-            totalXp: 0,
-            level: 1,
-            streak: 0,
-            lastStudyDate: "",
-            highestStreak: 0,
-            cardsStudiedToday: 0,
-            totalCardsLearned: 0,
-          },
-          settings: {
-            dailyGoal: 10,
-            ttsEnabled: true,
-            autoPlayAudio: true,
-            audioSpeaker: "elevenlabs",
-          },
-        };
-
-    // Older saved progress may contain a removed system-voice preference.
-    const savedSpeaker = initial.settings.audioSpeaker;
-    initial.settings = {
-      ...initial.settings,
-      audioSpeaker: savedSpeaker === "elevenlabs-female" ? "elevenlabs-female" : "elevenlabs",
-    };
+    const initial = loadState();
 
     // Reset daily counter if it's a new day
-    if (initial.stats.lastStudyDate !== today) {
+    if (initial.stats.lastStudyDate !== getLocalDateKey()) {
       initial.stats.cardsStudiedToday = 0;
     }
 
@@ -109,7 +187,11 @@ export function useStudyState() {
   // Persist to localStorage
   useEffect(() => {
     if (state) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        console.error("Failed to save progress:", error);
+      }
     }
   }, [state]);
 
@@ -117,10 +199,15 @@ export function useStudyState() {
     (cardId: string, rating: "again" | "good" | "easy", options?: { countProgress?: boolean; responseTimeMs?: number }) => {
       if (!state) return;
 
-      const countProgress = options?.countProgress !== false;
-      const xpGain = countProgress ? (rating === "easy" ? 15 : rating === "good" ? 10 : 5) : 0;
+      const requestedProgress = options?.countProgress !== false;
       const today = getLocalDateKey();
-      const yesterday = getLocalDateKey(new Date(Date.now() - 86400000));
+      const yesterday = addDays(today, -1);
+
+      const existingCard = state.cardStates[cardId];
+      const { schedule, advanced } = scheduleReview(existingCard, rating, today, options?.responseTimeMs);
+      // Re-grading a card already reviewed today earns no progress or XP.
+      const countProgress = requestedProgress && advanced;
+      const xpGain = countProgress ? (rating === "easy" ? 15 : rating === "good" ? 10 : 5) : 0;
 
       // Determine streak
       const lastDate = state.stats.lastStudyDate;
@@ -141,21 +228,21 @@ export function useStudyState() {
         newStreak
       );
 
-      const existingCard = state.cardStates[cardId];
-      const schedule = scheduleRecall(existingCard, rating, options?.responseTimeMs);
+      const cardsStudiedToday = lastDate === today ? state.stats.cardsStudiedToday : 0;
+      const responseTimeMs = options?.responseTimeMs;
       const newCardState: CardState = {
         id: cardId,
         box: schedule.box,
-        due: addDays(today, schedule.interval),
+        due: advanced || !existingCard ? addDays(today, schedule.interval) : existingCard.due,
         interval: schedule.interval,
-        timesReviewed: (existingCard?.timesReviewed || 0) + 1,
+        timesReviewed: (existingCard?.timesReviewed || 0) + (advanced ? 1 : 0),
         timesCorrect:
-          (existingCard?.timesCorrect || 0) + (rating === "again" ? 0 : 1),
+          (existingCard?.timesCorrect || 0) + (advanced && rating !== "again" ? 1 : 0),
         lastReviewDate: today,
         easeFactor: schedule.easeFactor,
         consecutiveCorrect: schedule.consecutiveCorrect,
         lapseCount: schedule.lapseCount,
-        lastResponseTimeMs: options?.responseTimeMs,
+        lastResponseTimeMs: typeof responseTimeMs === "number" ? responseTimeMs : existingCard?.lastResponseTimeMs,
       };
 
       const isNewCard = !existingCard;
@@ -174,7 +261,7 @@ export function useStudyState() {
           lastStudyDate: countProgress ? today : state.stats.lastStudyDate,
           streak: newStreak,
           highestStreak: newHighestStreak,
-          cardsStudiedToday: countProgress ? state.stats.cardsStudiedToday + 1 : state.stats.cardsStudiedToday,
+          cardsStudiedToday: countProgress ? cardsStudiedToday + 1 : cardsStudiedToday,
           totalCardsLearned: countProgress && isNewCard
             ? state.stats.totalCardsLearned + 1
             : state.stats.totalCardsLearned,
