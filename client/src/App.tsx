@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { MotionConfig } from "framer-motion";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
@@ -40,9 +41,11 @@ function App() {
           </ThemeProvider>
         </MotionConfig>
       </ErrorBoundary>
-      {/* Aggregate, cookieless page views. Kept outside the error boundary so a
-          failed analytics script can never take down the study app. */}
+      {/* Aggregate, cookieless page views and Core Web Vitals. Kept outside the
+          error boundary so a failed analytics script can never take down the
+          study app. */}
       <Analytics />
+      <SpeedInsights />
     </>
   );
 }

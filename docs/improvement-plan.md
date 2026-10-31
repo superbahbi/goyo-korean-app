@@ -13,8 +13,9 @@ Every stage is done only when its gate passes.
 - Success: users still reviewing 4+ days a week after 30 days.
 - Budget: a few hours a week and little or no new audio spend.
 - No accounts or backend. Progress lives in `localStorage` and moves by JSON export/import.
-- Vercel Web Analytics for aggregate, cookieless page views (enabled 2026-10-31). Retention is still
-  measured locally and by checking in with testers; no accounts and no personal data.
+- Vercel Web Analytics and Speed Insights for aggregate, cookieless page views and Core Web
+  Vitals (enabled 2026-10-31). Retention is still measured locally and by checking in with testers;
+  no accounts and no personal data.
 
 ## Current state
 
