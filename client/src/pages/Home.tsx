@@ -750,6 +750,7 @@ export default function Home() {
                   type="button"
                   key={filter}
                   onClick={() => setBrowseMastery(filter)}
+                  aria-pressed={browseMastery === filter}
                   className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition ${browseMastery === filter ? "bg-slate-900 text-white" : "bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50"}`}
                 >
                   {filter === "all" ? "All cards" : masteryLabels[filter]}

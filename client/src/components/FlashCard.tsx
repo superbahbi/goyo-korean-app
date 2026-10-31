@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect, type KeyboardEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Volume2, ChevronRight } from "lucide-react";
@@ -58,6 +58,14 @@ function FlashCardBase({
     onFlip?.(nextValue);
   };
 
+  const handleRevealKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleFlip();
+    }
+  };
+
   const getRomanization = () => {
     if (romanizationProp) return romanizationProp;
     const match = front.match(/\(([^)]*)\)/);
@@ -74,14 +82,19 @@ function FlashCardBase({
       className="w-full h-full flex flex-col items-center justify-center"
     >
       <div
+        role="button"
+        tabIndex={0}
+        aria-label={isRevealed ? "Hide meaning" : "Reveal meaning"}
         className={`w-full max-w-md aspect-[3/4] relative transition-all duration-500 cursor-pointer ${
           isRevealed ? "scale-105" : ""
         }`}
         onClick={handleFlip}
+        onKeyDown={handleRevealKeyDown}
       >
         {/* Front */}
         <motion.div
           initial={false}
+          inert={isRevealed}
           animate={{ opacity: isRevealed ? 0 : 1, pointerEvents: isRevealed ? "none" : "auto" }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 bg-white border-2 border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
@@ -116,6 +129,7 @@ function FlashCardBase({
               variant="secondary"
               size="icon"
               className="rounded-full w-12 h-12"
+              aria-label={`Play pronunciation for ${cleanKoreanText(front)}`}
               onClick={(e) => {
                 e.stopPropagation();
                 void playVocabularyAudio(wordId, cleanKoreanText(front));
@@ -143,6 +157,7 @@ function FlashCardBase({
         {/* Back */}
         <motion.div
           initial={false}
+          inert={!isRevealed}
           animate={{ opacity: isRevealed ? 1 : 0, pointerEvents: isRevealed ? "auto" : "none" }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-7 text-center shadow-xl sm:p-9"
