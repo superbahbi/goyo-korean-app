@@ -49,14 +49,20 @@ browser eviction, and `Home.tsx` is a 1,233-line monolith with 53 UI files of wh
 
 ## Status
 
-| Phase                           | State                     |
-| ------------------------------- | ------------------------- |
-| 0 Repairs                       | Not started               |
-| 1 Learning loop and measurement | Not started               |
-| 2 Structure                     | Not started               |
-| 3 Content                       | Not started               |
-| 4 Delivery and accessibility    | Not started               |
-| 5 Tune from data                | Blocked on 30 days of use |
+| Phase                           | State                                                     |
+| ------------------------------- | --------------------------------------------------------- |
+| 0 Repairs                       | Code done, in review (#3–#7); browser checks outstanding  |
+| 1 Learning loop and measurement | Next                                                      |
+| 2 Structure                     | Not started                                               |
+| 3 Content                       | Not started                                               |
+| 4 Delivery and accessibility    | Not started                                               |
+| 5 Tune from data                | Blocked on 30 days of use                                 |
+
+Phase 0 status per item: 1 offline audio is merged (#2); 6 local environment (#3), 2 visible
+audio failure (#4), 3 dead settings (#5), 4 protect progress (#6) and 5 PWA update notice
+(#7) are open. The acceptance steps that need a device — blocked audio, auto-play off,
+`storage.persisted()` on first grade, iPhone install hint, update toast — still need a browser
+and an iPhone check before the phase is called done.
 
 ---
 
