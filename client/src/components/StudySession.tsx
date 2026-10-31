@@ -112,6 +112,44 @@ export function StudySession({
     recallTimeMs.current = null;
   };
 
+  // Keyboard study: Space reveals, 1/2/3 grade, Escape closes. The listener is
+  // refreshed every render so it always sees the current card and reveal state.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.repeat || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) return;
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeSession();
+        return;
+      }
+      if (completed) return;
+
+      if (event.code === "Space" || event.key === " ") {
+        event.preventDefault();
+        if (!flipped) handleFlip(true);
+        return;
+      }
+      if (!flipped) return;
+
+      if (event.key === "1") {
+        event.preventDefault();
+        handleGrade("again");
+      } else if (event.key === "2") {
+        event.preventDefault();
+        handleGrade("good");
+      } else if (event.key === "3") {
+        event.preventDefault();
+        handleGrade("easy");
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  });
+
   if (completed) {
     const total = results.again + results.good + results.easy;
     const remembered = results.good + results.easy;
@@ -175,6 +213,11 @@ export function StudySession({
         className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-white p-0 shadow-none sm:max-w-none"
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          {flipped
+            ? "Answer revealed. Press 1 for Again, 2 for Good, or 3 for Easy."
+            : `Card ${index + 1} of ${sessionQueue.length}. Press Space to reveal.`}
+        </p>
         {/* Header */}
         <header className="p-4 flex items-center justify-between border-b bg-gradient-to-r from-slate-50 to-slate-100">
           <Button variant="ghost" size="icon" onClick={closeSession} aria-label="Close study session">
@@ -296,6 +339,9 @@ export function StudySession({
               </div>
             </div>
           )}
+          <p className="mt-3 hidden text-center text-xs text-slate-400 sm:block">
+            Space reveals · 1 Again · 2 Good · 3 Easy · Esc closes
+          </p>
         </footer>
       </DialogContent>
     </Dialog>
