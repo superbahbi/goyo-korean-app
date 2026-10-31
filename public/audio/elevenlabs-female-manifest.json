@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-09-17T23:40:54.598Z",
-  "voiceId": "uyVNoMrnUku1dZyVEXwD",
-  "modelId": "eleven_multilingual_v2",
+  "generatedAt": "2026-10-31T06:24:30.883Z",
+  "voiceId": "0oqpliV6dVSr9XomngOW",
+  "modelId": "eleven_v4",
   "counts": {
-    "total": 186,
-    "generated": 186,
-    "skipped": 0,
+    "total": 680,
+    "generated": 0,
+    "skipped": 680,
     "failed": 0
   },
   "vocabulary": [
@@ -14,1088 +14,5120 @@
       "text": "머리",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_001.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "body_002",
       "text": "눈",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_002.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "body_003",
       "text": "코",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_003.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "body_004",
       "text": "입",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_004.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "body_005",
       "text": "귀",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_005.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "body_006",
       "text": "손",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_006.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "body_007",
       "text": "발",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_007.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "body_008",
       "text": "다리",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_008.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "body_009",
       "text": "팔",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_009.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "body_010",
       "text": "배",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_010.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 10074
     },
     {
       "id": "body_011",
       "text": "가슴",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_011.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "body_012",
       "text": "등",
       "group": "vocabulary",
       "filename": "elevenlabs_female_body_012.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "color_001",
       "text": "빨강",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_001.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "color_002",
       "text": "파랑",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_002.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "color_003",
       "text": "노랑",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_003.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "color_004",
       "text": "초록",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_004.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "color_005",
       "text": "검정",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_005.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "color_006",
       "text": "하양",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_006.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "color_007",
       "text": "회색",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_007.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "color_008",
       "text": "주황",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_008.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "color_009",
       "text": "보라",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_009.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "color_010",
       "text": "분홍",
       "group": "vocabulary",
       "filename": "elevenlabs_female_color_010.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "daily_001",
       "text": "만나서 반가워요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_001.mp3",
-      "status": "generated",
-      "bytes": 24285
+      "status": "skipped",
+      "bytes": 26792
     },
     {
       "id": "daily_002",
       "text": "잘 지내요?",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_002.mp3",
-      "status": "generated",
-      "bytes": 18016
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "daily_003",
       "text": "좋아해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_003.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "daily_004",
       "text": "싫어해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_004.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "daily_005",
       "text": "재미있어요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_005.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 18851
     },
     {
       "id": "daily_006",
       "text": "지루해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_006.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 23030
     },
     {
       "id": "daily_007",
       "text": "피곤해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_007.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "daily_008",
       "text": "행복해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_008.mp3",
-      "status": "generated",
-      "bytes": 18016
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "daily_009",
       "text": "슬퍼요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_009.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 18851
     },
     {
       "id": "daily_010",
       "text": "화났어요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_010.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "daily_011",
       "text": "뭐 하고 있어요?",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_011.mp3",
-      "status": "generated",
-      "bytes": 18852
+      "status": "skipped",
+      "bytes": 20105
     },
     {
       "id": "daily_012",
       "text": "뭘 먹고 싶어요?",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_012.mp3",
-      "status": "generated",
-      "bytes": 20524
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "daily_013",
       "text": "어디 가고 싶어요?",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_013.mp3",
-      "status": "generated",
-      "bytes": 20942
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "daily_014",
       "text": "뭐라고 했어요?",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_014.mp3",
-      "status": "generated",
-      "bytes": 18016
+      "status": "skipped",
+      "bytes": 20105
     },
     {
       "id": "daily_015",
       "text": "다시 말씀해 주세요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_daily_015.mp3",
-      "status": "generated",
-      "bytes": 24285
+      "status": "skipped",
+      "bytes": 26792
     },
     {
       "id": "emot_001",
       "text": "사랑해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_001.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "emot_002",
       "text": "미워해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_002.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "emot_003",
       "text": "두려워요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_003.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "emot_004",
       "text": "놀라워요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_004.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 18851
     },
     {
       "id": "emot_005",
       "text": "부끄러워요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_005.mp3",
-      "status": "generated",
-      "bytes": 19688
+      "status": "skipped",
+      "bytes": 23030
     },
     {
       "id": "emot_006",
       "text": "자랑스러워요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_006.mp3",
-      "status": "generated",
-      "bytes": 20942
+      "status": "skipped",
+      "bytes": 24284
     },
     {
       "id": "emot_007",
       "text": "화가 나요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_007.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "emot_008",
       "text": "기쁜데요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_008.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "emot_009",
       "text": "슬픈데요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_009.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "emot_010",
       "text": "신나요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_010.mp3",
-      "status": "generated",
-      "bytes": 18016
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "emot_011",
       "text": "답답해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_011.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 23030
     },
     {
       "id": "emot_012",
       "text": "외로워요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_012.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "emot_013",
       "text": "편해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_013.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "emot_014",
       "text": "불편해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_014.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "emot_015",
       "text": "감동했어요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_emot_015.mp3",
-      "status": "generated",
-      "bytes": 18852
+      "status": "skipped",
+      "bytes": 24284
+    },
+    {
+      "id": "essential_001",
+      "text": "개",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_001.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_002",
+      "text": "고양이",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_002.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_003",
+      "text": "물고기",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_003.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_004",
+      "text": "새",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_004.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_005",
+      "text": "소",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_005.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_006",
+      "text": "쥐",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_006.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_007",
+      "text": "말",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_007.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_008",
+      "text": "날개",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_008.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_009",
+      "text": "동물",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_009.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_010",
+      "text": "기차",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_010.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_011",
+      "text": "비행기",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_011.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_012",
+      "text": "차",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_012.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_013",
+      "text": "트럭",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_013.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_014",
+      "text": "자전거",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_014.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_015",
+      "text": "버스",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_015.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_016",
+      "text": "배",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_016.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_017",
+      "text": "선박",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_017.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_018",
+      "text": "타이어",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_018.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_019",
+      "text": "기름",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_019.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_020",
+      "text": "엔진",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_020.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_021",
+      "text": "기차표",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_021.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_022",
+      "text": "교통",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_022.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_023",
+      "text": "도시",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_023.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_025",
+      "text": "길",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_025.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_026",
+      "text": "도로",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_026.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_027",
+      "text": "공항",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_027.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_028",
+      "text": "기차역",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_028.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_029",
+      "text": "다리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_029.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_030",
+      "text": "호텔",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_030.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_032",
+      "text": "농장",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_032.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_033",
+      "text": "재판소",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_033.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_035",
+      "text": "사무실",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_035.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_036",
+      "text": "방",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_036.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_037",
+      "text": "마을",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_037.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_038",
+      "text": "대학교",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_038.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_039",
+      "text": "클럽",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_039.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_040",
+      "text": "술집",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_040.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_042",
+      "text": "캠프",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_042.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_044",
+      "text": "극장",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_044.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_047",
+      "text": "교회",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_047.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_048",
+      "text": "시장",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_048.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_049",
+      "text": "나라",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_049.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_050",
+      "text": "건물",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_050.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_051",
+      "text": "바닥",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_051.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_052",
+      "text": "공간",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_052.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_054",
+      "text": "위치",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_054.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_055",
+      "text": "모자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_055.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_056",
+      "text": "드레스",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_056.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_057",
+      "text": "양복",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_057.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_058",
+      "text": "치마",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_058.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_059",
+      "text": "티셔츠",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_059.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_060",
+      "text": "바지",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_060.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_061",
+      "text": "신발",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_061.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_062",
+      "text": "주머니",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_062.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_063",
+      "text": "코트",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_063.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_064",
+      "text": "얼룩",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_064.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_065",
+      "text": "옷",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_065.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_066",
+      "text": "빨간색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_066.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_067",
+      "text": "초록색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_067.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_068",
+      "text": "파랑색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_068.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_069",
+      "text": "노랑색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_069.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_070",
+      "text": "곤색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_070.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_071",
+      "text": "분홍색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_071.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_072",
+      "text": "갈색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_072.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_073",
+      "text": "오랜지색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_073.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_074",
+      "text": "검은색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_074.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_075",
+      "text": "하얀색",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_075.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_077",
+      "text": "색깔",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_077.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_078",
+      "text": "아들",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_078.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_079",
+      "text": "딸",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_079.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_082",
+      "text": "부모님",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_082.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_083",
+      "text": "애기",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_083.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_084",
+      "text": "남자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_084.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_085",
+      "text": "여자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_085.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_094",
+      "text": "왕",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_094.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_095",
+      "text": "여왕",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_095.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_096",
+      "text": "대통령",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_096.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_097",
+      "text": "옆집 사람",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_097.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_098",
+      "text": "여자아이",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_098.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_099",
+      "text": "남자아이",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_099.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_100",
+      "text": "성인",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_100.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_101",
+      "text": "인간",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_101.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_102",
+      "text": "친구",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_102.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_103",
+      "text": "피해자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_103.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_104",
+      "text": "선수",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_104.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_105",
+      "text": "팬",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_105.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_106",
+      "text": "군중",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_106.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_107",
+      "text": "사람",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_107.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_108",
+      "text": "선생님",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_108.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_109",
+      "text": "학생",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_109.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_110",
+      "text": "변호사",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_110.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_111",
+      "text": "의사",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_111.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_112",
+      "text": "환자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_112.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_113",
+      "text": "웨이터",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_113.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_114",
+      "text": "비서",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_114.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_115",
+      "text": "신부님",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_115.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_116",
+      "text": "경찰",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_116.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_117",
+      "text": "군대",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_117.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_118",
+      "text": "군인",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_118.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_119",
+      "text": "예술가",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_119.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_120",
+      "text": "저자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_120.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_121",
+      "text": "매니저",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_121.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_122",
+      "text": "기자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_122.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_123",
+      "text": "배우",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_123.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_124",
+      "text": "직업",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_124.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_125",
+      "text": "종교",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_125.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_126",
+      "text": "천국",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_126.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_127",
+      "text": "지옥",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_127.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_128",
+      "text": "죽음",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_128.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_129",
+      "text": "약",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_129.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_130",
+      "text": "돈",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_130.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_131",
+      "text": "원",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_131.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_132",
+      "text": "지폐",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_132.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_133",
+      "text": "결혼",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_133.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_134",
+      "text": "결혼식",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_134.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_135",
+      "text": "팀",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_135.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_136",
+      "text": "인종",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_136.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_137",
+      "text": "섹스",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_137.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_138",
+      "text": "성별",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_138.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_139",
+      "text": "살인",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_139.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_140",
+      "text": "교도소",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_140.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_141",
+      "text": "기술",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_141.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_142",
+      "text": "정력",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_142.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_143",
+      "text": "전쟁",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_143.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_144",
+      "text": "평화",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_144.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_145",
+      "text": "공격",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_145.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_146",
+      "text": "선거",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_146.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_147",
+      "text": "잡지",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_147.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_148",
+      "text": "신문",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_148.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_149",
+      "text": "독",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_149.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_150",
+      "text": "총",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_150.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_151",
+      "text": "스포츠",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_151.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_152",
+      "text": "경주",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_152.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_153",
+      "text": "운동",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_153.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_154",
+      "text": "공",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_154.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_155",
+      "text": "게임",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_155.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_156",
+      "text": "가격",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_156.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_157",
+      "text": "계약서",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_157.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_158",
+      "text": "마약",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_158.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_159",
+      "text": "간판",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_159.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_160",
+      "text": "과학",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_160.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_161",
+      "text": "하느님",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_161.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_162",
+      "text": "밴드",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_162.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_163",
+      "text": "노래",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_163.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_164",
+      "text": "악기",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_164.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_165",
+      "text": "음악",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_165.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_166",
+      "text": "영화",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_166.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_167",
+      "text": "미술",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_167.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_171",
+      "text": "쥬스",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_171.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_174",
+      "text": "음료수",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_174.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_175",
+      "text": "계란",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_175.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_176",
+      "text": "치즈",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_176.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_177",
+      "text": "국물",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_177.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_178",
+      "text": "케이크",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_178.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_179",
+      "text": "닭",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_179.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_180",
+      "text": "돼지고기",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_180.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_181",
+      "text": "소고기",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_181.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_182",
+      "text": "사과",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_182.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_183",
+      "text": "바나나",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_183.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_184",
+      "text": "오렌지",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_184.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_185",
+      "text": "레몬",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_185.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_186",
+      "text": "옥수수",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_186.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_187",
+      "text": "쌀",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_187.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_189",
+      "text": "식용유",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_189.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_190",
+      "text": "씨",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_190.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_191",
+      "text": "칼",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_191.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_192",
+      "text": "숟가락",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_192.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_193",
+      "text": "포크",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_193.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_194",
+      "text": "접시",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_194.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_195",
+      "text": "컵",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_195.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_199",
+      "text": "설탕",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_199.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_200",
+      "text": "소금",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_200.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_201",
+      "text": "병",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_201.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_202",
+      "text": "음식",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_202.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_203",
+      "text": "책상",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_203.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_204",
+      "text": "탁자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_204.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_205",
+      "text": "식탁",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_205.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_206",
+      "text": "의자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_206.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_207",
+      "text": "침대",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_207.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_208",
+      "text": "꿈",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_208.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_209",
+      "text": "창문",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_209.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_210",
+      "text": "문",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_210.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_211",
+      "text": "침실",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_211.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_212",
+      "text": "부엌",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_212.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_213",
+      "text": "화장실",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_213.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_214",
+      "text": "연필",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_214.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_215",
+      "text": "볼팬",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_215.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_216",
+      "text": "사진",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_216.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_217",
+      "text": "비누",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_217.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_218",
+      "text": "책",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_218.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_219",
+      "text": "페이지",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_219.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_220",
+      "text": "열쇠",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_220.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_221",
+      "text": "페인트",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_221.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_222",
+      "text": "편지",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_222.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_223",
+      "text": "메모",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_223.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_224",
+      "text": "벽",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_224.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_225",
+      "text": "종이",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_225.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_226",
+      "text": "천장",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_226.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_227",
+      "text": "지붕",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_227.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_228",
+      "text": "수영장",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_228.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_229",
+      "text": "자물쇠",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_229.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_230",
+      "text": "전화기",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_230.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_231",
+      "text": "정원",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_231.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_232",
+      "text": "마당",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_232.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_233",
+      "text": "바늘",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_233.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_234",
+      "text": "가방",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_234.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_235",
+      "text": "상자",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_235.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_236",
+      "text": "선물",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_236.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_237",
+      "text": "카드",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_237.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_238",
+      "text": "반지",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_238.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_239",
+      "text": "도구",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_239.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_240",
+      "text": "시계",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_240.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_241",
+      "text": "램프",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_241.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_242",
+      "text": "휴대폰",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_242.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_243",
+      "text": "네트워크",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_243.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_244",
+      "text": "컴퓨터",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_244.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_245",
+      "text": "노트북",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_245.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_246",
+      "text": "화면",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_246.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_247",
+      "text": "카메라",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_247.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_248",
+      "text": "텔레비전",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_248.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_249",
+      "text": "라디오",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_249.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_251",
+      "text": "목",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_251.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_252",
+      "text": "얼굴",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_252.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_253",
+      "text": "턱수염",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_253.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_254",
+      "text": "머리카락",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_254.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_257",
+      "text": "입술",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_257.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_259",
+      "text": "이빨",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_259.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_261",
+      "text": "눈물",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_261.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_262",
+      "text": "혀",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_262.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_264",
+      "text": "허리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_264.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_265",
+      "text": "발가락",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_265.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_266",
+      "text": "손가락",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_266.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_270",
+      "text": "어깨",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_270.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_271",
+      "text": "심장",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_271.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_272",
+      "text": "피",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_272.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_273",
+      "text": "뇌",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_273.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_274",
+      "text": "무릎",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_274.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_275",
+      "text": "땀",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_275.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_276",
+      "text": "병",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_276.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_277",
+      "text": "뼈",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_277.mp3",
+      "status": "skipped",
+      "bytes": 10074
+    },
+    {
+      "id": "essential_278",
+      "text": "목소리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_278.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_279",
+      "text": "피부",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_279.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_280",
+      "text": "몸",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_280.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_281",
+      "text": "바다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_281.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_282",
+      "text": "강",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_282.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_283",
+      "text": "산",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_283.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_284",
+      "text": "비",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_284.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_285",
+      "text": "눈",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_285.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_286",
+      "text": "달",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_286.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_287",
+      "text": "세계",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_287.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_288",
+      "text": "지구",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_288.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_289",
+      "text": "숲",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_289.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_290",
+      "text": "하늘",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_290.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_291",
+      "text": "식물",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_291.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_292",
+      "text": "바람",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_292.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_293",
+      "text": "토양",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_293.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_294",
+      "text": "꽃",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_294.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_295",
+      "text": "계곡",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_295.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_296",
+      "text": "뿌리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_296.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_297",
+      "text": "호수",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_297.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_298",
+      "text": "별",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_298.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_299",
+      "text": "잔디",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_299.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_300",
+      "text": "나뭇잎",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_300.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_301",
+      "text": "공기",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_301.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_302",
+      "text": "모래",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_302.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_303",
+      "text": "해변",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_303.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_304",
+      "text": "파도",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_304.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_305",
+      "text": "불",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_305.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_306",
+      "text": "얼음",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_306.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_307",
+      "text": "섬",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_307.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_308",
+      "text": "언덕",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_308.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_309",
+      "text": "열",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_309.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_310",
+      "text": "자연",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_310.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_311",
+      "text": "유리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_311.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_312",
+      "text": "금속",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_312.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_313",
+      "text": "플라스틱",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_313.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_314",
+      "text": "나무",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_314.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_315",
+      "text": "돌",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_315.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_316",
+      "text": "다이아몬드",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_316.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_317",
+      "text": "찰흙",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_317.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_318",
+      "text": "먼지",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_318.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_319",
+      "text": "금",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_319.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_320",
+      "text": "구리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_320.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_321",
+      "text": "은",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_321.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_322",
+      "text": "재료",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_322.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_323",
+      "text": "미터",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_323.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_324",
+      "text": "센티미터",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_324.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_325",
+      "text": "킬로미터",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_325.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_326",
+      "text": "반",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_326.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_327",
+      "text": "서클",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_327.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_328",
+      "text": "정사각형",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_328.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_329",
+      "text": "온도",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_329.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_330",
+      "text": "날짜",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_330.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_331",
+      "text": "무게",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_331.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_332",
+      "text": "가장자리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_332.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_333",
+      "text": "지도",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_333.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_334",
+      "text": "점",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_334.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_335",
+      "text": "자음",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_335.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_336",
+      "text": "모음",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_336.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_338",
+      "text": "소리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_338.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_341",
+      "text": "조각",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_341.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_342",
+      "text": "아픔",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_342.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_343",
+      "text": "상처",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_343.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_344",
+      "text": "구멍",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_344.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_345",
+      "text": "이미지",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_345.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_346",
+      "text": "패턴",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_346.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_347",
+      "text": "명사",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_347.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_348",
+      "text": "동사",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_348.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_349",
+      "text": "형용사",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_349.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_350",
+      "text": "위에",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_350.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_351",
+      "text": "아래",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_351.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_352",
+      "text": "옆면",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_352.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_353",
+      "text": "뒷면",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_353.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_354",
+      "text": "안에",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_354.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_355",
+      "text": "밖에",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_355.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_356",
+      "text": "왼쪽",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_356.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_357",
+      "text": "오른쪽",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_357.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_358",
+      "text": "곧장",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_358.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_359",
+      "text": "북쪽",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_359.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_360",
+      "text": "남쪽",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_360.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_361",
+      "text": "동쪽",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_361.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_362",
+      "text": "서쪽",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_362.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_363",
+      "text": "방향",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_363.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_364",
+      "text": "여름",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_364.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_365",
+      "text": "봄",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_365.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_366",
+      "text": "겨울",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_366.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_367",
+      "text": "가을",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_367.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_368",
+      "text": "계절",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_368.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_369",
+      "text": "공",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_369.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_370",
+      "text": "첫번째",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_370.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_371",
+      "text": "둘째",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_371.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_372",
+      "text": "세번째",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_372.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_373",
+      "text": "네번째",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_373.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_374",
+      "text": "다섯번째",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_374.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_375",
+      "text": "번호",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_375.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_376",
+      "text": "일월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_376.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_377",
+      "text": "이월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_377.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_378",
+      "text": "삼월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_378.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_379",
+      "text": "사월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_379.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_380",
+      "text": "오월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_380.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_381",
+      "text": "유월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_381.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_382",
+      "text": "칠월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_382.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_383",
+      "text": "팔월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_383.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_384",
+      "text": "구월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_384.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_385",
+      "text": "시월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_385.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_386",
+      "text": "십일월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_386.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_387",
+      "text": "십이월",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_387.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_388",
+      "text": "월요일",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_388.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_389",
+      "text": "화요일",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_389.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_390",
+      "text": "수요일",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_390.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_391",
+      "text": "목요일",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_391.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_392",
+      "text": "금요일",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_392.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_393",
+      "text": "토요일",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_393.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_394",
+      "text": "일요일",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_394.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_395",
+      "text": "년",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_395.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_397",
+      "text": "분",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_397.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_399",
+      "text": "일하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_399.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_400",
+      "text": "놀다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_400.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_401",
+      "text": "걷다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_401.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_402",
+      "text": "뛰다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_402.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_403",
+      "text": "운전하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_403.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_404",
+      "text": "날다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_404.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_405",
+      "text": "수영하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_405.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_406",
+      "text": "가다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_406.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_407",
+      "text": "멈추다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_407.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_408",
+      "text": "따르다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_408.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_409",
+      "text": "생각하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_409.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_410",
+      "text": "말하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_410.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_411",
+      "text": "먹다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_411.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_412",
+      "text": "마시다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_412.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_413",
+      "text": "죽이다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_413.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_414",
+      "text": "죽다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_414.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_415",
+      "text": "웃다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_415.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_416",
+      "text": "울다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_416.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_417",
+      "text": "사다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_417.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_418",
+      "text": "지불하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_418.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_419",
+      "text": "팔다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_419.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_420",
+      "text": "쏘다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_420.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_421",
+      "text": "배우다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_421.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_422",
+      "text": "점프하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_422.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_423",
+      "text": "냄새를 맡다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_423.mp3",
+      "status": "skipped",
+      "bytes": 21358
+    },
+    {
+      "id": "essential_424",
+      "text": "듣다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_424.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_425",
+      "text": "맛보다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_425.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_426",
+      "text": "보다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_426.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_427",
+      "text": "만지다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_427.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_428",
+      "text": "뽀뽀하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_428.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_429",
+      "text": "불타다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_429.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_430",
+      "text": "녹다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_430.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_431",
+      "text": "파다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_431.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_432",
+      "text": "폭발하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_432.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_433",
+      "text": "앉다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_433.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_434",
+      "text": "서다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_434.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_435",
+      "text": "사랑하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_435.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_436",
+      "text": "지나가다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_436.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_437",
+      "text": "자르다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_437.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_438",
+      "text": "싸우다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_438.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_439",
+      "text": "눕다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_439.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_440",
+      "text": "춤추다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_440.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_441",
+      "text": "자다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_441.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_442",
+      "text": "깨다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_442.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_443",
+      "text": "노래하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_443.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_444",
+      "text": "세다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_444.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_445",
+      "text": "결혼하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_445.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_446",
+      "text": "기도하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_446.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_447",
+      "text": "이기다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_447.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_448",
+      "text": "지다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_448.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_449",
+      "text": "섞다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_449.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_450",
+      "text": "구부리다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_450.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_451",
+      "text": "씻다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_451.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_452",
+      "text": "요리하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_452.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_453",
+      "text": "열다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_453.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_454",
+      "text": "닫다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_454.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_455",
+      "text": "쓰다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_455.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_456",
+      "text": "부르다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_456.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_457",
+      "text": "돌다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_457.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_458",
+      "text": "건설하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_458.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_459",
+      "text": "가르치다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_459.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_460",
+      "text": "자라다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_460.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_461",
+      "text": "그리다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_461.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_462",
+      "text": "먹이다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_462.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_463",
+      "text": "잡다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_463.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_464",
+      "text": "던지다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_464.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_465",
+      "text": "청소하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_465.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_466",
+      "text": "찾다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_466.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_467",
+      "text": "넘어지다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_467.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_468",
+      "text": "밀다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_468.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_469",
+      "text": "당기다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_469.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_470",
+      "text": "들다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_470.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_471",
+      "text": "망가지다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_471.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_472",
+      "text": "깨지다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_472.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_473",
+      "text": "입다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_473.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_474",
+      "text": "흔들다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_474.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_475",
+      "text": "서명하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_475.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_476",
+      "text": "패다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_476.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_477",
+      "text": "들어올리다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_477.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_478",
+      "text": "길다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_478.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_479",
+      "text": "짧다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_479.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_480",
+      "text": "키가 크다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_480.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_481",
+      "text": "키가 작다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_481.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_482",
+      "text": "넓다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_482.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_483",
+      "text": "크다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_483.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_484",
+      "text": "작다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_484.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_485",
+      "text": "느리다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_485.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_486",
+      "text": "빠르다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_486.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_487",
+      "text": "뜨겁다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_487.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_488",
+      "text": "차갑다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_488.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_489",
+      "text": "따뜻하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_489.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_490",
+      "text": "선선하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_490.mp3",
+      "status": "skipped",
+      "bytes": 24284
+    },
+    {
+      "id": "essential_491",
+      "text": "새롭다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_491.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_492",
+      "text": "오래되다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_492.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_493",
+      "text": "젊다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_493.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_494",
+      "text": "늙다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_494.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_495",
+      "text": "좋다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_495.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_496",
+      "text": "나쁘다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_496.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_497",
+      "text": "젖다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_497.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_498",
+      "text": "건조하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_498.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_499",
+      "text": "아프다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_499.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_500",
+      "text": "건강하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_500.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_501",
+      "text": "시끄럽다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_501.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_502",
+      "text": "조용하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_502.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_503",
+      "text": "행복하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_503.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_504",
+      "text": "슬프다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_504.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_505",
+      "text": "아름답다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_505.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_506",
+      "text": "못생기다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_506.mp3",
+      "status": "skipped",
+      "bytes": 21358
+    },
+    {
+      "id": "essential_507",
+      "text": "귀머거리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_507.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_508",
+      "text": "맹인",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_508.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_509",
+      "text": "착하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_509.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_510",
+      "text": "가난하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_510.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_511",
+      "text": "부유하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_511.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_512",
+      "text": "두껍다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_512.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_513",
+      "text": "얇다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_513.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_514",
+      "text": "비싸다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_514.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_515",
+      "text": "싸다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_515.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_516",
+      "text": "평탄하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_516.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_517",
+      "text": "구부러지다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_517.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_518",
+      "text": "끼다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_518.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_519",
+      "text": "헐렁하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_519.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_520",
+      "text": "높다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_520.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_521",
+      "text": "낮다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_521.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_522",
+      "text": "딱딱하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_522.mp3",
+      "status": "skipped",
+      "bytes": 21358
+    },
+    {
+      "id": "essential_523",
+      "text": "부드럽다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_523.mp3",
+      "status": "skipped",
+      "bytes": 21358
+    },
+    {
+      "id": "essential_524",
+      "text": "깊다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_524.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_525",
+      "text": "얕다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_525.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_526",
+      "text": "깨끗하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_526.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_527",
+      "text": "더럽다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_527.mp3",
+      "status": "skipped",
+      "bytes": 17597
+    },
+    {
+      "id": "essential_528",
+      "text": "힘이 세다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_528.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_529",
+      "text": "약하다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_529.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_530",
+      "text": "살다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_530.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_531",
+      "text": "무겁다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_531.mp3",
+      "status": "skipped",
+      "bytes": 20105
+    },
+    {
+      "id": "essential_532",
+      "text": "가볍다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_532.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_533",
+      "text": "어둡다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_533.mp3",
+      "status": "skipped",
+      "bytes": 18851
+    },
+    {
+      "id": "essential_534",
+      "text": "밝다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_534.mp3",
+      "status": "skipped",
+      "bytes": 16343
+    },
+    {
+      "id": "essential_535",
+      "text": "인기가 많다",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_535.mp3",
+      "status": "skipped",
+      "bytes": 21358
+    },
+    {
+      "id": "essential_536",
+      "text": "저",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_536.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_537",
+      "text": "나",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_537.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_538",
+      "text": "그",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_538.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_539",
+      "text": "우리",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_539.mp3",
+      "status": "skipped",
+      "bytes": 11327
+    },
+    {
+      "id": "essential_540",
+      "text": "상대방",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_540.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_541",
+      "text": "저의",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_541.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_542",
+      "text": "내",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_542.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_543",
+      "text": "당신",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_543.mp3",
+      "status": "skipped",
+      "bytes": 13835
+    },
+    {
+      "id": "essential_544",
+      "text": "내가",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_544.mp3",
+      "status": "skipped",
+      "bytes": 15089
+    },
+    {
+      "id": "essential_545",
+      "text": "네가",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_545.mp3",
+      "status": "skipped",
+      "bytes": 12581
+    },
+    {
+      "id": "essential_546",
+      "text": "너희들",
+      "group": "vocabulary",
+      "filename": "elevenlabs_female_essential_546.mp3",
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "fam_001",
       "text": "엄마",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_001.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "fam_002",
       "text": "아빠",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_002.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "fam_003",
       "text": "오빠",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_003.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "fam_004",
       "text": "언니",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_004.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "fam_005",
       "text": "형",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_005.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "fam_006",
       "text": "누나",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_006.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "fam_007",
       "text": "남동생",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_007.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "fam_008",
       "text": "여동생",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_008.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "fam_009",
       "text": "할머니",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_009.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "fam_010",
       "text": "할아버지",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_010.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "fam_011",
       "text": "남편",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_011.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "fam_012",
       "text": "아내",
       "group": "vocabulary",
       "filename": "elevenlabs_female_fam_012.mp3",
-      "status": "generated",
-      "bytes": 11328
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "food_001",
       "text": "밥",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_001.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 10074
     },
     {
       "id": "food_002",
       "text": "물",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_002.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "food_003",
       "text": "커피",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_003.mp3",
-      "status": "generated",
-      "bytes": 18016
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "food_004",
       "text": "차",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_004.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "food_005",
       "text": "우유",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_005.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "food_006",
       "text": "주스",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_006.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "food_007",
       "text": "맥주",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_007.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "food_008",
       "text": "포도주",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_008.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "food_009",
       "text": "김밥",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_009.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "food_010",
       "text": "비빔밥",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_010.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "food_011",
       "text": "국",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_011.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "food_012",
       "text": "떡볶이",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_012.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "food_013",
       "text": "만두",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_013.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "food_014",
       "text": "고기",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_014.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "food_015",
       "text": "생선",
       "group": "vocabulary",
       "filename": "elevenlabs_female_food_015.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "num_001",
       "text": "하나",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_001.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "num_002",
       "text": "둘",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_002.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "num_003",
       "text": "셋",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_003.mp3",
-      "status": "generated",
-      "bytes": 11328
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "num_004",
       "text": "넷",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_004.mp3",
-      "status": "generated",
-      "bytes": 11328
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "num_005",
       "text": "다섯",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_005.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "num_006",
       "text": "여섯",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_006.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "num_007",
       "text": "일곱",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_007.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "num_008",
       "text": "여덟",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_008.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "num_009",
       "text": "아홉",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_009.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "num_010",
       "text": "열",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_010.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "num_011",
       "text": "시간",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_011.mp3",
-      "status": "generated",
-      "bytes": 19688
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "num_012",
       "text": "분",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_012.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "num_013",
       "text": "초",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_013.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "num_014",
       "text": "어제",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_014.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "num_015",
       "text": "오늘",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_015.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "num_016",
       "text": "내일",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_016.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "num_017",
       "text": "아침",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_017.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "num_018",
       "text": "점심",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_018.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "num_019",
       "text": "저녁",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_019.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "num_020",
       "text": "밤",
       "group": "vocabulary",
       "filename": "elevenlabs_female_num_020.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "place_001",
       "text": "학교",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_001.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "place_002",
       "text": "회사",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_002.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "place_003",
       "text": "집",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_003.mp3",
-      "status": "generated",
-      "bytes": 11328
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "place_004",
       "text": "병원",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_004.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "place_005",
       "text": "은행",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_005.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "place_006",
       "text": "가게",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_006.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "place_007",
       "text": "공원",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_007.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "place_008",
       "text": "도서관",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_008.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "place_009",
       "text": "영화관",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_009.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "place_010",
       "text": "식당",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_010.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "place_011",
       "text": "카페",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_011.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "place_012",
       "text": "역",
       "group": "vocabulary",
       "filename": "elevenlabs_female_place_012.mp3",
-      "status": "generated",
-      "bytes": 11328
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "surv_001",
       "text": "안녕하세요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_001.mp3",
-      "status": "generated",
-      "bytes": 18852
+      "status": "skipped",
+      "bytes": 18851
     },
     {
       "id": "surv_002",
       "text": "감사합니다",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_002.mp3",
-      "status": "generated",
-      "bytes": 18016
+      "status": "skipped",
+      "bytes": 20105
     },
     {
       "id": "surv_003",
       "text": "죄송합니다",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_003.mp3",
-      "status": "generated",
-      "bytes": 18852
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "surv_004",
       "text": "네",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_004.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "surv_005",
       "text": "아니요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_005.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "surv_006",
       "text": "모르겠습니다",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_006.mp3",
-      "status": "generated",
-      "bytes": 18852
+      "status": "skipped",
+      "bytes": 23030
     },
     {
       "id": "surv_007",
       "text": "도와주세요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_007.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 21358
     },
     {
       "id": "surv_008",
       "text": "화장실은 어디입니까?",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_008.mp3",
-      "status": "generated",
-      "bytes": 24703
+      "status": "skipped",
+      "bytes": 29300
     },
     {
       "id": "surv_009",
       "text": "얼마입니까?",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_009.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 18851
     },
     {
       "id": "surv_010",
       "text": "영어를 합니다",
       "group": "vocabulary",
       "filename": "elevenlabs_female_surv_010.mp3",
-      "status": "generated",
-      "bytes": 20942
+      "status": "skipped",
+      "bytes": 23030
     },
     {
       "id": "verb_001",
       "text": "가요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_001.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "verb_002",
       "text": "와요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_002.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "verb_003",
       "text": "먹어요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_003.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "verb_004",
       "text": "마셔요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_004.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "verb_005",
       "text": "자요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_005.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "verb_006",
       "text": "일어나요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_006.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "verb_007",
       "text": "공부해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_007.mp3",
-      "status": "generated",
-      "bytes": 18016
+      "status": "skipped",
+      "bytes": 18851
     },
     {
       "id": "verb_008",
       "text": "일해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_008.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "verb_009",
       "text": "놀아요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_009.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "verb_010",
       "text": "읽어요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_010.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "verb_011",
       "text": "쓰세요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_011.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "verb_012",
       "text": "말해요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_012.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "verb_013",
-      "text": "듣어요",
+      "text": "들어요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_013.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "verb_014",
       "text": "봐요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_014.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "verb_015",
       "text": "만나요",
       "group": "vocabulary",
       "filename": "elevenlabs_female_verb_015.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 15089
     }
   ],
   "alphabet": [
@@ -1104,400 +5136,320 @@
       "text": "기역",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_001.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "cons_002",
       "text": "니은",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_002.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "cons_003",
       "text": "디귿",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_003.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "cons_004",
       "text": "리을",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_004.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "cons_005",
       "text": "미음",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_005.mp3",
-      "status": "generated",
-      "bytes": 17598
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "cons_006",
       "text": "비읍",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_006.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "cons_007",
       "text": "시옷",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_007.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "cons_008",
       "text": "이응",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_008.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "cons_009",
       "text": "지읒",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_009.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "cons_010",
       "text": "치읓",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_010.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "cons_011",
       "text": "키읔",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_011.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "cons_012",
       "text": "티읕",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_012.mp3",
-      "status": "generated",
-      "bytes": 15090
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "cons_013",
       "text": "피읖",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_013.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "cons_014",
       "text": "히읗",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_014.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "cons_015",
       "text": "쌍기역",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_015.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 18851
     },
     {
       "id": "cons_016",
       "text": "쌍디귿",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_016.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 18851
     },
     {
       "id": "cons_017",
       "text": "쌍비읍",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_017.mp3",
-      "status": "generated",
-      "bytes": 15926
+      "status": "skipped",
+      "bytes": 16343
     },
     {
       "id": "cons_018",
       "text": "쌍시옷",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_018.mp3",
-      "status": "generated",
-      "bytes": 16762
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "cons_019",
       "text": "쌍지읒",
       "group": "alphabet",
       "filename": "elevenlabs_female_cons_019.mp3",
-      "status": "generated",
-      "bytes": 18016
-    },
-    {
-      "id": "num_001",
-      "text": "하나",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_001.mp3",
-      "status": "generated",
-      "bytes": 15926
-    },
-    {
-      "id": "num_002",
-      "text": "둘",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_002.mp3",
-      "status": "generated",
-      "bytes": 16762
-    },
-    {
-      "id": "num_003",
-      "text": "셋",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_003.mp3",
-      "status": "generated",
-      "bytes": 15090
-    },
-    {
-      "id": "num_004",
-      "text": "넷",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_004.mp3",
-      "status": "generated",
-      "bytes": 11328
-    },
-    {
-      "id": "num_005",
-      "text": "다섯",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_005.mp3",
-      "status": "generated",
-      "bytes": 15926
-    },
-    {
-      "id": "num_006",
-      "text": "여섯",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_006.mp3",
-      "status": "generated",
-      "bytes": 13000
-    },
-    {
-      "id": "num_007",
-      "text": "일곱",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_007.mp3",
-      "status": "generated",
-      "bytes": 13836
-    },
-    {
-      "id": "num_008",
-      "text": "여덟",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_008.mp3",
-      "status": "generated",
-      "bytes": 14254
-    },
-    {
-      "id": "num_009",
-      "text": "아홉",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_009.mp3",
-      "status": "generated",
-      "bytes": 15090
-    },
-    {
-      "id": "num_010",
-      "text": "열",
-      "group": "alphabet",
-      "filename": "elevenlabs_female_num_010.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 17597
     },
     {
       "id": "vowel_001",
       "text": "아",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_001.mp3",
-      "status": "generated",
-      "bytes": 10911
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_002",
       "text": "야",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_002.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "vowel_003",
       "text": "어",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_003.mp3",
-      "status": "generated",
-      "bytes": 9239
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_004",
       "text": "여",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_004.mp3",
-      "status": "generated",
-      "bytes": 11328
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_005",
       "text": "오",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_005.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_006",
       "text": "요",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_006.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_007",
       "text": "우",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_007.mp3",
-      "status": "generated",
-      "bytes": 10911
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_008",
       "text": "유",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_008.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_009",
       "text": "으",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_009.mp3",
-      "status": "generated",
-      "bytes": 10911
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_010",
       "text": "이",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_010.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 10074
     },
     {
       "id": "vowel_011",
       "text": "애",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_011.mp3",
-      "status": "generated",
-      "bytes": 11328
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_012",
       "text": "얘",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_012.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "vowel_013",
       "text": "에",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_013.mp3",
-      "status": "generated",
-      "bytes": 10911
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_014",
       "text": "예",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_014.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_015",
       "text": "와",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_015.mp3",
-      "status": "generated",
-      "bytes": 14254
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "vowel_016",
       "text": "왜",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_016.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 12581
     },
     {
       "id": "vowel_017",
       "text": "외",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_017.mp3",
-      "status": "generated",
-      "bytes": 10911
+      "status": "skipped",
+      "bytes": 11327
     },
     {
       "id": "vowel_018",
       "text": "워",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_018.mp3",
-      "status": "generated",
-      "bytes": 13000
+      "status": "skipped",
+      "bytes": 15089
     },
     {
       "id": "vowel_019",
       "text": "웨",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_019.mp3",
-      "status": "generated",
-      "bytes": 13836
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_020",
       "text": "위",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_020.mp3",
-      "status": "generated",
-      "bytes": 12164
+      "status": "skipped",
+      "bytes": 13835
     },
     {
       "id": "vowel_021",
       "text": "의",
       "group": "alphabet",
       "filename": "elevenlabs_female_vowel_021.mp3",
-      "status": "generated",
-      "bytes": 11328
+      "status": "skipped",
+      "bytes": 13835
     }
   ]
 }

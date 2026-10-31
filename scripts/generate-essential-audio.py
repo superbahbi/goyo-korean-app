@@ -9,8 +9,9 @@ AUDIO.mkdir(parents=True, exist_ok=True)
 INDEX_PATH = AUDIO / 'index.json'
 SOURCE = ROOT / 'client/src/lib/essentialVocabulary.ts'
 API_KEY = os.environ.get('ELEVENLABS_API_KEY', '')
-MODEL = 'eleven_multilingual_v2'
-VOICES = {'male': ('ZJCNdZEjYwkOElxugmW2', 'elevenlabs_'), 'female': ('uyVNoMrnUku1dZyVEXwD', 'elevenlabs_female_')}
+MODELS = {'male': 'eleven_multilingual_v2', 'female': 'eleven_v4'}
+VOICES = {'male': ('ZJCNdZEjYwkOElxugmW2', 'elevenlabs_'), 'female': ('0oqpliV6dVSr9XomngOW', 'elevenlabs_female_')}
+VOICE_NAMES = {'male': 'Hyuk - Cold and Clear', 'female': 'Jini - Warm & Intelligent Korean Female'}
 
 def write_manifest_atomically(manifest_data, target_path: Path):
     tmp_path = target_path.parent / f"{target_path.name}.tmp"
@@ -37,7 +38,7 @@ def generate(item, voice_key):
         return True,item['id'],voice_key,'existing'
     for attempt in range(4):
         try:
-            r=session.post(f'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}',headers={'xi-api-key':API_KEY,'Content-Type':'application/json','Accept':'audio/mpeg'},json={'text':item['text'],'model_id':MODEL,'output_format':'mp3_44100_32','voice_settings':{'stability':0.65,'similarity_boost':0.8,'style':0,'use_speaker_boost':True}},timeout=90)
+            r=session.post(f'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}',headers={'xi-api-key':API_KEY,'Content-Type':'application/json','Accept':'audio/mpeg'},json={'text':item['text'],'model_id':MODELS[voice_key],'output_format':'mp3_44100_32','voice_settings':{'stability':0.65,'similarity_boost':0.8,'style':0,'use_speaker_boost':True}},timeout=90)
             if r.ok and len(r.content)>1000:
                 path.write_bytes(r.content); mapping[item['id']]=filename
                 return True,item['id'],voice_key,'generated'
@@ -54,10 +55,10 @@ with ThreadPoolExecutor(max_workers=4) as pool:
         ok,card,voice,status=future.result(); completed+=1
         if not ok: failures.append((card,voice,status))
         if completed%20==0:
-            index['metadata']={'provider':'ElevenLabs','model':MODEL,'voices':{'male':'Hyuk - Cold and Clear','female':'Anna Kim - Tender, Calm and Clear'},'voiceIds':{'male':VOICES['male'][0],'female':VOICES['female'][0]}}
+            index['metadata']={'provider':'ElevenLabs','model':MODELS['female'],'models':MODELS,'voices':VOICE_NAMES,'voiceIds':{'male':VOICES['male'][0],'female':VOICES['female'][0]}}
             write_manifest_atomically(index, INDEX_PATH)
             print(f'completed {completed}/{len(tasks)} failures={len(failures)}',flush=True)
-index['metadata']={'provider':'ElevenLabs','model':MODEL,'voices':{'male':'Hyuk - Cold and Clear','female':'Anna Kim - Tender, Calm and Clear'},'voiceIds':{'male':VOICES['male'][0],'female':VOICES['female'][0]}}
+index['metadata']={'provider':'ElevenLabs','model':MODELS['female'],'models':MODELS,'voices':VOICE_NAMES,'voiceIds':{'male':VOICES['male'][0],'female':VOICES['female'][0]}}
 write_manifest_atomically(index, INDEX_PATH)
 (ROOT / '.tmp').mkdir(parents=True, exist_ok=True)
 Path(ROOT/'.tmp/essential-audio-failures.json').write_text(json.dumps(failures,ensure_ascii=False,indent=2),encoding='utf-8')

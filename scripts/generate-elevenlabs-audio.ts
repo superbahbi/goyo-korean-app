@@ -22,29 +22,61 @@ interface RetryableError extends Error {
   retryable?: boolean;
 }
 
-const rootArg = process.argv.slice(2).find((arg) => !arg.startsWith("--"));
+const cliArgs = process.argv.slice(2);
+
+// CLI voice flag handling: --voice female | --voice=female | --voice <voiceId>
+const voiceArg = cliArgs.find((arg) => arg.startsWith("--voice="));
+const voiceFlagIndex = cliArgs.indexOf("--voice");
+const voiceCli =
+  voiceArg?.split("=")[1] ??
+  (voiceFlagIndex !== -1 && cliArgs[voiceFlagIndex + 1] && !cliArgs[voiceFlagIndex + 1].startsWith("--")
+    ? cliArgs[voiceFlagIndex + 1]
+    : undefined);
+
+// The first bare argument is an optional project root. The value following
+// `--voice` belongs to that flag, so it must not be mistaken for a path.
+const voiceValueIndex = voiceArg ? -1 : voiceFlagIndex !== -1 && voiceCli ? voiceFlagIndex + 1 : -1;
+const rootArg = cliArgs.find((arg, index) => index !== voiceValueIndex && !arg.startsWith("--"));
 const defaultRoot = path.resolve(fileURLToPath(import.meta.url), "../..");
 const projectRoot = rootArg ? path.resolve(rootArg) : defaultRoot;
 const audioDir = path.join(projectRoot, "public", "audio");
 
-// CLI voice flag handling: --voice female | --voice=female | --voice <voiceId>
-const voiceArg = process.argv.find((arg) => arg.startsWith("--voice="));
-const voiceFlagIndex = process.argv.indexOf("--voice");
-const voiceCli = voiceArg
-  ? voiceArg.split("=")[1]
-  : voiceFlagIndex !== -1 && process.argv[voiceFlagIndex + 1] && !process.argv[voiceFlagIndex + 1].startsWith("--")
-    ? process.argv[voiceFlagIndex + 1]
-    : undefined;
+interface VoicePreset {
+  voiceId: string;
+  prefix: string;
+  manifest: string;
+  modelId: string;
+}
 
-const isFemale = voiceCli === "female";
-const defaultVoiceId = isFemale ? "uyVNoMrnUku1dZyVEXwD" : "ZJCNdZEjYwkOElxugmW2";
-const defaultPrefix = isFemale ? "elevenlabs_female_" : "elevenlabs_";
-const defaultManifest = isFemale ? "elevenlabs-female-manifest.json" : "elevenlabs-manifest.json";
+// Named presets keep the CLI terse: --voice male|female|jini. `jini` reuses the
+// female filename prefix and index slot so the app's female speaker plays Jini.
+const VOICE_PRESETS: Record<string, VoicePreset> = {
+  male: {
+    voiceId: "ZJCNdZEjYwkOElxugmW2",
+    prefix: "elevenlabs_",
+    manifest: "elevenlabs-manifest.json",
+    modelId: "eleven_multilingual_v2",
+  },
+  female: {
+    voiceId: "uyVNoMrnUku1dZyVEXwD",
+    prefix: "elevenlabs_female_",
+    manifest: "elevenlabs-female-manifest.json",
+    modelId: "eleven_multilingual_v2",
+  },
+  jini: {
+    voiceId: "0oqpliV6dVSr9XomngOW",
+    prefix: "elevenlabs_female_",
+    manifest: "elevenlabs-female-manifest.json",
+    modelId: "eleven_v4",
+  },
+};
 
-const filePrefix = process.env.ELEVENLABS_FILE_PREFIX || defaultPrefix;
-const manifestPath = path.join(audioDir, process.env.ELEVENLABS_MANIFEST_NAME || defaultManifest);
-const voiceId = process.env.ELEVENLABS_VOICE_ID || (voiceCli && voiceCli !== "female" && voiceCli !== "male" ? voiceCli : defaultVoiceId);
-const modelId = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
+const activePreset = (voiceCli && VOICE_PRESETS[voiceCli]) || VOICE_PRESETS.male;
+
+const filePrefix = process.env.ELEVENLABS_FILE_PREFIX || activePreset.prefix;
+const manifestPath = path.join(audioDir, process.env.ELEVENLABS_MANIFEST_NAME || activePreset.manifest);
+const voiceId = process.env.ELEVENLABS_VOICE_ID || (voiceCli && !VOICE_PRESETS[voiceCli] ? voiceCli : activePreset.voiceId);
+const modelId = process.env.ELEVENLABS_MODEL_ID || activePreset.modelId;
 const concurrency = Math.max(1, Math.min(5, Number(process.env.ELEVENLABS_CONCURRENCY || 3)));
 const force = process.argv.includes("--force");
 const apiKey = process.env.ELEVENLABS_API_KEY;
