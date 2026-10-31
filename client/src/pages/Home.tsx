@@ -387,6 +387,32 @@ export default function Home() {
     gradeCard(cardId, rating, { mode: "shadowing", practiceOnly: true });
   };
 
+  // Forecasts are hooks, so they must run on every render, including the first
+  // paint before saved state loads. An empty state yields an empty forecast.
+  const reviewForecast = useMemo(() => {
+    if (!cardStates) return [];
+    return buildReviewForecast(studyReady, cardStates, today, 7, { overdueOnFirstDay: true }).map((day, offset) => ({
+      ...day,
+      label:
+        offset === 0
+          ? "Today"
+          : offset === 1
+            ? "Tomorrow"
+            : new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { weekday: "short" }),
+    }));
+  }, [cardStates, studyReady, today]);
+  const extendedReviewForecast = useMemo(() => {
+    if (!cardStates) return [];
+    return buildReviewForecast(studyReady, cardStates, today, 30).map((day) => ({
+      ...day,
+      label: new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+    }));
+  }, [cardStates, studyReady, today]);
+  const { total: forecastTotal, peak: forecastPeak, status: workloadStatus } = useMemo(
+    () => summarizeForecast(extendedReviewForecast, state?.settings.dailyGoal ?? 0),
+    [extendedReviewForecast, state?.settings.dailyGoal],
+  );
+
   if (!state) return null;
 
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - cardsStudiedToday);
@@ -413,27 +439,6 @@ export default function Home() {
   const visibleBrowseCards = filteredCards.slice(0, browseVisibleCount);
   const { totalReviews, overallAccuracy, medianResponseTime } = reviewStats;
   const masteredCount = masteryCounts.known;
-  const reviewForecast = useMemo(() => {
-    return buildReviewForecast(studyReady, state.cardStates, today, 7, { overdueOnFirstDay: true }).map((day, offset) => ({
-      ...day,
-      label:
-        offset === 0
-          ? "Today"
-          : offset === 1
-            ? "Tomorrow"
-            : new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { weekday: "short" }),
-    }));
-  }, [studyReady, state.cardStates, today]);
-  const extendedReviewForecast = useMemo(() => {
-    return buildReviewForecast(studyReady, state.cardStates, today, 30).map((day) => ({
-      ...day,
-      label: new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
-    }));
-  }, [studyReady, state.cardStates, today]);
-  const { total: forecastTotal, peak: forecastPeak, status: workloadStatus } = useMemo(
-    () => summarizeForecast(extendedReviewForecast, state.settings.dailyGoal),
-    [extendedReviewForecast, state.settings.dailyGoal],
-  );
   const nextScheduledReview = getNextScheduledReview(state.cardStates, today);
 
   return (
