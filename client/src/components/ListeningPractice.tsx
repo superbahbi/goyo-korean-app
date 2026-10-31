@@ -23,7 +23,9 @@ function shuffle<T>(items: T[]): T[] {
 }
 
 export function ListeningPractice({ cards, onGrade, onClose }: ListeningPracticeProps) {
-  const questions = useMemo(() => shuffle(cards).slice(0, QUESTION_COUNT), [cards]);
+  // The caller orders due and weak cards first; keep that order so the session
+  // starts with what is actually slipping, and only shuffle the alternatives.
+  const questions = useMemo(() => cards.slice(0, QUESTION_COUNT), [cards]);
   const [index, setIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [answerState, setAnswerState] = useState<AnswerState>("unanswered");
@@ -36,9 +38,17 @@ export function ListeningPractice({ cards, onGrade, onClose }: ListeningPractice
 
   const choices = useMemo(() => {
     if (!currentCard) return [];
-    const distractors = shuffle(cards.filter((card) => card.id !== currentCard.id))
-      .slice(0, 3)
-      .map((card) => ({ id: card.id, text: card.back }));
+    // Distractors must differ in meaning, not just in card id.
+    const seen = new Set([currentCard.back.trim().toLowerCase()]);
+    const distractors: { id: string; text: string }[] = [];
+    for (const card of shuffle(cards)) {
+      if (card.id === currentCard.id) continue;
+      const meaning = card.back.trim().toLowerCase();
+      if (seen.has(meaning)) continue;
+      seen.add(meaning);
+      distractors.push({ id: card.id, text: card.back });
+      if (distractors.length === 3) break;
+    }
     return shuffle([{ id: currentCard.id, text: currentCard.back }, ...distractors]);
   }, [cards, currentCard]);
 

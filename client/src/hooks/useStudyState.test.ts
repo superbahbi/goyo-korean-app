@@ -288,6 +288,27 @@ describe("applyGrade", () => {
     expect(second.stats.streak).toBe(2);
   });
 
+  it("keeps a card first met in listening on a one- to two-day interval", () => {
+    const state = parseSavedState(JSON.stringify({ cardStates: {}, stats, settings, studyDays }), today);
+    const graded = applyGrade(state, "surv_001", "easy", { mode: "listening" }, new Date("2026-10-31T09:30:00.000Z"));
+
+    expect(graded.cardStates.surv_001.timesReviewed).toBe(1);
+    expect(graded.cardStates.surv_001.interval).toBe(2);
+    expect(graded.cardStates.surv_001.consecutiveCorrect).toBe(0);
+  });
+
+  it("logs shadowing without touching the schedule or progress", () => {
+    const state = parseSavedState(JSON.stringify({ cardStates: { surv_001: card }, stats, settings, studyDays }), today);
+    const at = new Date("2026-10-31T09:30:00.000Z");
+    const practiced = applyGrade(state, "surv_001", "good", { mode: "shadowing", practiceOnly: true }, at);
+
+    expect(practiced.cardStates).toEqual(state.cardStates);
+    expect(practiced.stats).toEqual(state.stats);
+    expect(practiced.studyDays).toEqual(state.studyDays);
+    expect(practiced.reviewLog.entries).toHaveLength(1);
+    expect(practiced.reviewLog.entries[0]).toMatchObject({ mode: "shadowing", rating: "good" });
+  });
+
   it("does not count a same-day re-grade as another review", () => {
     const state = parseSavedState(JSON.stringify({ cardStates: { surv_001: card }, stats, settings, studyDays }), today);
     const at = new Date("2026-10-31T09:30:00.000Z");
