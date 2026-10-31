@@ -1,4 +1,9 @@
 import { writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
+const rootDir = path.resolve(fileURLToPath(import.meta.url), "../..");
+const targetPath = path.join(rootDir, "public", "audio", "elevenlabs_num_004.mp3");
 
 const voiceId = process.env.ELEVENLABS_VOICE_ID || "ZJCNdZEjYwkOElxugmW2";
 const apiKey = process.env.ELEVENLABS_API_KEY;
@@ -16,5 +21,6 @@ const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voic
 if (!response.ok) throw new Error(`ElevenLabs HTTP ${response.status}: ${(await response.text()).slice(0, 300)}`);
 const audio = Buffer.from(await response.arrayBuffer());
 if (audio.length < 1000) throw new Error(`Audio too small: ${audio.length}`);
-await writeFile("/home/ubuntu/goyo-korean-app/public/audio/elevenlabs_num_004.mp3", audio);
+await writeFile(targetPath, audio);
 console.log(`regenerated male num_004 (${audio.length} bytes)`);
+

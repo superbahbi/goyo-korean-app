@@ -4,8 +4,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from openai import OpenAI
 
-SOURCE = Path('/home/ubuntu/goyo-korean-app/client/src/lib/essentialVocabulary.ts')
-OUTPUT = Path('/home/ubuntu/goyo-korean-app/.tmp/essential-enriched.json')
+ROOT = Path(__file__).resolve().parent.parent
+SOURCE = ROOT / 'client/src/lib/essentialVocabulary.ts'
+OUTPUT = ROOT / '.tmp/essential-enriched.json'
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
 records = []

@@ -79,25 +79,17 @@ Accounts and sync, push reminders, sentence-level audio, grammar content, Playwr
 
 ## Backlog
 
-Items from the DeepSeek review that are not in the stages above. Pick them up while touching the relevant files.
+Items from the review that remain. Completed: stop-audio promise settling, lazy-load error boundary, Browse stopping audio, two-tab sync, orphaned manifest ids, curated romanizations, headword typos, and the script cleanup (portable paths, atomic manifest, real deck import, `reset-alphabet-file.py` removed).
 
-- `audioPlayer.ts`: `stopAudio` leaves the previous play promise unsettled, so callers awaiting it can hang.
 - `audioPlayer.ts`: `fallbackText`, `ttsEnabled` and `autoPlayAudio` are accepted but never used. Implement them or remove them.
 - `audioPlayer.ts`: the female alphabet index uses ID keys and the male index uses mnemonic keys. Use one scheme.
 - `audioPlayer.ts`: `vocabularyAudioAliases` is dead code.
-- `Home.tsx`: dashboard aggregates and the 30-day forecast are recomputed on every render. Use `useMemo`, and compute the forecast only when the Stats dialog is open.
+- `Home.tsx`: dashboard aggregates recompute on every render. The forecasts are single-pass now, but mastery counts and category totals are not memoized.
 - `Home.tsx`: the session queue is derived state copied into `useState` by an effect.
-- `Home.tsx`: the lazy-load `Suspense` fallback is not an overlay, and there is no per-modal error boundary for failed chunk loads.
 - `Home.tsx`: the Browse romanization toggle duplicates text that is already shown.
-- `Home.tsx`: closing Browse during playback does not stop the audio.
-- `useStudyState.ts`: `gradeCard` and `updateSettings` should use functional state updates, and a `storage` listener would keep two open tabs in sync.
 - `useStudyState.ts`: `totalCardsLearned` counts a new card graded "again".
 - `StudySession.tsx`: no guard against a double click on a rating button, and the completion screen does not stop audio.
 - `FlashCard.tsx`: auto-play re-fires when flipping back to the front.
 - `srs.ts`: `box` is written but never read.
-- Scripts: remove hardcoded `/home/ubuntu` paths, write the audio manifest atomically, make `generate-elevenlabs-audio.mjs` import the real vocabulary data instead of scraping it with a regex, and delete `reset-alphabet-file.py`, which would overwrite `alphabet.ts` with stale data.
 - `vite.config.ts`: remove the `@assets` alias and the `*.manus*` entries in `allowedHosts`.
-- `public/audio/index.json`: 29 orphaned IDs belong to cards that were deduplicated out of the deck.
 - `client/src/lib/vocabulary.ts` and `docs/phase-1-content-audit.md` still say imported cards are not audio-ready.
-- Curated romanization errors: `surv_008`, `surv_009`, `color_001`.
-- Headword typos `essential_306` 어름 → 얼음, `essential_488` 차겁다 → 차갑다, and `verb_013` 듣어요 → 들어요 are fixed, with audio regenerated.

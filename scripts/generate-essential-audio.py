@@ -3,14 +3,19 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 import requests
 
-ROOT = Path('/home/ubuntu/goyo-korean-app')
+ROOT = Path(__file__).resolve().parent.parent
 AUDIO = ROOT / 'public/audio'
 AUDIO.mkdir(parents=True, exist_ok=True)
 INDEX_PATH = AUDIO / 'index.json'
 SOURCE = ROOT / 'client/src/lib/essentialVocabulary.ts'
-API_KEY = os.environ['ELEVENLABS_API_KEY']
+API_KEY = os.environ.get('ELEVENLABS_API_KEY', '')
 MODEL = 'eleven_multilingual_v2'
 VOICES = {'male': ('ZJCNdZEjYwkOElxugmW2', 'elevenlabs_'), 'female': ('uyVNoMrnUku1dZyVEXwD', 'elevenlabs_female_')}
+
+def write_manifest_atomically(manifest_data, target_path: Path):
+    tmp_path = target_path.parent / f"{target_path.name}.tmp"
+    tmp_path.write_text(json.dumps(manifest_data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    tmp_path.replace(target_path)
 
 records=[]
 for line in SOURCE.read_text(encoding='utf-8').splitlines():
@@ -50,9 +55,10 @@ with ThreadPoolExecutor(max_workers=4) as pool:
         if not ok: failures.append((card,voice,status))
         if completed%20==0:
             index['metadata']={'provider':'ElevenLabs','model':MODEL,'voices':{'male':'Hyuk - Cold and Clear','female':'Anna Kim - Tender, Calm and Clear'},'voiceIds':{'male':VOICES['male'][0],'female':VOICES['female'][0]}}
-            INDEX_PATH.write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+            write_manifest_atomically(index, INDEX_PATH)
             print(f'completed {completed}/{len(tasks)} failures={len(failures)}',flush=True)
 index['metadata']={'provider':'ElevenLabs','model':MODEL,'voices':{'male':'Hyuk - Cold and Clear','female':'Anna Kim - Tender, Calm and Clear'},'voiceIds':{'male':VOICES['male'][0],'female':VOICES['female'][0]}}
-INDEX_PATH.write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+write_manifest_atomically(index, INDEX_PATH)
+(ROOT / '.tmp').mkdir(parents=True, exist_ok=True)
 Path(ROOT/'.tmp/essential-audio-failures.json').write_text(json.dumps(failures,ensure_ascii=False,indent=2),encoding='utf-8')
 print(f'finished {completed}/{len(tasks)} failures={len(failures)}')

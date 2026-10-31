@@ -23,6 +23,7 @@ interface AudioIndex {
 }
 
 let audioIndex: AudioIndex | null = null;
+let audioIndexPromise: Promise<AudioIndex> | null = null;
 let currentAudio: HTMLAudioElement | null = null;
 // Settles the in-flight playback promise when it is stopped from outside, so
 // callers awaiting playAudioFile never hang.
@@ -84,27 +85,84 @@ const vowelAudioAliases: Record<string, string> = {
   vowel_012: "e",
 };
 
-async function loadAudioIndex(): Promise<AudioIndex> {
-  if (audioIndex) return audioIndex;
-
-  const response = await fetch(`/audio/index.json?v=${Date.now()}`, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`Audio index request failed (${response.status})`);
+function fetchAudioIndex(): Promise<AudioIndex> {
+  if (typeof window === "undefined" || typeof fetch === "undefined") {
+    return Promise.reject(new Error("Audio index fetch called outside browser"));
   }
 
-  audioIndex = (await response.json()) as AudioIndex;
-  return audioIndex;
+  return fetch(`/audio/index.json?v=${Date.now()}`, { cache: "no-store" })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Audio index request failed (${response.status})`);
+      }
+      return response.json() as Promise<AudioIndex>;
+    })
+    .then((data) => {
+      audioIndex = data;
+      return data;
+    });
+}
+
+// Module-level prefetch: begin loading immediately so the index is typically resolved by first tap
+if (typeof window !== "undefined") {
+  audioIndexPromise = fetchAudioIndex().catch((err) => {
+    audioIndexPromise = null;
+    throw err;
+  });
+  audioIndexPromise.catch(() => {
+    /* swallow background preload rejection to avoid unhandled rejection warning */
+  });
+}
+
+async function loadAudioIndex(): Promise<AudioIndex> {
+  if (audioIndex) return audioIndex;
+  if (!audioIndexPromise) {
+    audioIndexPromise = fetchAudioIndex().catch((err) => {
+      audioIndexPromise = null;
+      throw err;
+    });
+  }
+  return audioIndexPromise;
+}
+
+function resolveVocabularyAudioFile(index: AudioIndex, wordId: string): string | undefined {
+  const legacyKey = vocabularyAudioAliases[wordId];
+  const vocabularyIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.vocabulary : index.vocabulary;
+  return (
+    vocabularyIndex?.[wordId] ??
+    (legacyKey ? vocabularyIndex?.[legacyKey] : undefined) ??
+    (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${wordId}.mp3` : undefined)
+  );
+}
+
+function resolveAlphabetAudioFile(
+  index: AudioIndex,
+  characterId: string,
+  type: "consonant" | "vowel"
+): string | undefined {
+  const aliases = type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
+  const key = aliases[characterId] ?? characterId;
+  const alphabetIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.alphabet : index.alphabet;
+  const files = type === "consonant" ? alphabetIndex?.consonants : alphabetIndex?.vowels;
+  if (!files) throw new Error("Female premium audio index is unavailable");
+  return files[key] ?? (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${characterId}.mp3` : undefined);
 }
 
 export async function playVocabularyAudio(wordId: string, fallbackText?: string): Promise<void> {
   try {
-    const index = await loadAudioIndex();
-    const legacyKey = vocabularyAudioAliases[wordId];
-    const vocabularyIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.vocabulary : index.vocabulary;
-    const audioFile = vocabularyIndex?.[wordId]
-      ?? (legacyKey ? vocabularyIndex?.[legacyKey] : undefined)
-      ?? (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${wordId}.mp3` : undefined);
+    // When the index is already loaded, resolve and trigger playback synchronously
+    // without awaiting first, so mobile Safari retains user gesture activation.
+    if (audioIndex) {
+      const audioFile = resolveVocabularyAudioFile(audioIndex, wordId);
+      if (!audioFile) {
+        throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
+      }
+      await playAudioFile(`/audio/${audioFile}`);
+      return;
+    }
 
+    const index = await loadAudioIndex();
+    const audioFile = resolveVocabularyAudioFile(index, wordId);
     if (!audioFile) {
       throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
     }
@@ -120,15 +178,18 @@ export async function playAlphabetAudio(
   type: "consonant" | "vowel"
 ): Promise<void> {
   try {
-    const index = await loadAudioIndex();
-    const aliases = type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
-    const key = aliases[characterId] ?? characterId;
-    const alphabetIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.alphabet : index.alphabet;
-    const files = type === "consonant" ? alphabetIndex?.consonants : alphabetIndex?.vowels;
-    if (!files) throw new Error("Female premium audio index is unavailable");
-    const audioFile = files[key]
-      ?? (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${characterId}.mp3` : undefined);
+    // Synchronous resolution when index is cached to preserve user gesture
+    if (audioIndex) {
+      const audioFile = resolveAlphabetAudioFile(audioIndex, characterId, type);
+      if (!audioFile) {
+        throw new Error(`No generated audio mapped for ${type} ${characterId}`);
+      }
+      await playAudioFile(`/audio/${audioFile}`);
+      return;
+    }
 
+    const index = await loadAudioIndex();
+    const audioFile = resolveAlphabetAudioFile(index, characterId, type);
     if (!audioFile) {
       throw new Error(`No generated audio mapped for ${type} ${characterId}`);
     }
@@ -265,6 +326,7 @@ export function isAudioPlaying(): boolean {
 
 export function resetAudioIndex(): void {
   audioIndex = null;
+  audioIndexPromise = null;
 }
 
 export function setAudioSpeaker(speaker: AudioSpeaker): void {
