@@ -27,6 +27,10 @@ export function StudySession({
   title = "Daily Session",
 }: StudySessionProps) {
   const [index, setIndex] = useState(0);
+  // A failed card re-enters the session once, so the queue can grow while the
+  // session runs. Keep it local to avoid replaying the parent's original plan.
+  const [sessionQueue, setSessionQueue] = useState<VocabularyCard[]>(() => [...queue]);
+  const retriedIds = useRef(new Set<string>());
   const [flipped, setFlipped] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [results, setResults] = useState({ again: 0, good: 0, easy: 0 });
@@ -53,8 +57,7 @@ export function StudySession({
     onClose();
   };
 
-  const currentCard = queue[index];
-  const isLastCard = index >= queue.length - 1;
+  const currentCard = sessionQueue[index];
 
   const handleFlip = (nextFlipped: boolean) => {
     if (nextFlipped && recallTimeMs.current === null) {
@@ -71,7 +74,16 @@ export function StudySession({
     onGrade(currentCard.id, rating, { responseTimeMs });
     setResults((current) => ({ ...current, [rating]: current[rating] + 1 }));
 
-    if (!isLastCard) {
+    // A lapse comes back once, at the end, before the summary. The scheduler
+    // already recorded the failure, so the re-grade changes no schedule.
+    const shouldRetry = rating === "again" && !retriedIds.current.has(currentCard.id);
+    if (shouldRetry) {
+      retriedIds.current.add(currentCard.id);
+      setSessionQueue((current) => [...current, currentCard]);
+    }
+
+    const nextLength = sessionQueue.length + (shouldRetry ? 1 : 0);
+    if (index + 1 < nextLength) {
       setIndex(index + 1);
       setFlipped(false);
       setProductionAttempt("");
@@ -88,6 +100,8 @@ export function StudySession({
 
   const restartSession = () => {
     gradingLocked.current = false;
+    retriedIds.current.clear();
+    setSessionQueue([...queue]);
     setIndex(0);
     setFlipped(false);
     setCompleted(false);
@@ -101,8 +115,9 @@ export function StudySession({
   if (completed) {
     const total = results.again + results.good + results.easy;
     const remembered = results.good + results.easy;
-    const nextAction = results.again > 0
-      ? `${results.again} card${results.again === 1 ? " needs" : "s need"} a short rebuild tomorrow.`
+    const failedCards = retriedIds.current.size;
+    const nextAction = failedCards > 0
+      ? `${failedCards} card${failedCards === 1 ? " needs" : "s need"} a short rebuild tomorrow.`
       : results.easy === total
         ? "Excellent fluency signal—let the scheduler stretch these intervals."
         : "Keep the rhythm: another short session will strengthen today's recall.";
@@ -126,8 +141,13 @@ export function StudySession({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">Session complete</p>
             <h2 className="mt-2 font-serif text-3xl text-slate-900">Well practiced</h2>
             <p className="mt-3 text-slate-600">
-              You remembered <strong>{remembered}</strong> of {total} cards.
+              You remembered <strong>{remembered}</strong> of {total} reviews.
             </p>
+            {failedCards > 0 && (
+              <p className="mt-2 text-sm text-slate-500">
+                {failedCards} {failedCards === 1 ? "card came" : "cards came"} back once for a second try.
+              </p>
+            )}
             <p className="mt-3 rounded-2xl bg-indigo-50 px-4 py-3 text-sm leading-relaxed text-indigo-700">{nextAction}</p>
             <div className="mt-6 grid grid-cols-3 gap-2 text-center">
               <div className="rounded-2xl bg-red-50 p-3"><div className="text-2xl font-bold text-red-600">{results.again}</div><div className="text-xs text-red-700">Again</div></div>
@@ -161,10 +181,10 @@ export function StudySession({
             <X />
           </Button>
           <div className="max-w-xs flex-1 px-4 sm:px-8">
-            <Progress value={((index + (flipped ? 0.5 : 0)) / queue.length) * 100} className="h-2" />
+            <Progress value={((index + (flipped ? 0.5 : 0)) / sessionQueue.length) * 100} className="h-2" />
           </div>
           <div className="text-sm font-medium text-slate-500 min-w-[60px] text-right">
-            {index + 1} / {queue.length}
+            {index + 1} / {sessionQueue.length}
             <span className="block text-xs text-slate-400">{title} · {flipped ? "Choose a rating" : "Recall first"}</span>
           </div>
         </header>

@@ -291,10 +291,13 @@ describe("applyGrade", () => {
   it("does not count a same-day re-grade as another review", () => {
     const state = parseSavedState(JSON.stringify({ cardStates: { surv_001: card }, stats, settings, studyDays }), today);
     const at = new Date("2026-10-31T09:30:00.000Z");
-    const first = applyGrade(state, "surv_001", "good", {}, at);
-    const repeat = applyGrade(first, "surv_001", "good", {}, at);
+    const first = applyGrade(state, "surv_001", "again", {}, at);
+    const retry = applyGrade(first, "surv_001", "good", {}, at);
 
-    expect(repeat.studyDays["2026-10-31"]).toEqual({ cards: 1, reviews: 1 });
-    expect(repeat.reviewLog.entries).toHaveLength(2);
+    expect(retry.studyDays["2026-10-31"]).toEqual({ cards: 1, reviews: 1 });
+    expect(retry.reviewLog.entries).toHaveLength(2);
+    // A second try after "Again" must not earn XP or move the schedule again.
+    expect(retry.stats.totalXp).toBe(first.stats.totalXp);
+    expect(retry.cardStates.surv_001.timesReviewed).toBe(first.cardStates.surv_001.timesReviewed);
   });
 });
