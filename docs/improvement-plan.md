@@ -1,0 +1,222 @@
+# Goyo improvement plan
+
+This is the single source of truth for what to build next. It replaces the old
+`roadmap.md`, `phase-1-content-audit.md` and `srs-recall-quality.md`; their still-relevant
+content is folded in below (the SRS model and the deck provenance are reference sections).
+
+Every stage is done only when its gate passes.
+
+## Product
+
+- Free public web app. The maintainer is the first user, so the app is tuned on one real learner first.
+- Learner: English-speaking beginner. TOPIK I is the ceiling. No grammar lessons yet.
+- Success: users still reviewing 4+ days a week after 30 days.
+- Budget: a few hours a week and little or no new audio spend.
+- No accounts or backend. Progress lives in `localStorage` and moves by JSON export/import.
+- No third-party analytics. Measure retention locally and by checking in with testers.
+
+## Current state
+
+Verified on 2026-10-30 at `c4765a3`:
+
+| Check          | Result                                                                            |
+| -------------- | --------------------------------------------------------------------------------- |
+| `tsc --noEmit` | Passes                                                                            |
+| `vitest run`   | 39 tests pass (scheduling, saved state, import, deck data)                        |
+| `vite build`   | Passes. Main chunk 586 kB (183 kB gzipped), Essential 600 a separate 209 kB chunk |
+| CI             | Type check, tests and build are green on `main`                                   |
+
+What is solid: the deck is validated by tests, the scheduler is tested, saves are sanitized,
+CI runs every push, and the PWA precaches the shell plus Hangul and number audio.
+
+What is weak: the learning loop (no same-session retry, recognition modes feed the SRS),
+offline audio probably does not work, two settings are dead, progress is not protected from
+browser eviction, and `Home.tsx` is a 1,233-line monolith with 53 UI files of which 16 are used.
+
+## How we work
+
+- **Branch and PR for everything.** No direct commits to `main`.
+  `feat/…`, `fix/…`, `chore/…`, `docs/…`. One concern per PR.
+- **PR size:** aim for under ~400 changed lines. If a task is bigger, split it.
+- **Gate for every PR:** `pnpm check`, `pnpm test`, `pnpm build` all pass, run locally and in CI.
+  Behaviour tests cannot cover (UI, audio, PWA, iOS) is checked in a browser before merge.
+- **Authors and reviewers:** the coder is a cheap model (Haiku 5.5; escalate to Gemini 3.8 Flash if a
+  task fails its gate twice). The reviewer is a different model (DeepSeek V4.1 Flash). Never the same
+  model as the author. Stronger models only for a specific task the maintainer approves.
+- **Briefs to the coder** should name one stage task, the files involved, and the acceptance criteria
+  below. Start a fresh session per task to keep context small.
+- **Docs stay current.** When a phase closes, update the status table in this file in the same PR.
+
+## Status
+
+| Phase                           | State                     |
+| ------------------------------- | ------------------------- |
+| 0 Repairs                       | Not started               |
+| 1 Learning loop and measurement | Not started               |
+| 2 Structure                     | Not started               |
+| 3 Content                       | Not started               |
+| 4 Delivery and accessibility    | Not started               |
+| 5 Tune from data                | Blocked on 30 days of use |
+
+---
+
+## Phase 0: Repairs (do first)
+
+Small, high-value fixes. Each bullet is its own PR.
+
+1. **Offline audio.** `client/src/lib/audioPlayer.ts` fetches `/audio/index.json?v=<Date.now()>`
+   with `cache: "no-store"`, and `index.json` is not precached (it is absent from `dist/public/sw.js`).
+   Offline, the index cannot load, so no clip plays, including precached Hangul clips.
+   - Precache `/audio/index.json` in `vite.config.ts` (the audio files themselves stay on demand).
+   - Drop the timestamp and `no-store`; let the service worker and HTTP cache do their job.
+   - Apply the same to `DownloadAllAudio.tsx`.
+   - Acceptance: with the network off, a fresh reload plays Hangul audio and any previously played word.
+2. **Visible audio failure.** The study card is audio-only until reveal. If playback fails the card is
+   unusable. Add a fallback: a short message plus a "Show Korean" button, and a toast on console error
+   paths. Acceptance: muting the device or blocking `/audio/` still lets a session continue.
+3. **Dead settings.** `autoPlayAudio` is never read (`autoSpeak` is hard-coded to `true` in
+   `StudySession`), and `ttsEnabled` is displayed in Settings but does nothing.
+   - Wire `autoPlayAudio` to `FlashCard`'s auto-play.
+   - Delete `ttsEnabled` from the type, defaults and parser (persisted saves keep working because
+     unknown keys are ignored) and remove its Settings row.
+   - Acceptance: with auto-play off, no audio starts without a tap.
+4. **Protect progress.** Installable PWAs get persistent storage; browser tabs do not.
+   - Call `navigator.storage.persist()` once after the first graded card, and show a one-time prompt
+     suggesting install-to-home-screen for iPhone users.
+   - Add a gentle "last backed up N days ago" line in Settings with a shortcut to export.
+   - Acceptance: Settings shows the backup age; `navigator.storage.persisted()` is requested on first use.
+5. **PWA update notice.** `registerType: "prompt"` with no UI means an installed iOS app can stay on an
+   old version indefinitely. Use `registerSW`'s `onNeedRefresh` to show a toast with a "Reload" action.
+   - Acceptance: a new build shows the notice on the next launch and reloads when tapped.
+6. **Local environment.** `pnpm-workspace.yaml` has no `packages:` field, so pnpm 9 errors with
+   "packages field missing or empty"; local Node is 20.17 while `.nvmrc` says 22.
+   - Move `onlyBuiltDependencies` into `package.json` (`pnpm` field) or add `packages: ["."]`.
+   - Raise `engines.node` to `>=22.12` to match Vite 7 and `.nvmrc`.
+   - Document Node 22 + `corepack enable` in the README.
+   - Acceptance: a clean clone runs `pnpm check`, `pnpm test` and `pnpm build` on Node 22.
+
+## Phase 1: Learning loop and measurement
+
+The reason retention is the metric: right now the app cannot measure whether anyone is retaining.
+
+1. **Review log.** Append `{ cardId, at, rating, responseTimeMs, mode }` to a capped local array
+   (5,000 entries, oldest dropped) with `schemaVersion`. Keep it out of the export by default, with a
+   "include review log" checkbox.
+   - Acceptance: after a session, the log contains one entry per grade; export/import still round-trips.
+2. **Study-day history.** Store one entry per studied day with card and review counts. Derive the streak
+   and a new Stats block from it instead of the `cardsStudiedToday` counter.
+   - Acceptance: Stats shows days studied in the last 7 and 30 days. Streaks survive a reinstall via import.
+3. **Same-session retry.** A card graded `Again` re-enters the session queue once, near the end, before
+   the summary. The SRS still records failure immediately.
+   - Acceptance: failed cards appear again in the same session; re-grading does not double count XP or
+     the review count (the existing same-day guard already covers the schedule).
+4. **Recognition modes stop inflating intervals.** Listening, Scenario and Shadowing score recognition,
+   not recall, but grade cards identically.
+   - Listening and Scenario: cap the interval growth (for example `good` behaves like the 2-day
+     reinforcer) and never introduce brand-new cards.
+   - Shadowing: self-reported, so treat it as practice only.
+   - Listening also draws questions from due and weak cards first, not the whole deck, and keeps
+     distractors distinct in meaning.
+   - Acceptance: a card first met in Listening has a `timesReviewed` of 1 and a 1–2 day interval, not a
+     multi-week one. New tests cover the cap.
+5. **New-card pacing.** Replace the hard-coded `slice(0, 3)` with a `newCardsPerDay` setting (default 3).
+   Order new cards by theme and frequency, not source row order, so a beginner meets the most useful
+   words first.
+6. **Queue as a tested module.** Move the queue, forecast and workload logic out of `Home.tsx` into
+   `client/src/lib/queue.ts` with unit tests (due order, weak selection, new-card cap, no duplicates).
+7. **Keyboard shortcuts** in the study session: `Space` reveals, `1`/`2`/`3` grade, `Esc` closes.
+   - Acceptance: all three work with a screen reader announcing the new card.
+
+## Phase 2: Structure and tooling
+
+1. Split `client/src/pages/Home.tsx` into `pages/Home.tsx` (layout and state), `components/BrowseDialog.tsx`,
+   `components/StatsDialog.tsx`, `components/SettingsDialog.tsx`, and `lib/queue.ts` (Phase 1) and
+   `lib/xp.ts` (level math shared with `useStudyState`). Target: no file over 300 lines.
+2. Delete the 37 unused `client/src/components/ui/*` files and the dependencies only they use
+   (recharts, react-hook-form, @hookform/resolvers, zod, embla-carousel-react, cmdk, input-otp,
+   react-day-picker, react-resizable-panels, vaul, nanoid, and `workbox-window` if unused).
+   Re-check the bundle after each batch. Target: under 400 kB raw main chunk.
+3. Add ESLint (`typescript-eslint` + `react-hooks`) and `prettier --check` to CI. Run
+   `prettier --write` once in its own commit (36 files are currently unformatted).
+4. Read saved state synchronously (`useState(loadState)`) so the first paint is not a blank screen,
+   and make the daily count reset at midnight while the app is open.
+5. Replace `sort(() => Math.random() - 0.5)` shuffles with Fisher–Yates (`lib/shuffle.ts`).
+6. Housekeeping: delete `.gitkeep`, the one-shot `scripts/*elevenlabs*.mjs` activators
+   (keep the generator), move `scripts/test-srs.test.ts` to `client/src/lib/srs.test.ts`, and note the
+   remaining scripts in the README.
+7. Keep the roadmap honest: this file is the backlog. No second list.
+
+## Phase 3: Content quality
+
+The imported Essential 600 examples, translations and usage notes were written by a model and have had
+no human review. That is the largest content risk.
+
+1. Sample audit: review 50 imported cards (10%) with a Korean speaker or a second model, and record the
+   error rate. Fix every error found in that sample.
+2. Fix the systemic issues the audit finds (naturalness, politeness level, part-of-speech, batchim
+   romanization). Review the remaining deck in batches of 25–50 as time allows.
+3. Rewrite weak curated examples (`영어를 도와주세요`, `넷은 너무 많아요`, the 20 identical `나는다…` place
+   sentences) and add `exampleEnglish` where it is missing.
+4. Theme the Essential deck: replace the single `essential` tag with themes for browsing, while keeping
+   one library category. Add a difficulty signal only if it is real.
+5. Add an audio test that asserts every `studyReady` card has a clip in both voices.
+
+## Phase 4: Delivery and accessibility
+
+1. Accessibility pass: contrast on `slate-300`/`slate-400` text at 9–11px, `lang="ko"` on Korean text,
+   focus rings on the dashboard's `motion.button` cards, labelled icon-only controls, `aria-live` on
+   grading feedback. Re-check in a real browser, including the practice overlays.
+2. Vercel headers: long-lived immutable caching for `/assets/*` and hashed audio, a modest `max-age` for
+   `sw.js`, and baseline security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`).
+3. Audio delivery: content-hashed filenames so a regenerated clip cannot be served stale, and decide
+   whether 26 MB of mp3s keeps living in git (repo is 43 MB) or moves to object storage or LFS.
+4. Playwright smoke tests: study loop, Browse search and play, import/export, offline shell reload.
+5. Verify on a real iPhone: first-tap audio, install, offline, update notice.
+
+## Phase 5: Tune from real data (after 30 days)
+
+Only after Phase 1 has produced a review log:
+
+1. Retention first: if learners forget too much, reduce `Good` growth before changing the daily goal.
+2. Workload second: if queues grow, revisit the 90-day cap and `Easy` growth.
+3. Mastery last: adjust the `Known` threshold only after reviewing accuracy by card age.
+4. Consider FSRS (`ts-fsrs`) if the simple model underperforms. Do not tune from XP or streaks; those
+   measure motivation, not memory.
+
+---
+
+## Reference: the scheduler
+
+Deliberately simple, explainable, and tested.
+
+Each card tracks `interval` (days), `easeFactor` (1.3–3.2), `consecutiveCorrect`, `lapseCount` and
+`lastResponseTimeMs`. Missing fields on old saves use conservative defaults, so no progress is lost.
+
+| Rating | First review | Later                   | Meaning                        |
+| ------ | -----------: | ----------------------- | ------------------------------ |
+| Again  |        1 day | reset to 1 day          | Retrieval failed; rebuild soon |
+| Good   |       2 days | `interval × ease`       | Successful effortful recall    |
+| Easy   |       4 days | `interval × ease × 1.3` | Immediate, confident recall    |
+
+- Intervals are rounded and capped at 90 days (temporary; revisit with real data).
+- A lapse lowers ease by 0.2; `Easy` raises it by 0.15.
+- Response time is secondary: over 12 seconds trims growth slightly, a fast answer never overrides an
+  honest `Again`.
+- Same-day re-grading does not compound the interval; only a fresh lapse can change a card already
+  reviewed today.
+- `Known` requires 3+ reviews, 75%+ accuracy, a 7-day interval and 2 consecutive correct recalls.
+
+## Reference: deck provenance
+
+- Source: `The600EssentialKoreanWords.xlsx`. 547 valid rows, 542 unique headwords after fixing source
+  typos (`자정거` → `자전거`, `놉다` → `높다`).
+- Genuine homonyms stay separate cards: 차, 눈, 공, 병, 달, 배, 다리, 열, 분.
+- 29 senses duplicate curated cards and were dropped, leaving 517 imported cards. The curated deck of
+  136 cards remains study-ready with reviewed examples and audio.
+- Romanization is generated by `romanize.ts` (Revised Romanization) and linted by `data.test.ts`.
+- Audio: ElevenLabs, two voices (Hyuk, Jini), one clip per card per voice in `public/audio/`.
+
+## Deferred, not decided
+
+Accounts and sync, push reminders, sentence-level audio, grammar lessons, a real TTS fallback,
+multi-deck user imports, and any paid tier.
