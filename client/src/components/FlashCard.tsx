@@ -1,8 +1,9 @@
-import { memo, useState, useEffect, useRef, type KeyboardEvent } from "react";
+import { memo, useCallback, useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Volume2, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { playVocabularyAudio } from "@/lib/audioPlayer";
 
 interface FlashCardProps {
@@ -41,20 +42,41 @@ function FlashCardBase({
 }: FlashCardProps) {
   const [flipped, setFlipped] = useState(false);
   const [showRoman, setShowRoman] = useState(false);
+  // A card that only shows audio is unusable when the clip cannot play (muted
+  // device, blocked /audio/, offline miss). Track that so the front can offer a
+  // way forward instead of trapping the learner.
+  const [audioFailed, setAudioFailed] = useState(false);
+  const audioFailureAnnounced = useRef(false);
   const isRevealed = revealed ?? flipped;
   // Auto-play at most once per word per mount: flipping back to the front must
   // not replay the pronunciation.
   const lastAutoPlayedId = useRef<string | null>(null);
 
+  const markAudioFailed = useCallback((announce: boolean) => {
+    setAudioFailed(true);
+    if (!announce || audioFailureAnnounced.current) return;
+    audioFailureAnnounced.current = true;
+    toast.error("Pronunciation unavailable", {
+      description: "Reveal the Korean to keep this card moving.",
+    });
+  }, []);
+
+  useEffect(() => {
+    audioFailureAnnounced.current = false;
+    setAudioFailed(false);
+  }, [wordId]);
+
   useEffect(() => {
     if (!isRevealed && autoSpeak && lastAutoPlayedId.current !== wordId) {
       const timer = setTimeout(() => {
         lastAutoPlayedId.current = wordId;
-        void playVocabularyAudio(wordId);
+        void playVocabularyAudio(wordId).then((played) => {
+          if (!played) markAudioFailed(true);
+        });
       }, 300);
       return () => clearTimeout(timer);
     }
-  }, [isRevealed, front, wordId, autoSpeak]);
+  }, [isRevealed, front, wordId, autoSpeak, markAudioFailed]);
 
   const handleFlip = () => {
     const nextValue = !isRevealed;
@@ -92,7 +114,7 @@ function FlashCardBase({
           inert={isRevealed}
           animate={{ opacity: isRevealed ? 0 : 1, pointerEvents: isRevealed ? "none" : "auto" }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 bg-white border-2 border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
+          className="absolute inset-0 overflow-y-auto bg-white border-2 border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
         >
           <Badge variant="outline" className="mb-8 capitalize text-slate-500 font-medium bg-slate-50 border-slate-200">
             {tag}
@@ -105,6 +127,25 @@ function FlashCardBase({
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Listen &amp; recall</p>
               <h2 className="mt-3 text-2xl font-bold text-slate-800">What does this mean?</h2>
               <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-500">Say the meaning silently before revealing the Korean and example.</p>
+              {audioFailed && (
+                <div role="status" className="mt-5 flex max-w-xs flex-col items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+                  <p className="text-xs leading-relaxed text-amber-800">
+                    Audio isn&apos;t available, so you can&apos;t hear this card. Reveal it to keep going.
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="border-amber-300 bg-white text-amber-900 hover:bg-amber-100"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleFlip();
+                    }}
+                  >
+                    Show Korean
+                  </Button>
+                </div>
+              )}
             </>
           ) : (
             <h2 className="text-5xl font-bold text-slate-900 mb-6">{cleanKoreanText(front)}</h2>
@@ -127,7 +168,9 @@ function FlashCardBase({
               aria-label={`Play pronunciation for ${cleanKoreanText(front)}`}
               onClick={(e) => {
                 e.stopPropagation();
-                void playVocabularyAudio(wordId);
+                void playVocabularyAudio(wordId).then((played) => {
+                  if (!played) markAudioFailed(true);
+                });
               }}
             >
               <Volume2 size={20} />
