@@ -17,21 +17,23 @@ Every stage is done only when its gate passes.
 
 ## Current state
 
-Verified on 2026-10-30 at `c4765a3`:
+Verified on 2026-10-31 at `114cef6`:
 
-| Check          | Result                                                                            |
-| -------------- | --------------------------------------------------------------------------------- |
-| `tsc --noEmit` | Passes                                                                            |
-| `vitest run`   | 39 tests pass (scheduling, saved state, import, deck data)                        |
-| `vite build`   | Passes. Main chunk 586 kB (183 kB gzipped), Essential 600 a separate 209 kB chunk |
-| CI             | Type check, tests and build are green on `main`                                   |
+| Check          | Result                                                                             |
+| -------------- | ---------------------------------------------------------------------------------- |
+| `tsc --noEmit` | Passes                                                                             |
+| `vitest run`   | 100 tests pass (scheduler, saved state, review log, study days, queue, deck data)  |
+| `vite build`   | Passes. Main chunk 604 kB (188 kB gzipped), Essential 600 a separate 209 kB chunk  |
+| CI             | Type check, tests and build are green on `main`                                    |
 
-What is solid: the deck is validated by tests, the scheduler is tested, saves are sanitized,
-CI runs every push, and the PWA precaches the shell plus Hangul and number audio.
+What is solid: the deck is validated by tests; the scheduler, queue, saved state, review log and
+study-day history are tested; saves are sanitized; the learning loop retries failed cards and
+recognition modes no longer stretch intervals; CI runs every push; the PWA precaches the shell,
+the audio index, Hangul and number audio.
 
-What is weak: the learning loop (no same-session retry, recognition modes feed the SRS),
-offline audio probably does not work, two settings are dead, progress is not protected from
-browser eviction, and `Home.tsx` is a 1,233-line monolith with 53 UI files of which 16 are used.
+What is weak: `Home.tsx` is still a 1,300-line monolith with 53 UI files of which 16 are used; the
+imported Essential 600 examples have had no human review; no ESLint or format check; and several
+behaviour checks still need a real browser, screen reader and iPhone.
 
 ## How we work
 
@@ -49,20 +51,25 @@ browser eviction, and `Home.tsx` is a 1,233-line monolith with 53 UI files of wh
 
 ## Status
 
-| Phase                           | State                                                     |
-| ------------------------------- | --------------------------------------------------------- |
-| 0 Repairs                       | Code done, in review (#3–#7); browser checks outstanding  |
-| 1 Learning loop and measurement | Next                                                      |
-| 2 Structure                     | Not started                                               |
-| 3 Content                       | Not started                                               |
-| 4 Delivery and accessibility    | Not started                                               |
-| 5 Tune from data                | Blocked on 30 days of use                                 |
+| Phase                           | State                                                        |
+| ------------------------------- | ------------------------------------------------------------ |
+| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding           |
+| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open  |
+| 2 Structure                     | Next                                                         |
+| 3 Content                       | Not started                                                  |
+| 4 Delivery and accessibility    | Not started                                                  |
+| 5 Tune from data                | Blocked on 30 days of use                                    |
 
-Phase 0 status per item: 1 offline audio is merged (#2); 6 local environment (#3), 2 visible
-audio failure (#4), 3 dead settings (#5), 4 protect progress (#6) and 5 PWA update notice
-(#7) are open. The acceptance steps that need a device — blocked audio, auto-play off,
-`storage.persisted()` on first grade, iPhone install hint, update toast — still need a browser
-and an iPhone check before the phase is called done.
+Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
+settings (#5), protected progress (#6) and the update notice (#7). Its device checks — blocked
+audio, auto-play off, `storage.persisted()` on first grade, iPhone install hint, update toast —
+still need a browser and an iPhone.
+
+Phase 1 is merged: review log (#9), study-day history (#10), same-session retry (#11), recognition
+caps (#12), keyboard shortcuts (#13), queue module (#14) and new-card pace (#15). Task 5's theme
+order ships, but frequency ranking for the imported deck waits on the Phase 3 themes and a
+frequency signal; the imported cards therefore stay last and in deck order. Browser checks still
+outstanding: keyboard flow with a screen reader, recognition modes, and the study-day stats.
 
 ---
 
@@ -128,6 +135,10 @@ The reason retention is the metric: right now the app cannot measure whether any
 5. **New-card pacing.** Replace the hard-coded `slice(0, 3)` with a `newCardsPerDay` setting (default 3).
    Order new cards by theme and frequency, not source row order, so a beginner meets the most useful
    words first.
+   - Pacing is merged (#15): `newCardsPerDay` defaults to 3 and clamps to 1–10.
+   - New cards follow the curated theme order (survival, daily, numbers, food, …) before imported
+     cards. The imported deck still has no theme or frequency metadata, so frequency ranking waits
+     on Phase 3; its cards stay last and in deck order until then.
 6. **Queue as a tested module.** Move the queue, forecast and workload logic out of `Home.tsx` into
    `client/src/lib/queue.ts` with unit tests (due order, weak selection, new-card cap, no duplicates).
 7. **Keyboard shortcuts** in the study session: `Space` reveals, `1`/`2`/`3` grade, `Esc` closes.
