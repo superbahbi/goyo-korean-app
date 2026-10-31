@@ -1,8 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { scheduleReview } from "@/lib/srs";
 import { requestPersistentStorage } from "@/lib/storageProtection";
+import {
+  appendReviewEntry,
+  createReviewLog,
+  sanitizeReviewLog,
+  type ReviewLog,
+  type StudyMode,
+} from "@/lib/reviewLog";
 
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export interface CardState {
   id: string;
@@ -47,6 +54,13 @@ export interface UserState {
     autoPlayAudio: boolean;
     audioSpeaker: "elevenlabs" | "elevenlabs-female";
   };
+  reviewLog: ReviewLog;
+}
+
+export interface GradeOptions {
+  countProgress?: boolean;
+  responseTimeMs?: number;
+  mode?: StudyMode;
 }
 
 const STORAGE_KEY = "goyo-progress-v2";
@@ -82,6 +96,7 @@ function createDefaultState(): UserState {
       autoPlayAudio: true,
       audioSpeaker: "elevenlabs",
     },
+    reviewLog: createReviewLog(),
   };
 }
 
@@ -163,7 +178,13 @@ export function parseSavedState(raw: string | null): UserState {
       audioSpeaker: savedSettings.audioSpeaker === "elevenlabs-female" ? "elevenlabs-female" : "elevenlabs",
     };
 
-    return { schemaVersion: SCHEMA_VERSION, cardStates, stats, settings };
+    return {
+      schemaVersion: SCHEMA_VERSION,
+      cardStates,
+      stats,
+      settings,
+      reviewLog: sanitizeReviewLog(parsed.reviewLog),
+    };
   } catch (error) {
     console.error("Failed to load saved progress, starting fresh:", error);
     return defaults;
@@ -184,18 +205,25 @@ function resetDailyCountIfNewDay(state: UserState): UserState {
   return { ...state, stats: { ...state.stats, cardsStudiedToday: 0 } };
 }
 
-export function buildExportPayload(state: UserState, exportedAt = new Date()) {
-  return {
+export function buildExportPayload(
+  state: UserState,
+  exportedAt = new Date(),
+  options: { includeReviewLog?: boolean } = {},
+) {
+  const payload = {
     schemaVersion: state.schemaVersion,
     exportedAt: exportedAt.toISOString(),
     cardStates: state.cardStates,
     stats: state.stats,
     settings: state.settings,
   };
+  // The review log is for local analysis: it is large and not needed to restore
+  // progress, so it only travels when the learner asks for it.
+  return options.includeReviewLog ? { ...payload, reviewLog: state.reviewLog } : payload;
 }
 
 export type ImportValidation =
-  | { ok: true; state: UserState; exportedAt: string | null }
+  | { ok: true; state: UserState; exportedAt: string | null; hasReviewLog: boolean }
   | { ok: false; reason: string };
 
 // Rejects anything that is not a complete progress save. Missing or unknown
@@ -232,8 +260,93 @@ export function validateImportPayload(raw: string): ImportValidation {
 
   const exportedAt =
     typeof parsed.exportedAt === "string" && !Number.isNaN(Date.parse(parsed.exportedAt)) ? parsed.exportedAt : null;
+  const hasReviewLog = isRecord(parsed.reviewLog) && Array.isArray(parsed.reviewLog.entries);
 
-  return { ok: true, state: parseSavedState(raw), exportedAt };
+  return { ok: true, state: parseSavedState(raw), exportedAt, hasReviewLog };
+}
+
+/**
+ * Apply one grade to saved progress. Pure, so the review log and the schedule
+ * can be tested without React or localStorage; `now` is injectable for tests.
+ */
+export function applyGrade(
+  state: UserState,
+  cardId: string,
+  rating: "again" | "good" | "easy",
+  options: GradeOptions = {},
+  now = new Date(),
+): UserState {
+  const requestedProgress = options.countProgress !== false;
+  const today = getLocalDateKey(now);
+  const yesterday = addDays(today, -1);
+
+  const existingCard = state.cardStates[cardId];
+  const { schedule, advanced } = scheduleReview(existingCard, rating, today, options.responseTimeMs);
+  // Re-grading a card already reviewed today earns no progress or XP.
+  const countProgress = requestedProgress && advanced;
+  const xpGain = countProgress ? (rating === "easy" ? 15 : rating === "good" ? 10 : 5) : 0;
+
+  // Determine streak
+  const lastDate = state.stats.lastStudyDate;
+  let newStreak = state.stats.streak;
+
+  if (!countProgress) {
+    newStreak = state.stats.streak;
+  } else if (lastDate === today) {
+    newStreak = state.stats.streak;
+  } else if (lastDate === yesterday) {
+    newStreak = state.stats.streak + 1;
+  } else {
+    newStreak = 1;
+  }
+
+  const newHighestStreak = Math.max(state.stats.highestStreak, newStreak);
+
+  const cardsStudiedToday = lastDate === today ? state.stats.cardsStudiedToday : 0;
+  const responseTimeMs = options.responseTimeMs;
+  const newCardState: CardState = {
+    id: cardId,
+    due: advanced || !existingCard ? addDays(today, schedule.interval) : existingCard.due,
+    interval: schedule.interval,
+    timesReviewed: (existingCard?.timesReviewed || 0) + (advanced ? 1 : 0),
+    timesCorrect: (existingCard?.timesCorrect || 0) + (advanced && rating !== "again" ? 1 : 0),
+    lastReviewDate: today,
+    easeFactor: schedule.easeFactor,
+    consecutiveCorrect: schedule.consecutiveCorrect,
+    lapseCount: schedule.lapseCount,
+    lastResponseTimeMs: typeof responseTimeMs === "number" ? responseTimeMs : existingCard?.lastResponseTimeMs,
+  };
+
+  const isNewCard = !existingCard;
+
+  return {
+    ...state,
+    cardStates: {
+      ...state.cardStates,
+      [cardId]: newCardState,
+    },
+    stats: {
+      totalXp: state.stats.totalXp + xpGain,
+      level: Math.floor(Math.sqrt((state.stats.totalXp + xpGain) / 100)) + 1,
+      lastStudyDate: countProgress ? today : state.stats.lastStudyDate,
+      streak: newStreak,
+      highestStreak: newHighestStreak,
+      cardsStudiedToday: countProgress ? cardsStudiedToday + 1 : cardsStudiedToday,
+      totalCardsLearned:
+        countProgress && isNewCard && rating !== "again"
+          ? state.stats.totalCardsLearned + 1
+          : state.stats.totalCardsLearned,
+    },
+    // Every grade is logged, including a same-day repeat. The scheduler still
+    // owns whether the schedule moves; the log records what the learner did.
+    reviewLog: appendReviewEntry(state.reviewLog, {
+      cardId,
+      at: now.toISOString(),
+      rating,
+      responseTimeMs: typeof responseTimeMs === "number" ? responseTimeMs : null,
+      mode: options.mode ?? "daily",
+    }),
+  };
 }
 
 export function useStudyState() {
@@ -266,82 +379,14 @@ export function useStudyState() {
   }, [state]);
 
   const gradeCard = useCallback(
-    (cardId: string, rating: "again" | "good" | "easy", options?: { countProgress?: boolean; responseTimeMs?: number }) => {
+    (cardId: string, rating: "again" | "good" | "easy", options?: GradeOptions) => {
       if (!state) return;
 
       // Persist storage is granted per origin and cannot be requested repeatedly
       // for effect; ask on the first real use, not on first paint.
       void requestPersistentStorage();
 
-      const requestedProgress = options?.countProgress !== false;
-      const today = getLocalDateKey();
-      const yesterday = addDays(today, -1);
-
-      const existingCard = state.cardStates[cardId];
-      const { schedule, advanced } = scheduleReview(existingCard, rating, today, options?.responseTimeMs);
-      // Re-grading a card already reviewed today earns no progress or XP.
-      const countProgress = requestedProgress && advanced;
-      const xpGain = countProgress ? (rating === "easy" ? 15 : rating === "good" ? 10 : 5) : 0;
-
-      // Determine streak
-      const lastDate = state.stats.lastStudyDate;
-      let newStreak = state.stats.streak;
-
-      if (!countProgress) {
-        newStreak = state.stats.streak;
-      } else if (lastDate === today) {
-        newStreak = state.stats.streak;
-      } else if (lastDate === yesterday) {
-        newStreak = state.stats.streak + 1;
-      } else {
-        newStreak = 1;
-      }
-
-      const newHighestStreak = Math.max(
-        state.stats.highestStreak,
-        newStreak
-      );
-
-      const cardsStudiedToday = lastDate === today ? state.stats.cardsStudiedToday : 0;
-      const responseTimeMs = options?.responseTimeMs;
-      const newCardState: CardState = {
-        id: cardId,
-        due: advanced || !existingCard ? addDays(today, schedule.interval) : existingCard.due,
-        interval: schedule.interval,
-        timesReviewed: (existingCard?.timesReviewed || 0) + (advanced ? 1 : 0),
-        timesCorrect:
-          (existingCard?.timesCorrect || 0) + (advanced && rating !== "again" ? 1 : 0),
-        lastReviewDate: today,
-        easeFactor: schedule.easeFactor,
-        consecutiveCorrect: schedule.consecutiveCorrect,
-        lapseCount: schedule.lapseCount,
-        lastResponseTimeMs: typeof responseTimeMs === "number" ? responseTimeMs : existingCard?.lastResponseTimeMs,
-      };
-
-      const isNewCard = !existingCard;
-
-      const newState: UserState = {
-        ...state,
-        cardStates: {
-          ...state.cardStates,
-          [cardId]: newCardState,
-        },
-        stats: {
-          totalXp: state.stats.totalXp + xpGain,
-          level: Math.floor(
-            Math.sqrt((state.stats.totalXp + xpGain) / 100)
-          ) + 1,
-          lastStudyDate: countProgress ? today : state.stats.lastStudyDate,
-          streak: newStreak,
-          highestStreak: newHighestStreak,
-          cardsStudiedToday: countProgress ? cardsStudiedToday + 1 : cardsStudiedToday,
-          totalCardsLearned: countProgress && isNewCard && rating !== "again"
-            ? state.stats.totalCardsLearned + 1
-            : state.stats.totalCardsLearned,
-        },
-      };
-
-      setState(newState);
+      setState(applyGrade(state, cardId, rating, options));
     },
     [state]
   );
