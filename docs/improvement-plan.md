@@ -19,16 +19,16 @@ Every stage is done only when its gate passes.
 
 ## Current state
 
-Verified on 2026-10-31 on `main` after Phase 3 (`4af340d` plus the Phase 3 batches):
+Verified on 2026-10-31 on `main` after Phase 3 (`4af340d` plus the Phase 3 batches and the post-close review):
 
-| Check              | Result                                                                                                                                                                                          |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tsc --noEmit`     | Passes                                                                                                                                                                                          |
-| `eslint .`         | Passes                                                                                                                                                                                          |
-| `prettier --check` | Passes                                                                                                                                                                                          |
-| `vitest run`       | 172 tests pass in 18 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples) |
-| `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk                                |
-| CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                                                             |
+| Check              | Result                                                                                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tsc --noEmit`     | Passes                                                                                                                                                                                                             |
+| `eslint .`         | Passes                                                                                                                                                                                                             |
+| `prettier --check` | Passes                                                                                                                                                                                                             |
+| `vitest run`       | 179 tests pass in 19 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up) |
+| `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk                                                   |
+| CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                                                                                |
 
 All gates pass.
 
@@ -81,7 +81,7 @@ several practice views are still longer.
 | 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                     |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                            |
 | 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                      |
-| 3 Content                       | Done; all five tasks complete; Korean-speaker spot check of the audited cards still pending                                             |
+| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                         |
 | 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels and reduced motion done; device checks, hashed audio and Playwright open |
 | 5 Tune from data                | Blocked on 30 days of use                                                                                                               |
 
@@ -288,6 +288,15 @@ task is one PR.
      `surv_007` now reads `이 문제를 풀 수 있게 도와주세요.` and `num_004` reads `우리 가족은 넷이에요.`,
      with the number example synced in `alphabet.ts`. `curatedExamples.test.ts` bans the old phrases
      and caps the template at two.
+   - Post-close review (2026-10-31): reviewing #31–#33 found eight residual defects, all fixed.
+     Three headwords still carried their misspellings while the new notes called them misspellings —
+     `노랑색` → `노란색` (069), `쥬스` → `주스` (171) and `볼팬` → `볼펜` (215) — so both voice clips
+     were regenerated for each. Five sampled cards were repaired too: the tongue example (262) now
+     uses `제 혀를 살펴보셨어요`, the vowel example (336) uses the vowel letters `ㅏ, ㅑ, ㅓ, ㅕ`
+     instead of syllables, the ugly example (506) no longer insults an actor, the ring gloss (518) no
+     longer repeats "to wear", and `나뭇잎` (300) now romanizes as `namunnip` via a documented lexical
+     exception for ㄴ 첨가. `phase3Followup.test.ts` guards the content fixes and `data.test.ts`
+     covers the romanization exception.
 
 Already done, keep it: `data.test.ts` asserts that every study-ready card has a manifest entry and both
 audio files on disk, which covers the old item 5.

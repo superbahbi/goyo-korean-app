@@ -519,6 +519,37 @@
     "reauditedAt": "2026-10-31",
     "openFixes": 0,
     "method": "Every fixed card was re-read against the same five-point rubric after the edit, then the committed sheet was regenerated from the same seed.",
-    "result": "No remaining errors found in the 50-card sample."
+    "result": "No remaining errors were found at the time of the re-audit. The post-close review below later found five residual defects in this sample; all are fixed."
+  },
+  "postCloseReview": {
+    "at": "2026-10-31",
+    "reason": "Reviewing PRs #31–#33 found defects in cards this sample had marked pass, plus one extra content issue on 506.",
+    "resolved": [
+      {
+        "id": "essential_262",
+        "previousVerdict": "pass",
+        "resolution": "Example now reads 의사가 제 혀를 살펴보셨어요; the old sentence mixed plain 내 with the honorific and stopped at 말하셨어요."
+      },
+      {
+        "id": "essential_300",
+        "previousVerdict": "pass",
+        "resolution": "Romanization corrected to namunnip; romanize.ts now has a documented lexical exception for 나뭇잎 (ㄴ 첨가)."
+      },
+      {
+        "id": "essential_336",
+        "previousVerdict": "pass",
+        "resolution": "Example now uses the vowel letters ㅏ, ㅑ, ㅓ, ㅕ instead of the syllables 아, 야, 어, 여."
+      },
+      {
+        "id": "essential_506",
+        "previousVerdict": "fix",
+        "resolution": "Example no longer calls an actor ugly; it now uses the monster in a drawing."
+      },
+      {
+        "id": "essential_518",
+        "previousVerdict": "pass",
+        "resolution": "Back no longer repeats 'to wear'; it now reads 'to put on (a ring); to wear'."
+      }
+    ]
   }
 }

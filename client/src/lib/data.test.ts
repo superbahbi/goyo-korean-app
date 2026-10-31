@@ -123,6 +123,7 @@ describe("Revised Romanization", async () => {
       ["앉아", "anja"],
       ["짧다", "jjalda"],
       ["많다", "manta"],
+      ["나뭇잎", "namunnip"],
       ["어디입니까?", "eodiimnikka?"],
     ];
     for (const [front, expected] of cases)
