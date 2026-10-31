@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { memo, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Volume2, ChevronRight } from "lucide-react";
@@ -25,7 +25,7 @@ function cleanKoreanText(text: string): string {
   return match ? match[1].trim() : text.trim();
 }
 
-export function FlashCard({
+function FlashCardBase({
   wordId,
   front,
   back,
@@ -173,3 +173,7 @@ export function FlashCard({
     </motion.div>
   );
 }
+
+// React.memo keeps a card from re-rendering when its parent session re-renders
+// without any change to this card's props.
+export const FlashCard = memo(FlashCardBase);

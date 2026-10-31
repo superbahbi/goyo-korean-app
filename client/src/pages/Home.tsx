@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -12,13 +12,32 @@ import { toast } from "sonner";
 import { getLocalDateKey, getMasteryState, useStudyState, type MasteryState } from "@/hooks/useStudyState";
 import { StudySession } from "@/components/StudySession";
 import { VOCABULARY_DATA, STUDY_READY_VOCABULARY, CATEGORIES } from "@/lib/vocabulary";
-import { AlphabetPractice } from "./AlphabetPractice";
-import { ListeningPractice } from "@/components/ListeningPractice";
-import { ScenarioPractice } from "@/components/ScenarioPractice";
-import { ShadowingPractice } from "@/components/ShadowingPractice";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
 const BROWSE_PAGE_SIZE = 40;
+
+// Practice modes are secondary entry points, so they are lazily loaded to keep
+// the initial bundle focused on the Daily Session flow.
+const AlphabetPractice = lazy(() =>
+  import("./AlphabetPractice").then((module) => ({ default: module.AlphabetPractice })),
+);
+const ListeningPractice = lazy(() =>
+  import("@/components/ListeningPractice").then((module) => ({ default: module.ListeningPractice })),
+);
+const ScenarioPractice = lazy(() =>
+  import("@/components/ScenarioPractice").then((module) => ({ default: module.ScenarioPractice })),
+);
+const ShadowingPractice = lazy(() =>
+  import("@/components/ShadowingPractice").then((module) => ({ default: module.ShadowingPractice })),
+);
+
+function ModalLoadingFallback() {
+  return (
+    <div className="flex min-h-[60vh] items-center justify-center" role="status" aria-label="Loading practice mode">
+      <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+    </div>
+  );
+}
 
 export default function Home() {
   const { state, gradeCard, updateSettings } = useStudyState();
@@ -662,29 +681,37 @@ export default function Home() {
 
       {/* Alphabet Practice Modal */}
       {showAlphabet && (
-        <AlphabetPractice onClose={() => setShowAlphabet(false)} />
+        <Suspense fallback={<ModalLoadingFallback />}>
+          <AlphabetPractice onClose={() => setShowAlphabet(false)} />
+        </Suspense>
       )}
 
       {showListening && (
-        <ListeningPractice
-                  cards={STUDY_READY_VOCABULARY}
-          onGrade={handleListeningGrade}
-          onClose={() => setShowListening(false)}
-        />
+        <Suspense fallback={<ModalLoadingFallback />}>
+          <ListeningPractice
+            cards={STUDY_READY_VOCABULARY}
+            onGrade={handleListeningGrade}
+            onClose={() => setShowListening(false)}
+          />
+        </Suspense>
       )}
 
       {showScenarios && (
-        <ScenarioPractice
-          onGrade={handleScenarioGrade}
-          onClose={() => setShowScenarios(false)}
-        />
+        <Suspense fallback={<ModalLoadingFallback />}>
+          <ScenarioPractice
+            onGrade={handleScenarioGrade}
+            onClose={() => setShowScenarios(false)}
+          />
+        </Suspense>
       )}
 
       {showShadowing && (
-        <ShadowingPractice
-          onGrade={handleShadowingGrade}
-          onClose={() => setShowShadowing(false)}
-        />
+        <Suspense fallback={<ModalLoadingFallback />}>
+          <ShadowingPractice
+            onGrade={handleShadowingGrade}
+            onClose={() => setShowShadowing(false)}
+          />
+        </Suspense>
       )}
 
       {/* Browse Dialog */}
