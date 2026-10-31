@@ -70,6 +70,7 @@ export function ScenarioPractice({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [complete, setComplete] = useState(false);
+  const [round, setRound] = useState(0);
 
   const cardMap = useMemo(
     () => new Map(cards.map(card => [card.id, card])),
@@ -81,10 +82,11 @@ export function ScenarioPractice({
     () => SCENARIOS.filter(scenario => cardMap.has(scenario.cardId)),
     [cardMap]
   );
-  const scenarios = useMemo(
-    () => shuffle(availableScenarios),
-    [availableScenarios]
-  );
+  const scenarios = useMemo(() => {
+    // Reading the round counter is what forces a fresh order after restart.
+    void round;
+    return shuffle(availableScenarios);
+  }, [availableScenarios, round]);
   const current = scenarios[index];
   const currentCard = current ? cardMap.get(current.cardId) : undefined;
 
@@ -190,6 +192,7 @@ export function ScenarioPractice({
                   setSelectedId(null);
                   setScore(0);
                   setComplete(false);
+                  setRound(value => value + 1);
                 }}
               >
                 Practice again <RotateCcw size={16} className="ml-2" />
@@ -214,8 +217,10 @@ export function ScenarioPractice({
   };
 
   const next = () => {
-    if (index === scenarios.length - 1) setComplete(true);
-    else {
+    if (index === scenarios.length - 1) {
+      stopAudio();
+      setComplete(true);
+    } else {
       setIndex(value => value + 1);
       setSelectedId(null);
     }

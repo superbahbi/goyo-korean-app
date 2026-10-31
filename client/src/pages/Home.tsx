@@ -571,11 +571,17 @@ export default function Home() {
         )
       : 100;
   const overdueCount = countOverdue(studyReady, state.cardStates, today);
-  const weakCards = selectWeakCards(studyReady, state.cardStates, today);
-  const learningCards = selectLearningCards(
-    studyReady,
-    state.cardStates,
-    today
+  const overduePrefix =
+    overdueCount > 0
+      ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · `
+      : "";
+  const weakCards = useMemo(
+    () => selectWeakCards(studyReady, state.cardStates, today),
+    [studyReady, state.cardStates, today]
+  );
+  const learningCards = useMemo(
+    () => selectLearningCards(studyReady, state.cardStates, today),
+    [studyReady, state.cardStates, today]
   );
   const normalizedBrowseQuery = browseQuery.trim().toLocaleLowerCase();
   const filteredCards = !showBrowse
@@ -787,7 +793,9 @@ export default function Home() {
               </CardTitle>
               <p className="text-emerald-50 opacity-90 mt-2">
                 {cardsRemaining > 0
-                  ? `${overdueCount > 0 ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · ` : ""}${plannedCards || cardsRemaining} cards planned for today`
+                  ? plannedCards > 0
+                    ? `${overduePrefix}${plannedCards} cards planned for today`
+                    : `${overduePrefix}Today's scheduled reviews are complete. New words resume tomorrow.`
                   : "Daily goal complete! Review your Korean or come back tomorrow."}
               </p>
             </CardHeader>

@@ -41,6 +41,8 @@ export function ShadowingPractice({
     return () => window.clearTimeout(timer);
   }, [currentCard, complete]);
 
+  useEffect(() => () => stopAudio(), []);
+
   const close = () => {
     stopAudio();
     onClose();
@@ -49,8 +51,10 @@ export function ShadowingPractice({
   const next = () => {
     if (!currentCard) return;
     onGrade(currentCard.id, shadowed ? "good" : "again");
-    if (index === queue.length - 1) setComplete(true);
-    else {
+    if (index === queue.length - 1) {
+      stopAudio();
+      setComplete(true);
+    } else {
       setIndex(value => value + 1);
       setVisible(false);
       setShadowed(false);
