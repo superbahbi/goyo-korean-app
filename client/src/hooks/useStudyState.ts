@@ -406,8 +406,6 @@ export function applyGrade(
         : existingCard?.lastResponseTimeMs,
   };
 
-  const isNewCard = !existingCard;
-
   return {
     ...state,
     cardStates: {
@@ -421,7 +419,9 @@ export function applyGrade(
       streak: newStreak,
       highestStreak: newHighestStreak,
       totalCardsLearned:
-        countProgress && isNewCard && rating !== "again"
+        advanced &&
+        rating !== "again" &&
+        (existingCard?.timesCorrect ?? 0) === 0
           ? state.stats.totalCardsLearned + 1
           : state.stats.totalCardsLearned,
     },

@@ -785,7 +785,9 @@ export default function Home() {
                   className="h-2 mt-3 bg-slate-100"
                 />
                 <p className="text-xs text-slate-400 mt-2">
-                  Cards studied today · up to 3 new words per planned session
+                  Cards studied today · up to {state.settings.newCardsPerDay}{" "}
+                  new {state.settings.newCardsPerDay === 1 ? "word" : "words"}{" "}
+                  per day
                 </p>
               </CardContent>
             </Card>
@@ -1556,9 +1558,10 @@ export default function Home() {
                 </SelectContent>
               </Select>
               <p className="mt-2 text-xs leading-relaxed text-slate-500">
-                Brand-new words are capped at this number each day. Due reviews
-                still come first, so a lower pace keeps the session short
-                without hiding scheduled work.
+                Brand-new words are capped at this number each day, so the daily
+                goal can run shorter on a fresh deck. Due reviews still come
+                first, so a lower pace keeps the session short without hiding
+                scheduled work.
               </p>
             </div>
             <div className="border-t pt-4">

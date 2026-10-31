@@ -85,6 +85,36 @@ describe("buildDailyQueue", () => {
     ).toEqual(["a", "b", "c", "d", "e"]);
   });
 
+  it("counts cards introduced today against the new-card pace", () => {
+    const states = {
+      a: state("a", { lastReviewDate: today, timesReviewed: 1 }),
+      b: state("b", { lastReviewDate: today, timesReviewed: 1 }),
+    };
+    expect(
+      buildDailyQueue(cards, states, today, 10, 0, 3).map(item => item.id)
+    ).toEqual(["c"]);
+  });
+
+  it("stops introducing new cards once the daily pace is spent", () => {
+    const states = {
+      a: state("a", { lastReviewDate: today, timesReviewed: 1 }),
+      b: state("b", { lastReviewDate: today, timesReviewed: 1 }),
+      c: state("c", { lastReviewDate: today, timesReviewed: 1 }),
+    };
+    expect(
+      buildDailyQueue(cards, states, today, 10, 0, 3).map(item => item.id)
+    ).toEqual([]);
+  });
+
+  it("keeps unseen cards out of the repeat queue after the goal", () => {
+    const states = {
+      a: state("a", { due: "2026-10-30", lastReviewDate: today }),
+    };
+    expect(
+      buildDailyQueue(cards, states, today, 2, 2, 5).map(item => item.id)
+    ).toEqual(["a"]);
+  });
+
   it("introduces new cards in beginner theme order", () => {
     const themed = [
       { ...card("essential_1"), tag: "essential" },

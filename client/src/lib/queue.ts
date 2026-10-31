@@ -55,11 +55,24 @@ export function buildDailyQueue(
       (states[a.id]?.due ?? today).localeCompare(states[b.id]?.due ?? today)
     );
 
+  // A card is introduced the first time it is reviewed: the schedule makes it
+  // due later, but today's pace is already spent. Re-grading the same card
+  // leaves timesReviewed unchanged, so only genuinely new cards count.
+  const introducedToday = Object.values(states).filter(
+    state => state.lastReviewDate === today && state.timesReviewed === 1
+  ).length;
+  const newCardBudget = Math.max(0, newCardsPerDay - introducedToday);
+
   // Theme order first; the deck keeps its curated order inside a theme, so a
-  // beginner meets survival and daily phrases before broad vocabulary.
-  const newCards = orderNewCardsByTheme(
-    cards.filter(card => !states[card.id])
-  ).slice(0, newCardsPerDay);
+  // beginner meets survival and daily phrases before broad vocabulary. A repeat
+  // queue reviews what the learner knows and never introduces unseen words.
+  const newCards =
+    sessionSize <= 0
+      ? []
+      : orderNewCardsByTheme(cards.filter(card => !states[card.id])).slice(
+          0,
+          newCardBudget
+        );
 
   const planned = [...dueCards, ...newCards].filter(
     (card, position, all) =>

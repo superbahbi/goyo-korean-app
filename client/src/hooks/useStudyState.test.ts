@@ -489,6 +489,85 @@ describe("applyGrade", () => {
     });
   });
 
+  it("counts the first successful recall of a new card", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    const graded = applyGrade(
+      state,
+      "surv_002",
+      "good",
+      {},
+      new Date("2026-10-31T09:30:00.000Z")
+    );
+
+    expect(graded.stats.totalCardsLearned).toBe(stats.totalCardsLearned + 1);
+  });
+
+  it("counts a card first failed, then recalled on a later day, once", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    const first = applyGrade(
+      state,
+      "surv_002",
+      "again",
+      {},
+      new Date("2026-10-31T09:30:00.000Z")
+    );
+    expect(first.stats.totalCardsLearned).toBe(stats.totalCardsLearned);
+
+    const later = applyGrade(
+      first,
+      "surv_002",
+      "good",
+      {},
+      new Date("2026-11-01T09:30:00.000Z")
+    );
+    expect(later.stats.totalCardsLearned).toBe(stats.totalCardsLearned + 1);
+  });
+
+  it("does not count a later successful recall again", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    const first = applyGrade(
+      state,
+      "surv_002",
+      "good",
+      {},
+      new Date("2026-10-31T09:30:00.000Z")
+    );
+    const second = applyGrade(
+      first,
+      "surv_002",
+      "good",
+      {},
+      new Date("2026-11-01T09:30:00.000Z")
+    );
+
+    expect(second.stats.totalCardsLearned).toBe(stats.totalCardsLearned + 1);
+  });
+
+  it("does not count shadowing an unseen card as learned", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    const practiced = applyGrade(
+      state,
+      "surv_002",
+      "good",
+      { mode: "shadowing", practiceOnly: true },
+      new Date("2026-10-31T09:30:00.000Z")
+    );
+
+    expect(practiced.stats.totalCardsLearned).toBe(stats.totalCardsLearned);
+  });
+
   it("does not count a same-day re-grade as another review", () => {
     const state = parseSavedState(
       JSON.stringify({
