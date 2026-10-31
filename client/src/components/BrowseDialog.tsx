@@ -140,7 +140,7 @@ export function BrowseDialog({
                   key={filter}
                   onClick={() => setMasteryFilter(filter)}
                   aria-pressed={masteryFilter === filter}
-                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition ${masteryFilter === filter ? "bg-slate-900 text-white" : "bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50"}`}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${masteryFilter === filter ? "bg-slate-900 text-white" : "bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50"}`}
                 >
                   {filter === "all" ? "All cards" : MASTERY_LABELS[filter]}
                   <span className="ml-1 opacity-70">
@@ -160,7 +160,7 @@ export function BrowseDialog({
             {(category || query || masteryFilter !== "all") && (
               <button
                 type="button"
-                className="font-semibold text-emerald-700 hover:text-emerald-900"
+                className="rounded font-semibold text-emerald-700 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                 onClick={() => {
                   setCategory(null);
                   setQuery("");
