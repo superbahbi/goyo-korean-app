@@ -5,7 +5,6 @@ export const SCHEMA_VERSION = 2;
 
 export interface CardState {
   id: string;
-  box: number;
   due: string;
   interval: number;
   timesReviewed: number;
@@ -106,7 +105,6 @@ function sanitizeCardState(id: string, value: unknown): CardState | null {
   const timesReviewed = nonNegativeNumber(value.timesReviewed, 0);
   const card: CardState = {
     id,
-    box: nonNegativeNumber(value.box, 0),
     due: value.due,
     interval: nonNegativeNumber(value.interval, 0),
     timesReviewed,
@@ -305,7 +303,6 @@ export function useStudyState() {
       const responseTimeMs = options?.responseTimeMs;
       const newCardState: CardState = {
         id: cardId,
-        box: schedule.box,
         due: advanced || !existingCard ? addDays(today, schedule.interval) : existingCard.due,
         interval: schedule.interval,
         timesReviewed: (existingCard?.timesReviewed || 0) + (advanced ? 1 : 0),
@@ -335,7 +332,7 @@ export function useStudyState() {
           streak: newStreak,
           highestStreak: newHighestStreak,
           cardsStudiedToday: countProgress ? cardsStudiedToday + 1 : cardsStudiedToday,
-          totalCardsLearned: countProgress && isNewCard
+          totalCardsLearned: countProgress && isNewCard && rating !== "again"
             ? state.stats.totalCardsLearned + 1
             : state.stats.totalCardsLearned,
         },

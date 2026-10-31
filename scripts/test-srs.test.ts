@@ -45,7 +45,6 @@ describe("SRS scheduling", () => {
   it("treats a first-ever again as a non-lapse that leaves ease untouched", () => {
     const firstAgain = scheduleRecall(undefined, "again");
     expect(firstAgain.interval).toBe(1);
-    expect(firstAgain.box).toBe(0);
     expect(firstAgain.lapseCount).toBe(0);
     expect(firstAgain.easeFactor).toBe(firstGood.easeFactor);
     const afterFirstAgain = scheduleRecall(
@@ -105,7 +104,6 @@ describe("SRS scheduling", () => {
     const today = "2026-10-30";
     let repeated: Parameters<typeof scheduleReview>[0] = {
       interval: 2,
-      box: 1,
       easeFactor: 2.35,
       consecutiveCorrect: 1,
       timesReviewed: 1,
@@ -117,7 +115,6 @@ describe("SRS scheduling", () => {
       expect(result.advanced).toBe(false);
       expect(result.schedule.interval).toBe(2);
       expect(result.schedule.easeFactor).toBe(2.35);
-      expect(result.schedule.box).toBe(1);
       expect(result.schedule.consecutiveCorrect).toBe(1);
       repeated = { ...repeated, ...result.schedule };
     }

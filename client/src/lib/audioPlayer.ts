@@ -118,11 +118,13 @@ function resolveAlphabetAudioFile(
   type: "consonant" | "vowel"
 ): string | undefined {
   const aliases = type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
-  const key = aliases[characterId] ?? characterId;
   const alphabetIndex = selectedSpeaker === "elevenlabs-female" ? index.female?.alphabet : index.alphabet;
   const files = type === "consonant" ? alphabetIndex?.consonants : alphabetIndex?.vowels;
-  if (!files) throw new Error("Female premium audio index is unavailable");
-  return files[key] ?? (selectedSpeaker === "elevenlabs-female" ? `elevenlabs_female_${characterId}.mp3` : undefined);
+  if (!files) throw new Error("Premium audio index is unavailable");
+  // The male index keys alphabet clips by mnemonic, the female index by ID.
+  // Try the ID first (both indexes include it), then the mnemonic alias.
+  const alias = aliases[characterId];
+  return files[characterId] ?? (alias ? files[alias] : undefined);
 }
 
 export async function playVocabularyAudio(wordId: string): Promise<void> {

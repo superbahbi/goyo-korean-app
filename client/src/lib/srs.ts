@@ -1,7 +1,6 @@
 export type SrsRating = "again" | "good" | "easy";
 
 export interface SrsCardState {
-  box?: number;
   lastReviewDate?: string;
   interval?: number;
   timesReviewed?: number;
@@ -14,7 +13,6 @@ export interface SrsCardState {
 
 export interface SrsSchedule {
   interval: number;
-  box: number;
   easeFactor: number;
   consecutiveCorrect: number;
   lapseCount: number;
@@ -62,7 +60,6 @@ export function scheduleRecall(
     if (isFirstReview) {
       return {
         interval: 1,
-        box: 0,
         easeFactor: previousEase,
         consecutiveCorrect: 0,
         lapseCount: previousLapses,
@@ -70,7 +67,6 @@ export function scheduleRecall(
     }
     return {
       interval: 1,
-      box: 0,
       easeFactor: clamp(previousEase - 0.2, MIN_EASE, MAX_EASE),
       consecutiveCorrect: 0,
       lapseCount: previousLapses + 1,
@@ -87,7 +83,6 @@ export function scheduleRecall(
   if (isFirstReview) {
     return {
       interval: rating === "easy" ? 4 : 2,
-      box: rating === "easy" ? 2 : 1,
       easeFactor: nextEase,
       consecutiveCorrect: nextCorrectStreak,
       lapseCount: previousLapses,
@@ -97,7 +92,6 @@ export function scheduleRecall(
   if ((previousLapses > 0 || neverRecalled) && previousCorrectStreak === 0) {
     return {
       interval: rating === "easy" ? 4 : 2,
-      box: rating === "easy" ? 2 : 1,
       easeFactor: nextEase,
       consecutiveCorrect: nextCorrectStreak,
       lapseCount: previousLapses,
@@ -111,7 +105,6 @@ export function scheduleRecall(
 
   return {
     interval,
-    box: rating === "easy" ? 2 : 1,
     easeFactor: nextEase,
     consecutiveCorrect: nextCorrectStreak,
     lapseCount: previousLapses,
@@ -139,7 +132,7 @@ export function scheduleReview(
     return { schedule: scheduleRecall(existing, rating, responseTimeMs), advanced: true };
   }
 
-  const alreadyDueTomorrow = existing.box === 0 && (existing.interval ?? 0) <= 1;
+  const alreadyDueTomorrow = (existing.interval ?? 0) <= 1;
   if (rating === "again" && !alreadyDueTomorrow) {
     return { schedule: scheduleRecall(existing, rating, responseTimeMs), advanced: true };
   }
@@ -147,7 +140,6 @@ export function scheduleReview(
   return {
     schedule: {
       interval: existing.interval ?? 0,
-      box: existing.box ?? 0,
       easeFactor: clamp(existing.easeFactor ?? DEFAULT_EASE, MIN_EASE, MAX_EASE),
       consecutiveCorrect: existing.consecutiveCorrect ?? 0,
       lapseCount: existing.lapseCount ?? 0,

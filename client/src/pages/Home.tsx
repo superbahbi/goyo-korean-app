@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type ChangeEvent } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -45,7 +45,6 @@ function ModalLoadingFallback() {
 export default function Home() {
   const { state, gradeCard, updateSettings, replaceState } = useStudyState();
   const { vocabulary, studyReady } = useVocabularyDeck();
-  const [queue, setQueue] = useState<typeof vocabulary>([]);
   const [sessionQueue, setSessionQueue] = useState<typeof vocabulary>([]);
   const [sessionMode, setSessionMode] = useState<"daily" | "weak" | "learning">("daily");
   const [isStudying, setIsStudying] = useState(false);
@@ -164,43 +163,75 @@ export default function Home() {
     shaky: "bg-amber-100 text-amber-700",
     known: "bg-emerald-100 text-emerald-700",
   };
-  const masteryCounts = vocabulary.reduce<Record<MasteryState, number>>((counts, card) => {
-    counts[getMasteryState(state?.cardStates[card.id])] += 1;
-    return counts;
-  }, { new: 0, learning: 0, shaky: 0, known: 0 });
+  const cardStates = state?.cardStates;
+  const cardsStudiedToday = state?.stats.cardsStudiedToday ?? 0;
+  const dailyGoal = state?.settings.dailyGoal ?? 0;
+  const today = getLocalDateKey();
 
-  // Build queue of cards to study
-  useEffect(() => {
-    if (!state) return;
+  const masteryCounts = useMemo(
+    () =>
+      vocabulary.reduce<Record<MasteryState, number>>((counts, card) => {
+        counts[getMasteryState(cardStates?.[card.id])] += 1;
+        return counts;
+      }, { new: 0, learning: 0, shaky: 0, known: 0 }),
+    [vocabulary, cardStates],
+  );
 
-    const dailyGoal = state.settings.dailyGoal;
-    const cardsStudiedToday = state.stats.cardsStudiedToday;
-    
-    const today = getLocalDateKey();
+  const reviewStats = useMemo(() => {
+    const reviewedCards = cardStates
+      ? vocabulary.filter((card) => Boolean(cardStates[card.id]?.timesReviewed))
+      : [];
+    const totalReviews = reviewedCards.reduce((sum, card) => sum + (cardStates?.[card.id]?.timesReviewed ?? 0), 0);
+    const totalCorrect = reviewedCards.reduce((sum, card) => sum + (cardStates?.[card.id]?.timesCorrect ?? 0), 0);
+    const overallAccuracy = totalReviews > 0 ? Math.round((totalCorrect / totalReviews) * 100) : 0;
+    const responseTimes = reviewedCards
+      .map((card) => cardStates?.[card.id]?.lastResponseTimeMs)
+      .filter((time): time is number => typeof time === "number" && time > 0)
+      .sort((a, b) => a - b);
+    const medianResponseTime = responseTimes.length > 0
+      ? responseTimes[Math.floor(responseTimes.length / 2)]
+      : null;
+    return { totalReviews, overallAccuracy, medianResponseTime };
+  }, [vocabulary, cardStates]);
+
+  const categoryMastery = useMemo(
+    () =>
+      CATEGORIES.map((category) => {
+        const cards = vocabulary.filter((card) => card.tag === category.id);
+        const reviewed = cards.filter((card) => Boolean(cardStates?.[card.id]?.timesReviewed));
+        const reviews = reviewed.reduce((sum, card) => sum + (cardStates?.[card.id]?.timesReviewed ?? 0), 0);
+        const correct = reviewed.reduce((sum, card) => sum + (cardStates?.[card.id]?.timesCorrect ?? 0), 0);
+        return { ...category, reviewed: reviewed.length, total: cards.length, accuracy: reviews > 0 ? Math.round((correct / reviews) * 100) : null };
+      }),
+    [vocabulary, cardStates],
+  );
+
+  // Derived from saved progress, so it is current on the same render as a grade.
+  const queue = useMemo(() => {
+    if (!cardStates) return [];
 
     const sessionSize = Math.max(0, dailyGoal - cardsStudiedToday);
     const dueCards = studyReady
-      .filter((card) => state.cardStates[card.id]?.due && state.cardStates[card.id].due <= today)
-      .sort((a, b) => (state.cardStates[a.id]?.due ?? today).localeCompare(state.cardStates[b.id]?.due ?? today));
+      .filter((card) => cardStates[card.id]?.due && cardStates[card.id].due <= today)
+      .sort((a, b) => (cardStates[a.id]?.due ?? today).localeCompare(cardStates[b.id]?.due ?? today));
     const weakCards = studyReady
       .filter((card) => {
-        const cardState = state.cardStates[card.id];
+        const cardState = cardStates[card.id];
         const mastery = getMasteryState(cardState);
         return Boolean(cardState?.timesReviewed) && mastery !== "known" && cardState.lastReviewDate !== today && !dueCards.some((dueCard) => dueCard.id === card.id);
       })
       .sort((a, b) => {
-        const aState = state.cardStates[a.id];
-        const bState = state.cardStates[b.id];
+        const aState = cardStates[a.id];
+        const bState = cardStates[b.id];
         const aAccuracy = (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1);
         const bAccuracy = (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
         return aAccuracy - bAccuracy;
       });
-    const newCards = studyReady.filter((card) => !state.cardStates[card.id]).slice(0, 3);
-    const plannedCards = [...dueCards, ...weakCards, ...newCards]
+    const newCards = studyReady.filter((card) => !cardStates[card.id]).slice(0, 3);
+    return [...dueCards, ...weakCards, ...newCards]
       .filter((card, position, allCards) => allCards.findIndex((item) => item.id === card.id) === position)
       .slice(0, sessionSize || dailyGoal);
-    setQueue(plannedCards);
-  }, [state?.cardStates, state?.stats.cardsStudiedToday, state?.settings.dailyGoal, studyReady]);
+  }, [cardStates, cardsStudiedToday, dailyGoal, studyReady, today]);
 
   const handleGrade = (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => {
     const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
@@ -273,7 +304,6 @@ export default function Home() {
   const levelProgress = nextLevelXp > currentLevelXp
     ? Math.min(100, Math.max(0, ((state.stats.totalXp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100))
     : 100;
-  const today = getLocalDateKey();
   const overdueCount = studyReady.filter((card) => {
     const due = state.cardStates[card.id]?.due;
     return Boolean(due && due <= today);
@@ -315,25 +345,8 @@ export default function Home() {
     return matchesCategory && matchesMastery && matchesQuery;
   });
   const visibleBrowseCards = filteredCards.slice(0, browseVisibleCount);
-  const reviewedCards = vocabulary.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
-  const totalReviews = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
-  const totalCorrect = reviewedCards.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
-  const overallAccuracy = totalReviews > 0 ? Math.round((totalCorrect / totalReviews) * 100) : 0;
-  const responseTimes = reviewedCards
-    .map((card) => state.cardStates[card.id]?.lastResponseTimeMs)
-    .filter((time): time is number => typeof time === "number" && time > 0)
-    .sort((a, b) => a - b);
-  const medianResponseTime = responseTimes.length > 0
-    ? responseTimes[Math.floor(responseTimes.length / 2)]
-    : null;
-  const masteredCount = vocabulary.filter((card) => getMasteryState(state.cardStates[card.id]) === "known").length;
-  const categoryMastery = CATEGORIES.map((category) => {
-    const cards = vocabulary.filter((card) => card.tag === category.id);
-    const reviewed = cards.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed));
-    const reviews = reviewed.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesReviewed ?? 0), 0);
-    const correct = reviewed.reduce((sum, card) => sum + (state.cardStates[card.id]?.timesCorrect ?? 0), 0);
-    return { ...category, reviewed: reviewed.length, total: cards.length, accuracy: reviews > 0 ? Math.round((correct / reviews) * 100) : null };
-  });
+  const { totalReviews, overallAccuracy, medianResponseTime } = reviewStats;
+  const masteredCount = masteryCounts.known;
   // One pass over the deck feeds both forecasts instead of scanning it per day.
   const dueCounts = new Map<string, number>();
   let overdueTotal = 0;
@@ -864,7 +877,12 @@ export default function Home() {
                     >
                       <div className="flex justify-between items-start gap-3 mb-3">
                         <div className="flex-1 min-w-0">
-                          <div className="flex flex-wrap items-center gap-2"><div className="text-xl font-bold text-slate-900">{card.front}</div><span className="text-xs font-mono text-emerald-600">{romanization}</span></div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <div className="text-xl font-bold text-slate-900">{card.front}</div>
+                            {isShowingRoman && romanization && (
+                              <span className="text-xs font-mono text-emerald-600">{romanization}</span>
+                            )}
+                          </div>
                           <div className="mt-1 text-sm font-medium text-slate-600">{card.back}</div>
                           {isShowingRoman && romanization && (
                             <div className="text-sm text-emerald-600 font-mono font-semibold mt-1">
@@ -916,6 +934,8 @@ export default function Home() {
                           <Button
                             variant="ghost"
                             size="sm"
+                            aria-pressed={Boolean(isShowingRoman)}
+                            aria-label={`${isShowingRoman ? "Hide" : "Show"} romanization for ${card.front}`}
                             className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
                             onClick={() =>
                               setShowRomanization({
@@ -1153,11 +1173,11 @@ export default function Home() {
                 </SelectTrigger>
                   <SelectContent>
                   <SelectItem value="elevenlabs">Hyuk · Cold &amp; Clear</SelectItem>
-                  <SelectItem value="elevenlabs-female">Anna Kim · Tender, Calm &amp; Clear</SelectItem>
+                  <SelectItem value="elevenlabs-female">Jini · Warm &amp; Intelligent</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs leading-relaxed text-slate-500">
-                Goyo uses ElevenLabs recordings only. Choose Hyuk for a cold, clear delivery or Anna Kim for a tender, clear Seoul Korean voice.
+                Goyo uses ElevenLabs recordings only. Choose Hyuk for a cold, clear delivery or Jini for a warm, intelligent Seoul Korean voice.
               </p>
             </div>
             <div className="border-t pt-4 space-y-2">

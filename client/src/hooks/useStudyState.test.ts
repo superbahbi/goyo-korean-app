@@ -3,7 +3,6 @@ import { buildExportPayload, parseSavedState, SCHEMA_VERSION, validateImportPayl
 
 const card = {
   id: "surv_001",
-  box: 1,
   due: "2026-11-01",
   interval: 2,
   timesReviewed: 1,
@@ -52,6 +51,15 @@ describe("saved progress schemaVersion", () => {
 
   it("starts from the current version when nothing is saved", () => {
     expect(parseSavedState(null).schemaVersion).toBe(SCHEMA_VERSION);
+  });
+
+  it("ignores a legacy box field when loading saved cards", () => {
+    const legacyCard = { ...card, box: 1 };
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: { surv_001: legacyCard }, stats, settings }),
+    );
+    expect(state.cardStates.surv_001).toEqual(card);
+    expect(state.cardStates.surv_001).not.toHaveProperty("box");
   });
 });
 
