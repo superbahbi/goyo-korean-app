@@ -6619,7 +6619,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 치마는 제 키에 비해 너무 짧아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This skirt is too short for my height.",
     usageNote:
       "짧다 describes physical or temporal shortness; commonly adjective (descriptive verb) in Korean.",
@@ -6634,7 +6634,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "우리 아들은 키가 커서 농구를 좋아해요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "My son is tall, so he likes basketball.",
     usageNote:
       "키가 크다 describes someone's height; commonly used for people and animals.",
@@ -6649,7 +6649,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "제 동생은 키가 작아서 어린이용 옷이 잘 맞아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "My younger sibling is short, so children's clothes fit well.",
     usageNote:
@@ -6663,10 +6663,10 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "to be wide",
     romanization: "neolda",
     tag: "essential",
-    example: "이 도로는 차가 지나가기에는 너무 넓어요.",
+    example: "이 도로는 차가 여러 대 지나갈 수 있을 만큼 넓어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
-    exampleEnglish: "This road is too wide for cars to pass through.",
+    partOfSpeech: "adjective",
+    exampleEnglish: "This road is wide enough for several cars to pass.",
     usageNote:
       "넓다 describes physical width or spaciousness; often used for places or objects.",
     source: "600 essential words · row 542",
@@ -6680,7 +6680,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 방은 창문이 많아서 아주 커요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This room has many windows, so it's very big.",
     usageNote:
       "크다 describes physical or abstract size; use 커요 for polite present affirmative form.",
@@ -6695,7 +6695,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 방은 창문이 작아서 햇빛이 잘 들어오지 않아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "This room's window is small, so sunlight doesn't come in well.",
     usageNote:
@@ -6711,7 +6711,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "컴퓨터가 너무 느려서 파일을 열 때 시간이 많이 걸려요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "The computer is so slow that it takes a long time to open files.",
     usageNote:
@@ -6727,7 +6727,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 차는 속도가 빨라서 고속도로에서 편해요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This car is fast, so it's comfortable on the highway.",
     usageNote:
       "빠르다 describes high speed or quickness; often used for people, vehicles, or processes.",
@@ -6757,7 +6757,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "손이 차갑네요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "My hands feel cold.",
     usageNote:
       "차겁다 describes physical coldness of objects or body parts; similar to 춥다 but used for touch/feeling.",
@@ -6772,7 +6772,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "오늘 날씨가 따뜻해서 공원에 가고 싶어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "It's warm today, so I want to go to the park.",
     usageNote:
       "따뜻하다 describes ambient temperature or feelings of warmth; commonly used for weather, objects, and emotions.",
@@ -6787,7 +6787,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "가을 아침은 공기가 선선해서 산책하기 좋아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "The autumn morning's air is cool, so it's good for a walk.",
     usageNote:
@@ -6803,7 +6803,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 가게에는 항상 새롭고 흥미로운 물건들이 많아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This shop always has many new and interesting items.",
     usageNote:
       "새롭다 describes something being new or unfamiliar; often contrasts with 익숙하다 (familiar).",
@@ -6818,7 +6818,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 책은 오래돼서 표지가 낡았어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This book is old, so the cover is worn.",
     usageNote: "Used for inanimate objects; describes age or worn condition.",
     source: "600 essential words · row 552",
@@ -6832,7 +6832,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "그 배우는 실제로도 젊지만, 연기력도 좋아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "That actor is actually young, and his acting skills are also good.",
     usageNote:
@@ -6864,7 +6864,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 식당 음식이 정말 좋아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The food at this restaurant is really good.",
     usageNote:
       "Common adjective-like verb used to express approval or preference; can follow nouns or verbs (좋아하다).",
@@ -6879,7 +6879,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 음식은 조금 짜서 제 입맛에는 나쁘네요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This food is a bit salty, so it's bad for my taste.",
     usageNote:
       "나쁘다 describes something unfavorable or not good; tone/context varies by degree.",
@@ -6924,7 +6924,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "머리가 계속 아파서 일찍 잤어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "My head kept hurting, so I went to bed early.",
     usageNote:
       "아프다 covers both feeling ill and physical pain; use subject markers to specify which body part feels pain.",
@@ -6954,7 +6954,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "도서관이 너무 시끄러워서 공부하기 어려워요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The library is so noisy that it's hard to study.",
     usageNote:
       "시끄럽다 describes noisy/loud environments or sounds; can describe people, places, or objects creating noise.",
@@ -6969,7 +6969,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "도서관이 지금 조용해요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The library is quiet right now.",
     usageNote:
       "Used to describe a quiet state (not noisy); commonly describes places or people.",
@@ -6984,7 +6984,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "오늘 가족과 함께 있어서 정말 행복해요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "I am really happy today because I am with my family.",
     usageNote:
       "Used to describe feeling happy (state); commonly conjugated like an adjective in Korean (행복하다 → 행복해요).",
@@ -7075,7 +7075,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "그 사람은 항상 착해서 친구들이 많아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "That person is always kind, so they have many friends.",
     usageNote:
       "Used to describe a person's kind or good-natured character in everyday situations.",
@@ -7090,7 +7090,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "그 가족은 오랫동안 가난해서 작은 집에서 살았어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "That family was poor for a long time and lived in a small house.",
     usageNote:
@@ -7106,7 +7106,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "그 가족은 대대로 부유해서 자식들에게 좋은 교육을 시켰어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "That family has been wealthy for generations, so they provided good education for their children.",
     usageNote:
@@ -7120,9 +7120,9 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "to be thick",
     romanization: "dukkeopda",
     tag: "essential",
-    example: "이 책은 종이가 너무 두껍아서 접기 힘들어요.",
+    example: "이 책은 종이가 너무 두꺼워서 접기 힘들어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This book's paper is too thick, so it's hard to fold.",
     usageNote:
       "두껍다 describes physical thickness; can also be used metaphorically (e.g., skin, layers).",
@@ -7137,7 +7137,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 책은 종이가 얇아서 쉽게 찢어져요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This book's paper is thin, so it tears easily.",
     usageNote:
       "얇다 describes physical thinness (layers or thickness), not thinness of people.",
@@ -7152,7 +7152,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 가게에서는 가격이 좀 비싸요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The prices at this shop are a bit expensive.",
     usageNote:
       "Describes cost; commonly used to say something costs a lot (can modify with degree adverbs).",
@@ -7167,7 +7167,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 가게는 과일이 싸고 신선해요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The fruit at this shop is cheap and fresh.",
     usageNote:
       "싸다 primarily means 'to be cheap'; can also mean 'to wrap' (different verb).",
@@ -7260,7 +7260,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 방은 천장이 낮아서 키 큰 사람이 불편할 수 있어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "This room has a low ceiling, so tall people might be uncomfortable.",
     usageNote:
@@ -7276,7 +7276,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 빵은 오래돼서 딱딱해요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This bread is old, so it's hard.",
     usageNote:
       "Used for textures or manners (can mean rigid or formal); here denotes physical hardness.",
@@ -7291,7 +7291,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 베개는 정말 부드러워서 잠이 잘 와요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This pillow is really soft, so I fall asleep easily.",
     usageNote:
       "Describes texture or touch; can also describe taste, voice, or manner (soft).",
@@ -7306,7 +7306,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "호수 물이 생각보다 깊어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The lake water is deeper than I thought.",
     usageNote:
       "Used for physical depth or abstract depth (e.g., feelings); polite everyday form.",
@@ -7337,7 +7337,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 방은 창문을 열어서 공기를 바꾸면 더 깨끗해져요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "This room becomes cleaner if you open the windows to refresh the air.",
     usageNote:
@@ -7353,7 +7353,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "바닥이 아주 더러워서 신발을 벗고 들어가세요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "The floor is very dirty, so please take off your shoes before entering.",
     usageNote:
@@ -7367,11 +7367,11 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "to be strong",
     romanization: "himi seda",
     tag: "essential",
-    example: "그 남자 친구는 힘이 세서 무거운 가구도 혼자 옮겨요.",
+    example: "그 남자는 힘이 세서 무거운 가구도 혼자 옮겨요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
-      "That boyfriend is strong, so he moves heavy furniture by himself.",
+      "That man is strong, so he moves heavy furniture by himself.",
     usageNote:
       "Used to describe physical strength; often about people or animals.",
     source: "600 essential words · row 588",
@@ -7385,7 +7385,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "그 약은 제 증상에 비해 효과가 약해요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "That medicine is weak for my symptoms.",
     usageNote:
       "약하다 can describe physical strength, flavors, effects, or intensity (weaker/not strong).",
@@ -7413,10 +7413,10 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "to be heavy",
     romanization: "mugeopda",
     tag: "essential",
-    example: "이상한 냄새가 나서 가방이 무거운 것 같아요.",
+    example: "가방이 무거워서 들고 다니기 힘들어요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
-    exampleEnglish: "My bag seems heavy because there is a strange smell.",
+    partOfSpeech: "adjective",
+    exampleEnglish: "My bag is heavy, so it is hard to carry around.",
     usageNote:
       "무겁다 describes physical weight or figurative heaviness; context determines literal vs. metaphorical use.",
     source: "600 essential words · row 591",
@@ -7430,7 +7430,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 가방은 내용물이 거의 없어서 아주 가벼워요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish:
       "This bag is very light because it hardly has any contents.",
     usageNote:
@@ -7444,9 +7444,9 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     back: "to be dark",
     romanization: "eodupda",
     tag: "essential",
-    example: "밤이라서 방이 어둡아요.",
+    example: "밤이라서 방이 어두워요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "The room is dark because it's night.",
     usageNote:
       "어둡다 describes low light or mood; commonly used for places or atmospheres.",
@@ -7461,7 +7461,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "이 방은 창문이 커서 항상 밝아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "This room is always bright because the windows are large.",
     usageNote:
       "Used for light/brightness or cheerful atmosphere; context determines literal vs. figurative meaning.",
@@ -7476,7 +7476,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     tag: "essential",
     example: "그 가수는 젊은이들 사이에서 인기가 많아요.",
     difficulty: "beginner",
-    partOfSpeech: "verb",
+    partOfSpeech: "adjective",
     exampleEnglish: "That singer is very popular among young people.",
     usageNote:
       "Describes general popularity; used for people, items, or ideas.",
