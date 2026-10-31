@@ -79,11 +79,15 @@ Accounts and sync, push reminders, sentence-level audio, grammar content, Playwr
 
 ## Backlog
 
-Items from the review that remain. Completed: stop-audio promise settling, lazy-load error boundary, Browse stopping audio, two-tab sync, orphaned manifest ids, curated romanizations, headword typos, and the script cleanup (portable paths, atomic manifest, real deck import, `reset-alphabet-file.py` removed), dead audio aliases, StudySession double-submit guard, FlashCard auto-play dedupe, and stale audio-ready docs.
+All review items are closed. Remaining follow-ups, none blocking:
 
-- `audioPlayer.ts`: the female alphabet index uses ID keys and the male index uses mnemonic keys. Use one scheme.
-- `Home.tsx`: dashboard aggregates recompute on every render. The forecasts are single-pass now, but mastery counts and category totals are not memoized.
-- `Home.tsx`: the session queue is derived state copied into `useState` by an effect.
-- `Home.tsx`: the Browse romanization toggle duplicates text that is already shown.
-- `useStudyState.ts`: `totalCardsLearned` counts a new card graded "again".
-- `srs.ts`: `box` is written but never read.
+- **Female voice re-record (Jini, `eleven_v4`)** is present in the working tree but not committed: 682 files under `public/audio/` plus `index.json` metadata. Decide whether to keep it, then commit it as its own change.
+- **Ignore generated folders**: `jini/` (11 MB duplicate audio output) and `scripts/__pycache__/` are untracked and should be deleted or added to `.gitignore`.
+- **`pnpm start -- --port N` does not change the port**: the script already passes `--host`, so the extra `--` swallows the argument. Use `PORT=4175 pnpm start` or `vite preview --port`.
+- **In-app browser re-check** of the accessibility pass (stage 3) was never done; stages 3-5 were only exercised in headless Chrome.
+- **Playwright end-to-end tests** would cover the study loop, Browse and the PWA offline shell, which unit tests cannot.
+- **iOS first-tap audio** is implemented but unverified on a real device.
+
+## Completed backlog
+
+Stop-audio promise settling, lazy-load error boundary, Browse stopping audio, two-tab sync, orphaned manifest ids, curated romanizations, headword typos, script portability and atomic manifest writes, real deck import in the audio generator, dead audio aliases, StudySession double-submit guard, FlashCard auto-play dedupe, stale audio-ready docs, alphabet audio key scheme, dashboard memoization, derived session queue, Browse romanization toggle, `totalCardsLearned` on "again", and the unused `box` field.
