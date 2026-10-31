@@ -19,7 +19,7 @@ Every stage is done only when its gate passes.
 
 ## Current state
 
-Verified on 2026-10-31 on `refactor/stats-dialog-extract`:
+Verified on 2026-10-31 on `main` (`5d07010`):
 
 | Check              | Result                                                                                                                                                           |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -48,11 +48,12 @@ cache; `lang="ko"`, the contrast fixes, chart labels, reduced motion, dialog des
 standalone meta tags and the Vercel security/cache headers are in place; CI runs every push; the PWA
 precaches the shell, the audio index, Hangul and number audio.
 
-What is open: the imported Essential 600 examples still have no human review; behaviour checks still
-need a real browser, screen reader and iPhone; there are no Playwright smokes; audio filenames are not
-content-hashed; and the Phase 3 content work (sample audit, weak-example rewrites, imported themes)
-remains. The Phase 2 split is done, but its 300-line target is only met by `Home.tsx` (274 lines):
-`SettingsDialog` (415), `StudySession` (446) and several practice views are still longer.
+What is open: the imported Essential 600 examples still have no human review, and that is the next
+phase (see Phase 3 — content trust); behaviour checks still need a real browser, screen reader and
+iPhone; there are no Playwright smokes; audio filenames are not content-hashed; and the repo is 48 MB
+with 26 MB of audio in git. The Phase 2 split is done, but its 300-line target is only met by
+`Home.tsx` (274 lines): `SettingsDialog` (415), `StudySession` (446) and several practice views are
+still longer.
 
 ## How we work
 
@@ -67,6 +68,9 @@ remains. The Phase 2 split is done, but its 300-line target is only met by `Home
   model as the author. Stronger models only for a specific task the maintainer approves.
 - **Briefs to the coder** should name one stage task, the files involved, and the acceptance criteria
   below. Start a fresh session per task to keep context small.
+- **Content PRs** list the card ids they touch and the audit verdicts they resolve, so a batch can be
+  re-checked without reading the whole diff. Content never ships with new audio unless the headword
+  itself changes.
 - **Docs stay current.** When a phase closes, update the status table in this file in the same PR.
 
 ## Status
@@ -76,7 +80,7 @@ remains. The Phase 2 split is done, but its 300-line target is only met by `Home
 | 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                     |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                            |
 | 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                      |
-| 3 Content                       | In progress; `exampleEnglish` added to all 136 curated cards; sample audit and weak-example rewrites still open                         |
+| 3 Content                       | In progress; next phase. Plan below: audit harness, 50-card baseline, sample fixes, systemic batches, weak-example rewrites             |
 | 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels and reduced motion done; device checks, hashed audio and Playwright open |
 | 5 Tune from data                | Blocked on 30 days of use                                                                                                               |
 
@@ -198,21 +202,68 @@ type checking, ESLint and Prettier; tests are type-checked too.
    (kept the generator), and moved `scripts/test-srs.test.ts` to `client/src/lib/srs.test.ts`.
 7. Keep the roadmap honest: this file is the backlog. No second list.
 
-## Phase 3: Content quality
+## Phase 3: Content quality — content trust (next)
 
 The imported Essential 600 examples, translations and usage notes were written by a model and have had
-no human review. That is the largest content risk.
+no human review. That is the largest content risk: content is the only defect code cannot repair later
+for an existing user, and it is the one the 30-day retention number will be blamed on if it goes wrong.
+So this phase buys evidence first, then fixes only what the evidence proves.
 
-1. Sample audit: review 50 imported cards (10%) with a Korean speaker or a second model, and record the
-   error rate. Fix every error found in that sample.
-2. Fix the systemic issues the audit finds (naturalness, politeness level, part-of-speech, batchim
-   romanization). Review the remaining deck in batches of 25–50 as time allows.
-3. Rewrite weak curated examples (`영어를 도와주세요`, `넷은 너무 많아요`, the repeated `나는…` place
-   sentences). `exampleEnglish` is now present on all 136 curated cards; the weak Korean examples
-   still need rewriting.
-4. Theme the Essential deck: replace the single `essential` tag with themes for browsing, while keeping
-   one library category. Add a difficulty signal only if it is real.
-5. Add an audio test that asserts every `studyReady` card has a clip in both voices.
+Two facts shape the plan:
+
+- **No new audio spend is needed.** The generator speaks `card.front` only
+  (`scripts/generate-elevenlabs-audio.ts`), never the example or usage note. Rewriting sentences is
+  free.
+- **The audit is the sizing input.** Until the error rate is known, "review the remaining deck in
+  batches" is unbounded. Doing fixes, theming or ordering first is guessing.
+
+Order: harness → baseline audit → sample fixes → systemic batches → curated rewrites. Each numbered
+task is one PR.
+
+1. **Audit harness** (`scripts/audit-content.ts`).
+   - Deterministic sampler over the imported deck: `--limit 50 --seed 1`, seeded Fisher–Yates, so the
+     same seed always emits the same sheet. Emit Markdown with id, front, back, romanization, part of
+     speech, example, `exampleEnglish`, usage note and source row.
+   - Write only under `docs/audits/`; never modify deck data.
+   - Acceptance: two runs with the same seed produce identical rows; the sheet contains exactly `limit`
+     ids that exist in the deck.
+2. **Baseline audit of 50 imported cards.**
+   - Score each card against a fixed five-point rubric: translation accuracy, Korean naturalness,
+     politeness consistency, part of speech, and romanization/batchim.
+   - Commit verdicts as `docs/audits/essential-sample-1.json`, one entry per card:
+     `{ id, source, verdict: "pass" | "fix", issues: [] }`. Record the error rate and the top three
+     systemic issues in this file.
+   - The auditor is a second model (DeepSeek V4.1 Flash, never the authoring model) plus a Korean
+     speaker spot check of 10 of the 50 for calibration. Treat the model pass as a screen for grammar,
+     tags and translations, not as a substitute for a native reader.
+   - Decision rule: 50 cards gives a rough rate, not a precise one. If 3 or more of 50 fail (6%+),
+     audit a second 50 before scoping fixes. If fewer than 3 fail, fix the sample and re-sample after
+     the systemic fixes rather than auditing all 504.
+   - Acceptance: a verdict exists for all 50 ids, a test asserts each id exists in the deck, and this
+     section states the measured error rate.
+3. **Fix the audited sample.** One PR, split if it exceeds ~400 lines.
+   - Fix every card marked `fix`, then re-run the sheet and mark the verdicts resolved (`resolvedAt` or
+     `verdict: "pass"` with the issue list kept for the record).
+   - Acceptance: no open `fix` verdicts remain in the sample file; deck tests and the romanization lint
+     pass; a re-audit of the same 50 finds no remaining errors.
+4. **Systemic fixes in batches.** Only the issue types step 2 proved exist — politeness drift, wrong
+   part of speech, batchim romanization, translation mismatch. 25–50 cards per PR, scored against the
+   same rubric.
+   - Acceptance: per batch, `data.test.ts` and the romanization lint pass, the batch re-audits clean,
+     and the PR stays under ~400 lines.
+5. **Rewrite the weak curated examples.** `영어를 도와주세요`, `넷은 너무 많아요`, and the repeated
+   `나는…` place sentences; keep `exampleEnglish` in sync.
+   - Add a guard test: a banned-phrase list must not reappear, and the `나는 ` sentence template may
+     not be used more than twice.
+   - Acceptance: the named cards are rewritten with matching translations, and the guard test fails if
+     a banned phrase returns.
+
+Already done, keep it: `data.test.ts` asserts that every study-ready card has a manifest entry and both
+audio files on disk, which covers the old item 5.
+
+Out of scope for this phase: theming the imported deck (step 4 is still editing those cards, so tagging
+now would churn, and themes only pay off once a frequency signal exists), frequency ordering, new
+audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, device checks) follows.
 
 ## Phase 4: Delivery and accessibility
 
@@ -228,7 +279,7 @@ no human review. That is the largest content risk.
      `/audio/*` caches for one day with stale-while-revalidate, and `sw.js` plus `index.html` are
      `no-cache`. The iOS standalone meta tags ship in `index.html`.
 3. Audio delivery: content-hashed filenames so a regenerated clip cannot be served stale, and decide
-   whether 26 MB of mp3s keeps living in git (repo is 43 MB) or moves to object storage or LFS.
+   whether 26 MB of mp3s keeps living in git (repo is 48 MB) or moves to object storage or LFS.
    - Decision (2026-10-31): the ~26 MB library stays committed to git for now; it keeps the Vercel
      deploy and offline cache simple, with no extra host or credentials. Revisit if clone/CI checkout
      or deploy size becomes a burden, or if regenerated clips cause merge conflicts on most audio
