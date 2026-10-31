@@ -28,6 +28,7 @@ const stats = {
 };
 const settings = {
   dailyGoal: 10,
+  newCardsPerDay: 3,
   autoPlayAudio: true,
   audioSpeaker: "elevenlabs",
 };
@@ -76,6 +77,23 @@ describe("saved progress schemaVersion", () => {
 
   it("starts from the current version when nothing is saved", () => {
     expect(parseSavedState(null).schemaVersion).toBe(SCHEMA_VERSION);
+  });
+
+  it("defaults and clamps the new-card pace", () => {
+    const base = { cardStates: {}, stats, studyDays };
+    const parsed = (settingsValue: Record<string, unknown>) =>
+      parseSavedState(
+        JSON.stringify({
+          ...base,
+          settings: { dailyGoal: 10, autoPlayAudio: true, audioSpeaker: "elevenlabs", ...settingsValue },
+        }),
+        today,
+      ).settings.newCardsPerDay;
+
+    expect(parsed({})).toBe(3);
+    expect(parsed({ newCardsPerDay: 0 })).toBe(1);
+    expect(parsed({ newCardsPerDay: 99 })).toBe(10);
+    expect(parsed({ newCardsPerDay: 5 })).toBe(5);
   });
 
   it("drops the removed ttsEnabled setting from older saves", () => {
