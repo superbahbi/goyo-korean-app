@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Analytics } from "@vercel/analytics/react";
 import { MotionConfig } from "framer-motion";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
@@ -25,19 +26,24 @@ function Router() {
 
 function App() {
   return (
-    <ErrorBoundary>
-      <MotionConfig reducedMotion="user">
-        <ThemeProvider
-          defaultTheme="light"
-          // switchable
-        >
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </ThemeProvider>
-      </MotionConfig>
-    </ErrorBoundary>
+    <>
+      <ErrorBoundary>
+        <MotionConfig reducedMotion="user">
+          <ThemeProvider
+            defaultTheme="light"
+            // switchable
+          >
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </ThemeProvider>
+        </MotionConfig>
+      </ErrorBoundary>
+      {/* Aggregate, cookieless page views. Kept outside the error boundary so a
+          failed analytics script can never take down the study app. */}
+      <Analytics />
+    </>
   );
 }
 

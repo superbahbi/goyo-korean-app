@@ -8,6 +8,7 @@ React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the
   example and ElevenLabs pronunciation in two voices.
 - **Scheduling:** a small, tested SM-2 variant. The rules live in `docs/improvement-plan.md`.
 - **Progress:** `localStorage`, moved between devices with JSON export/import.
+- **Analytics:** Vercel Web Analytics — aggregate, cookieless page views; no accounts or personal data.
 
 ## Requirements
 
