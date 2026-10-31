@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { ArrowLeft, Volume2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { AlphabetCard } from "@/components/AlphabetCard";
-import { ALPHABET_DATA, ALPHABET_CATEGORIES, AlphabetCard as AlphabetCardType, NUMBER_DATA } from "@/lib/alphabet";
+import { ALPHABET_DATA, ALPHABET_CATEGORIES, NUMBER_DATA } from "@/lib/alphabet";
 import { playAlphabetAudio, playVocabularyAudio } from "@/lib/audioPlayer";
 
 interface AlphabetPracticeProps {

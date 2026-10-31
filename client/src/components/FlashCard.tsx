@@ -22,7 +22,7 @@ interface FlashCardProps {
 }
 
 function cleanKoreanText(text: string): string {
-  const match = text.match(/^([^\(]+)/);
+  const match = text.match(/^([^(]+)/);
   return match ? match[1].trim() : text.trim();
 }
 

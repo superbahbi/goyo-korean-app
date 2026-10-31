@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -387,6 +386,30 @@ export default function Home() {
     gradeCard(cardId, rating, { mode: "shadowing", practiceOnly: true });
   };
 
+  const reviewForecast = useMemo(() => {
+    if (!state) return [];
+    return buildReviewForecast(studyReady, state.cardStates, today, 7, { overdueOnFirstDay: true }).map((day, offset) => ({
+      ...day,
+      label:
+        offset === 0
+          ? "Today"
+          : offset === 1
+            ? "Tomorrow"
+            : new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { weekday: "short" }),
+    }));
+  }, [state, studyReady, today]);
+  const extendedReviewForecast = useMemo(() => {
+    if (!state) return [];
+    return buildReviewForecast(studyReady, state.cardStates, today, 30).map((day) => ({
+      ...day,
+      label: new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+    }));
+  }, [state, studyReady, today]);
+  const { total: forecastTotal, peak: forecastPeak, status: workloadStatus } = useMemo(
+    () => summarizeForecast(extendedReviewForecast, dailyGoal),
+    [extendedReviewForecast, dailyGoal],
+  );
+
   if (!state) return null;
 
   const cardsRemaining = Math.max(0, state.settings.dailyGoal - cardsStudiedToday);
@@ -413,27 +436,6 @@ export default function Home() {
   const visibleBrowseCards = filteredCards.slice(0, browseVisibleCount);
   const { totalReviews, overallAccuracy, medianResponseTime } = reviewStats;
   const masteredCount = masteryCounts.known;
-  const reviewForecast = useMemo(() => {
-    return buildReviewForecast(studyReady, state.cardStates, today, 7, { overdueOnFirstDay: true }).map((day, offset) => ({
-      ...day,
-      label:
-        offset === 0
-          ? "Today"
-          : offset === 1
-            ? "Tomorrow"
-            : new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { weekday: "short" }),
-    }));
-  }, [studyReady, state.cardStates, today]);
-  const extendedReviewForecast = useMemo(() => {
-    return buildReviewForecast(studyReady, state.cardStates, today, 30).map((day) => ({
-      ...day,
-      label: new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
-    }));
-  }, [studyReady, state.cardStates, today]);
-  const { total: forecastTotal, peak: forecastPeak, status: workloadStatus } = useMemo(
-    () => summarizeForecast(extendedReviewForecast, state.settings.dailyGoal),
-    [extendedReviewForecast, state.settings.dailyGoal],
-  );
   const nextScheduledReview = getNextScheduledReview(state.cardStates, today);
 
   return (
