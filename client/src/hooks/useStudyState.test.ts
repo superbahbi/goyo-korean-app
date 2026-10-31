@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import {
   applyGrade,
   buildExportPayload,
+  getSavedSchemaVersion,
+  isNewerSave,
   parseSavedState,
   SCHEMA_VERSION,
   validateImportPayload,
@@ -122,6 +124,33 @@ describe("saved progress schemaVersion", () => {
     expect(parsed({ newCardsPerDay: 5 })).toBe(5);
   });
 
+  it("derives the level from total XP instead of trusting the saved level", () => {
+    const state = parseSavedState(
+      JSON.stringify({
+        cardStates: {},
+        stats: { ...stats, totalXp: 900, level: 99 },
+        settings,
+        studyDays,
+      }),
+      today
+    );
+    expect(state.stats.level).toBe(4);
+  });
+
+  it("clamps the daily goal to a whole number between 1 and 100", () => {
+    const base = { cardStates: {}, stats, studyDays };
+    const parsed = (dailyGoal: unknown) =>
+      parseSavedState(
+        JSON.stringify({ ...base, settings: { ...settings, dailyGoal } }),
+        today
+      ).settings.dailyGoal;
+
+    expect(parsed(0)).toBe(1);
+    expect(parsed(0.4)).toBe(1);
+    expect(parsed(1e9)).toBe(100);
+    expect(parsed("10")).toBe(10);
+  });
+
   it("drops the removed ttsEnabled setting from older saves", () => {
     const legacySettings = { ...settings, ttsEnabled: false };
     const state = parseSavedState(
@@ -168,6 +197,44 @@ describe("saved progress schemaVersion", () => {
     expect(state.studyDays).toEqual({ "2026-10-30": { cards: 4, reviews: 4 } });
     expect(state.stats.streak).toBe(1);
     expect(state.stats).not.toHaveProperty("cardsStudiedToday");
+  });
+});
+
+describe("saved progress version guard", () => {
+  it("reports no version when nothing is saved", () => {
+    expect(getSavedSchemaVersion(null)).toBeNull();
+    expect(getSavedSchemaVersion("")).toBeNull();
+    expect(isNewerSave(null)).toBe(false);
+  });
+
+  it("reports no version for malformed saves", () => {
+    expect(getSavedSchemaVersion("{ not json")).toBeNull();
+    expect(getSavedSchemaVersion("[1, 2, 3]")).toBeNull();
+    expect(getSavedSchemaVersion(JSON.stringify({ stats }))).toBeNull();
+    expect(
+      getSavedSchemaVersion(JSON.stringify({ schemaVersion: "4" }))
+    ).toBeNull();
+    expect(
+      getSavedSchemaVersion(JSON.stringify({ schemaVersion: 3.5 }))
+    ).toBeNull();
+    expect(isNewerSave("{ not json")).toBe(false);
+  });
+
+  it("reads older and current versions without blocking", () => {
+    expect(getSavedSchemaVersion(JSON.stringify({ schemaVersion: 1 }))).toBe(1);
+    expect(
+      getSavedSchemaVersion(JSON.stringify({ schemaVersion: SCHEMA_VERSION }))
+    ).toBe(SCHEMA_VERSION);
+    expect(isNewerSave(JSON.stringify({ schemaVersion: 1 }))).toBe(false);
+    expect(isNewerSave(JSON.stringify({ schemaVersion: SCHEMA_VERSION }))).toBe(
+      false
+    );
+  });
+
+  it("detects a save written by a newer version", () => {
+    const raw = JSON.stringify({ schemaVersion: SCHEMA_VERSION + 1 });
+    expect(getSavedSchemaVersion(raw)).toBe(SCHEMA_VERSION + 1);
+    expect(isNewerSave(raw)).toBe(true);
   });
 });
 
@@ -487,6 +554,85 @@ describe("applyGrade", () => {
       mode: "shadowing",
       rating: "good",
     });
+  });
+
+  it("counts the first successful recall of a new card", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    const graded = applyGrade(
+      state,
+      "surv_002",
+      "good",
+      {},
+      new Date("2026-10-31T09:30:00.000Z")
+    );
+
+    expect(graded.stats.totalCardsLearned).toBe(stats.totalCardsLearned + 1);
+  });
+
+  it("counts a card first failed, then recalled on a later day, once", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    const first = applyGrade(
+      state,
+      "surv_002",
+      "again",
+      {},
+      new Date("2026-10-31T09:30:00.000Z")
+    );
+    expect(first.stats.totalCardsLearned).toBe(stats.totalCardsLearned);
+
+    const later = applyGrade(
+      first,
+      "surv_002",
+      "good",
+      {},
+      new Date("2026-11-01T09:30:00.000Z")
+    );
+    expect(later.stats.totalCardsLearned).toBe(stats.totalCardsLearned + 1);
+  });
+
+  it("does not count a later successful recall again", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    const first = applyGrade(
+      state,
+      "surv_002",
+      "good",
+      {},
+      new Date("2026-10-31T09:30:00.000Z")
+    );
+    const second = applyGrade(
+      first,
+      "surv_002",
+      "good",
+      {},
+      new Date("2026-11-01T09:30:00.000Z")
+    );
+
+    expect(second.stats.totalCardsLearned).toBe(stats.totalCardsLearned + 1);
+  });
+
+  it("does not count shadowing an unseen card as learned", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    const practiced = applyGrade(
+      state,
+      "surv_002",
+      "good",
+      { mode: "shadowing", practiceOnly: true },
+      new Date("2026-10-31T09:30:00.000Z")
+    );
+
+    expect(practiced.stats.totalCardsLearned).toBe(stats.totalCardsLearned);
   });
 
   it("does not count a same-day re-grade as another review", () => {

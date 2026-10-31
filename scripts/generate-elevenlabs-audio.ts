@@ -203,7 +203,8 @@ export async function main() {
 
   const alphabet: AudioItem[] = ALPHABET_DATA.map(card => ({
     id: card.id,
-    text: card.ttsText,
+    // Letter names are the spoken text; numbers use their Hangul reading.
+    text: card.type === "number" ? card.hangul : card.sound,
     group: "alphabet",
     filename: `${filePrefix}${card.id}.mp3`,
   }));

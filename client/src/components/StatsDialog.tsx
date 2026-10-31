@@ -1,6 +1,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -39,6 +40,7 @@ export interface StatsDialogStats {
   overdueCount: number;
   daysStudied7: number;
   daysStudied30: number;
+  reviews7: number;
   masteryCounts: Record<MasteryState, number>;
   categories: CategoryMastery[];
 }
@@ -64,6 +66,11 @@ export function StatsDialog({
   forecast,
   today,
 }: StatsDialogProps) {
+  const forecastSummary =
+    forecast.peak.count > 0
+      ? `30-day review forecast: ${forecast.total} review${forecast.total === 1 ? "" : "s"}, peak ${forecast.peak.count} on ${forecast.peak.label}`
+      : "30-day review forecast: no scheduled reviews";
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
@@ -72,10 +79,10 @@ export function StatsDialog({
             <Target size={20} className="text-emerald-600" /> Your Korean
             ability
           </DialogTitle>
-          <p className="text-sm text-slate-500">
+          <DialogDescription className="text-sm text-slate-500">
             Progress measured by recall, coverage, and durable review—not just
             completion.
-          </p>
+          </DialogDescription>
         </DialogHeader>
         <div className="mt-4 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 p-5 text-white shadow-lg shadow-emerald-100">
           <div className="flex items-end justify-between gap-4">
@@ -148,7 +155,7 @@ export function StatsDialog({
             <div className="mt-1 text-2xl font-bold text-slate-900">
               {stats.totalReviews}
             </div>
-            <div className="mt-1 text-[11px] text-slate-400">
+            <div className="mt-1 text-[11px] text-slate-500">
               total attempts
             </div>
           </div>
@@ -178,7 +185,8 @@ export function StatsDialog({
               {stats.daysStudied7} / 7
             </div>
             <div className="mt-1 text-[11px] text-indigo-600">
-              days with a review
+              days · {stats.reviews7} review
+              {stats.reviews7 === 1 ? "" : "s"}
             </div>
           </div>
           <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
@@ -196,7 +204,7 @@ export function StatsDialog({
         <div className="mt-5 border-t border-slate-100 pt-4">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="font-semibold text-slate-800">Ability states</h3>
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-slate-500">
               Based on spaced recall
             </span>
           </div>
@@ -218,7 +226,7 @@ export function StatsDialog({
               )
             )}
           </div>
-          <p className="mt-3 text-xs leading-relaxed text-slate-400">
+          <p className="mt-3 text-xs leading-relaxed text-slate-500">
             Known means at least three reviews with 75%+ recall and a review
             interval of seven days or more.
           </p>
@@ -226,7 +234,7 @@ export function StatsDialog({
         <div className="mt-5 border-t border-slate-100 pt-4">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="font-semibold text-slate-800">Category mastery</h3>
-            <span className="text-xs text-slate-400">Accuracy · coverage</span>
+            <span className="text-xs text-slate-500">Accuracy · coverage</span>
           </div>
           <div className="max-h-56 space-y-2 overflow-y-auto pr-1">
             {stats.categories.map(category => (
@@ -263,7 +271,7 @@ export function StatsDialog({
               <h3 className="font-semibold text-slate-800">
                 30-day review outlook
               </h3>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-slate-500">
                 Scheduled cards only; new cards are not included.
               </p>
             </div>
@@ -299,7 +307,8 @@ export function StatsDialog({
           </div>
           <div
             className="mt-4 overflow-x-auto pb-1"
-            aria-label="30-day review forecast"
+            role="img"
+            aria-label={forecastSummary}
           >
             <div className="flex min-w-[720px] items-end gap-1">
               {forecast.days.map(day => {
@@ -326,7 +335,7 @@ export function StatsDialog({
                       day.key === forecast.days[7]?.key ||
                       day.key === forecast.days[14]?.key ||
                       day.key === forecast.days[21]?.key) && (
-                      <span className="text-[9px] text-slate-400">
+                      <span className="text-[9px] text-slate-500">
                         {day.label}
                       </span>
                     )}

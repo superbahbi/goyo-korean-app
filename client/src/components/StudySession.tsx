@@ -376,7 +376,7 @@ export function StudySession({
                   </Button>
                 </div>
               </div>
-              <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">
                 How did that feel?
               </p>
               <div className="grid grid-cols-3 gap-2 sm:gap-4">
@@ -436,7 +436,7 @@ export function StudySession({
               </div>
             </div>
           )}
-          <p className="mt-3 hidden text-center text-xs text-slate-400 sm:block">
+          <p className="mt-3 hidden text-center text-xs text-slate-500 sm:block">
             Space reveals · 1 Again · 2 Good · 3 Easy · Esc closes
           </p>
         </footer>

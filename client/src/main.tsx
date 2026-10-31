@@ -1,10 +1,15 @@
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { registerSW } from "virtual:pwa-register";
 import { toast } from "sonner";
 import App from "./App";
 import "./index.css";
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);
 
 // registerType is "prompt" in vite.config.ts, so a new worker installs in the
 // background and waits. Without a notice an installed iPhone app can stay on an

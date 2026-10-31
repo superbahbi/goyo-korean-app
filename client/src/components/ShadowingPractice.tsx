@@ -41,6 +41,8 @@ export function ShadowingPractice({
     return () => window.clearTimeout(timer);
   }, [currentCard, complete]);
 
+  useEffect(() => () => stopAudio(), []);
+
   const close = () => {
     stopAudio();
     onClose();
@@ -49,8 +51,10 @@ export function ShadowingPractice({
   const next = () => {
     if (!currentCard) return;
     onGrade(currentCard.id, shadowed ? "good" : "again");
-    if (index === queue.length - 1) setComplete(true);
-    else {
+    if (index === queue.length - 1) {
+      stopAudio();
+      setComplete(true);
+    } else {
       setIndex(value => value + 1);
       setVisible(false);
       setShadowed(false);
@@ -160,13 +164,16 @@ export function ShadowingPractice({
               </p>
               {visible ? (
                 <div className="mt-7 border-t border-slate-100 pt-6">
-                  <p className="text-4xl font-bold tracking-wide text-slate-900">
+                  <p
+                    className="text-4xl font-bold tracking-wide text-slate-900"
+                    lang="ko"
+                  >
                     {currentCard.front}
                   </p>
                   <p className="mt-2 font-mono text-emerald-600">
                     {currentCard.romanization}
                   </p>
-                  <p className="mt-4 text-sm italic text-slate-500">
+                  <p className="mt-4 text-sm italic text-slate-500" lang="ko">
                     {currentCard.example}
                   </p>
                 </div>

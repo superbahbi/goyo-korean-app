@@ -39,12 +39,15 @@ export function ListeningPractice({
   const [answerState, setAnswerState] = useState<AnswerState>("unanswered");
   const [isPlaying, setIsPlaying] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+  const [round, setRound] = useState(0);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
 
   const currentCard = questions[index];
   const isComplete = !currentCard;
 
   const choices = useMemo(() => {
+    // Reading the round counter is what forces fresh choices after restart.
+    void round;
     if (!currentCard) return [];
     // Distractors must differ in meaning, not just in card id.
     const seen = new Set([currentCard.back.trim().toLowerCase()]);
@@ -61,7 +64,7 @@ export function ListeningPractice({
       { id: currentCard.id, text: currentCard.back },
       ...distractors,
     ]);
-  }, [cards, currentCard]);
+  }, [cards, currentCard, round]);
 
   useEffect(() => () => stopAudio(), []);
 
@@ -122,6 +125,7 @@ export function ListeningPractice({
                   setCorrectCount(0);
                   setSelectedAnswer(null);
                   setAnswerState("unanswered");
+                  setRound(value => value + 1);
                 }}
               >
                 <RotateCcw size={16} className="mr-2" />
@@ -236,7 +240,10 @@ export function ListeningPractice({
 
               {answerState !== "unanswered" && (
                 <div className="mt-6 border-t border-slate-100 pt-5">
-                  <p className="text-4xl font-bold tracking-wide text-slate-900">
+                  <p
+                    className="text-4xl font-bold tracking-wide text-slate-900"
+                    lang="ko"
+                  >
                     {currentCard.front}
                   </p>
                   <p className="mt-2 font-mono text-emerald-600">
@@ -294,7 +301,7 @@ export function ListeningPractice({
                       ? "Correct — nice listening."
                       : `The answer is “${currentCard.back}”.`}
                   </p>
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-slate-500" lang="ko">
                     {currentCard.example}
                   </p>
                   <Button

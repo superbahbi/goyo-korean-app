@@ -25,9 +25,14 @@ function accuracy(state?: CardState): number {
 }
 
 /**
- * The daily session plan: due first (oldest due date first), then weak cards
- * not already in the due list, then a capped batch of brand-new cards, with no
- * card appearing twice.
+ * The daily session plan: due reviews first (oldest due date first), then a
+ * capped batch of brand-new cards, with no card appearing twice.
+ *
+ * Only cards whose due date has arrived belong here. Reviewing a card early
+ * would count as a successful recall and stretch its interval without the wait
+ * spaced repetition depends on, so reviewed cards that are not due yet are left
+ * for their scheduled day. Weak Words remains a separate practice mode with its
+ * own selection.
  *
  * A learner who has already hit the daily goal gets a full repeat queue rather
  * than an empty one; the caller decides whether those grades count for progress.
@@ -50,26 +55,26 @@ export function buildDailyQueue(
       (states[a.id]?.due ?? today).localeCompare(states[b.id]?.due ?? today)
     );
 
-  const dueIds = new Set(dueCards.map(card => card.id));
-  const weakCards = cards
-    .filter(card => {
-      const state = states[card.id];
-      return (
-        Boolean(state?.timesReviewed) &&
-        getMasteryState(state) !== "known" &&
-        state?.lastReviewDate !== today &&
-        !dueIds.has(card.id)
-      );
-    })
-    .sort((a, b) => accuracy(states[a.id]) - accuracy(states[b.id]));
+  // A card is introduced the first time it is reviewed: the schedule makes it
+  // due later, but today's pace is already spent. Re-grading the same card
+  // leaves timesReviewed unchanged, so only genuinely new cards count.
+  const introducedToday = Object.values(states).filter(
+    state => state.lastReviewDate === today && state.timesReviewed === 1
+  ).length;
+  const newCardBudget = Math.max(0, newCardsPerDay - introducedToday);
 
   // Theme order first; the deck keeps its curated order inside a theme, so a
-  // beginner meets survival and daily phrases before broad vocabulary.
-  const newCards = orderNewCardsByTheme(
-    cards.filter(card => !states[card.id])
-  ).slice(0, newCardsPerDay);
+  // beginner meets survival and daily phrases before broad vocabulary. A repeat
+  // queue reviews what the learner knows and never introduces unseen words.
+  const newCards =
+    sessionSize <= 0
+      ? []
+      : orderNewCardsByTheme(cards.filter(card => !states[card.id])).slice(
+          0,
+          newCardBudget
+        );
 
-  const planned = [...dueCards, ...weakCards, ...newCards].filter(
+  const planned = [...dueCards, ...newCards].filter(
     (card, position, all) =>
       all.findIndex(item => item.id === card.id) === position
   );
@@ -204,10 +209,12 @@ export function summarizeForecast<T extends ForecastDay>(
 
 export function nextScheduledReview(
   states: CardStates,
+  cards: readonly VocabularyCard[],
   today: string
 ): string | undefined {
-  return Object.values(states)
-    .map(card => card.due)
-    .filter(due => due > today)
+  const deckIds = new Set(cards.map(card => card.id));
+  return Object.entries(states)
+    .filter(([id, card]) => deckIds.has(id) && card.due > today)
+    .map(([, card]) => card.due)
     .sort()[0];
 }

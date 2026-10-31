@@ -31,6 +31,18 @@ let settleStoppedPlayback: (() => void) | null = null;
 export type AudioSpeaker = "elevenlabs" | "elevenlabs-female";
 let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
+/**
+ * Rejection used when playback ends because a caller stopped it or replaced it
+ * with a newer clip. It is not a failure: the UI must not offer a fallback or
+ * log an error for it.
+ */
+export class PlaybackStoppedError extends Error {
+  constructor() {
+    super("Audio playback was stopped");
+    this.name = "PlaybackStoppedError";
+  }
+}
+
 const consonantAudioAliases: Record<string, string> = {
   cons_001: "ga",
   cons_002: "na",
@@ -146,9 +158,10 @@ function resolveAlphabetAudioFile(
 }
 
 /**
- * Resolves true when the clip played to the end, false when it could not start
- * or failed midway. Callers that can show a fallback (the study card) use the
- * result; callers that treat audio as optional may ignore it.
+ * Resolves true when the clip played to the end or was intentionally stopped,
+ * false when it could not start or failed midway. Callers that can show a
+ * fallback (the study card) use the result; callers that treat audio as
+ * optional may ignore it.
  */
 export async function playVocabularyAudio(wordId: string): Promise<boolean> {
   try {
@@ -172,6 +185,9 @@ export async function playVocabularyAudio(wordId: string): Promise<boolean> {
     await playAudioFile(`/audio/${audioFile}`);
     return true;
   } catch (error) {
+    // Stopping a clip (closing a session, moving to the next card) is expected,
+    // not a playback failure, so do not log it or show the fallback toast.
+    if (error instanceof PlaybackStoppedError) return true;
     console.error("Vocabulary audio failed:", error);
     return false;
   }
@@ -200,6 +216,7 @@ export async function playAlphabetAudio(
 
     await playAudioFile(`/audio/${audioFile}`);
   } catch (error) {
+    if (error instanceof PlaybackStoppedError) return;
     console.error("Alphabet audio failed:", error);
   }
 }
@@ -250,6 +267,10 @@ function playAudioFile(audioPath: string): Promise<void> {
     audio.playbackRate = 0.9;
     audio.volume = 1;
     let retried = false;
+    // Set once stopAudio (or a newer clip) takes over, so late events cannot
+    // resurrect the playback or evict the cache.
+    let stopped = false;
+    let settled = false;
     // Each attach gets an id so a superseded attempt's late errors are ignored.
     let attemptId = 0;
 
@@ -258,25 +279,35 @@ function playAudioFile(audioPath: string): Promise<void> {
       audio.onerror = null;
       audio.onabort = null;
       if (currentAudio === audio) currentAudio = null;
-      settleStoppedPlayback = null;
+      if (settleStoppedPlayback === handleStopped) settleStoppedPlayback = null;
     };
 
-    settleStoppedPlayback = () => {
+    const finish = (error?: Error) => {
+      if (settled) return;
+      settled = true;
       cleanup();
-      reject(new Error("Audio playback was stopped"));
+      if (error) reject(error);
+      else resolve();
     };
+
+    const handleStopped = () => {
+      stopped = true;
+      finish(new PlaybackStoppedError());
+    };
+
+    settleStoppedPlayback = handleStopped;
 
     // A cached response can be stale or corrupt (for example HTML saved from a
     // fallback route). Drop it and retry once from the network, bypassing the
-    // service worker by adding a query string to the URL.
+    // service worker by adding a query string to the URL. Only real media
+    // errors reach this path; a rejected play() must not discard a good clip.
     const recover = async (id: number, message: string) => {
-      if (id !== attemptId) return;
+      if (id !== attemptId || stopped) return;
       // Delete first: the retry must not race the service worker and re-read the bad entry.
       await forgetCachedAudio(audioPath);
-      if (id !== attemptId) return;
+      if (id !== attemptId || stopped) return;
       if (retried) {
-        cleanup();
-        reject(new Error(message));
+        finish(new Error(message));
         return;
       }
       retried = true;
@@ -289,20 +320,26 @@ function playAudioFile(audioPath: string): Promise<void> {
       const id = ++attemptId;
       audio.onended = () => {
         if (id !== attemptId) return;
-        cleanup();
-        resolve();
+        finish();
       };
       audio.onerror = () => {
+        if (id !== attemptId) return;
         void recover(id, audio.error?.message || `Unable to load ${audioPath}`);
       };
       audio.onabort = () => {
         if (id !== attemptId) return;
-        cleanup();
-        reject(new Error("Audio playback was stopped"));
+        finish(new PlaybackStoppedError());
       };
       audio.src = src;
       audio.play().catch(error => {
-        void recover(id, String(error));
+        if (id !== attemptId) return;
+        const name = error instanceof Error ? error.name : "";
+        // stopAudio already settled the promise and paused the element; the
+        // browser's abort rejection is expected and must not evict the clip.
+        if (name === "AbortError" && stopped) return;
+        // Autoplay blocking (iOS) and other start failures leave the cached
+        // clip intact: the user can retry by tapping the speaker.
+        finish(error instanceof Error ? error : new Error(String(error)));
       });
     };
 
@@ -311,19 +348,24 @@ function playAudioFile(audioPath: string): Promise<void> {
 }
 
 export function stopAudio(): void {
-  settleStoppedPlayback?.();
+  const audio = currentAudio;
+  const settle = settleStoppedPlayback;
+  // Clear the module state before pausing so re-entry and late play() events
+  // are no-ops, then tear the element down before settling the pending promise.
+  currentAudio = null;
   settleStoppedPlayback = null;
 
-  if (currentAudio) {
-    currentAudio.onended = null;
-    currentAudio.onerror = null;
-    currentAudio.onabort = null;
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-    currentAudio.removeAttribute("src");
-    currentAudio.load();
-    currentAudio = null;
+  if (audio) {
+    audio.onended = null;
+    audio.onerror = null;
+    audio.onabort = null;
+    audio.pause();
+    audio.currentTime = 0;
+    audio.removeAttribute("src");
+    audio.load();
   }
+
+  settle?.();
 }
 
 export function isAudioPlaying(): boolean {

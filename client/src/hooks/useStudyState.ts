@@ -21,6 +21,7 @@ import {
   type CardState,
   type MasteryState,
 } from "@/lib/mastery";
+import { levelFromXp } from "@/lib/xp";
 
 export { getLocalDateKey, getMasteryState };
 export type { CardState, MasteryState };
@@ -136,6 +137,33 @@ function sanitizeCardState(id: string, value: unknown): CardState | null {
   return card;
 }
 
+/**
+ * Reads only the save format version from a raw localStorage value. Anything
+ * unreadable or malformed reports null, so callers can treat it like an
+ * unversioned save instead of trusting it.
+ */
+export function getSavedSchemaVersion(raw: string | null): number | null {
+  if (!raw) return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!isRecord(parsed)) return null;
+    const version = parsed.schemaVersion;
+    return typeof version === "number" &&
+      Number.isInteger(version) &&
+      version >= 1
+      ? version
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+/** True when a raw save was written by a newer app build than this one. */
+export function isNewerSave(raw: string | null): boolean {
+  const version = getSavedSchemaVersion(raw);
+  return version !== null && version > SCHEMA_VERSION;
+}
+
 // A missing or older schemaVersion is treated as current. Pre-v2 saves are not migrated.
 export function parseSavedState(
   raw: string | null,
@@ -172,13 +200,8 @@ export function parseSavedState(
     const streak = deriveStreak(studyDays, today);
     const stats: UserStats = {
       totalXp,
-      level: Math.max(
-        1,
-        nonNegativeNumber(
-          savedStats.level,
-          Math.floor(Math.sqrt(totalXp / 100)) + 1
-        )
-      ),
+      // Derived exactly like applyGrade so an edited save cannot inflate a level.
+      level: levelFromXp(totalXp),
       streak,
       lastStudyDate,
       highestStreak: Math.max(
@@ -198,7 +221,7 @@ export function parseSavedState(
       defaults.settings.newCardsPerDay
     );
     const settings: UserState["settings"] = {
-      dailyGoal: dailyGoal >= 1 ? dailyGoal : defaults.settings.dailyGoal,
+      dailyGoal: Math.min(100, Math.max(1, Math.round(dailyGoal))),
       newCardsPerDay: Math.min(10, Math.max(1, Math.round(newCardsPerDay))),
       // `ttsEnabled` was a dead system-voice toggle; unknown keys in old saves are ignored.
       autoPlayAudio:
@@ -226,12 +249,26 @@ export function parseSavedState(
   }
 }
 
-function loadState(): UserState {
+interface LoadedState {
+  state: UserState;
+  blockedByNewerVersion: boolean;
+}
+
+function loadState(): LoadedState {
   try {
-    return parseSavedState(localStorage.getItem(STORAGE_KEY));
+    const raw = localStorage.getItem(STORAGE_KEY);
+    // A newer build may still have this tab open or a shared device may have
+    // upgraded. Start fresh in memory and leave their save untouched.
+    if (isNewerSave(raw)) {
+      return { state: createDefaultState(), blockedByNewerVersion: true };
+    }
+    return {
+      state: parseSavedState(raw),
+      blockedByNewerVersion: false,
+    };
   } catch (error) {
     console.error("Failed to load saved progress, starting fresh:", error);
-    return createDefaultState();
+    return { state: createDefaultState(), blockedByNewerVersion: false };
   }
 }
 
@@ -406,8 +443,6 @@ export function applyGrade(
         : existingCard?.lastResponseTimeMs,
   };
 
-  const isNewCard = !existingCard;
-
   return {
     ...state,
     cardStates: {
@@ -416,12 +451,14 @@ export function applyGrade(
     },
     stats: {
       totalXp: state.stats.totalXp + xpGain,
-      level: Math.floor(Math.sqrt((state.stats.totalXp + xpGain) / 100)) + 1,
+      level: levelFromXp(state.stats.totalXp + xpGain),
       lastStudyDate: today,
       streak: newStreak,
       highestStreak: newHighestStreak,
       totalCardsLearned:
-        countProgress && isNewCard && rating !== "again"
+        advanced &&
+        rating !== "again" &&
+        (existingCard?.timesCorrect ?? 0) === 0
           ? state.stats.totalCardsLearned + 1
           : state.stats.totalCardsLearned,
     },
@@ -435,12 +472,24 @@ export function applyGrade(
 export function useStudyState() {
   // Read the save during the first render so the dashboard never flashes blank
   // while an effect catches up.
-  const [state, setState] = useState<UserState>(loadState);
+  const [initialLoad] = useState(loadState);
+  const [state, setState] = useState<UserState>(initialLoad.state);
+  // A newer save is never rewritten, so this tab's changes stay in memory only.
+  const [saveBlocked, setSaveBlocked] = useState(
+    initialLoad.blockedByNewerVersion
+  );
+  const [saveError, setSaveError] = useState(false);
 
   // Another tab wrote progress: adopt it instead of overwriting it later.
   useEffect(() => {
     const onStorage = (event: StorageEvent) => {
       if (event.key !== STORAGE_KEY) return;
+      if (isNewerSave(event.newValue)) {
+        // Another build upgraded the save: do not adopt (or sanitize) it.
+        setSaveBlocked(true);
+        return;
+      }
+      setSaveBlocked(false);
       setState(
         event.newValue ? parseSavedState(event.newValue) : createDefaultState()
       );
@@ -451,12 +500,15 @@ export function useStudyState() {
 
   // Persist to localStorage
   useEffect(() => {
+    if (saveBlocked) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      setSaveError(false);
     } catch (error) {
       console.error("Failed to save progress:", error);
+      setSaveError(true);
     }
-  }, [state]);
+  }, [state, saveBlocked]);
 
   const gradeCard = useCallback(
     (
@@ -487,5 +539,12 @@ export function useStudyState() {
     setState(next);
   }, []);
 
-  return { state, gradeCard, updateSettings, replaceState };
+  return {
+    state,
+    gradeCard,
+    updateSettings,
+    replaceState,
+    saveBlocked,
+    saveError,
+  };
 }

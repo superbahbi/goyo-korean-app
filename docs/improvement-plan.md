@@ -13,27 +13,46 @@ Every stage is done only when its gate passes.
 - Success: users still reviewing 4+ days a week after 30 days.
 - Budget: a few hours a week and little or no new audio spend.
 - No accounts or backend. Progress lives in `localStorage` and moves by JSON export/import.
-- No third-party analytics. Measure retention locally and by checking in with testers.
+- Vercel Web Analytics and Speed Insights for aggregate, cookieless page views and Core Web
+  Vitals (enabled 2026-10-31). Retention is still measured locally and by checking in with testers;
+  no accounts and no personal data.
 
 ## Current state
 
-Verified on 2026-10-31 at `114cef6`:
+Verified on 2026-10-31 on `refactor/stats-dialog-extract`:
 
-| Check          | Result                                                                            |
-| -------------- | --------------------------------------------------------------------------------- |
-| `tsc --noEmit` | Passes                                                                            |
-| `vitest run`   | 100 tests pass (scheduler, saved state, review log, study days, queue, deck data) |
-| `vite build`   | Passes. Main chunk 604 kB (188 kB gzipped), Essential 600 a separate 209 kB chunk |
-| CI             | Type check, tests and build are green on `main`                                   |
+| Check              | Result                                                                                                                                                           |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tsc --noEmit`     | Passes                                                                                                                                                           |
+| `eslint .`         | Passes                                                                                                                                                           |
+| `prettier --check` | Passes                                                                                                                                                           |
+| `vitest run`       | 134 tests pass in 13 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio)                                                         |
+| `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk |
+| CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                              |
 
-What is solid: the deck is validated by tests; the scheduler, queue, saved state, review log and
-study-day history are tested; saves are sanitized; the learning loop retries failed cards and
-recognition modes no longer stretch intervals; CI runs every push; the PWA precaches the shell,
-the audio index, Hangul and number audio.
+All gates pass.
 
-What is weak: `Home.tsx` is still a 1,300-line monolith with 53 UI files of which 16 are used; the
-imported Essential 600 examples have had no human review; no ESLint or format check; and several
-behaviour checks still need a real browser, screen reader and iPhone.
+2026-10-31 review fixes: the daily queue now reviews only due cards, so early non-due reviews no
+longer move the schedule; `newCardsPerDay` is enforced per calendar day and repeat queues add no
+unseen cards; `totalCardsLearned` counts the first successful recall, including cards that were
+failed first; audio keeps its cache through blocked autoplay and intentional stops, and stops are not
+recorded as failures; newer saves are never overwritten, save failures surface, reset asks for
+confirmation, level derives from XP and `dailyGoal` is bounded. The Stats view also gained a 7-day
+review count, and the next-review forecast now ignores states for cards no longer in the deck.
+
+What is solid: the deck is validated by tests; the scheduler, queue, saved state, review log,
+study-day history, XP and audio player are tested; saves are sanitized and newer saves are never
+overwritten; the learning loop retries failed cards and recognition modes cap interval growth; the
+daily queue is due-only; audio survives blocked autoplay and intentional stops without evicting the
+cache; `lang="ko"`, the contrast fixes, chart labels, reduced motion, dialog descriptions, the iOS
+standalone meta tags and the Vercel security/cache headers are in place; CI runs every push; the PWA
+precaches the shell, the audio index, Hangul and number audio.
+
+What is open: the imported Essential 600 examples still have no human review; behaviour checks still
+need a real browser, screen reader and iPhone; there are no Playwright smokes; audio filenames are not
+content-hashed; and the Phase 3 content work (sample audit, weak-example rewrites, imported themes)
+remains. The Phase 2 split is done, but its 300-line target is only met by `Home.tsx` (274 lines):
+`SettingsDialog` (415), `StudySession` (446) and several practice views are still longer.
 
 ## How we work
 
@@ -52,14 +71,14 @@ behaviour checks still need a real browser, screen reader and iPhone.
 
 ## Status
 
-| Phase                           | State                                                        |
-| ------------------------------- | ------------------------------------------------------------ |
-| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding          |
-| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open |
-| 2 Structure                     | In progress; items 2–3 done, bundle target still open        |
-| 3 Content                       | Not started                                                  |
-| 4 Delivery and accessibility    | Not started                                                  |
-| 5 Tune from data                | Blocked on 30 days of use                                    |
+| Phase                           | State                                                                                                                                   |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                     |
+| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                            |
+| 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                      |
+| 3 Content                       | In progress; `exampleEnglish` added to all 136 curated cards; sample audit and weak-example rewrites still open                         |
+| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels and reduced motion done; device checks, hashed audio and Playwright open |
+| 5 Tune from data                | Blocked on 30 days of use                                                                                                               |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its device checks — blocked
@@ -147,26 +166,36 @@ The reason retention is the metric: right now the app cannot measure whether any
 
 ## Phase 2: Structure and tooling
 
+Done. Final sizes: main chunk 105.6 kB raw / 30.8 kB gzipped, with React, vendor, motion and Radix in
+separate vendor chunks and the dialogs plus practice views lazily loaded. Every file is covered by
+type checking, ESLint and Prettier; tests are type-checked too.
+
 1. Split `client/src/pages/Home.tsx` into `pages/Home.tsx` (layout and state), `components/BrowseDialog.tsx`,
-   `components/StatsDialog.tsx`, `components/SettingsDialog.tsx`, and `lib/queue.ts` (Phase 1) and
-   `lib/xp.ts` (level math shared with `useStudyState`). Target: no file over 300 lines.
+   `components/StatsDialog.tsx`, `components/SettingsDialog.tsx`, dashboard sections under
+   `components/`, and `lib/queue.ts` (Phase 1) and `lib/xp.ts` (level math shared with `useStudyState`).
+   Target: no file over 300 lines.
+   - Done: `Home.tsx` is 274 lines and the dashboard now uses `useHomeDashboard`, `useHomeSessions` and
+     section components. The 300-line target is met for `Home.tsx` but not everywhere: the extracted
+     dialogs landed at 341–415 lines and `StudySession.tsx` is 446.
 2. Delete the unused `client/src/components/ui/*` files and the dependencies only they use
    (recharts, react-hook-form, @hookform/resolvers, zod, embla-carousel-react, cmdk, input-otp,
    react-day-picker, react-resizable-panels, vaul, nanoid, and `workbox-window` if unused).
    Re-check the bundle after each batch. Target: under 400 kB raw main chunk.
    - Done: 41 files were unused by then (not 37), leaving the 12 that the app reaches. The 30 matching
      dependencies are gone. `workbox-window` stays: `virtual:pwa-register` imports it at build time.
-   - The main JS chunk is unchanged at 604 kB because dead files were never bundled, but the CSS
-     chunk fell from 141 kB to 79 kB (22 to 13 kB gzipped) once Tailwind stopped scanning them.
-     Under 400 kB needs the item 1 split plus lazy loading.
+     The initial main chunk did not shrink until the item 1 split, but the CSS chunk fell from 141 kB
+     to 79 kB (22 to 13 kB gzipped) once Tailwind stopped scanning dead files. The under-400 kB target
+     was met with the split and lazy loading.
 3. Add ESLint (`typescript-eslint` + `react-hooks`) and `prettier --check` to CI. Run
-   `prettier --write` once in its own commit (36 files are currently unformatted).
+   `prettier --write` once in its own commit.
+   - Done: both run locally and in CI; the repository was formatted in one commit.
 4. Read saved state synchronously (`useState(loadState)`) so the first paint is not a blank screen,
    and make the daily count reset at midnight while the app is open.
+   - Done.
 5. Replace `sort(() => Math.random() - 0.5)` shuffles with Fisher–Yates (`lib/shuffle.ts`).
-6. Housekeeping: delete `.gitkeep`, the one-shot `scripts/*elevenlabs*.mjs` activators
-   (keep the generator), move `scripts/test-srs.test.ts` to `client/src/lib/srs.test.ts`, and note the
-   remaining scripts in the README.
+   - Done.
+6. Housekeeping (done): deleted `.gitkeep` and the one-shot `scripts/*elevenlabs*.mjs` activators
+   (kept the generator), and moved `scripts/test-srs.test.ts` to `client/src/lib/srs.test.ts`.
 7. Keep the roadmap honest: this file is the backlog. No second list.
 
 ## Phase 3: Content quality
@@ -178,8 +207,9 @@ no human review. That is the largest content risk.
    error rate. Fix every error found in that sample.
 2. Fix the systemic issues the audit finds (naturalness, politeness level, part-of-speech, batchim
    romanization). Review the remaining deck in batches of 25–50 as time allows.
-3. Rewrite weak curated examples (`영어를 도와주세요`, `넷은 너무 많아요`, the 20 identical `나는다…` place
-   sentences) and add `exampleEnglish` where it is missing.
+3. Rewrite weak curated examples (`영어를 도와주세요`, `넷은 너무 많아요`, the repeated `나는…` place
+   sentences). `exampleEnglish` is now present on all 136 curated cards; the weak Korean examples
+   still need rewriting.
 4. Theme the Essential deck: replace the single `essential` tag with themes for browsing, while keeping
    one library category. Add a difficulty signal only if it is real.
 5. Add an audio test that asserts every `studyReady` card has a clip in both voices.
@@ -189,12 +219,24 @@ no human review. That is the largest content risk.
 1. Accessibility pass: contrast on `slate-300`/`slate-400` text at 9–11px, `lang="ko"` on Korean text,
    focus rings on the dashboard's `motion.button` cards, labelled icon-only controls, `aria-live` on
    grading feedback. Re-check in a real browser, including the practice overlays.
+   - Partly done: `lang="ko"`, `slate-500` for the small text, chart role/label, reduced-motion handling
+     and dialog descriptions shipped. The focus-ring, icon-control and browser/overlay checks remain.
 2. Vercel headers: long-lived immutable caching for `/assets/*` and hashed audio, a modest `max-age` for
    `sw.js`, and baseline security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`).
+   - Done apart from hashed audio (item 3): `vercel.json` ships a CSP, `X-Content-Type-Options: nosniff`,
+     `Referrer-Policy`, `Permissions-Policy` and `X-Frame-Options`. `/assets/*` is immutable for a year,
+     `/audio/*` caches for one day with stale-while-revalidate, and `sw.js` plus `index.html` are
+     `no-cache`. The iOS standalone meta tags ship in `index.html`.
 3. Audio delivery: content-hashed filenames so a regenerated clip cannot be served stale, and decide
    whether 26 MB of mp3s keeps living in git (repo is 43 MB) or moves to object storage or LFS.
+   - Decision (2026-10-31): the ~26 MB library stays committed to git for now; it keeps the Vercel
+     deploy and offline cache simple, with no extra host or credentials. Revisit if clone/CI checkout
+     or deploy size becomes a burden, or if regenerated clips cause merge conflicts on most audio
+     changes. Content-hashed filenames are still open.
 4. Playwright smoke tests: study loop, Browse search and play, import/export, offline shell reload.
+   - Not started.
 5. Verify on a real iPhone: first-tap audio, install, offline, update notice.
+   - Outstanding.
 
 ## Phase 5: Tune from real data (after 30 days)
 
@@ -229,13 +271,16 @@ Each card tracks `interval` (days), `easeFactor` (1.3–3.2), `consecutiveCorrec
   reviewed today.
 - `Known` requires 3+ reviews, 75%+ accuracy, a 7-day interval and 2 consecutive correct recalls.
 
+The daily queue only reviews cards on their due date; reviewing a card early does not advance its
+schedule. Weak Words and Learning Review remain explicit extra practice on top of that queue.
+
 ## Reference: deck provenance
 
 - Source: `The600EssentialKoreanWords.xlsx`. 547 valid rows, 542 unique headwords after fixing source
   typos (`자정거` → `자전거`, `놉다` → `높다`).
 - Genuine homonyms stay separate cards: 차, 눈, 공, 병, 달, 배, 다리, 열, 분.
-- 29 senses duplicate curated cards and were dropped, leaving 517 imported cards. The curated deck of
-  136 cards remains study-ready with reviewed examples and audio.
+- Senses that duplicate curated cards were dropped, leaving 504 imported cards. The curated deck of
+  136 cards remains study-ready with reviewed examples and audio; together the deck has 640 cards.
 - Romanization is generated by `romanize.ts` (Revised Romanization) and linted by `data.test.ts`.
 - Audio: ElevenLabs, two voices (Hyuk, Jini), one clip per card per voice in `public/audio/`.
 

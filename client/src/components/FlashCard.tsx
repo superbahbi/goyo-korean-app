@@ -165,7 +165,7 @@ function FlashCardBase({
               )}
             </>
           ) : (
-            <h2 className="text-5xl font-bold text-slate-900 mb-6">
+            <h2 className="text-5xl font-bold text-slate-900 mb-6" lang="ko">
               {cleanKoreanText(front)}
             </h2>
           )}
@@ -230,7 +230,10 @@ function FlashCardBase({
               {audioFirst ? "Korean + meaning" : "Meaning"}
             </Badge>
             {audioFirst && (
-              <p className="text-5xl font-bold tracking-tight text-slate-900">
+              <p
+                className="text-5xl font-bold tracking-tight text-slate-900"
+                lang="ko"
+              >
                 {cleanKoreanText(front)}
               </p>
             )}
@@ -251,7 +254,10 @@ function FlashCardBase({
                 <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
                   In context
                 </p>
-                <p className="mt-2 text-sm italic leading-relaxed text-slate-600">
+                <p
+                  className="mt-2 text-sm italic leading-relaxed text-slate-600"
+                  lang="ko"
+                >
                   “{example}”
                 </p>
                 {exampleEnglish && (
