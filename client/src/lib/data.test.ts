@@ -30,7 +30,7 @@ const manifest = JSON.parse(
 function hasGeminateRieul(text: string): boolean {
   const syllableCode = (ch: string) => ch.codePointAt(0)! - 0xac00;
   const isSyllable = (code: number) => code >= 0 && code <= 11171;
-  const chars = [...text];
+  const chars = Array.from(text);
   return chars.some((ch, i) => {
     const first = syllableCode(ch);
     const second = i + 1 < chars.length ? syllableCode(chars[i + 1]) : -1;
@@ -72,7 +72,7 @@ describe("combined vocabulary deck", async () => {
     const counts = new Map<string, number>();
     for (const card of VOCABULARY_DATA)
       counts.set(card.front, (counts.get(card.front) ?? 0) + 1);
-    const duplicates = [...counts]
+    const duplicates = Array.from(counts)
       .filter(([, count]) => count > 1)
       .map(([front]) => front)
       .sort();

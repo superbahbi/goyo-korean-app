@@ -83,7 +83,7 @@ import {
   setAudioSpeaker,
   type AudioSpeaker,
 } from "@/lib/audioPlayer";
-import { daysStudiedWithin } from "@/lib/studyDays";
+import { daysStudiedWithin, reviewsWithin } from "@/lib/studyDays";
 import {
   buildDailyQueue,
   buildReviewForecast,
@@ -329,6 +329,7 @@ export default function Home() {
   const dailyGoal = state.settings.dailyGoal;
   const daysStudied7 = daysStudiedWithin(state.studyDays, today, 7);
   const daysStudied30 = daysStudiedWithin(state.studyDays, today, 30);
+  const reviews7 = reviewsWithin(state.studyDays, today, 7);
 
   const masteryCounts = useMemo(
     () =>
@@ -628,7 +629,11 @@ export default function Home() {
     () => summarizeForecast(extendedReviewForecast, state.settings.dailyGoal),
     [extendedReviewForecast, state.settings.dailyGoal]
   );
-  const nextScheduledReview = getNextScheduledReview(state.cardStates, today);
+  const nextScheduledReview = getNextScheduledReview(
+    state.cardStates,
+    vocabulary,
+    today
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
@@ -1540,6 +1545,7 @@ export default function Home() {
           overdueCount,
           daysStudied7,
           daysStudied30,
+          reviews7,
           masteryCounts,
           categories: categoryMastery,
         }}

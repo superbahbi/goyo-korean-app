@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { scheduleRecall, scheduleReview } from "../client/src/lib/srs";
+import { scheduleRecall, scheduleReview } from "./srs";
 
 describe("SRS scheduling", () => {
   const firstGood = scheduleRecall(undefined, "good");

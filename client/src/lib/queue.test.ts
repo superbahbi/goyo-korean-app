@@ -250,7 +250,16 @@ describe("workload", () => {
   });
 
   it("finds the next scheduled review after today", () => {
-    expect(nextScheduledReview(states, today)).toBe("2026-11-02");
-    expect(nextScheduledReview({}, today)).toBeUndefined();
+    expect(nextScheduledReview(states, cards, today)).toBe("2026-11-02");
+    expect(nextScheduledReview({}, cards, today)).toBeUndefined();
+  });
+
+  it("ignores saved states for cards no longer in the deck", () => {
+    const withRemoved = {
+      ...states,
+      removed: state("removed", { due: "2026-11-01" }),
+    };
+    expect(nextScheduledReview(withRemoved, cards, today)).toBe("2026-11-02");
+    expect(nextScheduledReview(withRemoved, [], today)).toBeUndefined();
   });
 });

@@ -40,6 +40,7 @@ export interface StatsDialogStats {
   overdueCount: number;
   daysStudied7: number;
   daysStudied30: number;
+  reviews7: number;
   masteryCounts: Record<MasteryState, number>;
   categories: CategoryMastery[];
 }
@@ -184,7 +185,8 @@ export function StatsDialog({
               {stats.daysStudied7} / 7
             </div>
             <div className="mt-1 text-[11px] text-indigo-600">
-              days with a review
+              days · {stats.reviews7} review
+              {stats.reviews7 === 1 ? "" : "s"}
             </div>
           </div>
           <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">

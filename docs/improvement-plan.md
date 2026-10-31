@@ -164,9 +164,8 @@ The reason retention is the metric: right now the app cannot measure whether any
 4. Read saved state synchronously (`useState(loadState)`) so the first paint is not a blank screen,
    and make the daily count reset at midnight while the app is open.
 5. Replace `sort(() => Math.random() - 0.5)` shuffles with Fisher–Yates (`lib/shuffle.ts`).
-6. Housekeeping: delete `.gitkeep`, the one-shot `scripts/*elevenlabs*.mjs` activators
-   (keep the generator), move `scripts/test-srs.test.ts` to `client/src/lib/srs.test.ts`, and note the
-   remaining scripts in the README.
+6. Housekeeping (done): deleted `.gitkeep` and the one-shot `scripts/*elevenlabs*.mjs` activators
+   (kept the generator), and moved `scripts/test-srs.test.ts` to `client/src/lib/srs.test.ts`.
 7. Keep the roadmap honest: this file is the backlog. No second list.
 
 ## Phase 3: Content quality

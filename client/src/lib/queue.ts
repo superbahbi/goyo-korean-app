@@ -209,10 +209,12 @@ export function summarizeForecast<T extends ForecastDay>(
 
 export function nextScheduledReview(
   states: CardStates,
+  cards: readonly VocabularyCard[],
   today: string
 ): string | undefined {
-  return Object.values(states)
-    .map(card => card.due)
-    .filter(due => due > today)
+  const deckIds = new Set(cards.map(card => card.id));
+  return Object.entries(states)
+    .filter(([id, card]) => deckIds.has(id) && card.due > today)
+    .map(([, card]) => card.due)
     .sort()[0];
 }

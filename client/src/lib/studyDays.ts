@@ -90,6 +90,19 @@ export function daysStudiedWithin(
   return count;
 }
 
+/** Reviews logged in the inclusive window ending today. */
+export function reviewsWithin(
+  days: StudyDays,
+  today: string,
+  windowDays: number
+): number {
+  let count = 0;
+  for (let offset = 0; offset < windowDays; offset += 1) {
+    count += days[addDays(today, -offset)]?.reviews ?? 0;
+  }
+  return count;
+}
+
 /** Fold a v3 `cardsStudiedToday` counter into the history on first load. */
 export function migrateLegacyDay(
   days: StudyDays,

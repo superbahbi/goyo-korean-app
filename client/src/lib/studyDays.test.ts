@@ -4,6 +4,7 @@ import {
   deriveStreak,
   migrateLegacyDay,
   recordStudyDay,
+  reviewsWithin,
   sanitizeStudyDays,
   type StudyDays,
 } from "./studyDays";
@@ -93,6 +94,23 @@ describe("daysStudiedWithin", () => {
 
   it("ignores future days", () => {
     expect(daysStudiedWithin(days, "2026-10-24", 7)).toBe(0);
+  });
+});
+
+describe("reviewsWithin", () => {
+  const days: StudyDays = {
+    "2026-10-31": { cards: 1, reviews: 3 },
+    "2026-10-25": { cards: 1, reviews: 2 },
+    "2026-10-02": { cards: 1, reviews: 4 },
+  };
+
+  it("sums accepted reviews in the inclusive window", () => {
+    expect(reviewsWithin(days, "2026-10-31", 7)).toBe(5);
+    expect(reviewsWithin(days, "2026-10-31", 30)).toBe(9);
+  });
+
+  it("ignores days outside the window", () => {
+    expect(reviewsWithin(days, "2026-10-24", 7)).toBe(0);
   });
 });
 
