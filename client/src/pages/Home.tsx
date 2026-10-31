@@ -14,6 +14,7 @@ import { StudySession } from "@/components/StudySession";
 import { CATEGORIES } from "@/lib/vocabulary";
 import { useVocabularyDeck } from "@/hooks/useVocabularyDeck";
 import { DownloadAllAudio } from "@/components/DownloadAllAudio";
+import { LazyBoundary } from "@/components/LazyBoundary";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 
 const BROWSE_PAGE_SIZE = 40;
@@ -752,37 +753,45 @@ export default function Home() {
       {/* Alphabet Practice Modal */}
       {showAlphabet && (
         <Suspense fallback={<ModalLoadingFallback />}>
-          <AlphabetPractice onClose={() => setShowAlphabet(false)} />
+          <LazyBoundary onClose={() => setShowAlphabet(false)}>
+            <AlphabetPractice onClose={() => setShowAlphabet(false)} />
+          </LazyBoundary>
         </Suspense>
       )}
 
       {showListening && (
         <Suspense fallback={<ModalLoadingFallback />}>
-          <ListeningPractice
+          <LazyBoundary onClose={() => setShowListening(false)}>
+            <ListeningPractice
             cards={studyReady}
             onGrade={handleListeningGrade}
             onClose={() => setShowListening(false)}
           />
+          </LazyBoundary>
         </Suspense>
       )}
 
       {showScenarios && (
         <Suspense fallback={<ModalLoadingFallback />}>
-          <ScenarioPractice
+          <LazyBoundary onClose={() => setShowScenarios(false)}>
+            <ScenarioPractice
             cards={studyReady}
             onGrade={handleScenarioGrade}
             onClose={() => setShowScenarios(false)}
           />
+          </LazyBoundary>
         </Suspense>
       )}
 
       {showShadowing && (
         <Suspense fallback={<ModalLoadingFallback />}>
-          <ShadowingPractice
+          <LazyBoundary onClose={() => setShowShadowing(false)}>
+            <ShadowingPractice
             cards={studyReady}
             onGrade={handleShadowingGrade}
             onClose={() => setShowShadowing(false)}
           />
+          </LazyBoundary>
         </Suspense>
       )}
 
