@@ -845,7 +845,7 @@ const CURATED_VOCABULARY_DATA: VocabularyCard[] = [
     back: "I'm scared",
     romanization: "duryeowoyo",
     tag: "emotions",
-    example: "제 동생은 높이를 두려워해요.",
+    example: "제 동생은 높은 곳을 두려워해요.",
     exampleEnglish: "My younger sibling is afraid of heights.",
     difficulty: "beginner",
     partOfSpeech: "verb",
