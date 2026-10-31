@@ -127,6 +127,26 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        // Keep the framework and large animation/Radix libraries in stable
+        // vendor chunks, so an app-code edit does not invalidate the whole
+        // main chunk and the entry stays small.
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+          if (/node_modules\/(react|react-dom|scheduler)\//.test(id)) {
+            return "react-vendor";
+          }
+          if (
+            /node_modules\/(framer-motion|motion-dom|motion-utils)\//.test(id)
+          ) {
+            return "motion-vendor";
+          }
+          if (id.includes("node_modules/@radix-ui/")) return "radix-vendor";
+          return "vendor";
+        },
+      },
+    },
   },
   server: {
     port: 3000,

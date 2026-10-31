@@ -21,6 +21,7 @@ import {
   type CardState,
   type MasteryState,
 } from "@/lib/mastery";
+import { levelFromXp } from "@/lib/xp";
 
 export { getLocalDateKey, getMasteryState };
 export type { CardState, MasteryState };
@@ -200,7 +201,7 @@ export function parseSavedState(
     const stats: UserStats = {
       totalXp,
       // Derived exactly like applyGrade so an edited save cannot inflate a level.
-      level: Math.floor(Math.sqrt(totalXp / 100)) + 1,
+      level: levelFromXp(totalXp),
       streak,
       lastStudyDate,
       highestStreak: Math.max(
@@ -450,7 +451,7 @@ export function applyGrade(
     },
     stats: {
       totalXp: state.stats.totalXp + xpGain,
-      level: Math.floor(Math.sqrt((state.stats.totalXp + xpGain) / 100)) + 1,
+      level: levelFromXp(state.stats.totalXp + xpGain),
       lastStudyDate: today,
       streak: newStreak,
       highestStreak: newHighestStreak,
