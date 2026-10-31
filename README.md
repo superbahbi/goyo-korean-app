@@ -56,6 +56,11 @@ Regenerating audio needs an ElevenLabs key in `.env.local` (never commit it). Se
 `scripts/generate-elevenlabs-audio.ts`; `tsx scripts/generate-elevenlabs-audio.ts` uses the full deck.
 Do not commit regenerated clips without checking their size and whether the existing ones are fine.
 
+The ~26 MB vocabulary library stays committed to git and is served as static files from
+`public/audio/`. That keeps the Vercel deploy and the offline cache simple: every clip is a normal
+build artifact with no extra host or credentials. Revisit this if clone/CI checkout or deploy size
+becomes a burden, or if regenerated clips start causing merge conflicts on most audio changes.
+
 ## Deployment
 
 Vercel builds with `pnpm install --frozen-lockfile` and serves `dist/public`. SPA rewrites and cache
