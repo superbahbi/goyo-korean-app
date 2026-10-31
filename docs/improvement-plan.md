@@ -27,6 +27,7 @@ Verified on 2026-10-31 on `main` after Phase 3 (`4af340d` plus the Phase 3 batch
 | `eslint .`         | Passes                                                                                                                                                                                                             |
 | `prettier --check` | Passes                                                                                                                                                                                                             |
 | `vitest run`       | 179 tests pass in 19 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up) |
+| `playwright test`  | 5 smokes pass against the production build: study loop with the keyboard, failed-card retry, Browse search and audio, progress export/import, offline reload                                                       |
 | `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk                                                   |
 | CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                                                                                |
 
@@ -50,7 +51,7 @@ precaches the shell, the audio index, Hangul and number audio; and the imported 
 and usage notes plus the curated examples are now guarded by tests.
 
 What is open: the Korean-speaker spot check of the audited cards is still pending (see Phase 3 —
-content trust), and the Playwright, browser, screen-reader and iPhone checks still need a real device;
+content trust), and the browser, screen-reader and iPhone checks still need a real device;
 audio filenames are not content-hashed; and the repo is 48 MB with 26 MB of audio in git. The Phase 2
 split is done, but its
 300-line target is only met by `Home.tsx` (274 lines): `SettingsDialog` (415), `StudySession` (446) and
@@ -62,7 +63,8 @@ several practice views are still longer.
   `feat/…`, `fix/…`, `chore/…`, `docs/…`. One concern per PR.
 - **PR size:** aim for under ~400 changed lines. If a task is bigger, split it.
 - **Gate for every PR:** `pnpm check`, `pnpm lint`, `pnpm format:check`, `pnpm test` and
-  `pnpm build` all pass, run locally and in CI.
+  `pnpm build` all pass, run locally and in CI. CI also runs `pnpm test:e2e` (Playwright) against
+  the production build.
   Behaviour tests cannot cover (UI, audio, PWA, iOS) is checked in a browser before merge.
 - **Authors and reviewers:** the coder is a cheap model (Haiku 5.5; escalate to Gemini 3.8 Flash if a
   task fails its gate twice). The reviewer is a different model (DeepSeek V4.1 Flash). Never the same
@@ -76,14 +78,14 @@ several practice views are still longer.
 
 ## Status
 
-| Phase                           | State                                                                                                                                                |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                                  |
-| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                         |
-| 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                                   |
-| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                                      |
-| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels, reduced motion and focus rings done; device checks, hashed audio and Playwright open |
-| 5 Tune from data                | Blocked on 30 days of use                                                                                                                            |
+| Phase                           | State                                                                                                                                                       |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                                         |
+| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                                |
+| 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                                          |
+| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                                             |
+| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels, reduced motion, focus rings and Playwright smokes done; device checks and hashed audio open |
+| 5 Tune from data                | Blocked on 30 days of use                                                                                                                                   |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its device checks — blocked
@@ -313,8 +315,9 @@ audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, devic
    - Partly done: `lang="ko"`, `slate-500` for the small text, chart role/label, reduced-motion handling,
      dialog descriptions and explicit `focus-visible` rings on the dashboard cards, practice cards,
      choice buttons and text links shipped. Every icon-only control already carries a label, and the
-     Scenario verdict now announces through `aria-live` like Listening and Study. The real-browser,
-     screen-reader and overlay checks remain.
+     Scenario verdict now announces through `aria-live` like Listening and Study. The smoke suite also
+     caught the Settings dialog overflowing a laptop-height viewport, so it now scrolls like Stats does.
+     The real-browser, screen-reader and overlay checks remain.
 2. Vercel headers: long-lived immutable caching for `/assets/*` and hashed audio, a modest `max-age` for
    `sw.js`, and baseline security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`).
    - Done apart from hashed audio (item 3): `vercel.json` ships a CSP, `X-Content-Type-Options: nosniff`,
@@ -328,7 +331,13 @@ audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, devic
      or deploy size becomes a burden, or if regenerated clips cause merge conflicts on most audio
      changes. Content-hashed filenames are still open.
 4. Playwright smoke tests: study loop, Browse search and play, import/export, offline shell reload.
-   - Not started.
+   - Done (2026-10-31): `playwright.config.ts` builds the app and serves it with `vite preview`, and
+     `e2e/` holds five smokes: the full three-card daily loop driven by Space and `2` (with the saved
+     card states, XP and review log checked), the same-session retry after `Again`, Browse search plus
+     the requested vocabulary clip, an exported progress file imported back, and an offline reload that
+     still serves the shell, `audio/index.json` and a Hangul clip from the precache. A separate CI job
+     installs Chromium and runs `pnpm test:e2e`, uploading the report on failure. The suite found the
+     Settings dialog overflow fixed in item 1.
 5. Verify on a real iPhone: first-tap audio, install, offline, update notice.
    - Outstanding.
 
