@@ -61,7 +61,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "A bird is flying outside the window.",
     usageNote:
-      "새 also means 'new' in Sino-Korean (새로) but as a noun it means 'bird'.",
+      "새 is the everyday noun for a bird. It is not related to 새로, the adverb meaning 'newly'.",
     source: "600 essential words · row 10",
     audioReady: true,
   },
@@ -746,7 +746,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I went to the meeting wearing a new suit.",
     usageNote:
-      "Formal men's or women's western-style suit; more formal than 옷 or 정장 in some contexts.",
+      "양복 is the everyday word for a Western-style suit. 정장 is the more formal word for formal dress.",
     source: "600 essential words · row 63",
     audioReady: true,
   },
@@ -926,7 +926,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "The walls of my room are yellow.",
     usageNote:
-      "노랑색 means the color yellow; can be shortened to 노랑 in casual speech.",
+      "노란색 is the standard spelling for the color yellow. 노랑 is the noun form used before 색.",
     source: "600 essential words · row 75",
     audioReady: true,
   },
@@ -941,7 +941,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I'm wearing navy blue shoes today.",
     usageNote:
-      "곤색 is a formal/loanword for navy blue; commonly used for clothing and fabrics.",
+      "곤색 means dark navy blue and is common for clothing. 남색 is another everyday word for navy blue.",
     source: "600 essential words · row 76",
     audioReady: true,
   },
@@ -1001,7 +1001,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "That bag is black.",
     usageNote:
-      "검은색 is a noun/adjective describing the color black; often used with -색 to mean 'color'.",
+      "검은색 is the noun for the color black. It goes directly before the noun it describes, as in 검은색 가방.",
     source: "600 essential words · row 80",
     audioReady: true,
   },
@@ -1016,7 +1016,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "The snow on that mountain is white.",
     usageNote:
-      "하얀색 is a noun for the color white; often used with -의 or -인 to modify nouns.",
+      "하얀색 is the noun for the color white. It comes directly before a noun, as in 하얀색 옷.",
     source: "600 essential words · row 81",
     audioReady: true,
   },
@@ -1121,7 +1121,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "The woman over there is my friend.",
     usageNote:
-      "General noun for adult female; neutral but not used for girls (어린이).",
+      "여자 means a female person and is neutral in tone. For a young girl, say 여자아이; 어린이 means 'child' in general.",
     source: "600 essential words · row 91",
     audioReady: true,
   },
@@ -1473,7 +1473,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     exampleEnglish:
       "I reported to the police yesterday that I found a wallet on the street.",
     usageNote:
-      "'경찰' refers to police or police officers; use '경찰관' for an individual officer formality.",
+      "경찰 means the police as an institution or police officers in general. 경찰관 is the specific word for one officer.",
     source: "600 essential words · row 122",
     audioReady: true,
   },
@@ -1503,7 +1503,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I'm proud because my friend is a soldier.",
     usageNote:
-      "군인 is a neutral noun meaning a member of the military; use 병사 for enlisted soldier in informal contexts.",
+      "군인 is the general word for a soldier or service member. 병사 refers specifically to an enlisted soldier.",
     source: "600 essential words · row 124",
     audioReady: true,
   },
@@ -1548,7 +1548,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "Our manager helped prepare for the meeting.",
     usageNote:
-      "매니저 is a loanword for manager (workplace/organization); polite contexts often use 직장 상사 or 관리자.",
+      "매니저 is the common loanword for a manager at work or in sports. 관리자 is the more formal word.",
     source: "600 essential words · row 127",
     audioReady: true,
   },
@@ -1670,7 +1670,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     exampleEnglish:
       "When you catch a cold, you should take medicine on time to get better quickly.",
     usageNote:
-      "약 also means promise/plan in other contexts; here it refers to medicine.",
+      "약 is the everyday word for medicine. Before a number it means 'about', as in 약 10분.",
     source: "600 essential words · row 135",
     audioReady: true,
   },
@@ -2052,7 +2052,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "The children are playing soccer with a ball.",
     usageNote:
-      "공 means a physical ball; homonymous with '공' meaning 'zero' or 'public' in other contexts.",
+      "공 is the everyday noun for a ball. The same word is also used for the number zero in scores and phone numbers.",
     source: "600 essential words · row 160",
     audioReady: true,
   },
@@ -2264,7 +2264,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I drank a glass of orange juice in the morning.",
     usageNote:
-      "쥬스 is Konglish for 'juice' and used in casual speech; also written 주스 commonly.",
+      "주스 is the standard spelling for juice. 쥬스 is a common informal variant.",
     source: "600 essential words · row 177",
     audioReady: true,
   },
@@ -2325,7 +2325,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     exampleEnglish:
       "When you have a cold, hot broth/soup soothes your stomach.",
     usageNote:
-      "국물 refers to the liquid part (broth/soup); solid ingredients may be called 국이나 찌개.",
+      "국물 is the broth or liquid part of a soup or stew. The dish itself is 국 or 찌개.",
     source: "600 essential words · row 183",
     audioReady: true,
   },
@@ -2748,7 +2748,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I opened the window and let the breeze in.",
     usageNote:
-      "창문 means a physical window; can refer to figurative 'window' in compounds (e.g., 창문지, 창문틀).",
+      "창문 is a physical window. 창문틀 means the window frame, not a figurative use.",
     source: "600 essential words · row 215",
     audioReady: true,
   },
@@ -2837,7 +2837,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I signed the letter with a ballpoint pen.",
     usageNote:
-      "볼팬 is a Koreanized term for ballpoint pen (noun), informal but widely understood.",
+      "볼펜 is the standard spelling for a ballpoint pen. 볼팬 is a common misspelling.",
     source: "600 essential words · row 221",
     audioReady: true,
   },
@@ -3848,7 +3848,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I grow small plants at home.",
     usageNote:
-      "식물 refers to plants/vegetation generally (noun), not to a potted plant brand or metaphorical uses.",
+      "식물 is the general noun for plants. It is not used for a plant shop or brand name.",
     source: "600 essential words · row 297",
     audioReady: true,
   },
@@ -3864,7 +3864,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     exampleEnglish:
       "The wind is strong today, so I closed the window a little.",
     usageNote:
-      "바람 primarily means 'wind' but can be metaphorical (e.g., 분위기) in other contexts.",
+      "바람 means wind. It can also mean a wish or desire, as in 바람이 있다.",
     source: "600 essential words · row 298",
     audioReady: true,
   },
@@ -4000,7 +4000,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I opened the window and breathed fresh air.",
     usageNote:
-      "공기 means the atmosphere or air; also used figuratively (e.g., 분위기) — context matters.",
+      "공기 means the air around us. For a mood or atmosphere, use 분위기 instead.",
     source: "600 essential words · row 307",
     audioReady: true,
   },
@@ -4077,7 +4077,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     exampleEnglish:
       "There is a thin layer of ice frozen in the puddle in front of the shop.",
     usageNote:
-      "어름 is a literary/archaic variant of 얼음; modern standard is 얼음.",
+      "얼음 is the standard word for ice. 어름 is not a standard spelling.",
     source: "600 essential words · row 312",
     audioReady: true,
   },
@@ -4882,7 +4882,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "My house is two blocks west of the park.",
     usageNote:
-      "Directional noun meaning 'west'; often used with directional particles like ~로/에서 or as 부/서쪽.",
+      "서쪽 is the noun for west. It takes location and direction particles, as in 서쪽으로 가요.",
     source: "600 essential words · row 368",
     audioReady: true,
   },
@@ -5095,7 +5095,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "In January we have a New Year's party with family.",
     usageNote:
-      "일월 is a formal or literary way to say January; 일월 is less common in casual speech than 1월.",
+      "일월 is the ordinary word for January, used in speech and writing. It is also written 1월.",
     source: "600 essential words · row 435",
     audioReady: true,
   },
@@ -5110,7 +5110,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "The full moon looks brightest in February.",
     usageNote:
-      "이월 is a formal/old-fashioned term for February; commonly used in formal writing or lunar-calendar contexts.",
+      "이월 is the ordinary word for February, not an old-fashioned one. It is also written 2월.",
     source: "600 essential words · row 436",
     audioReady: true,
   },
@@ -5140,7 +5140,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I will travel to Korea in April.",
     usageNote:
-      "사월 is the Sino-Korean word for the month April (formal written style, used in dates).",
+      "사월 is the ordinary word for April, used in speech and writing. It is also written 4월.",
     source: "600 essential words · row 438",
     audioReady: true,
   },
@@ -5155,7 +5155,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "Many flowers bloom in May.",
     usageNote:
-      "오월 means the month of May (literary/slightly formal tone); common everyday word is 5월.",
+      "오월 is the ordinary word for May, not a literary form. It is also written 5월.",
     source: "600 essential words · row 439",
     audioReady: true,
   },
@@ -5169,8 +5169,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     difficulty: "beginner",
     partOfSpeech: "noun",
     exampleEnglish: "Our wedding will be in June.",
-    usageNote:
-      "유월 means the month of June; formal word but common in dates and announcements.",
+    usageNote: "유월 is the ordinary word for June. It is also written 6월.",
     source: "600 essential words · row 440",
     audioReady: true,
   },
@@ -5200,7 +5199,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I am going to travel to Korea in August.",
     usageNote:
-      "팔월 is the native Korean name for the month August; used in dates and casual speech.",
+      "팔월 is the Sino-Korean word for August, not a native Korean word. It is also written 8월.",
     source: "600 essential words · row 442",
     audioReady: true,
   },
@@ -5215,7 +5214,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "My birthday is in September.",
     usageNote:
-      "구월 is a formal/literary word for 'September' (commonly '9월' in everyday use).",
+      "구월 is the ordinary word for September. It is also written 9월.",
     source: "600 essential words · row 443",
     audioReady: true,
   },
@@ -5230,7 +5229,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "In October, the autumn leaves color beautifully.",
     usageNote:
-      "시월 is a traditional/literary term for October; equivalent to 10월 in modern usage.",
+      "시월 is the ordinary word for October, not a literary form. It is also written 10월.",
     source: "600 essential words · row 444",
     audioReady: true,
   },
@@ -5260,7 +5259,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "My family has a Christmas party in December.",
     usageNote:
-      "십이월 is the Sino-Korean name for the month December (formal calendar use).",
+      "십이월 is the ordinary word for December. It is also written 12월.",
     source: "600 essential words · row 446",
     audioReady: true,
   },
@@ -5456,7 +5455,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "I run in the park every morning.",
     usageNote:
-      "Common verb for physical running; can also mean 'to operate' in technical contexts (not covered here).",
+      "뛰다 is the everyday verb for running. It also describes a beating heart, as in 심장이 뛰어요.",
     source: "600 essential words · row 462",
     audioReady: true,
   },
@@ -5486,7 +5485,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "The birds fly in the sky welcoming spring.",
     usageNote:
-      '날다 primarily means to move through the air; can be literal or figurative (e.g., time/rumors "날다").',
+      "날다 is the basic verb for flying, used for birds, planes, and insects. The polite form is 날아요.",
     source: "600 essential words · row 464",
     audioReady: true,
   },
@@ -5531,7 +5530,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "The bus suddenly stopped.",
     usageNote:
-      "멈추다 is a generalverb meaning to stop or cease motion or action.",
+      "멈추다 is the general verb for stopping or ceasing movement. The polite form is 멈춰요.",
     source: "600 essential words · row 467",
     audioReady: true,
   },
@@ -5608,7 +5607,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "Would you like to drink some water?",
     usageNote:
-      "Polite everyday form; 마시다 also means 'take' (medicine) in context.",
+      "마시다 is the basic verb 'to drink'. For taking medicine, Korean usually uses 먹다 instead.",
     source: "600 essential words · row 472",
     audioReady: true,
   },
@@ -5625,7 +5624,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     exampleEnglish:
       "The criminal was eventually arrested, sentenced to death in court, and executed, but we cannot justify killing anyone.",
     usageNote:
-      "Formal and strong verb; can be literal or figurative (e.g., '죽이다' for killing or '웃겨서 죽겠다' colloquially).",
+      "죽이다 is the plain, direct verb 'to kill'; it is not formal. The expression 웃겨서 죽겠다 comes from 죽다, not 죽이다.",
     source: "600 essential words · row 473",
     audioReady: true,
   },
@@ -5730,7 +5729,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "He shot the gun at the target.",
     usageNote:
-      "쏘다 can mean 'to shoot' (weapon/projectile) and also 'to sting' or 'to send' in other contexts; here it refers to firing a gun.",
+      "쏘다 means to shoot or fire. It also means to sting, as in 벌에 쏘였어요, and to treat someone, as in 한턱 쏘다.",
     source: "600 essential words · row 480",
     audioReady: true,
   },
@@ -5760,7 +5759,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "The children jump high on the playground.",
     usageNote:
-      "Common verb for physically jumping; can also be used figuratively (e.g., jump a task).",
+      "점프하다 means to jump physically, as in sports or play. It is not used for skipping a task.",
     source: "600 essential words · row 482",
     audioReady: true,
   },
@@ -5804,8 +5803,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     difficulty: "beginner",
     partOfSpeech: "verb",
     exampleEnglish: "May I taste the soup first?",
-    usageNote:
-      "맛보다 = to taste/try food; polite request uses 맛보다 → 맛보다/맛봐요.",
+    usageNote: "맛보다 means to taste or try food. The polite form is 맛봐요.",
     source: "600 essential words · row 485",
     audioReady: true,
   },
@@ -6016,7 +6014,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "I'm tired, so I'll lie down on the sofa.",
     usageNote:
-      "Standard verb meaning 'to lie down'; 주로 사람이나 동물이 몸을 눕히는 상황에서 사용.",
+      "눕다 is the intransitive verb 'to lie down'. The transitive form 'to lay something down' is 눕히다.",
     source: "600 essential words · row 499",
     audioReady: true,
   },
@@ -6045,8 +6043,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     difficulty: "beginner",
     partOfSpeech: "verb",
     exampleEnglish: "I went to bed early last night, so I feel good today.",
-    usageNote:
-      "Common verb meaning 'to sleep'; can also mean 'to lie down' in some contexts.",
+    usageNote: "자다 means to sleep. 'To lie down' is a different verb, 눕다.",
     source: "600 essential words · row 501",
     audioReady: true,
   },
@@ -6076,7 +6073,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "I sing with my friends every weekend.",
     usageNote:
-      "노래하다 means 'to sing' (action); it’s commonly used for casual and formal contexts with appropriate politeness.",
+      "노래하다 means to sing, but 노래를 부르다 is the more common everyday expression. The polite form is 노래해요.",
     source: "600 essential words · row 503",
     audioReady: true,
   },
@@ -6453,8 +6450,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     difficulty: "beginner",
     partOfSpeech: "verb",
     exampleEnglish: "Please push the door gently.",
-    usageNote:
-      "Common everyday verb; can mean shove or postpone in different contexts (confirm context if needed).",
+    usageNote: "밀다 means to push. 'To postpone' is a different verb, 미루다.",
     source: "600 essential words · row 528",
     audioReady: true,
   },
@@ -6469,7 +6465,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "The door wasn't opening well, so I pulled the handle.",
     usageNote:
-      "당기다 is a verb meaning 'to pull'; the part of speech given as noun is likely incorrect.",
+      "당기다 is the verb 'to pull'. It is the opposite of 밀다, 'to push'.",
     source: "600 essential words · row 529",
     audioReady: true,
   },
@@ -6653,7 +6649,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     exampleEnglish:
       "My younger sibling is short, so children's clothes fit well.",
     usageNote:
-      "키가 작다 describes a person's height; commonly used informally about people or animals.",
+      "키가 작다 means 'to be short in height'. It is a neutral expression, though it can sound blunt about other people.",
     source: "600 essential words · row 541",
     audioReady: true,
   },
@@ -6760,7 +6756,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "My hands feel cold.",
     usageNote:
-      "차겁다 describes physical coldness of objects or body parts; similar to 춥다 but used for touch/feeling.",
+      "차갑다 describes something cold to the touch. For cold weather or feeling cold, use 춥다.",
     source: "600 essential words · row 548",
     audioReady: true,
   },
@@ -6867,7 +6863,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "The food at this restaurant is really good.",
     usageNote:
-      "Common adjective-like verb used to express approval or preference; can follow nouns or verbs (좋아하다).",
+      "좋다 is the descriptive verb 'to be good'. The verb 'to like' is a separate word, 좋아하다.",
     source: "600 essential words · row 555",
     audioReady: true,
   },
@@ -6942,7 +6938,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "adjective",
     exampleEnglish: "These days I exercise every day, so my body is healthy.",
     usageNote:
-      "Used to describe physical or mental well-being; often with 있다/되다 or adjectives like 건강하다.",
+      "건강하다 means to be healthy. It is a descriptive verb, so the polite form is 건강해요.",
     source: "600 essential words · row 560",
     audioReady: true,
   },
@@ -7125,7 +7121,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "verb",
     exampleEnglish: "This book's paper is too thick, so it's hard to fold.",
     usageNote:
-      "두껍다 describes physical thickness; can also be used metaphorically (e.g., skin, layers).",
+      "두껍다 describes physical thickness. 얼굴이 두껍다 is a fixed expression meaning 'shameless'.",
     source: "600 essential words · row 572",
     audioReady: true,
   },
@@ -7569,7 +7565,8 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     difficulty: "beginner",
     partOfSpeech: "noun",
     exampleEnglish: "Shall I bring you my book?",
-    usageNote: "저의 is a formal/polite possessive; 저의 = 제 (less formal).",
+    usageNote:
+      "저의 is the polite possessive 'my'. 제 is its common contracted form.",
     source: "600 essential words · row 601",
     audioReady: true,
   },
@@ -7599,7 +7596,7 @@ export const ESSENTIAL_WORDS: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "You need to rest today.",
     usageNote:
-      "Used as polite 'you' but avoid with strangers; often used between spouses or in writing.",
+      "당신 is not a general polite 'you'. It is used between spouses or in writing, and can sound rude to strangers.",
     source: "600 essential words · row 603",
     audioReady: true,
   },
