@@ -5,21 +5,21 @@ describe("SRS scheduling", () => {
   const firstGood = scheduleRecall(undefined, "good");
   const secondGood = scheduleRecall(
     { ...firstGood, timesReviewed: 1, timesCorrect: 1 },
-    "good",
+    "good"
   );
   const easy = scheduleRecall(
     { ...secondGood, timesReviewed: 2, timesCorrect: 2 },
-    "easy",
+    "easy"
   );
   const fastGood = scheduleRecall(
     { ...secondGood, timesReviewed: 2, timesCorrect: 2 },
     "good",
-    4000,
+    4000
   );
   const slowGood = scheduleRecall(
     { ...secondGood, timesReviewed: 2, timesCorrect: 2 },
     "good",
-    13000,
+    13000
   );
 
   it("starts a new card at a 2-day interval on a good review", () => {
@@ -49,7 +49,7 @@ describe("SRS scheduling", () => {
     expect(firstAgain.easeFactor).toBe(firstGood.easeFactor);
     const afterFirstAgain = scheduleRecall(
       { ...firstAgain, timesReviewed: 1, timesCorrect: 0 },
-      "good",
+      "good"
     );
     expect(afterFirstAgain.interval).toBe(2);
   });
@@ -58,7 +58,7 @@ describe("SRS scheduling", () => {
     const slowFirst = scheduleRecall(undefined, "good", 13000);
     expect(slowFirst.interval).toBe(2);
     expect(
-      Math.abs(slowFirst.easeFactor - (firstGood.easeFactor - 0.1)),
+      Math.abs(slowFirst.easeFactor - (firstGood.easeFactor - 0.1))
     ).toBeLessThan(1e-9);
   });
 
@@ -67,7 +67,7 @@ describe("SRS scheduling", () => {
     expect(legacy.interval).toBe(25);
     const legacyAgain = scheduleRecall(
       { interval: 10, easeFactor: 2.5 },
-      "again",
+      "again"
     );
     expect(legacyAgain.lapseCount).toBe(1);
     expect(legacyAgain.easeFactor).toBeLessThan(2.5);
@@ -82,7 +82,7 @@ describe("SRS scheduling", () => {
         easeFactor: 3.2,
         consecutiveCorrect: 9,
       },
-      "easy",
+      "easy"
     );
     expect(capped.interval).toBe(90);
     expect(capped.easeFactor).toBe(3.2);
@@ -95,7 +95,7 @@ describe("SRS scheduling", () => {
         consecutiveCorrect: 2,
         lapseCount: 3,
       },
-      "again",
+      "again"
     );
     expect(floored.easeFactor).toBe(1.3);
   });
@@ -138,7 +138,13 @@ describe("SRS scheduling", () => {
   });
 
   it("caps recognition reviews so they never stretch an interval", () => {
-    const firstRecognition = scheduleReview(undefined, "easy", "2026-10-31", undefined, { recognition: true });
+    const firstRecognition = scheduleReview(
+      undefined,
+      "easy",
+      "2026-10-31",
+      undefined,
+      { recognition: true }
+    );
     expect(firstRecognition.advanced).toBe(true);
     expect(firstRecognition.schedule.interval).toBe(2);
     expect(firstRecognition.schedule.consecutiveCorrect).toBe(0);
@@ -151,7 +157,9 @@ describe("SRS scheduling", () => {
       timesCorrect: 4,
       lastReviewDate: "2026-10-29",
     };
-    const reviewed = scheduleReview(mature, "good", "2026-10-31", undefined, { recognition: true });
+    const reviewed = scheduleReview(mature, "good", "2026-10-31", undefined, {
+      recognition: true,
+    });
     expect(reviewed.advanced).toBe(true);
     expect(reviewed.schedule.interval).toBe(12);
     expect(reviewed.schedule.easeFactor).toBe(2.5);
@@ -174,7 +182,7 @@ describe("SRS scheduling", () => {
       "again",
       "2026-10-31",
       undefined,
-      { recognition: true },
+      { recognition: true }
     );
     expect(lapse.advanced).toBe(true);
     expect(lapse.schedule.interval).toBe(1);
@@ -184,7 +192,7 @@ describe("SRS scheduling", () => {
   it("records a lapse on again and recovers on a later good review", () => {
     const lapse = scheduleRecall(
       { ...easy, timesReviewed: 3, timesCorrect: 3 },
-      "again",
+      "again"
     );
     expect(lapse.interval).toBe(1);
     expect(lapse.consecutiveCorrect).toBe(0);
@@ -193,7 +201,7 @@ describe("SRS scheduling", () => {
 
     const recovered = scheduleRecall(
       { ...lapse, timesReviewed: 4, timesCorrect: 3 },
-      "good",
+      "good"
     );
     expect(recovered.interval).toBe(2);
     expect(recovered.lapseCount).toBe(1);

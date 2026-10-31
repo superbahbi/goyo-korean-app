@@ -132,11 +132,14 @@ function DialogContent({
           className
         )}
         onEscapeKeyDown={handleEscapeKeyDown}
-        onOpenAutoFocus={(event) => {
-          returnFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        onOpenAutoFocus={event => {
+          returnFocusRef.current =
+            document.activeElement instanceof HTMLElement
+              ? document.activeElement
+              : null;
           onOpenAutoFocus?.(event);
         }}
-        onCloseAutoFocus={(event) => {
+        onCloseAutoFocus={event => {
           onCloseAutoFocus?.(event);
           if (!event.defaultPrevented && returnFocusRef.current?.isConnected) {
             event.preventDefault();
@@ -219,6 +222,5 @@ export {
   DialogOverlay,
   DialogPortal,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 };
-

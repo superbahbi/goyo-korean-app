@@ -5,7 +5,10 @@ import { AlphabetCard as AlphabetCardType } from "@/lib/alphabet";
 
 interface AlphabetCardProps {
   card: AlphabetCardType;
-  onSpeak: (characterId: string, type: "consonant" | "vowel" | "number") => void;
+  onSpeak: (
+    characterId: string,
+    type: "consonant" | "vowel" | "number"
+  ) => void;
 }
 
 export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
@@ -23,17 +26,13 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
         <div className="text-2xl font-bold text-slate-900 mb-2">
           {card.sound}
         </div>
-        <div className="text-lg text-slate-600">
-          {card.romanization}
-        </div>
+        <div className="text-lg text-slate-600">{card.romanization}</div>
       </div>
 
       {/* Example */}
       <div className="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-200">
         <p className="text-sm text-slate-600 mb-1">Example:</p>
-        <p className="text-lg font-semibold text-slate-900">
-          {card.example}
-        </p>
+        <p className="text-lg font-semibold text-slate-900">{card.example}</p>
       </div>
 
       {/* Speak Button */}
@@ -47,14 +46,20 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
 
       {/* Type Badge */}
       <div className="mt-4 text-center">
-        <span className={`inline-block px-4 py-1 rounded-full text-sm font-semibold ${
-          card.type === "consonant"
-            ? "bg-blue-100 text-blue-700"
+        <span
+          className={`inline-block px-4 py-1 rounded-full text-sm font-semibold ${
+            card.type === "consonant"
+              ? "bg-blue-100 text-blue-700"
+              : card.type === "vowel"
+                ? "bg-purple-100 text-purple-700"
+                : "bg-emerald-100 text-emerald-700"
+          }`}
+        >
+          {card.type === "consonant"
+            ? "Consonant"
             : card.type === "vowel"
-              ? "bg-purple-100 text-purple-700"
-              : "bg-emerald-100 text-emerald-700"
-        }`}>
-          {card.type === "consonant" ? "Consonant" : card.type === "vowel" ? "Vowel" : "Native number"}
+              ? "Vowel"
+              : "Native number"}
         </span>
       </div>
     </motion.div>

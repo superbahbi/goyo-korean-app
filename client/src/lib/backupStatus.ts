@@ -31,14 +31,22 @@ export function daysSince(date: Date, now = new Date()): number {
   return Math.max(0, Math.floor((now.getTime() - date.getTime()) / DAY_MS));
 }
 
-export function describeBackupAge(lastBackupAt: Date | null, now = new Date()): string {
-  if (!lastBackupAt) return "Progress has never been exported from this device.";
+export function describeBackupAge(
+  lastBackupAt: Date | null,
+  now = new Date()
+): string {
+  if (!lastBackupAt)
+    return "Progress has never been exported from this device.";
   const days = daysSince(lastBackupAt, now);
   if (days === 0) return "Last backed up today.";
   if (days === 1) return "Last backed up yesterday.";
   return `Last backed up ${days} days ago.`;
 }
 
-export function isBackupOverdue(lastBackupAt: Date | null, now = new Date(), staleAfterDays = 7): boolean {
+export function isBackupOverdue(
+  lastBackupAt: Date | null,
+  now = new Date(),
+  staleAfterDays = 7
+): boolean {
   return !lastBackupAt || daysSince(lastBackupAt, now) >= staleAfterDays;
 }

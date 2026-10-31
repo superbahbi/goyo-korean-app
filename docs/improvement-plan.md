@@ -19,12 +19,12 @@ Every stage is done only when its gate passes.
 
 Verified on 2026-10-31 at `114cef6`:
 
-| Check          | Result                                                                             |
-| -------------- | ---------------------------------------------------------------------------------- |
-| `tsc --noEmit` | Passes                                                                             |
-| `vitest run`   | 100 tests pass (scheduler, saved state, review log, study days, queue, deck data)  |
-| `vite build`   | Passes. Main chunk 604 kB (188 kB gzipped), Essential 600 a separate 209 kB chunk  |
-| CI             | Type check, tests and build are green on `main`                                    |
+| Check          | Result                                                                            |
+| -------------- | --------------------------------------------------------------------------------- |
+| `tsc --noEmit` | Passes                                                                            |
+| `vitest run`   | 100 tests pass (scheduler, saved state, review log, study days, queue, deck data) |
+| `vite build`   | Passes. Main chunk 604 kB (188 kB gzipped), Essential 600 a separate 209 kB chunk |
+| CI             | Type check, tests and build are green on `main`                                   |
 
 What is solid: the deck is validated by tests; the scheduler, queue, saved state, review log and
 study-day history are tested; saves are sanitized; the learning loop retries failed cards and
@@ -54,8 +54,8 @@ behaviour checks still need a real browser, screen reader and iPhone.
 
 | Phase                           | State                                                        |
 | ------------------------------- | ------------------------------------------------------------ |
-| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding           |
-| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open  |
+| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding          |
+| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open |
 | 2 Structure                     | In progress (item 3 done)                                    |
 | 3 Content                       | Not started                                                  |
 | 4 Delivery and accessibility    | Not started                                                  |

@@ -47,23 +47,42 @@ describe("buildDailyQueue", () => {
       b: state("b", { due: "2026-10-27" }),
       c: state("c", { due: "2026-10-31" }),
     };
-    expect(buildDailyQueue(cards, states, today, 10, 0, 0).map((item) => item.id)).toEqual(["b", "a", "c"]);
+    expect(
+      buildDailyQueue(cards, states, today, 10, 0, 0).map(item => item.id)
+    ).toEqual(["b", "a", "c"]);
   });
 
   it("adds weak cards after due cards and skips known or already-reviewed-today cards", () => {
     const states = {
       a: state("a", { due: "2026-11-05", timesReviewed: 2, timesCorrect: 1 }),
-      b: state("b", { due: "2026-11-05", timesReviewed: 3, timesCorrect: 3, interval: 10, consecutiveCorrect: 2 }),
-      c: state("c", { due: "2026-11-05", lastReviewDate: today, timesReviewed: 2, timesCorrect: 1 }),
+      b: state("b", {
+        due: "2026-11-05",
+        timesReviewed: 3,
+        timesCorrect: 3,
+        interval: 10,
+        consecutiveCorrect: 2,
+      }),
+      c: state("c", {
+        due: "2026-11-05",
+        lastReviewDate: today,
+        timesReviewed: 2,
+        timesCorrect: 1,
+      }),
       d: state("d", { due: "2026-10-30" }),
     };
-    expect(buildDailyQueue(cards, states, today, 10, 0, 0).map((item) => item.id)).toEqual(["d", "a"]);
+    expect(
+      buildDailyQueue(cards, states, today, 10, 0, 0).map(item => item.id)
+    ).toEqual(["d", "a"]);
   });
 
   it("adds the newest cards up to the per-day cap", () => {
     const fresh = [card("a"), card("b"), card("c"), card("d"), card("e")];
-    expect(buildDailyQueue(fresh, {}, today, 10, 0).map((item) => item.id)).toEqual(["a", "b", "c"]);
-    expect(buildDailyQueue(fresh, {}, today, 10, 0, 5).map((item) => item.id)).toEqual(["a", "b", "c", "d", "e"]);
+    expect(
+      buildDailyQueue(fresh, {}, today, 10, 0).map(item => item.id)
+    ).toEqual(["a", "b", "c"]);
+    expect(
+      buildDailyQueue(fresh, {}, today, 10, 0, 5).map(item => item.id)
+    ).toEqual(["a", "b", "c", "d", "e"]);
   });
 
   it("introduces new cards in beginner theme order", () => {
@@ -73,11 +92,9 @@ describe("buildDailyQueue", () => {
       { ...card("survival_1"), tag: "survival" },
       { ...card("daily_1"), tag: "daily" },
     ];
-    expect(buildDailyQueue(themed, {}, today, 10, 0, 3).map((item) => item.id)).toEqual([
-      "survival_1",
-      "daily_1",
-      "food_1",
-    ]);
+    expect(
+      buildDailyQueue(themed, {}, today, 10, 0, 3).map(item => item.id)
+    ).toEqual(["survival_1", "daily_1", "food_1"]);
   });
 
   it("never repeats a card and respects the cards left in the goal", () => {
@@ -86,15 +103,19 @@ describe("buildDailyQueue", () => {
       b: state("b", { due: "2026-11-05", timesReviewed: 2, timesCorrect: 1 }),
     };
     const queue = buildDailyQueue(cards, states, today, 4, 0, 3);
-    const ids = queue.map((item) => item.id);
+    const ids = queue.map(item => item.id);
     expect(new Set(ids).size).toBe(ids.length);
     expect(queue).toHaveLength(4);
     expect(ids.slice(0, 2)).toEqual(["a", "b"]);
   });
 
   it("returns a repeat queue once the daily goal is reached", () => {
-    const states = { a: state("a", { due: "2026-10-30", lastReviewDate: today }) };
-    expect(buildDailyQueue(cards, states, today, 2, 2, 0).map((item) => item.id)).toEqual(["a"]);
+    const states = {
+      a: state("a", { due: "2026-10-30", lastReviewDate: today }),
+    };
+    expect(
+      buildDailyQueue(cards, states, today, 2, 2, 0).map(item => item.id)
+    ).toEqual(["a"]);
   });
 });
 
@@ -105,19 +126,40 @@ describe("weak and learning selections", () => {
     const states = {
       a: state("a", { timesReviewed: 4, timesCorrect: 1 }),
       b: state("b", { timesReviewed: 4, timesCorrect: 3 }),
-      c: state("c", { timesReviewed: 4, timesCorrect: 0, lastReviewDate: today }),
-      d: state("d", { timesReviewed: 2, timesCorrect: 2, interval: 10, consecutiveCorrect: 2 }),
+      c: state("c", {
+        timesReviewed: 4,
+        timesCorrect: 0,
+        lastReviewDate: today,
+      }),
+      d: state("d", {
+        timesReviewed: 2,
+        timesCorrect: 2,
+        interval: 10,
+        consecutiveCorrect: 2,
+      }),
     };
-    expect(selectWeakCards(cards, states, today).map((item) => item.id)).toEqual(["a", "b", "d"]);
+    expect(selectWeakCards(cards, states, today).map(item => item.id)).toEqual([
+      "a",
+      "b",
+      "d",
+    ]);
   });
 
   it("selects learning and shaky cards by due date", () => {
     const states = {
-      a: state("a", { timesReviewed: 3, timesCorrect: 3, interval: 10, consecutiveCorrect: 2, due: "2026-11-09" }),
+      a: state("a", {
+        timesReviewed: 3,
+        timesCorrect: 3,
+        interval: 10,
+        consecutiveCorrect: 2,
+        due: "2026-11-09",
+      }),
       b: state("b", { timesReviewed: 1, due: "2026-11-01" }),
       c: state("c", { timesReviewed: 2, timesCorrect: 2, due: "2026-11-02" }),
     };
-    expect(selectLearningCards(cards, states, today).map((item) => item.id)).toEqual(["b", "c"]);
+    expect(
+      selectLearningCards(cards, states, today).map(item => item.id)
+    ).toEqual(["b", "c"]);
   });
 });
 
@@ -134,9 +176,11 @@ describe("workload", () => {
   });
 
   it("builds the short forecast with overdue work on the first day", () => {
-    expect(buildReviewForecast(cards, states, today, 7, { overdueOnFirstDay: true }).map((day) => day.count)).toEqual([
-      2, 0, 1, 0, 0, 0, 0,
-    ]);
+    expect(
+      buildReviewForecast(cards, states, today, 7, {
+        overdueOnFirstDay: true,
+      }).map(day => day.count)
+    ).toEqual([2, 0, 1, 0, 0, 0, 0]);
   });
 
   it("counts only today's scheduled work in the 30-day outlook", () => {
@@ -147,7 +191,15 @@ describe("workload", () => {
   });
 
   it("summarizes the peak and workload status", () => {
-    expect(summarizeForecast([{ key: "a", count: 1 }, { key: "b", count: 4 }], 10)).toMatchObject({
+    expect(
+      summarizeForecast(
+        [
+          { key: "a", count: 1 },
+          { key: "b", count: 4 },
+        ],
+        10
+      )
+    ).toMatchObject({
       total: 5,
       peak: { key: "b", count: 4 },
       status: "balanced",

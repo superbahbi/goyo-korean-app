@@ -34,7 +34,9 @@ describe("iOS detection", () => {
     const persist = vi.fn(async () => true);
     vi.stubGlobal("navigator", { storage: { persist } });
 
-    const { requestPersistentStorage: request } = await import("./storageProtection");
+    const { requestPersistentStorage: request } = await import(
+      "./storageProtection"
+    );
 
     await expect(request()).resolves.toBe(true);
     await expect(request()).resolves.toBe(true);
@@ -44,7 +46,9 @@ describe("iOS detection", () => {
   it("reports no result when the browser has no Storage API", async () => {
     vi.stubGlobal("navigator", {});
 
-    const { requestPersistentStorage: request } = await import("./storageProtection");
+    const { requestPersistentStorage: request } = await import(
+      "./storageProtection"
+    );
 
     await expect(request()).resolves.toBeNull();
   });

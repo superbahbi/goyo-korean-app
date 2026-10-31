@@ -6,12 +6,43 @@ const audioDir = path.join(projectRoot, "public", "audio");
 const indexPath = path.join(audioDir, "index.json");
 const manifestPath = path.join(audioDir, "elevenlabs-manifest.json");
 
-const consonantKeys = ["ga", "na", "da", "ra", "ma", "ba", "sa", "a_consonant", "ja", "cha2", "cha", "kha", "ta", "pha", "ha"];
-const vowelKeys = ["a", "ya", "eo", "yeo", "o", "yo", "u", "yu", "eu", "i", "ae", "e"];
+const consonantKeys = [
+  "ga",
+  "na",
+  "da",
+  "ra",
+  "ma",
+  "ba",
+  "sa",
+  "a_consonant",
+  "ja",
+  "cha2",
+  "cha",
+  "kha",
+  "ta",
+  "pha",
+  "ha",
+];
+const vowelKeys = [
+  "a",
+  "ya",
+  "eo",
+  "yeo",
+  "o",
+  "yo",
+  "u",
+  "yu",
+  "eu",
+  "i",
+  "ae",
+  "e",
+];
 
 const index = JSON.parse(await readFile(indexPath, "utf8"));
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
-const generated = new Map([...manifest.vocabulary, ...manifest.alphabet].map((item) => [item.id, item]));
+const generated = new Map(
+  [...manifest.vocabulary, ...manifest.alphabet].map(item => [item.id, item])
+);
 
 for (const item of [...manifest.vocabulary, ...manifest.alphabet]) {
   if (!item.filename || item.status === "failed") {
@@ -26,7 +57,8 @@ for (const item of manifest.vocabulary) {
 
 for (let position = 0; position < consonantKeys.length; position += 1) {
   const id = `cons_${String(position + 1).padStart(3, "0")}`;
-  index.alphabet.consonants[consonantKeys[position]] = generated.get(id).filename;
+  index.alphabet.consonants[consonantKeys[position]] =
+    generated.get(id).filename;
 }
 
 for (let position = 0; position < vowelKeys.length; position += 1) {
@@ -43,4 +75,6 @@ index.metadata = {
 };
 
 await writeFile(indexPath, `${JSON.stringify(index, null, 2)}\n`, "utf8");
-console.log(`Activated ${manifest.counts.total} ElevenLabs files in ${indexPath}`);
+console.log(
+  `Activated ${manifest.counts.total} ElevenLabs files in ${indexPath}`
+);

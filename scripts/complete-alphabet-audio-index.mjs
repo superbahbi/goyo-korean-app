@@ -14,4 +14,6 @@ for (let n = 1; n <= 21; n += 1) {
   index.alphabet.vowels[id] = `elevenlabs_${id}.mp3`;
 }
 await writeFile(indexPath, `${JSON.stringify(index, null, 2)}\n`, "utf8");
-console.log(`indexed ${Object.keys(index.alphabet.consonants).length} consonant aliases and ${Object.keys(index.alphabet.vowels).length} vowel aliases`);
+console.log(
+  `indexed ${Object.keys(index.alphabet.consonants).length} consonant aliases and ${Object.keys(index.alphabet.vowels).length} vowel aliases`
+);

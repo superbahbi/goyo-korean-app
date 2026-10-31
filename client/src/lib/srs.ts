@@ -44,16 +44,24 @@ function roundInterval(days: number) {
 export function scheduleRecall(
   existing: SrsCardState | undefined,
   rating: SrsRating,
-  responseTimeMs?: number,
+  responseTimeMs?: number
 ): SrsSchedule {
   const previousInterval = Math.max(0, existing?.interval ?? 0);
-  const previousEase = clamp(existing?.easeFactor ?? DEFAULT_EASE, MIN_EASE, MAX_EASE);
+  const previousEase = clamp(
+    existing?.easeFactor ?? DEFAULT_EASE,
+    MIN_EASE,
+    MAX_EASE
+  );
   const previousCorrectStreak = Math.max(0, existing?.consecutiveCorrect ?? 0);
   const previousLapses = Math.max(0, existing?.lapseCount ?? 0);
-  const responseWasSlow = typeof responseTimeMs === "number" && responseTimeMs > 12000;
+  const responseWasSlow =
+    typeof responseTimeMs === "number" && responseTimeMs > 12000;
   // A card with an interval but no review count (older saves) is not brand new.
-  const isFirstReview = !existing || ((existing.timesReviewed ?? 0) === 0 && previousInterval === 0);
-  const neverRecalled = (existing?.timesReviewed ?? 0) > 0 && (existing?.timesCorrect ?? 0) === 0;
+  const isFirstReview =
+    !existing ||
+    ((existing.timesReviewed ?? 0) === 0 && previousInterval === 0);
+  const neverRecalled =
+    (existing?.timesReviewed ?? 0) > 0 && (existing?.timesCorrect ?? 0) === 0;
 
   if (rating === "again") {
     // Failing a never-seen card is not a lapse: there was nothing to forget yet.
@@ -76,7 +84,7 @@ export function scheduleRecall(
   const nextEase = clamp(
     previousEase + (rating === "easy" ? 0.15 : 0) - (responseWasSlow ? 0.1 : 0),
     MIN_EASE,
-    MAX_EASE,
+    MAX_EASE
   );
   const nextCorrectStreak = previousCorrectStreak + 1;
 
@@ -98,9 +106,16 @@ export function scheduleRecall(
     };
   }
 
-  const qualityMultiplier = rating === "easy" ? (responseWasSlow ? 1.1 : 1.3) : responseWasSlow ? 0.9 : 1;
+  const qualityMultiplier =
+    rating === "easy"
+      ? responseWasSlow
+        ? 1.1
+        : 1.3
+      : responseWasSlow
+        ? 0.9
+        : 1;
   const interval = roundInterval(
-    Math.max(2, previousInterval || 1) * nextEase * qualityMultiplier,
+    Math.max(2, previousInterval || 1) * nextEase * qualityMultiplier
   );
 
   return {
@@ -130,11 +145,18 @@ export interface ScheduleReviewOptions {
  * stay where it is but never grows; a first meeting lands on the 2-day
  * reinforcer, and consecutive recall is left untouched.
  */
-function capRecognitionSchedule(schedule: SrsSchedule, existing: SrsCardState | undefined): SrsSchedule {
+function capRecognitionSchedule(
+  schedule: SrsSchedule,
+  existing: SrsCardState | undefined
+): SrsSchedule {
   const previousInterval = Math.max(0, existing?.interval ?? 0);
   return {
     interval: Math.min(schedule.interval, Math.max(2, previousInterval)),
-    easeFactor: clamp(existing?.easeFactor ?? schedule.easeFactor, MIN_EASE, MAX_EASE),
+    easeFactor: clamp(
+      existing?.easeFactor ?? schedule.easeFactor,
+      MIN_EASE,
+      MAX_EASE
+    ),
     consecutiveCorrect: existing?.consecutiveCorrect ?? 0,
     lapseCount: schedule.lapseCount,
   };
@@ -144,21 +166,31 @@ function scheduleWithSameDayGuard(
   existing: SrsCardState | undefined,
   rating: SrsRating,
   today: string,
-  responseTimeMs?: number,
+  responseTimeMs?: number
 ): SrsReviewResult {
   if (!existing || existing.lastReviewDate !== today) {
-    return { schedule: scheduleRecall(existing, rating, responseTimeMs), advanced: true };
+    return {
+      schedule: scheduleRecall(existing, rating, responseTimeMs),
+      advanced: true,
+    };
   }
 
   const alreadyDueTomorrow = (existing.interval ?? 0) <= 1;
   if (rating === "again" && !alreadyDueTomorrow) {
-    return { schedule: scheduleRecall(existing, rating, responseTimeMs), advanced: true };
+    return {
+      schedule: scheduleRecall(existing, rating, responseTimeMs),
+      advanced: true,
+    };
   }
 
   return {
     schedule: {
       interval: existing.interval ?? 0,
-      easeFactor: clamp(existing.easeFactor ?? DEFAULT_EASE, MIN_EASE, MAX_EASE),
+      easeFactor: clamp(
+        existing.easeFactor ?? DEFAULT_EASE,
+        MIN_EASE,
+        MAX_EASE
+      ),
       consecutiveCorrect: existing.consecutiveCorrect ?? 0,
       lapseCount: existing.lapseCount ?? 0,
     },
@@ -176,11 +208,20 @@ export function scheduleReview(
   rating: SrsRating,
   today: string,
   responseTimeMs?: number,
-  options: ScheduleReviewOptions = {},
+  options: ScheduleReviewOptions = {}
 ): SrsReviewResult {
-  const result = scheduleWithSameDayGuard(existing, rating, today, responseTimeMs);
-  if (!options.recognition || !result.advanced || rating === "again") return result;
-  return { ...result, schedule: capRecognitionSchedule(result.schedule, existing) };
+  const result = scheduleWithSameDayGuard(
+    existing,
+    rating,
+    today,
+    responseTimeMs
+  );
+  if (!options.recognition || !result.advanced || rating === "again")
+    return result;
+  return {
+    ...result,
+    schedule: capRecognitionSchedule(result.schedule, existing),
+  };
 }
 
 export function getRecallAccuracy(state?: SrsCardState) {

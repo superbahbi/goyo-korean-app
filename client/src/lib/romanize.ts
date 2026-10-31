@@ -6,41 +6,190 @@
 // tensing, and cross-word liaison. Spaces in the input are kept and words are
 // romanized separately.
 
-const CHO = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
-const JUNG = ["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"];
-const JONG = ["", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+const CHO = [
+  "ㄱ",
+  "ㄲ",
+  "ㄴ",
+  "ㄷ",
+  "ㄸ",
+  "ㄹ",
+  "ㅁ",
+  "ㅂ",
+  "ㅃ",
+  "ㅅ",
+  "ㅆ",
+  "ㅇ",
+  "ㅈ",
+  "ㅉ",
+  "ㅊ",
+  "ㅋ",
+  "ㅌ",
+  "ㅍ",
+  "ㅎ",
+];
+const JUNG = [
+  "ㅏ",
+  "ㅐ",
+  "ㅑ",
+  "ㅒ",
+  "ㅓ",
+  "ㅔ",
+  "ㅕ",
+  "ㅖ",
+  "ㅗ",
+  "ㅘ",
+  "ㅙ",
+  "ㅚ",
+  "ㅛ",
+  "ㅜ",
+  "ㅝ",
+  "ㅞ",
+  "ㅟ",
+  "ㅠ",
+  "ㅡ",
+  "ㅢ",
+  "ㅣ",
+];
+const JONG = [
+  "",
+  "ㄱ",
+  "ㄲ",
+  "ㄳ",
+  "ㄴ",
+  "ㄵ",
+  "ㄶ",
+  "ㄷ",
+  "ㄹ",
+  "ㄺ",
+  "ㄻ",
+  "ㄼ",
+  "ㄽ",
+  "ㄾ",
+  "ㄿ",
+  "ㅀ",
+  "ㅁ",
+  "ㅂ",
+  "ㅄ",
+  "ㅅ",
+  "ㅆ",
+  "ㅇ",
+  "ㅈ",
+  "ㅊ",
+  "ㅋ",
+  "ㅌ",
+  "ㅍ",
+  "ㅎ",
+];
 
 const VOWEL: Record<string, string> = {
-  ㅏ: "a", ㅐ: "ae", ㅑ: "ya", ㅒ: "yae", ㅓ: "eo", ㅔ: "e", ㅕ: "yeo", ㅖ: "ye",
-  ㅗ: "o", ㅘ: "wa", ㅙ: "wae", ㅚ: "oe", ㅛ: "yo", ㅜ: "u", ㅝ: "wo", ㅞ: "we",
-  ㅟ: "wi", ㅠ: "yu", ㅡ: "eu", ㅢ: "ui", ㅣ: "i",
+  ㅏ: "a",
+  ㅐ: "ae",
+  ㅑ: "ya",
+  ㅒ: "yae",
+  ㅓ: "eo",
+  ㅔ: "e",
+  ㅕ: "yeo",
+  ㅖ: "ye",
+  ㅗ: "o",
+  ㅘ: "wa",
+  ㅙ: "wae",
+  ㅚ: "oe",
+  ㅛ: "yo",
+  ㅜ: "u",
+  ㅝ: "wo",
+  ㅞ: "we",
+  ㅟ: "wi",
+  ㅠ: "yu",
+  ㅡ: "eu",
+  ㅢ: "ui",
+  ㅣ: "i",
 };
 
 const INITIAL: Record<string, string> = {
-  ㄱ: "g", ㄲ: "kk", ㄴ: "n", ㄷ: "d", ㄸ: "tt", ㄹ: "r", ㅁ: "m", ㅂ: "b", ㅃ: "pp",
-  ㅅ: "s", ㅆ: "ss", ㅇ: "", ㅈ: "j", ㅉ: "jj", ㅊ: "ch", ㅋ: "k", ㅌ: "t", ㅍ: "p", ㅎ: "h",
+  ㄱ: "g",
+  ㄲ: "kk",
+  ㄴ: "n",
+  ㄷ: "d",
+  ㄸ: "tt",
+  ㄹ: "r",
+  ㅁ: "m",
+  ㅂ: "b",
+  ㅃ: "pp",
+  ㅅ: "s",
+  ㅆ: "ss",
+  ㅇ: "",
+  ㅈ: "j",
+  ㅉ: "jj",
+  ㅊ: "ch",
+  ㅋ: "k",
+  ㅌ: "t",
+  ㅍ: "p",
+  ㅎ: "h",
 };
 
 // A final consonant moved into the next syllable's onset (liaison). ㅎ is silent.
 const LIAISON_ONSET: Record<string, string> = {
-  ㄱ: "g", ㄲ: "kk", ㄴ: "n", ㄷ: "d", ㄸ: "tt", ㄹ: "r", ㅁ: "m", ㅂ: "b", ㅅ: "s",
-  ㅆ: "ss", ㅈ: "j", ㅊ: "ch", ㅋ: "k", ㅌ: "t", ㅍ: "p", ㅎ: "",
+  ㄱ: "g",
+  ㄲ: "kk",
+  ㄴ: "n",
+  ㄷ: "d",
+  ㄸ: "tt",
+  ㄹ: "r",
+  ㅁ: "m",
+  ㅂ: "b",
+  ㅅ: "s",
+  ㅆ: "ss",
+  ㅈ: "j",
+  ㅊ: "ch",
+  ㅋ: "k",
+  ㅌ: "t",
+  ㅍ: "p",
+  ㅎ: "",
 };
 
 const NEUTRAL_CODA: Record<string, string> = {
-  ㄱ: "k", ㄲ: "k", ㅋ: "k", ㄳ: "k", ㄺ: "k",
-  ㄷ: "t", ㅌ: "t", ㅅ: "t", ㅆ: "t", ㅈ: "t", ㅊ: "t", ㅎ: "t",
-  ㄴ: "n", ㄵ: "n", ㄶ: "n",
-  ㄹ: "l", ㄼ: "l", ㄽ: "l", ㄾ: "l", ㅀ: "l",
-  ㅁ: "m", ㄻ: "m",
-  ㅂ: "p", ㅍ: "p", ㅄ: "p", ㄿ: "p",
+  ㄱ: "k",
+  ㄲ: "k",
+  ㅋ: "k",
+  ㄳ: "k",
+  ㄺ: "k",
+  ㄷ: "t",
+  ㅌ: "t",
+  ㅅ: "t",
+  ㅆ: "t",
+  ㅈ: "t",
+  ㅊ: "t",
+  ㅎ: "t",
+  ㄴ: "n",
+  ㄵ: "n",
+  ㄶ: "n",
+  ㄹ: "l",
+  ㄼ: "l",
+  ㄽ: "l",
+  ㄾ: "l",
+  ㅀ: "l",
+  ㅁ: "m",
+  ㄻ: "m",
+  ㅂ: "p",
+  ㅍ: "p",
+  ㅄ: "p",
+  ㄿ: "p",
   ㅇ: "ng",
 };
 
 // Compound finals: [part left on the syllable, part carried by liaison].
 const COMPOUND_FINAL: Record<string, [string, string]> = {
-  ㄳ: ["ㄱ", "ㅅ"], ㄵ: ["ㄴ", "ㅈ"], ㄶ: ["ㄴ", "ㅎ"], ㄺ: ["ㄹ", "ㄱ"], ㄻ: ["ㄹ", "ㅁ"],
-  ㄼ: ["ㄹ", "ㅂ"], ㄽ: ["ㄹ", "ㅅ"], ㄾ: ["ㄹ", "ㅌ"], ㄿ: ["ㄹ", "ㅍ"], ㅀ: ["ㄹ", "ㅎ"], ㅄ: ["ㅂ", "ㅅ"],
+  ㄳ: ["ㄱ", "ㅅ"],
+  ㄵ: ["ㄴ", "ㅈ"],
+  ㄶ: ["ㄴ", "ㅎ"],
+  ㄺ: ["ㄹ", "ㄱ"],
+  ㄻ: ["ㄹ", "ㅁ"],
+  ㄼ: ["ㄹ", "ㅂ"],
+  ㄽ: ["ㄹ", "ㅅ"],
+  ㄾ: ["ㄹ", "ㅌ"],
+  ㄿ: ["ㄹ", "ㅍ"],
+  ㅀ: ["ㄹ", "ㅎ"],
+  ㅄ: ["ㅂ", "ㅅ"],
 };
 
 const NASAL_NG = ["ㄱ", "ㄲ", "ㅋ", "ㄳ", "ㄺ"];
@@ -57,9 +206,10 @@ interface Syllable {
 }
 
 function decompose(word: string): Syllable[] {
-  return Array.from(word, (ch) => {
+  return Array.from(word, ch => {
     const code = ch.codePointAt(0)! - 0xac00;
-    if (code < 0 || code > 11171) throw new Error(`Not a Hangul syllable: "${ch}" in "${word}"`);
+    if (code < 0 || code > 11171)
+      throw new Error(`Not a Hangul syllable: "${ch}" in "${word}"`);
     return {
       cho: CHO[Math.floor(code / 588)],
       jung: JUNG[Math.floor((code % 588) / 28)],
@@ -102,7 +252,11 @@ function romanizeWord(word: string): string {
       // 앉다 is romanized anta: the ㄴ stays as coda and the ㅈ surfaces as t.
       coda[i] = "n";
       onsetOverride[i + 1] = "t";
-    } else if (nextCho && H_FINAL_LEFT[jong] !== undefined && ASPIRATE[nextCho]) {
+    } else if (
+      nextCho &&
+      H_FINAL_LEFT[jong] !== undefined &&
+      ASPIRATE[nextCho]
+    ) {
       coda[i] = H_FINAL_LEFT[jong];
       onsetOverride[i + 1] = ASPIRATE[nextCho];
     } else if (nextCho === "ㄴ" || nextCho === "ㅁ") {
@@ -123,7 +277,12 @@ function romanizeWord(word: string): string {
       onset = onsetOverride[i]!;
     } else if (carried[i] !== undefined) {
       const moved = carried[i]!;
-      onset = (moved === "ㄷ" || moved === "ㅌ") && jung === "ㅣ" ? (moved === "ㄷ" ? "j" : "ch") : LIAISON_ONSET[moved];
+      onset =
+        (moved === "ㄷ" || moved === "ㅌ") && jung === "ㅣ"
+          ? moved === "ㄷ"
+            ? "j"
+            : "ch"
+          : LIAISON_ONSET[moved];
     } else if (cho === "ㄹ") {
       onset = i > 0 && syls[i - 1].jong ? "l" : "r";
     } else {
@@ -135,10 +294,12 @@ function romanizeWord(word: string): string {
 }
 
 export function romanize(text: string): string {
-  return text
-    .trim()
-    .split(/\s+/)
-    // Romanize Hangul runs only, so punctuation and mixed text pass through.
-    .map((word) => word.replace(/[가-힣]+/g, romanizeWord))
-    .join(" ");
+  return (
+    text
+      .trim()
+      .split(/\s+/)
+      // Romanize Hangul runs only, so punctuation and mixed text pass through.
+      .map(word => word.replace(/[가-힣]+/g, romanizeWord))
+      .join(" ")
+  );
 }

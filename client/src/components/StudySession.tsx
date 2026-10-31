@@ -11,7 +11,11 @@ import { stopAudio } from "@/lib/audioPlayer";
 
 interface StudySessionProps {
   queue: VocabularyCard[];
-  onGrade: (cardId: string, rating: "again" | "good" | "easy", options?: { responseTimeMs?: number }) => void;
+  onGrade: (
+    cardId: string,
+    rating: "again" | "good" | "easy",
+    options?: { responseTimeMs?: number }
+  ) => void;
   onClose: () => void;
   allowRepeat?: boolean;
   autoPlayAudio?: boolean;
@@ -29,7 +33,9 @@ export function StudySession({
   const [index, setIndex] = useState(0);
   // A failed card re-enters the session once, so the queue can grow while the
   // session runs. Keep it local to avoid replaying the parent's original plan.
-  const [sessionQueue, setSessionQueue] = useState<VocabularyCard[]>(() => [...queue]);
+  const [sessionQueue, setSessionQueue] = useState<VocabularyCard[]>(() => [
+    ...queue,
+  ]);
   const retriedIds = useRef(new Set<string>());
   const [flipped, setFlipped] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -70,16 +76,20 @@ export function StudySession({
     if (gradingLocked.current) return;
     gradingLocked.current = true;
 
-    const responseTimeMs = Math.min(120000, Math.max(250, recallTimeMs.current ?? Date.now() - cardStartedAt.current));
+    const responseTimeMs = Math.min(
+      120000,
+      Math.max(250, recallTimeMs.current ?? Date.now() - cardStartedAt.current)
+    );
     onGrade(currentCard.id, rating, { responseTimeMs });
-    setResults((current) => ({ ...current, [rating]: current[rating] + 1 }));
+    setResults(current => ({ ...current, [rating]: current[rating] + 1 }));
 
     // A lapse comes back once, at the end, before the summary. The scheduler
     // already recorded the failure, so the re-grade changes no schedule.
-    const shouldRetry = rating === "again" && !retriedIds.current.has(currentCard.id);
+    const shouldRetry =
+      rating === "again" && !retriedIds.current.has(currentCard.id);
     if (shouldRetry) {
       retriedIds.current.add(currentCard.id);
-      setSessionQueue((current) => [...current, currentCard]);
+      setSessionQueue(current => [...current, currentCard]);
     }
 
     const nextLength = sessionQueue.length + (shouldRetry ? 1 : 0);
@@ -116,9 +126,22 @@ export function StudySession({
   // refreshed every render so it always sees the current card and reveal state.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || event.repeat || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (
+        event.defaultPrevented ||
+        event.repeat ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.altKey
+      )
+        return;
       const target = event.target as HTMLElement | null;
-      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) return;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      )
+        return;
 
       if (event.key === "Escape") {
         event.preventDefault();
@@ -154,13 +177,19 @@ export function StudySession({
     const total = results.again + results.good + results.easy;
     const remembered = results.good + results.easy;
     const failedCards = retriedIds.current.size;
-    const nextAction = failedCards > 0
-      ? `${failedCards} card${failedCards === 1 ? " needs" : "s need"} a short rebuild tomorrow.`
-      : results.easy === total
-        ? "Excellent fluency signal—let the scheduler stretch these intervals."
-        : "Keep the rhythm: another short session will strengthen today's recall.";
+    const nextAction =
+      failedCards > 0
+        ? `${failedCards} card${failedCards === 1 ? " needs" : "s need"} a short rebuild tomorrow.`
+        : results.easy === total
+          ? "Excellent fluency signal—let the scheduler stretch these intervals."
+          : "Keep the rhythm: another short session will strengthen today's recall.";
     return (
-      <Dialog open onOpenChange={(open) => { if (!open) closeSession(); }}>
+      <Dialog
+        open
+        onOpenChange={open => {
+          if (!open) closeSession();
+        }}
+      >
         <DialogContent
           aria-modal="true"
           aria-describedby={undefined}
@@ -176,25 +205,60 @@ export function StudySession({
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
               <Check size={34} />
             </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">Session complete</p>
-            <h2 className="mt-2 font-serif text-3xl text-slate-900">Well practiced</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">
+              Session complete
+            </p>
+            <h2 className="mt-2 font-serif text-3xl text-slate-900">
+              Well practiced
+            </h2>
             <p className="mt-3 text-slate-600">
               You remembered <strong>{remembered}</strong> of {total} reviews.
             </p>
             {failedCards > 0 && (
               <p className="mt-2 text-sm text-slate-500">
-                {failedCards} {failedCards === 1 ? "card came" : "cards came"} back once for a second try.
+                {failedCards} {failedCards === 1 ? "card came" : "cards came"}{" "}
+                back once for a second try.
               </p>
             )}
-            <p className="mt-3 rounded-2xl bg-indigo-50 px-4 py-3 text-sm leading-relaxed text-indigo-700">{nextAction}</p>
+            <p className="mt-3 rounded-2xl bg-indigo-50 px-4 py-3 text-sm leading-relaxed text-indigo-700">
+              {nextAction}
+            </p>
             <div className="mt-6 grid grid-cols-3 gap-2 text-center">
-              <div className="rounded-2xl bg-red-50 p-3"><div className="text-2xl font-bold text-red-600">{results.again}</div><div className="text-xs text-red-700">Again</div></div>
-              <div className="rounded-2xl bg-emerald-50 p-3"><div className="text-2xl font-bold text-emerald-600">{results.good}</div><div className="text-xs text-emerald-700">Good</div></div>
-              <div className="rounded-2xl bg-blue-50 p-3"><div className="text-2xl font-bold text-blue-600">{results.easy}</div><div className="text-xs text-blue-700">Easy</div></div>
+              <div className="rounded-2xl bg-red-50 p-3">
+                <div className="text-2xl font-bold text-red-600">
+                  {results.again}
+                </div>
+                <div className="text-xs text-red-700">Again</div>
+              </div>
+              <div className="rounded-2xl bg-emerald-50 p-3">
+                <div className="text-2xl font-bold text-emerald-600">
+                  {results.good}
+                </div>
+                <div className="text-xs text-emerald-700">Good</div>
+              </div>
+              <div className="rounded-2xl bg-blue-50 p-3">
+                <div className="text-2xl font-bold text-blue-600">
+                  {results.easy}
+                </div>
+                <div className="text-xs text-blue-700">Easy</div>
+              </div>
             </div>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Button variant="outline" className="min-h-12 flex-1" onClick={closeSession}>Return to dashboard</Button>
-              {allowRepeat && <Button className="min-h-12 flex-1 bg-emerald-600 hover:bg-emerald-700" onClick={restartSession}>Practice again</Button>}
+              <Button
+                variant="outline"
+                className="min-h-12 flex-1"
+                onClick={closeSession}
+              >
+                Return to dashboard
+              </Button>
+              {allowRepeat && (
+                <Button
+                  className="min-h-12 flex-1 bg-emerald-600 hover:bg-emerald-700"
+                  onClick={restartSession}
+                >
+                  Practice again
+                </Button>
+              )}
             </div>
           </motion.div>
         </DialogContent>
@@ -205,7 +269,12 @@ export function StudySession({
   if (!currentCard) return null;
 
   return (
-    <Dialog open onOpenChange={(open) => { if (!open) closeSession(); }}>
+    <Dialog
+      open
+      onOpenChange={open => {
+        if (!open) closeSession();
+      }}
+    >
       <DialogContent
         aria-modal="true"
         aria-describedby={undefined}
@@ -220,15 +289,27 @@ export function StudySession({
         </p>
         {/* Header */}
         <header className="p-4 flex items-center justify-between border-b bg-gradient-to-r from-slate-50 to-slate-100">
-          <Button variant="ghost" size="icon" onClick={closeSession} aria-label="Close study session">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={closeSession}
+            aria-label="Close study session"
+          >
             <X />
           </Button>
           <div className="max-w-xs flex-1 px-4 sm:px-8">
-            <Progress value={((index + (flipped ? 0.5 : 0)) / sessionQueue.length) * 100} className="h-2" />
+            <Progress
+              value={
+                ((index + (flipped ? 0.5 : 0)) / sessionQueue.length) * 100
+              }
+              className="h-2"
+            />
           </div>
           <div className="text-sm font-medium text-slate-500 min-w-[60px] text-right">
             {index + 1} / {sessionQueue.length}
-            <span className="block text-xs text-slate-400">{title} · {flipped ? "Choose a rating" : "Recall first"}</span>
+            <span className="block text-xs text-slate-400">
+              {title} · {flipped ? "Choose a rating" : "Recall first"}
+            </span>
           </div>
         </header>
 
@@ -270,72 +351,88 @@ export function StudySession({
                   Use it in a new situation
                 </div>
                 <p className="mt-1 text-xs leading-relaxed text-indigo-700">
-                  Say a new sentence aloud with this Korean word or phrase. Writing your attempt is optional.
+                  Say a new sentence aloud with this Korean word or phrase.
+                  Writing your attempt is optional.
                 </p>
                 <div className="mt-3 flex gap-2">
                   <Input
                     value={productionAttempt}
-                    onChange={(event) => setProductionAttempt(event.target.value)}
+                    onChange={event => setProductionAttempt(event.target.value)}
                     placeholder="Your Korean sentence (optional)"
                     className="h-10 border-indigo-200 bg-white"
-                    onClick={(event) => event.stopPropagation()}
+                    onClick={event => event.stopPropagation()}
                   />
                   <Button
                     type="button"
                     variant={productionDone ? "default" : "outline"}
-                    className={productionDone ? "h-10 shrink-0 bg-indigo-600 hover:bg-indigo-700" : "h-10 shrink-0 border-indigo-200 text-indigo-700 hover:bg-indigo-100"}
+                    className={
+                      productionDone
+                        ? "h-10 shrink-0 bg-indigo-600 hover:bg-indigo-700"
+                        : "h-10 shrink-0 border-indigo-200 text-indigo-700 hover:bg-indigo-100"
+                    }
                     onClick={() => setProductionDone(true)}
                   >
                     {productionDone ? "Tried" : "Done"}
                   </Button>
                 </div>
               </div>
-              <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-400">How did that feel?</p>
+              <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-400">
+                How did that feel?
+              </p>
               <div className="grid grid-cols-3 gap-2 sm:gap-4">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <Button
-                  variant="outline"
-                  className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-red-100 text-red-600 hover:bg-red-50 sm:h-24"
-                  onClick={() => handleGrade("again")}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
                 >
-                  <X size={24} />
-                  <span>Again</span><span className="text-[10px] font-normal text-red-400">Rebuild tomorrow</span>
-                </Button>
-              </motion.div>
+                  <Button
+                    variant="outline"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-red-100 text-red-600 hover:bg-red-50 sm:h-24"
+                    onClick={() => handleGrade("again")}
+                  >
+                    <X size={24} />
+                    <span>Again</span>
+                    <span className="text-[10px] font-normal text-red-400">
+                      Rebuild tomorrow
+                    </span>
+                  </Button>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-              >
-                <Button
-                  variant="outline"
-                  className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-emerald-100 text-emerald-600 hover:bg-emerald-50 sm:h-24"
-                  onClick={() => handleGrade("good")}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
                 >
-                  <Check size={24} />
-                  <span>Good</span><span className="text-[10px] font-normal text-emerald-400">Build the interval</span>
-                </Button>
-              </motion.div>
+                  <Button
+                    variant="outline"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-emerald-100 text-emerald-600 hover:bg-emerald-50 sm:h-24"
+                    onClick={() => handleGrade("good")}
+                  >
+                    <Check size={24} />
+                    <span>Good</span>
+                    <span className="text-[10px] font-normal text-emerald-400">
+                      Build the interval
+                    </span>
+                  </Button>
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Button
-                  variant="outline"
-                  className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-blue-100 text-blue-600 hover:bg-blue-50 sm:h-24"
-                  onClick={() => handleGrade("easy")}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
                 >
-                  <Star size={24} />
-                  <span>Easy</span><span className="text-[10px] font-normal text-blue-400">Stretch the interval</span>
-                </Button>
-              </motion.div>
+                  <Button
+                    variant="outline"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-blue-100 text-blue-600 hover:bg-blue-50 sm:h-24"
+                    onClick={() => handleGrade("easy")}
+                  >
+                    <Star size={24} />
+                    <span>Easy</span>
+                    <span className="text-[10px] font-normal text-blue-400">
+                      Stretch the interval
+                    </span>
+                  </Button>
+                </motion.div>
               </div>
             </div>
           )}

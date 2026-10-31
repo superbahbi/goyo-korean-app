@@ -21,8 +21,9 @@ function audioManifestUrls(index: unknown): string[] {
   };
   const files = new Set<string>();
   for (const file of Object.values(manifest.vocabulary ?? {})) files.add(file);
-  for (const file of Object.values(manifest.female?.vocabulary ?? {})) files.add(file);
-  return Array.from(files, (file) => `/audio/${file}`);
+  for (const file of Object.values(manifest.female?.vocabulary ?? {}))
+    files.add(file);
+  return Array.from(files, file => `/audio/${file}`);
 }
 
 /**
@@ -37,8 +38,12 @@ export function DownloadAllAudio() {
   useEffect(() => {
     let active = true;
     fetch("/audio/index.json")
-      .then((response) => (response.ok ? response.json() : Promise.reject(new Error(String(response.status)))))
-      .then((index) => {
+      .then(response =>
+        response.ok
+          ? response.json()
+          : Promise.reject(new Error(String(response.status)))
+      )
+      .then(index => {
         if (active) setTotal(audioManifestUrls(index).length);
       })
       .catch(() => {
@@ -51,7 +56,9 @@ export function DownloadAllAudio() {
 
   const start = useCallback(async () => {
     if (!("caches" in window)) {
-      toast.error("Offline audio is unavailable", { description: "This browser does not support the Cache API." });
+      toast.error("Offline audio is unavailable", {
+        description: "This browser does not support the Cache API.",
+      });
       return;
     }
 
@@ -69,27 +76,38 @@ export function DownloadAllAudio() {
         if (cancelRef.current) break;
         const batch = urls.slice(start, start + BATCH_SIZE);
         await Promise.all(
-          batch.map(async (url) => {
+          batch.map(async url => {
             if (await cache.match(url)) return;
             const clip = await fetch(`${url}?warm=1`);
             const type = clip.headers.get("content-type") ?? "";
-            if (clip.status === 200 && type.startsWith("audio/")) await cache.put(url, clip);
-          }),
+            if (clip.status === 200 && type.startsWith("audio/"))
+              await cache.put(url, clip);
+          })
         );
         done += batch.length;
-        setDownload({ total: urls.length, done: Math.min(done, urls.length), cancelled: cancelRef.current });
+        setDownload({
+          total: urls.length,
+          done: Math.min(done, urls.length),
+          cancelled: cancelRef.current,
+        });
       }
 
       if (cancelRef.current) {
-        toast.info("Audio download cancelled", { description: `Saved ${done} of ${urls.length} clips.` });
+        toast.info("Audio download cancelled", {
+          description: `Saved ${done} of ${urls.length} clips.`,
+        });
       } else {
-        toast.success("Audio is ready offline", { description: `${urls.length} clips are stored on this device.` });
+        toast.success("Audio is ready offline", {
+          description: `${urls.length} clips are stored on this device.`,
+        });
       }
       setDownload(null);
     } catch (error) {
       console.error("Failed to download audio:", error);
       setDownload(null);
-      toast.error("Audio download failed", { description: "Check your connection and try again." });
+      toast.error("Audio download failed", {
+        description: "Check your connection and try again.",
+      });
     }
   }, []);
 
@@ -97,8 +115,12 @@ export function DownloadAllAudio() {
     cancelRef.current = true;
   };
 
-  const progress = download && download.total > 0 ? Math.round((download.done / download.total) * 100) : 0;
-  const sizeLabel = total === null ? "the pronunciation library" : `${total} clips`;
+  const progress =
+    download && download.total > 0
+      ? Math.round((download.done / download.total) * 100)
+      : 0;
+  const sizeLabel =
+    total === null ? "the pronunciation library" : `${total} clips`;
 
   return (
     <div className="border-t pt-4 space-y-2">
@@ -107,7 +129,8 @@ export function DownloadAllAudio() {
         Offline audio
       </div>
       <p className="text-xs leading-relaxed text-slate-500">
-        Hangul and number audio is always available offline. Download {sizeLabel} to keep every word playable without a connection.
+        Hangul and number audio is always available offline. Download{" "}
+        {sizeLabel} to keep every word playable without a connection.
       </p>
       {download ? (
         <div className="space-y-2" role="status" aria-live="polite">
@@ -116,13 +139,24 @@ export function DownloadAllAudio() {
             <span>
               {download.done} / {download.total} clips
             </span>
-            <Button type="button" variant="outline" size="sm" className="h-7 bg-white text-xs" onClick={cancel}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-7 bg-white text-xs"
+              onClick={cancel}
+            >
               Cancel
             </Button>
           </div>
         </div>
       ) : (
-        <Button type="button" variant="outline" className="w-full bg-white" onClick={start}>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full bg-white"
+          onClick={start}
+        >
           Download all audio
         </Button>
       )}
