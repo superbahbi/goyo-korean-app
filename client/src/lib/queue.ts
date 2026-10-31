@@ -1,10 +1,22 @@
 import { addDays } from "@/lib/day";
 import { getMasteryState, type CardState } from "@/lib/mastery";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import { CATEGORIES, type VocabularyCard } from "@/lib/vocabulary";
 
 export type CardStates = Record<string, CardState>;
 
 export const DEFAULT_NEW_CARDS_PER_DAY = 3;
+
+// Curated categories are ordered the way a beginner should meet them. Cards
+// without a themed tag (the imported deck) come after every themed card.
+const THEME_ORDER = new Map(CATEGORIES.map((category, index) => [category.id, index]));
+
+function orderNewCardsByTheme(cards: VocabularyCard[]): VocabularyCard[] {
+  return [...cards].sort((a, b) => {
+    const aRank = THEME_ORDER.get(a.tag) ?? THEME_ORDER.size;
+    const bRank = THEME_ORDER.get(b.tag) ?? THEME_ORDER.size;
+    return aRank - bRank;
+  });
+}
 
 function accuracy(state?: CardState): number {
   return (state?.timesCorrect ?? 0) / (state?.timesReviewed ?? 1);
@@ -47,7 +59,9 @@ export function buildDailyQueue(
     })
     .sort((a, b) => accuracy(states[a.id]) - accuracy(states[b.id]));
 
-  const newCards = cards.filter((card) => !states[card.id]).slice(0, newCardsPerDay);
+  // Theme order first; the deck keeps its curated order inside a theme, so a
+  // beginner meets survival and daily phrases before broad vocabulary.
+  const newCards = orderNewCardsByTheme(cards.filter((card) => !states[card.id])).slice(0, newCardsPerDay);
 
   const planned = [...dueCards, ...weakCards, ...newCards].filter(
     (card, position, all) => all.findIndex((item) => item.id === card.id) === position,

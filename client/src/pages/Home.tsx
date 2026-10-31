@@ -129,6 +129,13 @@ export default function Home() {
     toast.success(`Daily goal set to ${dailyGoal} cards`);
   };
 
+  const handleNewCardsPerDayChange = (value: string) => {
+    const newCardsPerDay = Number(value);
+    if (!Number.isFinite(newCardsPerDay) || newCardsPerDay < 1) return;
+    updateSettings({ newCardsPerDay });
+    toast.success(`New cards set to ${newCardsPerDay} per day`);
+  };
+
   const handleAutoPlayChange = (autoPlayAudio: boolean) => {
     updateSettings({ autoPlayAudio });
     if (!autoPlayAudio) stopAudio();
@@ -272,8 +279,15 @@ export default function Home() {
   // Derived from saved progress, so it is current on the same render as a grade.
   const queue = useMemo(() => {
     if (!cardStates) return [];
-    return buildDailyQueue(studyReady, cardStates, today, dailyGoal, cardsStudiedToday);
-  }, [cardStates, cardsStudiedToday, dailyGoal, studyReady, today]);
+    return buildDailyQueue(
+      studyReady,
+      cardStates,
+      today,
+      dailyGoal,
+      cardsStudiedToday,
+      state?.settings.newCardsPerDay,
+    );
+  }, [cardStates, cardsStudiedToday, dailyGoal, studyReady, today, state?.settings.newCardsPerDay]);
 
   // Recognition practice never introduces a card: due and weak reviews come
   // first, then the rest of the learner's existing cards.
@@ -1196,6 +1210,25 @@ export default function Home() {
               </Select>
               <p className="mt-2 text-xs leading-relaxed text-slate-500">
                 Choose a goal you can sustain. Consistent recall is more valuable than a large daily streak.
+              </p>
+            </div>
+            <div className="border-t pt-4">
+              <label className="text-sm font-medium text-slate-700" htmlFor="new-cards-per-day">New cards per day</label>
+              <Select value={String(state.settings.newCardsPerDay)} onValueChange={handleNewCardsPerDayChange}>
+                <SelectTrigger id="new-cards-per-day" className="mt-2 w-full bg-white">
+                  <SelectValue placeholder="Choose a new-card pace" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[1, 2, 3, 5, 8, 10].map((count) => (
+                    <SelectItem key={count} value={String(count)}>
+                      {count} new {count === 1 ? "card" : "cards"} per day
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                Brand-new words are capped at this number each day. Due reviews still come first, so a lower pace keeps the
+                session short without hiding scheduled work.
               </p>
             </div>
             <div className="border-t pt-4">

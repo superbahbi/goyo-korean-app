@@ -66,6 +66,20 @@ describe("buildDailyQueue", () => {
     expect(buildDailyQueue(fresh, {}, today, 10, 0, 5).map((item) => item.id)).toEqual(["a", "b", "c", "d", "e"]);
   });
 
+  it("introduces new cards in beginner theme order", () => {
+    const themed = [
+      { ...card("essential_1"), tag: "essential" },
+      { ...card("food_1"), tag: "food" },
+      { ...card("survival_1"), tag: "survival" },
+      { ...card("daily_1"), tag: "daily" },
+    ];
+    expect(buildDailyQueue(themed, {}, today, 10, 0, 3).map((item) => item.id)).toEqual([
+      "survival_1",
+      "daily_1",
+      "food_1",
+    ]);
+  });
+
   it("never repeats a card and respects the cards left in the goal", () => {
     const states = {
       a: state("a", { due: "2026-10-30" }),
