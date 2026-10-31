@@ -13,6 +13,20 @@ export interface CardState {
 
 export type MasteryState = "new" | "learning" | "shaky" | "known";
 
+export const MASTERY_LABELS: Record<MasteryState, string> = {
+  new: "New",
+  learning: "Learning",
+  shaky: "Shaky",
+  known: "Known",
+};
+
+export const MASTERY_STYLES: Record<MasteryState, string> = {
+  new: "bg-slate-100 text-slate-600",
+  learning: "bg-blue-100 text-blue-700",
+  shaky: "bg-amber-100 text-amber-700",
+  known: "bg-emerald-100 text-emerald-700",
+};
+
 export function getMasteryState(cardState?: CardState): MasteryState {
   if (!cardState || cardState.timesReviewed === 0) return "new";
   const accuracy = cardState.timesCorrect / cardState.timesReviewed;
