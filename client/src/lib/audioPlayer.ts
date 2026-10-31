@@ -69,7 +69,10 @@ function fetchAudioIndex(): Promise<AudioIndex> {
     return Promise.reject(new Error("Audio index fetch called outside browser"));
   }
 
-  return fetch(`/audio/index.json?v=${Date.now()}`, { cache: "no-store" })
+  // No cache-busting query and no `no-store`: the service worker precaches this
+  // exact URL, and a query string would miss that entry and fail offline. A
+  // regenerated index gets a new precache revision on the next deploy.
+  return fetch("/audio/index.json")
     .then((response) => {
       if (!response.ok) {
         throw new Error(`Audio index request failed (${response.status})`);
