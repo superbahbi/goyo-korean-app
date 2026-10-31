@@ -21,6 +21,15 @@ import { describeBackupAge, getLastBackupAt, isBackupOverdue, recordBackup } fro
 import { markIosInstallHintShown, shouldSuggestIosInstall } from "@/lib/storageProtection";
 import { playVocabularyAudio, stopAudio, setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 import { daysStudiedWithin } from "@/lib/studyDays";
+import {
+  buildDailyQueue,
+  buildReviewForecast,
+  countOverdue,
+  nextScheduledReview as getNextScheduledReview,
+  selectLearningCards,
+  selectWeakCards,
+  summarizeForecast,
+} from "@/lib/queue";
 
 const BROWSE_PAGE_SIZE = 40;
 
@@ -263,28 +272,7 @@ export default function Home() {
   // Derived from saved progress, so it is current on the same render as a grade.
   const queue = useMemo(() => {
     if (!cardStates) return [];
-
-    const sessionSize = Math.max(0, dailyGoal - cardsStudiedToday);
-    const dueCards = studyReady
-      .filter((card) => cardStates[card.id]?.due && cardStates[card.id].due <= today)
-      .sort((a, b) => (cardStates[a.id]?.due ?? today).localeCompare(cardStates[b.id]?.due ?? today));
-    const weakCards = studyReady
-      .filter((card) => {
-        const cardState = cardStates[card.id];
-        const mastery = getMasteryState(cardState);
-        return Boolean(cardState?.timesReviewed) && mastery !== "known" && cardState.lastReviewDate !== today && !dueCards.some((dueCard) => dueCard.id === card.id);
-      })
-      .sort((a, b) => {
-        const aState = cardStates[a.id];
-        const bState = cardStates[b.id];
-        const aAccuracy = (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1);
-        const bAccuracy = (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
-        return aAccuracy - bAccuracy;
-      });
-    const newCards = studyReady.filter((card) => !cardStates[card.id]).slice(0, 3);
-    return [...dueCards, ...weakCards, ...newCards]
-      .filter((card, position, allCards) => allCards.findIndex((item) => item.id === card.id) === position)
-      .slice(0, sessionSize || dailyGoal);
+    return buildDailyQueue(studyReady, cardStates, today, dailyGoal, cardsStudiedToday);
   }, [cardStates, cardsStudiedToday, dailyGoal, studyReady, today]);
 
   // Recognition practice never introduces a card: due and weak reviews come
@@ -398,39 +386,9 @@ export default function Home() {
   const levelProgress = nextLevelXp > currentLevelXp
     ? Math.min(100, Math.max(0, ((state.stats.totalXp - currentLevelXp) / (nextLevelXp - currentLevelXp)) * 100))
     : 100;
-  const overdueCount = studyReady.filter((card) => {
-    const due = state.cardStates[card.id]?.due;
-    return Boolean(due && due <= today);
-  }).length;
-  // Cards already reviewed today no longer move their schedule or earn XP, so
-  // prefer the rest; fall back to them only so the lists are still usable for practice.
-  const preferNotReviewedToday = <T extends { id: string }>(cards: T[]) => {
-    const fresh = cards.filter((card) => state.cardStates[card.id]?.lastReviewDate !== today);
-    return fresh.length > 0 ? fresh : cards;
-  };
-  const weakCards = preferNotReviewedToday(
-    studyReady.filter((card) => Boolean(state.cardStates[card.id]?.timesReviewed)),
-  )
-    .sort((a, b) => {
-      const aState = state.cardStates[a.id];
-      const bState = state.cardStates[b.id];
-      const aAccuracy = (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1);
-      const bAccuracy = (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1);
-      return aAccuracy - bAccuracy || (bState?.timesReviewed ?? 0) - (aState?.timesReviewed ?? 0);
-    })
-    .slice(0, 10);
-  const learningCards = preferNotReviewedToday(
-    studyReady.filter((card) => {
-      const mastery = getMasteryState(state.cardStates[card.id]);
-      return mastery === "learning" || mastery === "shaky";
-    }),
-  )
-    .sort((a, b) => {
-      const aState = state.cardStates[a.id];
-      const bState = state.cardStates[b.id];
-      return (aState?.due ?? "9999-12-31").localeCompare(bState?.due ?? "9999-12-31");
-    })
-    .slice(0, 10);
+  const overdueCount = countOverdue(studyReady, state.cardStates, today);
+  const weakCards = selectWeakCards(studyReady, state.cardStates, today);
+  const learningCards = selectLearningCards(studyReady, state.cardStates, today);
   const normalizedBrowseQuery = browseQuery.trim().toLocaleLowerCase();
   const filteredCards = !showBrowse ? [] : vocabulary.filter((card) => {
     const matchesCategory = !selectedCategory || card.tag === selectedCategory;
@@ -441,51 +399,28 @@ export default function Home() {
   const visibleBrowseCards = filteredCards.slice(0, browseVisibleCount);
   const { totalReviews, overallAccuracy, medianResponseTime } = reviewStats;
   const masteredCount = masteryCounts.known;
-  // One pass over the deck feeds both forecasts instead of scanning it per day.
-  const dueCounts = new Map<string, number>();
-  let overdueTotal = 0;
-  for (const card of studyReady) {
-    const due = state.cardStates[card.id]?.due;
-    if (!due) continue;
-    dueCounts.set(due, (dueCounts.get(due) ?? 0) + 1);
-    if (due <= today) overdueTotal += 1;
-  }
-  const reviewForecast = Array.from({ length: 7 }, (_, offset) => {
-    const date = new Date();
-    date.setHours(12, 0, 0, 0);
-    date.setDate(date.getDate() + offset);
-    const key = getLocalDateKey(date);
-    return {
-      key,
-      label: offset === 0 ? "Today" : offset === 1 ? "Tomorrow" : date.toLocaleDateString(undefined, { weekday: "short" }),
-      count: offset === 0 ? overdueTotal : dueCounts.get(key) ?? 0,
-    };
-  });
-  const extendedReviewForecast = Array.from({ length: 30 }, (_, offset) => {
-    const date = new Date();
-    date.setHours(12, 0, 0, 0);
-    date.setDate(date.getDate() + offset);
-    const key = getLocalDateKey(date);
-    return {
-      key,
-      label: date.toLocaleDateString(undefined, { month: "short", day: "numeric" }),
-      count: dueCounts.get(key) ?? 0,
-    };
-  });
-  const forecastTotal = extendedReviewForecast.reduce((sum, day) => sum + day.count, 0);
-  const forecastPeak = extendedReviewForecast.reduce(
-    (peak, day) => (day.count > peak.count ? day : peak),
-    extendedReviewForecast[0] ?? { key: today, label: today, count: 0 },
+  const reviewForecast = useMemo(() => {
+    return buildReviewForecast(studyReady, state.cardStates, today, 7, { overdueOnFirstDay: true }).map((day, offset) => ({
+      ...day,
+      label:
+        offset === 0
+          ? "Today"
+          : offset === 1
+            ? "Tomorrow"
+            : new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { weekday: "short" }),
+    }));
+  }, [studyReady, state.cardStates, today]);
+  const extendedReviewForecast = useMemo(() => {
+    return buildReviewForecast(studyReady, state.cardStates, today, 30).map((day) => ({
+      ...day,
+      label: new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+    }));
+  }, [studyReady, state.cardStates, today]);
+  const { total: forecastTotal, peak: forecastPeak, status: workloadStatus } = useMemo(
+    () => summarizeForecast(extendedReviewForecast, state.settings.dailyGoal),
+    [extendedReviewForecast, state.settings.dailyGoal],
   );
-  const workloadStatus = forecastPeak.count >= Math.max(6, state.settings.dailyGoal * 2)
-    ? "heavy"
-    : forecastPeak.count > state.settings.dailyGoal
-      ? "busy"
-      : "balanced";
-  const nextScheduledReview = Object.values(state.cardStates)
-    .map((card) => card.due)
-    .filter((due) => due > today)
-    .sort()[0];
+  const nextScheduledReview = getNextScheduledReview(state.cardStates, today);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
