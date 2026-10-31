@@ -8,6 +8,7 @@ interface Props {
 
 interface State {
   hasError: boolean;
+  confirmingReset: boolean;
 }
 
 const STORAGE_KEY = "goyo-progress-v2";
@@ -24,11 +25,11 @@ function resetProgressAndReload() {
 class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, confirmingReset: false };
   }
 
   static getDerivedStateFromError(): State {
-    return { hasError: true };
+    return { hasError: true, confirmingReset: false };
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
@@ -52,6 +53,16 @@ class ErrorBoundary extends Component<Props, State> {
               this device.
             </p>
 
+            {this.state.confirmingReset && (
+              <p
+                role="alert"
+                className="mb-4 max-w-md text-center text-sm text-destructive"
+              >
+                This permanently erases saved progress on this device. Click the
+                button again to confirm, or reload instead.
+              </p>
+            )}
+
             <div className="flex flex-wrap justify-center gap-3">
               <button
                 onClick={() => window.location.reload()}
@@ -65,14 +76,22 @@ class ErrorBoundary extends Component<Props, State> {
                 Reload Page
               </button>
               <button
-                onClick={resetProgressAndReload}
+                onClick={() => {
+                  if (!this.state.confirmingReset) {
+                    this.setState({ confirmingReset: true });
+                    return;
+                  }
+                  resetProgressAndReload();
+                }}
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-lg",
                   "border border-destructive text-destructive",
                   "hover:bg-destructive/10 cursor-pointer"
                 )}
               >
-                Reset local progress
+                {this.state.confirmingReset
+                  ? "Yes, erase local progress"
+                  : "Reset local progress"}
               </button>
             </div>
           </div>
