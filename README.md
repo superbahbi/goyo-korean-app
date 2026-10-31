@@ -4,8 +4,8 @@ Audio-first Korean vocabulary practice with spaced repetition. Free, offline-cap
 
 React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the PWA.
 
-- **Deck:** 136 curated cards plus 517 imported Essential 600 cards, each with a Korean example and
-  ElevenLabs pronunciation in two voices.
+- **Deck:** 136 curated cards plus 504 imported Essential 600 cards (640 total), each with a Korean
+  example and ElevenLabs pronunciation in two voices.
 - **Scheduling:** a small, tested SM-2 variant. The rules live in `docs/improvement-plan.md`.
 - **Progress:** `localStorage`, moved between devices with JSON export/import.
 
@@ -23,25 +23,28 @@ pnpm dev        # http://localhost:3000
 
 ## Scripts
 
-| Command       | What it does                                                             |
-| ------------- | ------------------------------------------------------------------------ |
-| `pnpm dev`    | Dev server on port 3000                                                  |
-| `pnpm build`  | Production build into `dist/public`                                      |
-| `pnpm start`  | Preview the production build (`PORT=4175 pnpm start` to change the port) |
-| `pnpm check`  | Type check                                                               |
-| `pnpm test`   | Vitest unit and data tests                                               |
-| `pnpm format` | Prettier write                                                           |
+| Command             | What it does                                                             |
+| ------------------- | ------------------------------------------------------------------------ |
+| `pnpm dev`          | Dev server on port 3000                                                  |
+| `pnpm build`        | Production build into `dist/public`                                      |
+| `pnpm start`        | Preview the production build (`PORT=4175 pnpm start` to change the port) |
+| `pnpm check`        | Type check                                                               |
+| `pnpm lint`         | ESLint                                                                   |
+| `pnpm test`         | Vitest unit and data tests                                               |
+| `pnpm format`       | Prettier write                                                           |
+| `pnpm format:check` | Prettier check                                                           |
 
-The gate for every change is `pnpm check && pnpm test && pnpm build`.
+The gate for every change is `pnpm check && pnpm lint && pnpm format:check && pnpm test && pnpm build`.
 
 ## Layout
 
 ```
-client/src/pages/         Home dashboard (the app is a single page)
-client/src/components/    Study session, practice modes, dialogs
+client/src/pages/         Home dashboard shell (the app is a single page)
+client/src/components/    Dashboard sections (header, progress, plan, alerts), practice modes,
+                          Browse/Stats/Settings dialogs, study session
 client/src/components/ui/ shadcn primitives (only the imported ones are kept)
-client/src/lib/           Deck data, scheduler, romanization, audio player
-client/src/hooks/         Saved state and deck loading
+client/src/lib/           Deck data, scheduler, queue, XP, audio player, persistence helpers
+client/src/hooks/         Dashboard state, study sessions, deck loading and saved state
 public/audio/             Pronunciation library plus index.json and manifests
 scripts/                  Audio generation and maintenance scripts
 docs/                     Improvement plan
