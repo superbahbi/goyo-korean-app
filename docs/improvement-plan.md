@@ -26,7 +26,7 @@ Verified on 2026-10-31 on `main` (`5d07010`):
 | `tsc --noEmit`     | Passes                                                                                                                                                           |
 | `eslint .`         | Passes                                                                                                                                                           |
 | `prettier --check` | Passes                                                                                                                                                           |
-| `vitest run`       | 157 tests pass in 15 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts)                          |
+| `vitest run`       | 161 tests pass in 15 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts)                          |
 | `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk |
 | CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                              |
 
@@ -48,13 +48,12 @@ cache; `lang="ko"`, the contrast fixes, chart labels, reduced motion, dialog des
 standalone meta tags and the Vercel security/cache headers are in place; CI runs every push; the PWA
 precaches the shell, the audio index, Hangul and number audio.
 
-What is open: two content samples (96 unique imported cards) put the fix rate at 25%, so scoping fixes
-comes next; the Korean-speaker spot check is still pending (see Phase 3 — content trust);
-behaviour checks still need a real browser, screen reader and
-iPhone; there are no Playwright smokes; audio filenames are not content-hashed; and the repo is 48 MB
-with 26 MB of audio in git. The Phase 2 split is done, but its 300-line target is only met by
-`Home.tsx` (274 lines): `SettingsDialog` (415), `StudySession` (446) and several practice views are
-still longer.
+What is open: the 24 fixed sample cards now re-audit clean, so the systemic batches are next; the
+Korean-speaker spot check is still pending (see Phase 3 — content trust); behaviour checks still need a
+real browser, screen reader and iPhone; there are no Playwright smokes; audio filenames are not
+content-hashed; and the repo is 48 MB with 26 MB of audio in git. The Phase 2 split is done, but its
+300-line target is only met by `Home.tsx` (274 lines): `SettingsDialog` (415), `StudySession` (446) and
+several practice views are still longer.
 
 ## How we work
 
@@ -81,7 +80,7 @@ still longer.
 | 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                     |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                            |
 | 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                      |
-| 3 Content                       | In progress; two samples audited — 24/96 fix (25%), scoping fixes next                                                                  |
+| 3 Content                       | In progress; 24/96 sampled cards fixed and re-audited clean; systemic batches next                                                      |
 | 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels and reduced motion done; device checks, hashed audio and Playwright open |
 | 5 Tune from data                | Blocked on 30 days of use                                                                                                               |
 
@@ -261,6 +260,11 @@ task is one PR.
      `verdict: "pass"` with the issue list kept for the record).
    - Acceptance: no open `fix` verdicts remain in the sample file; deck tests and the romanization lint
      pass; a re-audit of the same 50 finds no remaining errors.
+   - Done (2026-10-31): all 24 unique `fix` cards were corrected — 11 adjectives retagged, 7 usage notes
+     rewritten, 6 examples/translations repaired, and the two headword spellings fixed (`오렌지색`,
+     `첫 번째`) with both voice clips regenerated. Verdicts now carry `resolvedAt` and `resolution`, and
+     a `reaudit` block records zero open fixes. `audit-verdicts.test.ts` enforces both and guards the
+     corrected tags and headwords. The sheets were regenerated from the same seeds and read clean.
 4. **Systemic fixes in batches.** Only the issue types step 2 proved exist — politeness drift, wrong
    part of speech, batchim romanization, translation mismatch. 25–50 cards per PR, scored against the
    same rubric.

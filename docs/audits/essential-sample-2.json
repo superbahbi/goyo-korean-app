@@ -28,7 +28,9 @@
     "pass": 39,
     "fix": 11,
     "errorRate": 0.22,
-    "decision": "11 of 50 fail (22%); with sample 1 that is 24 of 96 unique cards (25%). The rate is confirmed, so scope fixes now: the 11 adjective-as-verb cards are the largest batch, and the sample fixes follow."
+    "decision": "11 of 50 fail (22%); with sample 1 that is 24 of 96 unique cards (25%). The rate is confirmed, so scope fixes now: the 11 adjective-as-verb cards are the largest batch, and the sample fixes follow.",
+    "resolved": 11,
+    "openFix": 0
   },
   "combined": {
     "samples": 2,
@@ -138,7 +140,9 @@
           "category": "translation",
           "detail": "Update exampleEnglish to match the rewritten Korean."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Example now uses 받다 for both coins and bills; English updated."
     },
     {
       "id": "essential_136",
@@ -185,7 +189,9 @@
           "category": "usage-note",
           "detail": "\"informal variant: 주방 (more formal)\" contradicts itself. 부엌 is the everyday native word; 주방 is the Sino-Korean, more formal word."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Usage note now says 부엌 is the everyday native word and 주방 the formal Sino-Korean word."
     },
     {
       "id": "essential_213",
@@ -232,7 +238,9 @@
           "category": "usage-note",
           "detail": "\"무릎팍\" is a colloquial variant, not a standard compound. Use 무릎뼈 or drop the example."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Usage note no longer presents the colloquial 무릎팍 as a standard form."
     },
     {
       "id": "essential_276",
@@ -297,7 +305,9 @@
           "category": "usage-note",
           "detail": "\"reputation\" is not a standard figurative sense of 소리. It can mean words or remarks (그런 소리), not reputation."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Usage note now gives 그런 소리 (remarks) instead of the unsupported 'reputation' sense."
     },
     {
       "id": "essential_349",
@@ -314,7 +324,9 @@
           "category": "part-of-speech",
           "detail": "위에 is a locative phrase (noun 위 + particle 에), not a noun. Keep the headword and tag it as an adverb/locative, or change the headword to 위."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as adverb/locative, matching the 위 + 에 construction."
     },
     {
       "id": "essential_351",
@@ -345,7 +357,9 @@
           "category": "part-of-speech",
           "detail": "first is an ordinal number, not a noun; tag number for consistency with the numbers theme."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Headword corrected to 첫 번째 with a space, tagged as a number, romanized cheot beonjjae; both audio clips regenerated."
     },
     {
       "id": "essential_379",
@@ -378,7 +392,9 @@
           "category": "naturalness",
           "detail": "\"버스 멈추자마자\" drops the subject particle; a written example should use 버스가 멈추자마자."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Example now keeps 버스가; the usage note gives 계획이 서다 instead of 'to be scheduled'."
     },
     {
       "id": "essential_443",
@@ -413,7 +429,9 @@
           "category": "part-of-speech",
           "detail": "뜨겁다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_494",
@@ -424,7 +442,9 @@
           "category": "translation",
           "detail": "The back says \"to be old (person)\", but 늙다 means \"to grow old/age\"; the example is \"has aged a lot\". Use \"to grow old; to age\"."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Back is now 'to grow old; to age'."
     },
     {
       "id": "essential_505",
@@ -443,7 +463,9 @@
           "category": "usage-note",
           "detail": "\"verb in Korean grammar\" is misleading; Korean adjectives are 형용사, a separate category from verbs."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective, the example uses polite 아름다워요, and the usage note explains 형용사."
     },
     {
       "id": "essential_525",
@@ -454,7 +476,9 @@
           "category": "part-of-speech",
           "detail": "얕다 is an adjective (형용사), not a verb."
         }
-      ]
+      ],
+      "resolvedAt": "2026-10-31",
+      "resolution": "Tagged as an adjective."
     },
     {
       "id": "essential_539",
@@ -462,5 +486,11 @@
       "verdict": "pass",
       "issues": []
     }
-  ]
+  ],
+  "reaudit": {
+    "reauditedAt": "2026-10-31",
+    "openFixes": 0,
+    "method": "Every fixed card was re-read against the same five-point rubric after the edit, then the committed sheet was regenerated from the same seed.",
+    "result": "No remaining errors found in the 50-card sample."
+  }
 }
