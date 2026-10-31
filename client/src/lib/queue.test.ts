@@ -52,7 +52,7 @@ describe("buildDailyQueue", () => {
     ).toEqual(["b", "a", "c"]);
   });
 
-  it("adds weak cards after due cards and skips known or already-reviewed-today cards", () => {
+  it("includes due reviews and leaves not-yet-due reviews for later", () => {
     const states = {
       a: state("a", { due: "2026-11-05", timesReviewed: 2, timesCorrect: 1 }),
       b: state("b", {
@@ -72,7 +72,7 @@ describe("buildDailyQueue", () => {
     };
     expect(
       buildDailyQueue(cards, states, today, 10, 0, 0).map(item => item.id)
-    ).toEqual(["d", "a"]);
+    ).toEqual(["d"]);
   });
 
   it("adds the newest cards up to the per-day cap", () => {
@@ -106,7 +106,18 @@ describe("buildDailyQueue", () => {
     const ids = queue.map(item => item.id);
     expect(new Set(ids).size).toBe(ids.length);
     expect(queue).toHaveLength(4);
-    expect(ids.slice(0, 2)).toEqual(["a", "b"]);
+    expect(ids[0]).toBe("a");
+    expect(ids).not.toContain("b");
+  });
+
+  it("slices to the cards left in the daily goal", () => {
+    const states = {
+      a: state("a", { due: "2026-10-30" }),
+      b: state("b", { due: "2026-10-29" }),
+    };
+    expect(
+      buildDailyQueue(cards, states, today, 4, 3, 3).map(item => item.id)
+    ).toEqual(["b"]);
   });
 
   it("returns a repeat queue once the daily goal is reached", () => {
