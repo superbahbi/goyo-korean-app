@@ -193,7 +193,7 @@ describe("Revised Romanization", async () => {
       ["무릎", "mureup"],
       ["트럭", "teureok"],
       ["냄새를 맡다", "naemsaereul matda"],
-      ["앉다", "anta"],
+      ["앉다", "anda"],
       ["앉아", "anja"],
       ["짧다", "jjalda"],
       ["많다", "manta"],

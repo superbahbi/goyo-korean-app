@@ -28,7 +28,9 @@
     "pass": 46,
     "fix": 4,
     "errorRate": 0.08,
-    "decision": "4 of 50 fail (8%), inside the 5-15% band, so audit the rest of the imported deck in batches rather than treating it as clean or wholly untrusted."
+    "decision": "4 of 50 fail (8%), inside the 5-15% band, so audit the rest of the imported deck in batches rather than treating it as clean or wholly untrusted.",
+    "resolved": 4,
+    "openFix": 0
   },
   "phase7Combined": {
     "samples": [3, 4],
@@ -73,7 +75,8 @@
   "notes": [
     "Each of the 50 seed-61 rows was read against the five-point rubric (translation, naturalness, politeness, part of speech, romanization/batchim), with usage-note claims checked separately; no deck data was edited.",
     "This is a model screen, not the pending Korean-speaker spot check.",
-    "The four ids shared with samples 1-2 (essential_338, essential_443, essential_506, essential_520) were re-read in their Phase 3 form and all pass, so no earlier defect was re-reported. The four ids shared with the parallel sample 3 (essential_063, essential_148, essential_182, essential_387) were judged independently and agreed."
+    "The four ids shared with samples 1-2 (essential_338, essential_443, essential_506, essential_520) were re-read in their Phase 3 form and all pass, so no earlier defect was re-reported. The four ids shared with the parallel sample 3 (essential_063, essential_148, essential_182, essential_387) were judged independently and agreed.",
+    "The 4 fix verdicts were resolved on 2026-11-01 and the sheet was regenerated from seed 61."
   ],
   "verdicts": [
     {
@@ -223,7 +226,9 @@
           "category": "naturalness",
           "detail": "\"강아지가 제 이빨을 깨물었어요\" says the puppy bit my tooth, which is nonsensical. Use 강아지가 이빨로 제 손을 깨물었어요 (\"The puppy bit my hand with its teeth\") and update exampleEnglish to match."
         }
-      ]
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Example replaced with 강아지가 이빨로 장난감을 깨물고 있어요 and the English synced. Headword and audio unchanged."
     },
     {
       "id": "essential_264",
@@ -282,7 +287,9 @@
           "category": "part-of-speech",
           "detail": "밖에 is the noun 밖 plus the locative particle 에, not a noun; tag it adverb/locative (as 위에 was) or change the headword to 밖."
         }
-      ]
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Retagged adverb and the note now calls it a place adverb. Headword and audio unchanged."
     },
     {
       "id": "essential_364",
@@ -313,7 +320,9 @@
           "category": "part-of-speech",
           "detail": "다섯 번째 is an ordinal number, not a noun; tag it number, as 첫 번째 was."
         }
-      ]
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Headword spaced as 다섯 번째, romanization updated to daseot beonjjae, retagged number, and the note plus example synced. The spoken form is unchanged, so no clip was regenerated."
     },
     {
       "id": "essential_387",
@@ -336,7 +345,9 @@
           "category": "romanization",
           "detail": "anta is the McCune-Reischauer transcription; Revised Romanization is anda (ㄵ reduces to ㄴ before ㄷ, and tensification is not written)."
         }
-      ]
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Romanization corrected to anda and the transliterator's 앉다 special case removed. The pronunciation is unchanged, so no clip was regenerated."
     },
     {
       "id": "essential_443",
@@ -404,5 +415,11 @@
       "verdict": "pass",
       "issues": []
     }
-  ]
+  ],
+  "reaudit": {
+    "reauditedAt": "2026-11-01",
+    "openFixes": 0,
+    "method": "Every fixed card was re-read against the same five-point rubric after the edit, then the committed sheet was regenerated from the same seed.",
+    "result": "No remaining errors found in the 50-card sample."
+  }
 }
