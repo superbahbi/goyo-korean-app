@@ -21,12 +21,17 @@ import {
   levelTitle as getLevelTitle,
   xpToReachLevel,
 } from "@/lib/xp";
+import {
+  describeTodayProgress,
+  isFirstRunState,
+} from "@/lib/dashboardProgress";
 
 interface UseHomeDashboardOptions {
   vocabulary: VocabularyCard[];
   studyReady: VocabularyCard[];
   cardStates: Record<string, CardState>;
   studyDays: StudyDays;
+  reviewEntries: number;
   today: string;
   dailyGoal: number;
   newCardsPerDay: number;
@@ -43,6 +48,7 @@ export function useHomeDashboard({
   studyReady,
   cardStates,
   studyDays,
+  reviewEntries,
   today,
   dailyGoal,
   newCardsPerDay,
@@ -238,6 +244,18 @@ export function useHomeDashboard({
     today
   );
 
+  const firstRun = isFirstRunState({
+    reviewEntries,
+    studiedToday: cardsStudiedToday,
+  });
+  // Once the daily goal is reached the queue becomes optional repeat practice,
+  // so it is no longer part of the planned work for the day.
+  const todayProgress = describeTodayProgress({
+    studied: cardsStudiedToday,
+    remaining: dailyGoalReached ? 0 : queue.length,
+    dailyGoal,
+  });
+
   return {
     cardsStudiedToday,
     daysStudied7,
@@ -258,7 +276,8 @@ export function useHomeDashboard({
     cardsRemaining,
     plannedCards: queue.length,
     newCardsPlanned,
-    progressPercent: (cardsStudiedToday / dailyGoal) * 100,
+    firstRun,
+    todayProgress,
     dailyGoalReached,
     levelTitle: getLevelTitle(level),
     nextLevelXp: xpToReachLevel(level + 1),
