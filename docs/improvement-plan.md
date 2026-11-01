@@ -26,7 +26,7 @@ Verified on 2026-10-31 on `main` after the Phase 4 closeout (`#39`–`#43`):
 | `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `vitest run`       | 181 tests pass in 19 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up)                                                                                                                                                                                                       |
+| `vitest run`       | 186 tests pass in 20 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up, imported taxonomy)                                                                                                                                                                                    |
 | `playwright test`  | 22 checks pass against the production build: the five flow smokes (study loop, failed-card retry, Browse search and audio, progress export/import, offline reload), five axe scans (dashboard, study, dialogs, Hangul, recognition overlays), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker) |
 | `vite build`       | Passes. Main chunk 108.6 kB (31.7 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk                                                                                                                                                                                                                                                         |
 | CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                            |
@@ -89,7 +89,7 @@ the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lin
 | Phase                           | State                                                                                                                                                                        |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0 Repairs                       | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                  |
-| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                                                 |
+| 1 Learning loop and measurement | Done (#9–#15); browser checks outstanding; item 5 done                                                                                                                       |
 | 2 Structure                     | Done; main chunk 108.6 kB raw / 31.7 kB gzipped with vendor chunks; every page and component under 300 lines                                                                 |
 | 3 Content                       | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
 | 4 Delivery and accessibility    | Done; headers, iOS meta, `lang`, contrast, focus rings, 22 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
@@ -103,9 +103,8 @@ first grade. The iPhone install hint and update toast were covered by the Phase 
 so Phase 0 has no manual checks left.
 
 Phase 1 is merged: review log (#9), study-day history (#10), same-session retry (#11), recognition
-caps (#12), keyboard shortcuts (#13), queue module (#14) and new-card pace (#15). Task 5's theme
-order ships, but frequency ranking for the imported deck waits on the Phase 3 themes and a
-frequency signal; the imported cards therefore stay last and in deck order. Browser checks still
+caps (#12), keyboard shortcuts (#13), queue module (#14) and new-card pace (#15). Task 5 now orders
+the imported deck by theme and frequency instead of source row order. Browser checks still
 outstanding: keyboard flow with a screen reader, recognition modes, and the study-day stats.
 
 ---
@@ -173,9 +172,13 @@ The reason retention is the metric: right now the app cannot measure whether any
    Order new cards by theme and frequency, not source row order, so a beginner meets the most useful
    words first.
    - Pacing is merged (#15): `newCardsPerDay` defaults to 3 and clamps to 1–10.
-   - New cards follow the curated theme order (survival, daily, numbers, food, …) before imported
-     cards. The imported deck still has no theme or frequency metadata, so frequency ranking waits
-     on Phase 3; its cards stay last and in deck order until then.
+   - Done (2026-10-31): the imported deck now carries a themed category on every card (24 categories,
+     from survival and daily through time, people, food, animals, nature and adjectives) plus a
+     frequency rank derived from the NIKL learner-vocabulary list. New cards follow the category
+     order; curated cards keep their hand-picked order inside a theme and imported cards follow by
+     frequency. NIKL ranks collapse homographs, so a few words (말, 씨) rank higher than their deck
+     sense; `essentialTaxonomy.test.ts` covers theme and rank coverage, and `queue.test.ts` covers the
+     ordering.
 6. **Queue as a tested module.** Move the queue, forecast and workload logic out of `Home.tsx` into
    `client/src/lib/queue.ts` with unit tests (due order, weak selection, new-card cap, no duplicates).
 7. **Keyboard shortcuts** in the study session: `Space` reveals, `1`/`2`/`3` grade, `Esc` closes.
@@ -317,9 +320,8 @@ task is one PR.
 Already done, keep it: `data.test.ts` asserts that every study-ready card has a manifest entry and both
 audio files on disk, which covers the old item 5.
 
-Out of scope for this phase: theming the imported deck (step 4 is still editing those cards, so tagging
-now would churn, and themes only pay off once a frequency signal exists), frequency ordering, new
-audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, device checks) follows.
+Out of scope for this phase: theming and frequency ordering (both shipped later with Phase 1 item 5),
+new audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, device checks) follows.
 
 ## Phase 4: Delivery and accessibility
 

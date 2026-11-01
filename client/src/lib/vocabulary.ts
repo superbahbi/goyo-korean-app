@@ -11,6 +11,8 @@ export interface VocabularyCard {
   partOfSpeech: string;
   source?: string;
   audioReady?: boolean;
+  /** 1 = most frequent. Imported cards only; curated cards keep their own order. */
+  frequencyRank?: number;
 }
 
 const CURATED_VOCABULARY_DATA: VocabularyCard[] = [
@@ -1551,10 +1553,16 @@ export const CATEGORIES = [
     color: "bg-yellow-100 text-yellow-700",
   },
   {
-    id: "food",
-    name: "Food",
-    icon: "🍜",
-    color: "bg-orange-100 text-orange-700",
+    id: "time",
+    name: "Time",
+    icon: "🕒",
+    color: "bg-sky-100 text-sky-700",
+  },
+  {
+    id: "people",
+    name: "People",
+    icon: "👥",
+    color: "bg-teal-100 text-teal-700",
   },
   {
     id: "family",
@@ -1563,16 +1571,16 @@ export const CATEGORIES = [
     color: "bg-pink-100 text-pink-700",
   },
   {
-    id: "emotions",
-    name: "Emotions",
-    icon: "😊",
-    color: "bg-purple-100 text-purple-700",
+    id: "food",
+    name: "Food",
+    icon: "🍜",
+    color: "bg-orange-100 text-orange-700",
   },
   {
-    id: "verbs",
-    name: "Verbs",
-    icon: "⚡",
-    color: "bg-green-100 text-green-700",
+    id: "animals",
+    name: "Animals",
+    icon: "🐾",
+    color: "bg-amber-100 text-amber-700",
   },
   {
     id: "body",
@@ -1581,10 +1589,34 @@ export const CATEGORIES = [
     color: "bg-indigo-100 text-indigo-700",
   },
   {
+    id: "health",
+    name: "Health",
+    icon: "🩺",
+    color: "bg-rose-100 text-rose-700",
+  },
+  {
+    id: "clothing",
+    name: "Clothing",
+    icon: "👕",
+    color: "bg-fuchsia-100 text-fuchsia-700",
+  },
+  {
     id: "colors",
     name: "Colors",
     icon: "🎨",
     color: "bg-cyan-100 text-cyan-700",
+  },
+  {
+    id: "emotions",
+    name: "Emotions",
+    icon: "😊",
+    color: "bg-purple-100 text-purple-700",
+  },
+  {
+    id: "home",
+    name: "Home",
+    icon: "🏠",
+    color: "bg-stone-100 text-stone-700",
   },
   {
     id: "places",
@@ -1593,10 +1625,58 @@ export const CATEGORIES = [
     color: "bg-lime-100 text-lime-700",
   },
   {
-    id: "essential",
-    name: "Essential 600",
-    icon: "📚",
+    id: "transport",
+    name: "Transport",
+    icon: "🚌",
+    color: "bg-slate-100 text-slate-700",
+  },
+  {
+    id: "school",
+    name: "School",
+    icon: "🎓",
+    color: "bg-violet-100 text-violet-700",
+  },
+  {
+    id: "work",
+    name: "Work",
+    icon: "💼",
+    color: "bg-zinc-100 text-zinc-700",
+  },
+  {
+    id: "society",
+    name: "Society",
+    icon: "🏛️",
+    color: "bg-neutral-100 text-neutral-700",
+  },
+  {
+    id: "leisure",
+    name: "Leisure",
+    icon: "🎬",
     color: "bg-emerald-100 text-emerald-700",
+  },
+  {
+    id: "nature",
+    name: "Nature",
+    icon: "🌿",
+    color: "bg-green-100 text-green-700",
+  },
+  {
+    id: "objects",
+    name: "Objects",
+    icon: "📦",
+    color: "bg-gray-100 text-gray-700",
+  },
+  {
+    id: "verbs",
+    name: "Verbs",
+    icon: "⚡",
+    color: "bg-green-100 text-green-700",
+  },
+  {
+    id: "adjectives",
+    name: "Adjectives",
+    icon: "✨",
+    color: "bg-indigo-100 text-indigo-700",
   },
 ];
 
