@@ -46,15 +46,8 @@ export function BrowseResultRow({
     >
       <div className="flex justify-between items-start gap-3 mb-3">
         <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="text-xl font-bold text-slate-900" lang="ko">
-              {card.front}
-            </div>
-            {isShowingRoman && romanization && (
-              <span className="text-xs font-mono text-emerald-700">
-                {romanization}
-              </span>
-            )}
+          <div className="text-xl font-bold text-slate-900" lang="ko">
+            {card.front}
           </div>
           <div className="mt-1 text-sm font-medium text-slate-600">
             {card.back}
@@ -66,7 +59,7 @@ export function BrowseResultRow({
             </div>
           )}
           {card.example && (
-            <div className="mt-2 flex items-start gap-2">
+            <div className="mt-2 flex items-center gap-2">
               <p
                 className="min-w-0 flex-1 text-xs italic text-slate-500 line-clamp-2"
                 lang="ko"
@@ -78,7 +71,7 @@ export function BrowseResultRow({
                   type="button"
                   onClick={onSpeakSentence}
                   aria-label={`${isSentencePlaying ? "Playing" : "Play"} example sentence for ${card.front}`}
-                  className="shrink-0 rounded-full p-1.5 text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1"
                 >
                   <Volume2
                     size={13}
