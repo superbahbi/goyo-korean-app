@@ -23,7 +23,7 @@ test("reloads the shell and serves precached audio offline", async ({
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
   await page.reload();
   await expect(
-    page.getByText("Ready to practice?", { exact: true })
+    page.getByRole("button", { name: /start first session/i })
   ).toBeVisible();
   await expect
     .poll(() =>
@@ -35,7 +35,7 @@ test("reloads the shell and serves precached audio offline", async ({
   try {
     await page.reload();
     await expect(
-      page.getByText("Ready to practice?", { exact: true })
+      page.getByRole("button", { name: /start first session/i })
     ).toBeVisible();
 
     // The audio map and the Hangul clips are precached, so both must resolve

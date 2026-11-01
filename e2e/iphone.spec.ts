@@ -71,6 +71,20 @@ function trackConsoleErrors(page: Page) {
   return errors;
 }
 
+// A fresh save hides the dashboard hero and shows the first-session block
+// instead, so wait on the session action, which exists in both states.
+async function waitForDashboard(page: Page) {
+  await expect(
+    page.getByRole("button", { name: /start (daily|first) session/i })
+  ).toBeVisible();
+}
+
+async function startSession(page: Page) {
+  await page
+    .getByRole("button", { name: /start (daily|first) session/i })
+    .click();
+}
+
 async function gradeOneCard(page: Page) {
   // The first card is new, so Enter clears its introduction before the reveal.
   await page.keyboard.press("Enter");
@@ -91,9 +105,7 @@ test.describe("first-tap audio", () => {
   test("the speaker tap requests a clip with no audio console error", async ({
     page,
   }) => {
-    await expect(
-      page.getByText("Ready to practice?", { exact: true })
-    ).toBeVisible();
+    await waitForDashboard(page);
     const errors = trackConsoleErrors(page);
 
     const clips: string[] = [];
@@ -102,7 +114,7 @@ test.describe("first-tap audio", () => {
         clips.push(request.url());
     });
 
-    await page.getByRole("button", { name: /start daily session/i }).click();
+    await startSession(page);
     const speaker = page
       .getByRole("button", { name: /hear it again for/i })
       .first();
@@ -129,9 +141,7 @@ test.describe("iOS install path", () => {
     page,
   }) => {
     await page.goto("/");
-    await expect(
-      page.getByText("Ready to practice?", { exact: true })
-    ).toBeVisible();
+    await waitForDashboard(page);
 
     await expect(
       page.locator('meta[name="apple-mobile-web-app-capable"]')
@@ -166,14 +176,12 @@ test.describe("iOS install path", () => {
     // learner's first study activity. No init script here: it would run again
     // on the reload below and wipe the hint this test is checking.
     await page.goto("/");
-    await expect(
-      page.getByText("Ready to practice?", { exact: true })
-    ).toBeVisible();
+    await waitForDashboard(page);
     await expect(
       page.getByText("Add Goyo to your Home Screen", { exact: true })
     ).toHaveCount(0);
 
-    await page.getByRole("button", { name: /start daily session/i }).click();
+    await startSession(page);
     await gradeOneCard(page);
 
     // Close the session so the toast is read on the dashboard, not behind the
@@ -191,10 +199,8 @@ test.describe("iOS install path", () => {
 
     // The hint is one-time per device: a second graded card never repeats it.
     await page.reload();
-    await expect(
-      page.getByText("Ready to practice?", { exact: true })
-    ).toBeVisible();
-    await page.getByRole("button", { name: /start daily session/i }).click();
+    await waitForDashboard(page);
+    await startSession(page);
     await gradeOneCard(page);
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog")).toBeHidden();
@@ -220,9 +226,7 @@ test.describe("offline on WebKit", () => {
     await page.goto("/");
     await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
     await page.reload();
-    await expect(
-      page.getByText("Ready to practice?", { exact: true })
-    ).toBeVisible();
+    await waitForDashboard(page);
     await expect
       .poll(() =>
         page.evaluate(() => Boolean(navigator.serviceWorker.controller))
@@ -232,9 +236,7 @@ test.describe("offline on WebKit", () => {
     await context.setOffline(true);
     try {
       await page.reload();
-      await expect(
-        page.getByText("Ready to practice?", { exact: true })
-      ).toBeVisible();
+      await waitForDashboard(page);
 
       for (const url of ["/audio/index.json", `/audio/${hangulClip}`]) {
         await expect
@@ -261,9 +263,7 @@ test.describe("update notice on WebKit", () => {
     page,
   }) => {
     await page.goto("/");
-    await expect(
-      page.getByText("Ready to practice?", { exact: true })
-    ).toBeVisible();
+    await waitForDashboard(page);
 
     // The waiting-worker update toast needs a second production build to
     // produce a new worker, so it is not simulated here. That check stays a
