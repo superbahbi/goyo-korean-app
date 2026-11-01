@@ -24,18 +24,18 @@ pnpm dev        # http://localhost:3000
 
 ## Scripts
 
-| Command              | What it does                                                                                  |
-| -------------------- | --------------------------------------------------------------------------------------------- |
-| `pnpm audit:content` | Sample imported cards into a Markdown audit sheet                                             |
-| `pnpm dev`           | Dev server on port 3000                                                                       |
-| `pnpm build`         | Production build into `dist/public`                                                           |
-| `pnpm start`         | Preview the production build (`PORT=4175 pnpm start` to change the port)                      |
-| `pnpm check`         | Type check                                                                                    |
-| `pnpm lint`          | ESLint                                                                                        |
-| `pnpm test`          | Vitest unit and data tests                                                                    |
-| `pnpm test:e2e`      | Playwright smokes against the production build (`pnpm exec playwright install chromium` once) |
-| `pnpm format`        | Prettier write                                                                                |
-| `pnpm format:check`  | Prettier check                                                                                |
+| Command              | What it does                                                                                                                                  |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm audit:content` | Sample imported cards into a Markdown audit sheet                                                                                             |
+| `pnpm dev`           | Dev server on port 3000                                                                                                                       |
+| `pnpm build`         | Production build into `dist/public`                                                                                                           |
+| `pnpm start`         | Preview the production build (`PORT=4175 pnpm start` to change the port)                                                                      |
+| `pnpm check`         | Type check                                                                                                                                    |
+| `pnpm lint`          | ESLint                                                                                                                                        |
+| `pnpm test`          | Vitest unit and data tests                                                                                                                    |
+| `pnpm test:e2e`      | Playwright smokes against the production build, Chromium plus the WebKit iPhone project (`pnpm exec playwright install chromium webkit` once) |
+| `pnpm format`        | Prettier write                                                                                                                                |
+| `pnpm format:check`  | Prettier check                                                                                                                                |
 
 The gate for every change is `pnpm check && pnpm lint && pnpm format:check && pnpm test && pnpm build`.
 CI also runs `pnpm test:e2e`, which builds the app and serves it with `vite preview`.
