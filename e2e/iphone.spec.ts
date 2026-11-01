@@ -72,6 +72,8 @@ function trackConsoleErrors(page: Page) {
 }
 
 async function gradeOneCard(page: Page) {
+  // The first card is new, so Enter clears its introduction before the reveal.
+  await page.keyboard.press("Enter");
   await page.keyboard.press("Space");
   await expect(page.getByText("How did that feel?")).toBeVisible();
   await page.keyboard.press("2");
@@ -102,7 +104,7 @@ test.describe("first-tap audio", () => {
 
     await page.getByRole("button", { name: /start daily session/i }).click();
     const speaker = page
-      .getByRole("button", { name: /play pronunciation for/i })
+      .getByRole("button", { name: /hear it again for/i })
       .first();
     await expect(speaker).toBeVisible();
     // Auto-play fires about 300 ms after the card mounts. Let it pass, then

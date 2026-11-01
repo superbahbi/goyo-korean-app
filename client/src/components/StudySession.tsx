@@ -5,12 +5,16 @@ import { FlashCard } from "./FlashCard";
 import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
 import { ProductionAttempt } from "./study/ProductionAttempt";
 import { StudySessionSummary } from "./study/StudySessionSummary";
+import { NewCardIntro } from "./study/NewCardIntro";
 import { useStudySession } from "./study/useStudySession";
 import { PracticeShell } from "./practice/PracticeShell";
 import { VocabularyCard } from "@/lib/vocabulary";
+import type { CardState } from "@/lib/mastery";
 
 interface StudySessionProps {
   queue: VocabularyCard[];
+  /** Saved card states; used to teach cards the learner has never seen. */
+  cardStates?: Record<string, CardState>;
   onGrade: (
     cardId: string,
     rating: "again" | "good" | "easy",
@@ -24,18 +28,20 @@ interface StudySessionProps {
 
 export function StudySession({
   queue,
+  cardStates,
   onGrade,
   onClose,
   allowRepeat = false,
   autoPlayAudio = true,
   title = "Daily Session",
 }: StudySessionProps) {
-  const study = useStudySession({ queue, onGrade, onClose });
+  const study = useStudySession({ queue, cardStates, onGrade, onClose });
   const sentenceAudioIds = useSentenceAudioIds();
   const {
     index,
     sessionQueue,
     currentCard,
+    showIntro,
     flipped,
     completed,
     results,
@@ -44,6 +50,7 @@ export function StudySession({
     setProductionAttempt,
     productionDone,
     setProductionDone,
+    dismissIntro,
     handleFlip,
     handleGrade,
     restartSession,
@@ -63,6 +70,34 @@ export function StudySession({
   }
 
   if (!currentCard) return null;
+
+  // Teach a never-reviewed word before testing it. This branch never grades,
+  // so grades, XP and the schedule still begin on the recall card.
+  if (showIntro) {
+    return (
+      <PracticeShell
+        title={title}
+        showTitle={false}
+        tone="emerald"
+        closeLabel="Close study session"
+        onClose={closeSession}
+        progress={(index / sessionQueue.length) * 100}
+        progressLabel="Session progress"
+        counter={`${index + 1} / ${sessionQueue.length}`}
+        center
+      >
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          New word. Press Enter or Space to start practising.
+        </p>
+        <NewCardIntro
+          card={currentCard}
+          autoPlayAudio={autoPlayAudio}
+          sentenceAudioReady={sentenceAudioIds.has(currentCard.id)}
+          onStart={dismissIntro}
+        />
+      </PracticeShell>
+    );
+  }
 
   return (
     <PracticeShell

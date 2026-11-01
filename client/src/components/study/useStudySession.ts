@@ -1,12 +1,37 @@
 import { useEffect, useRef, useState } from "react";
 import { VocabularyCard } from "@/lib/vocabulary";
 import { stopAudio } from "@/lib/audioPlayer";
+import type { CardState } from "@/lib/mastery";
 
 export type StudyRating = "again" | "good" | "easy";
 export type StudyResults = Record<StudyRating, number>;
 
+/**
+ * A first meeting is presented before it is tested. Only a card with no saved
+ * state is new; once the intro is acknowledged the same card shows its recall
+ * card for the rest of the session, including an `again` retry.
+ */
+export function shouldShowNewCardIntro(
+  cardId: string,
+  cardStates: Record<string, CardState> | undefined,
+  introducedIds: ReadonlySet<string>
+): boolean {
+  return !cardStates?.[cardId] && !introducedIds.has(cardId);
+}
+
+/** Acknowledge the introduction without touching card state or the schedule. */
+export function acknowledgeNewCardIntro(
+  introducedIds: ReadonlySet<string>,
+  cardId: string
+): ReadonlySet<string> {
+  if (introducedIds.has(cardId)) return introducedIds;
+  return new Set<string>(Array.from(introducedIds).concat(cardId));
+}
+
 interface UseStudySessionOptions {
   queue: VocabularyCard[];
+  /** Saved card states; a card missing here has never been reviewed. */
+  cardStates?: Record<string, CardState>;
   onGrade: (
     cardId: string,
     rating: StudyRating,
@@ -17,6 +42,7 @@ interface UseStudySessionOptions {
 
 export function useStudySession({
   queue,
+  cardStates,
   onGrade,
   onClose,
 }: UseStudySessionOptions) {
@@ -36,6 +62,9 @@ export function useStudySession({
   });
   const [productionAttempt, setProductionAttempt] = useState("");
   const [productionDone, setProductionDone] = useState(false);
+  const [introducedIds, setIntroducedIds] = useState<ReadonlySet<string>>(
+    () => new Set()
+  );
   const cardStartedAt = useRef(Date.now());
   // Recall latency: card display to first reveal, excluding time spent on the back.
   const recallTimeMs = useRef<number | null>(null);
@@ -58,6 +87,21 @@ export function useStudySession({
   };
 
   const currentCard = sessionQueue[index];
+  const showIntro = Boolean(
+    currentCard &&
+      shouldShowNewCardIntro(currentCard.id, cardStates, introducedIds)
+  );
+
+  // The intro is presentation only: acknowledging it starts the recall timer,
+  // but leaves the queue, schedule, results and saved state untouched.
+  const dismissIntro = () => {
+    if (!currentCard) return;
+    setIntroducedIds(current =>
+      acknowledgeNewCardIntro(current, currentCard.id)
+    );
+    cardStartedAt.current = Date.now();
+    recallTimeMs.current = null;
+  };
 
   const handleFlip = (nextFlipped: boolean) => {
     if (nextFlipped && recallTimeMs.current === null) {
@@ -106,6 +150,7 @@ export function useStudySession({
     gradingLocked.current = false;
     retriedIds.current.clear();
     setSessionQueue([...queue]);
+    setIntroducedIds(new Set());
     setIndex(0);
     setFlipped(false);
     setCompleted(false);
@@ -144,6 +189,20 @@ export function useStudySession({
       }
       if (completed) return;
 
+      // New word intro: Enter or Space starts the recall card. The replay
+      // speaker keeps its native keyboard activation.
+      if (showIntro) {
+        const onAudioControl = target?.closest("[data-intro-audio]");
+        if (
+          !onAudioControl &&
+          (event.key === "Enter" || event.code === "Space" || event.key === " ")
+        ) {
+          event.preventDefault();
+          dismissIntro();
+        }
+        return;
+      }
+
       if (event.code === "Space" || event.key === " ") {
         event.preventDefault();
         if (!flipped) handleFlip(true);
@@ -171,6 +230,7 @@ export function useStudySession({
     index,
     sessionQueue,
     currentCard,
+    showIntro,
     flipped,
     completed,
     results,
@@ -179,6 +239,7 @@ export function useStudySession({
     setProductionAttempt,
     productionDone,
     setProductionDone,
+    dismissIntro,
     handleFlip,
     handleGrade,
     restartSession,
