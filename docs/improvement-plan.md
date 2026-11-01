@@ -89,7 +89,7 @@ the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lin
 | Phase                           | State                                                                                                                                                                        |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0 Repairs                       | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                  |
-| 1 Learning loop and measurement | Done (#9–#15); browser checks outstanding; item 5 done                                                                                                                       |
+| 1 Learning loop and measurement | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                        |
 | 2 Structure                     | Done; main chunk 108.6 kB raw / 31.7 kB gzipped with vendor chunks; every page and component under 300 lines                                                                 |
 | 3 Content                       | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
 | 4 Delivery and accessibility    | Done; headers, iOS meta, `lang`, contrast, focus rings, 22 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
@@ -104,8 +104,9 @@ so Phase 0 has no manual checks left.
 
 Phase 1 is merged: review log (#9), study-day history (#10), same-session retry (#11), recognition
 caps (#12), keyboard shortcuts (#13), queue module (#14) and new-card pace (#15). Task 5 now orders
-the imported deck by theme and frequency instead of source row order. Browser checks still
-outstanding: keyboard flow with a screen reader, recognition modes, and the study-day stats.
+the imported deck by theme and frequency instead of source row order. The browser checks — keyboard
+flow with a screen reader, recognition modes and the study-day stats — were signed off on
+2026-10-31, so Phase 1 is closed.
 
 ---
 
