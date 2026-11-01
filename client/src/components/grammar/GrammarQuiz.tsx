@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, RotateCcw, X } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChoiceButton } from "@/components/practice/ChoiceButton";
 import type { GrammarLesson } from "@/lib/grammar";
@@ -116,16 +116,6 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
             chosen={chosen === optionIndex}
             correct={optionIndex === question.answerIndex}
             onChoose={() => choose(optionIndex)}
-            sizeClass="min-h-12"
-            correctIcon={
-              <Check
-                size={18}
-                className="text-emerald-600 dark:text-emerald-400"
-              />
-            }
-            wrongIcon={
-              <X size={18} className="text-red-500 dark:text-red-400" />
-            }
           />
         ))}
       </div>
