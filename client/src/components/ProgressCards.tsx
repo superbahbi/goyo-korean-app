@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { BookOpen, TrendingUp, Zap } from "lucide-react";
 import { motion } from "framer-motion";
@@ -17,7 +17,7 @@ interface ProgressCardsProps {
   studyReadyCount: number;
 }
 
-/** Today's progress, level progress, and total learned cards. */
+/** Compact stat strip: today's goal, level progress, and deck coverage. */
 export function ProgressCards({
   cardsStudiedToday,
   dailyGoal,
@@ -31,93 +31,77 @@ export function ProgressCards({
   totalCardsLearned,
   studyReadyCount,
 }: ProgressCardsProps) {
+  const learnedPercent =
+    studyReadyCount > 0
+      ? Math.round((totalCardsLearned / studyReadyCount) * 100)
+      : 0;
+
+  const tiles = [
+    {
+      key: "today",
+      label: "Today",
+      icon: BookOpen,
+      value: `${cardsStudiedToday}/${dailyGoal}`,
+      percent: progressPercent,
+      ariaLabel: "Today's cards studied",
+      detail: `Cards studied today · up to ${newCardsPerDay} new ${
+        newCardsPerDay === 1 ? "word" : "words"
+      } per day`,
+    },
+    {
+      key: "level",
+      label: `Level ${level}`,
+      icon: Zap,
+      value: levelTitle,
+      percent: levelProgress,
+      ariaLabel: `Level ${level} progress`,
+      detail: `${Math.max(0, nextLevelXp - totalXp)} XP to next level`,
+    },
+    {
+      key: "learned",
+      label: "Learned",
+      icon: TrendingUp,
+      value: String(totalCardsLearned),
+      percent: learnedPercent,
+      ariaLabel: "Share of the deck learned",
+      detail: `${learnedPercent}% of ${studyReadyCount} study-ready cards`,
+    },
+  ] as const;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <Card className="bg-white border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
-              <BookOpen size={16} />
-              Today's Progress
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-slate-900">
-              {cardsStudiedToday}/{dailyGoal}
-            </div>
-            <Progress
-              value={progressPercent}
-              aria-label="Today's cards studied"
-              className="h-2 mt-3 bg-slate-100"
-            />
-            <p className="text-xs text-slate-500 mt-2">
-              Cards studied today · up to {newCardsPerDay} new{" "}
-              {newCardsPerDay === 1 ? "word" : "words"} per day
-            </p>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
-      >
-        <Card className="bg-white border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
-              <Zap size={16} />
-              Level {level}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline justify-between gap-2">
-              <div className="text-2xl font-bold text-slate-900">
-                {levelTitle}
+    <div className="grid grid-cols-3 gap-2 sm:gap-4">
+      {tiles.map((tile, index) => {
+        const Icon = tile.icon;
+        return (
+          <motion.div
+            key={tile.key}
+            className="min-w-0"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 * index }}
+          >
+            <Card className="h-full gap-0 border-slate-100 bg-white py-0 shadow-sm transition-shadow hover:shadow-md">
+              <div className="flex h-full flex-col p-3 sm:p-5">
+                <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 sm:text-xs">
+                  <Icon size={14} aria-hidden="true" />
+                  <span className="truncate">{tile.label}</span>
+                </div>
+                <div className="mt-1.5 truncate text-xl font-bold text-slate-900 tabular-nums sm:text-3xl">
+                  {tile.value}
+                </div>
+                <Progress
+                  value={tile.percent}
+                  aria-label={tile.ariaLabel}
+                  className="mt-2 h-1.5 bg-slate-100"
+                />
+                <p className="mt-2 hidden text-xs leading-snug text-slate-500 sm:block">
+                  {tile.detail}
+                </p>
               </div>
-              <div className="text-sm font-semibold text-emerald-700">
-                Lv. {level}
-              </div>
-            </div>
-            <Progress
-              value={levelProgress}
-              aria-label={`Level ${level} progress`}
-              className="mt-3 h-2 bg-slate-100"
-            />
-            <p className="mt-2 text-xs text-slate-500">
-              {Math.max(0, nextLevelXp - totalXp)} XP to next level
-            </p>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <Card className="bg-white border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-slate-500 font-medium flex items-center gap-2">
-              <TrendingUp size={16} />
-              Total Learned
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-slate-900">
-              {totalCardsLearned}
-            </div>
-            <p className="text-xs text-slate-500 mt-2">
-              {Math.round((totalCardsLearned / studyReadyCount) * 100)}% of
-              study-ready deck
-            </p>
-          </CardContent>
-        </Card>
-      </motion.div>
+            </Card>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }

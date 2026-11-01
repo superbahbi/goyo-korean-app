@@ -153,9 +153,7 @@ test("dialogs have no WCAG A/AA violations", async ({ page }) => {
 });
 
 test("Hangul practice has no WCAG A/AA violations", async ({ page }) => {
-  await page
-    .getByRole("button", { name: /learn hangul \(korean alphabet\)/i })
-    .click();
+  await page.getByRole("button", { name: /learn hangul/i }).click();
   expect(await audit(page, "alphabet categories", '[role="dialog"]')).toEqual(
     []
   );

@@ -228,7 +228,7 @@ test("dashboard cards are reachable with Tab and operable with Enter", async ({
   page,
 }) => {
   const cards = [
-    page.getByRole("button", { name: /learn hangul \(korean alphabet\)/i }),
+    page.getByRole("button", { name: /learn hangul/i }),
     page.getByRole("button", { name: /listening practice/i }),
     page.getByRole("button", { name: /survival scenarios/i }),
     page.getByRole("button", { name: /shadowing practice/i }),
