@@ -5,6 +5,7 @@ import path from "node:path";
 import { loadVocabularyDeck, CURATED_CARDS } from "./vocabulary";
 import { ESSENTIAL_WORDS } from "./essentialVocabulary";
 import { romanize } from "./romanize";
+import { GRAMMAR_SENTENCE_LINES } from "./grammar";
 
 // Genuine homonyms kept as separate cards: 차 car/tea, 눈 eye/snow, 배 boat-pear/stomach,
 // 다리 bridge/leg, 열 ten/fever, 분 minute/honorific person, 공 ball/zero, 병 bottle/illness.
@@ -158,20 +159,22 @@ describe("hashed audio library", () => {
 });
 
 describe("sentence audio index", () => {
-  it("keys every clip by a deck card that has an example", async () => {
+  it("keys every clip by a deck or grammar example that exists", async () => {
     const { vocabulary } = await loadVocabularyDeck();
-    const exampleIds = new Set(
+    const knownIds = new Set(
       vocabulary
         .filter(card => (card.example ?? "").trim().length > 0)
         .map(card => card.id)
     );
+    for (const line of GRAMMAR_SENTENCE_LINES) knownIds.add(line.id);
+
     const sentenceIds = new Set([
       ...Object.keys(manifest.sentences ?? {}),
       ...Object.keys(manifest.female?.sentences ?? {}),
     ]);
     expect(sentenceIds.size).toBeGreaterThan(0);
     for (const id of Array.from(sentenceIds)) {
-      expect(exampleIds.has(id), id).toBe(true);
+      expect(knownIds.has(id), id).toBe(true);
     }
   });
 });

@@ -7,6 +7,7 @@ import {
   loadVocabularyDeck,
 } from "../client/src/lib/vocabulary";
 import { ALPHABET_DATA } from "../client/src/lib/alphabet";
+import { GRAMMAR_SENTENCE_LINES } from "../client/src/lib/grammar";
 import { audioBaseName, hashAudioLibrary } from "./hash-audio.ts";
 
 export interface AudioItem {
@@ -97,6 +98,7 @@ const activePreset =
 
 const filePrefix = process.env.ELEVENLABS_FILE_PREFIX || activePreset.prefix;
 const sentenceMode = process.argv.includes("--sentences");
+const grammarOnly = sentenceMode && process.argv.includes("--grammar");
 const sampleArg = process.argv.find(arg => arg.startsWith("--sample="));
 const sampleSize = sampleArg ? Number(sampleArg.split("=")[1]) : undefined;
 const manifestPath = path.join(
@@ -202,22 +204,21 @@ async function generateOne(item: AudioItem): Promise<AudioResult> {
 }
 
 /**
- * Builds one clip per card example. The sentence id is the card id, so the app
- * can resolve the clip from the card it already has. `prefix` lets the female
- * voice write `elevenlabs_female_sent_*` instead of colliding with the male
- * clip of the same card.
+ * Builds one clip per spoken line. Card examples use the card id; grammar
+ * examples use `grammar_<lesson>_<n>`. `prefix` lets the female voice write
+ * `elevenlabs_female_sent_*` instead of colliding with the male clip.
  */
 export function buildSentenceItems(
-  cards: { id: string; example?: string }[],
+  lines: { id: string; text: string }[],
   prefix: string
 ): AudioItem[] {
-  return cards
-    .filter(card => (card.example ?? "").trim().length > 0)
-    .map(card => ({
-      id: card.id,
-      text: (card.example as string).trim(),
+  return lines
+    .filter(line => line.text.trim().length > 0)
+    .map(line => ({
+      id: line.id,
+      text: line.text.trim(),
       group: "sentences" as const,
-      filename: `${prefix}sent_${card.id}.mp3`,
+      filename: `${prefix}sent_${line.id}.mp3`,
     }));
 }
 
@@ -304,7 +305,18 @@ export async function main() {
     );
   }
 
-  const sentences = buildSentenceItems(deckCards, filePrefix);
+  const sentences = buildSentenceItems(
+    grammarOnly
+      ? GRAMMAR_SENTENCE_LINES
+      : [
+          ...deckCards.map(card => ({
+            id: card.id,
+            text: card.example ?? "",
+          })),
+          ...GRAMMAR_SENTENCE_LINES,
+        ],
+    filePrefix
+  );
   const sentenceItems =
     sampleSize !== undefined && Number.isFinite(sampleSize) && sampleSize > 0
       ? sentences.slice(0, Math.floor(sampleSize))
@@ -316,7 +328,7 @@ export async function main() {
   const selectedItems = sentenceMode ? sentenceItems : items;
   console.log(
     sentenceMode
-      ? `Discovered ${selectedItems.length} sentence items${sampleSize ? ` (sample of ${sentences.length})` : ""}.`
+      ? `Discovered ${selectedItems.length} ${grammarOnly ? "grammar " : ""}sentence items${sampleSize ? ` (sample of ${sentences.length})` : ""}.`
       : `Discovered ${items.length} audio items (${vocabulary.length} vocabulary across curated + imported decks, ${alphabet.length} alphabet).`
   );
 
