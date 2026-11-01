@@ -1,0 +1,442 @@
+{
+  "sample": 5,
+  "sheet": "docs/audits/essential-sample-5.md",
+  "deck": "Essential 600 imported deck",
+  "deckSize": 504,
+  "seed": 5,
+  "limit": 50,
+  "auditedAt": "2026-11-01",
+  "auditor": "DeepSeek V4.1 Flash model pass; native-speaker spot check pending.",
+  "rubric": [
+    "translation accuracy",
+    "Korean naturalness",
+    "politeness consistency",
+    "part of speech",
+    "romanization/batchim"
+  ],
+  "issueCategories": [
+    "translation",
+    "naturalness",
+    "politeness",
+    "part-of-speech",
+    "romanization",
+    "usage-note",
+    "spelling"
+  ],
+  "summary": {
+    "cards": 50,
+    "pass": 43,
+    "fix": 7,
+    "errorRate": 0.14,
+    "decision": "7 of 50 fail (14%), inside the 5-15% band, so the sweep continues in 50-card batches until every imported card has a verdict.",
+    "resolved": 7,
+    "openFix": 0
+  },
+  "sweep": {
+    "batch": 1,
+    "batchSize": 50,
+    "cardsAuditedBefore": 185,
+    "cardsAuditedAfter": 235,
+    "deckCoverage": 0.4662698412698413,
+    "remaining": 269
+  },
+  "reaudit": {
+    "reauditedAt": "2026-11-01",
+    "openFixes": 0,
+    "method": "Re-read all 50 seed-5 rows against the five-point rubric after the fixes, then re-rendered the same sheet with --from and re-ran the deck, romanization and content guard tests.",
+    "result": "All 7 fixed cards read clean and no new defect was found; the sheet now shows the corrected rows."
+  },
+  "systemicIssues": [
+    {
+      "issue": "Examples that do not show the headword",
+      "category": "naturalness",
+      "cards": 3,
+      "ids": ["essential_083", "essential_190", "essential_414"],
+      "detail": "Two examples used a different form of the word (아기 for 애기, 세상을 떠나다 for 죽다) and one was nonsensical (thorns while handling seeds), so none of the three taught the headword in context."
+    },
+    {
+      "issue": "Usage notes with inaccurate sense claims",
+      "category": "usage-note",
+      "cards": 3,
+      "ids": ["essential_039", "essential_155", "essential_190"],
+      "detail": "클럽 was described as a club/organization only in English, 게임 was said to cover sports matches (경기), and 씨 led with a rude-exclamation sense a beginner does not need."
+    },
+    {
+      "issue": "Ordinal number spacing and tagging",
+      "category": "part-of-speech",
+      "cards": 1,
+      "ids": ["essential_373"],
+      "detail": "네번째 carried the unspaced spelling, the matching nebeonjjae romanization and the noun tag; the standard form is 네 번째, ne beonjjae, an ordinal number like 첫 번째."
+    }
+  ],
+  "notes": [
+    "Each of the 50 seed-5 rows was read against the five-point rubric (translation, naturalness, politeness, part of speech, romanization/batchim), with usage-note claims checked separately; no deck data was edited during the audit.",
+    "This is a model screen, not the pending Korean-speaker spot check.",
+    "The sheet was sampled with --unaudited, so none of the 185 cards audited in samples 1-4 was re-read and every row is new evidence.",
+    "The one-off 가격 translation fix is recorded in its verdict but not counted as a systemic issue.",
+    "No audio was regenerated: the 네 번째 spacing and the other six fixes leave every spoken form unchanged, and none of the seven cards has a sentence clip. The sheet was re-rendered with --from so the fixed rows appear without sampling a new batch."
+  ],
+  "verdicts": [
+    {
+      "id": "essential_020",
+      "source": "600 essential words · row 26",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_021",
+      "source": "600 essential words · row 27",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_039",
+      "source": "600 essential words · row 45",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "The note said 클럽 means club or organization only 'in English contexts'; Korean also uses 클럽 for sports and hobby clubs, as in 축구 클럽."
+        }
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Rewrote the note to name the nightlife sense and the sports/hobby club sense (축구 클럽)."
+    },
+    {
+      "id": "essential_047",
+      "source": "600 essential words · row 53",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_069",
+      "source": "600 essential words · row 75",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_083",
+      "source": "600 essential words · row 89",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "The example used the standard form 아기 instead of the headword 애기, so the card never showed the word it teaches."
+        }
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Changed the example to 애기가 어제 처음으로 웃었어요 so the headword appears."
+    },
+    {
+      "id": "essential_097",
+      "source": "600 essential words · row 103",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_098",
+      "source": "600 essential words · row 104",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_102",
+      "source": "600 essential words · row 108",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_110",
+      "source": "600 essential words · row 116",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_123",
+      "source": "600 essential words · row 129",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_128",
+      "source": "600 essential words · row 134",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_138",
+      "source": "600 essential words · row 144",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_147",
+      "source": "600 essential words · row 153",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_153",
+      "source": "600 essential words · row 159",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_155",
+      "source": "600 essential words · row 161",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "The note claimed 게임 covers sports games; a sports match is 경기, so the claim was misleading."
+        }
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Rewrote the note to say video or board games and to point sports matches to 경기."
+    },
+    {
+      "id": "essential_156",
+      "source": "600 essential words · row 162",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "translation",
+          "detail": "exampleEnglish read 'This product's price is a bit expensive'; natural English is 'This product is a bit expensive.'"
+        }
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Changed exampleEnglish to 'This product is a bit expensive.'"
+    },
+    {
+      "id": "essential_160",
+      "source": "600 essential words · row 166",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_186",
+      "source": "600 essential words · row 192",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_190",
+      "source": "600 essential words · row 196",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "The example warned about thorns while handling flower seeds and used the less standard 조심히, so the sentence did not make sense."
+        },
+        {
+          "category": "usage-note",
+          "detail": "The note led with a rude-exclamation sense that a beginner does not need; the surname suffix use is the useful second sense."
+        }
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Replaced the thorn sentence with a planting sentence and the note with the seed and surname-suffix senses."
+    },
+    {
+      "id": "essential_193",
+      "source": "600 essential words · row 199",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_195",
+      "source": "600 essential words · row 201",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_207",
+      "source": "600 essential words · row 213",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_238",
+      "source": "600 essential words · row 244",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_247",
+      "source": "600 essential words · row 253",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_266",
+      "source": "600 essential words · row 272",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_277",
+      "source": "600 essential words · row 283",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_283",
+      "source": "600 essential words · row 289",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_288",
+      "source": "600 essential words · row 294",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_306",
+      "source": "600 essential words · row 312",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_325",
+      "source": "600 essential words · row 331",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_335",
+      "source": "600 essential words · row 341",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_341",
+      "source": "600 essential words · row 347",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_360",
+      "source": "600 essential words · row 366",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_366",
+      "source": "600 essential words · row 372",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_373",
+      "source": "600 essential words · row 432",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "spelling",
+          "detail": "The headword was written 네번째; the standard form is the spaced 네 번째."
+        },
+        {
+          "category": "romanization",
+          "detail": "nebeonjjae followed the unspaced spelling; the spaced form romanizes as ne beonjjae."
+        },
+        {
+          "category": "part-of-speech",
+          "detail": "The card was tagged noun; 네 번째 is an ordinal number, like 첫 번째 and 다섯 번째."
+        }
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Spaced the headword as 네 번째, set ne beonjjae, retagged it as a number and updated the example and note."
+    },
+    {
+      "id": "essential_414",
+      "source": "600 essential words · row 474",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "The example used the euphemism 세상을 떠나다 and never showed the headword 죽다 in context."
+        }
+      ],
+      "resolvedAt": "2026-11-01",
+      "resolution": "Replaced the euphemism with 우리 집 강아지가 어제 죽었어요 and kept the softer form in the note."
+    },
+    {
+      "id": "essential_416",
+      "source": "600 essential words · row 476",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_428",
+      "source": "600 essential words · row 488",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_438",
+      "source": "600 essential words · row 498",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_447",
+      "source": "600 essential words · row 507",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_466",
+      "source": "600 essential words · row 526",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_468",
+      "source": "600 essential words · row 528",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_471",
+      "source": "600 essential words · row 531",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_499",
+      "source": "600 essential words · row 559",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_502",
+      "source": "600 essential words · row 562",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_521",
+      "source": "600 essential words · row 581",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_528",
+      "source": "600 essential words · row 588",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_532",
+      "source": "600 essential words · row 592",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_546",
+      "source": "600 essential words · row 606",
+      "verdict": "pass",
+      "issues": []
+    }
+  ]
+}

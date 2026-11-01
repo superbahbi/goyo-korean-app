@@ -5,7 +5,9 @@ import {
   AUDIT_DIR,
   DEFAULT_LIMIT,
   DEFAULT_SEED,
+  loadAuditedIds,
   parseArgs,
+  readSheet,
   renderAuditSheet,
   resolveOutputPath,
   sampleCards,
@@ -46,6 +48,32 @@ describe("audit sampler", () => {
     expect(() =>
       sampleCards(ESSENTIAL_WORDS, ESSENTIAL_WORDS.length + 1, 1)
     ).toThrow(/exceeds/);
+  });
+
+  it("skips every id that already has a verdict", () => {
+    const audited = loadAuditedIds();
+    expect(audited.size).toBeGreaterThan(0);
+
+    const sample = sampleCards(
+      ESSENTIAL_WORDS,
+      DEFAULT_LIMIT,
+      DEFAULT_SEED,
+      audited
+    );
+
+    expect(sample).toHaveLength(DEFAULT_LIMIT);
+    for (const card of sample)
+      expect(audited.has(card.id), card.id).toBe(false);
+  });
+
+  it("rejects a limit larger than the unaudited pool", () => {
+    const excludeIds = new Set(
+      ESSENTIAL_WORDS.slice(0, -1).map(card => card.id)
+    );
+
+    expect(() => sampleCards(ESSENTIAL_WORDS, 2, 1, excludeIds)).toThrow(
+      /unaudited/
+    );
   });
 });
 
@@ -98,13 +126,39 @@ describe("audit CLI options", () => {
       limit: 50,
       seed: 1,
       out: undefined,
+      unaudited: false,
     });
   });
 
-  it("parses limit, seed and out", () => {
+  it("parses limit, seed, out and unaudited", () => {
     expect(
-      parseArgs(["--limit", "25", "--seed", "3", "--out", "sample.md"])
-    ).toEqual({ help: false, limit: 25, seed: 3, out: "sample.md" });
+      parseArgs([
+        "--limit",
+        "25",
+        "--seed",
+        "3",
+        "--out",
+        "sample.md",
+        "--unaudited",
+      ])
+    ).toEqual({
+      help: false,
+      limit: 25,
+      seed: 3,
+      out: "sample.md",
+      unaudited: true,
+    });
+  });
+
+  it("parses --from", () => {
+    expect(parseArgs(["--from", "essential-sample-5.md"])).toEqual({
+      help: false,
+      limit: 50,
+      seed: 1,
+      out: undefined,
+      unaudited: false,
+      from: "essential-sample-5.md",
+    });
   });
 
   it("supports --help", () => {
@@ -133,5 +187,18 @@ describe("audit CLI options", () => {
     expect(() => resolveOutputPath("/tmp/essential.md", 1, 50)).toThrow(
       /outside/
     );
+  });
+
+  it("reads a committed sheet back for a re-render", () => {
+    const source = readSheet("essential-sample-5.md");
+
+    expect(source.ids).toHaveLength(50);
+    expect(new Set(source.ids).size).toBe(50);
+    expect(source.seed).toBe(5);
+    expect(source.unaudited).toBe(true);
+  });
+
+  it("refuses to read a sheet outside docs/audits", () => {
+    expect(() => readSheet("../essential.md")).toThrow(/outside/);
   });
 });
