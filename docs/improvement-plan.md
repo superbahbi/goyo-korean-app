@@ -19,19 +19,26 @@ Every stage is done only when its gate passes.
 
 ## Current state
 
-Verified on 2026-10-31 on `main` after the Phase 4 closeout (`#39`–`#43`):
+Verified on 2026-11-01 on `main` after the Phase 6 practice-shell merge (`#58`):
 
-| Check              | Result                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `vitest run`       | 186 tests pass in 20 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up, imported taxonomy)                                                                                                                                                                                    |
-| `playwright test`  | 22 checks pass against the production build: the five flow smokes (study loop, failed-card retry, Browse search and audio, progress export/import, offline reload), five axe scans (dashboard, study, dialogs, Hangul, recognition overlays), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker) |
-| `vite build`       | Passes. Main chunk 108.6 kB (31.7 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk                                                                                                                                                                                                                                                         |
-| CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                            |
+| Check              | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `vitest run`       | 210 tests pass in 23 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up, imported taxonomy, grammar, grammar progress, backup status)                                                                                                                                                                                |
+| `playwright test`  | 25 checks pass against the production build: seven flow smokes (study loop, failed-card retry, Browse search and audio, progress export/import, offline reload, Settings scroll, grammar lesson), six axe scans (dashboard, study, dialogs, Hangul, recognition overlays, grammar), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker) |
+| `vite build`       | Passes. Main chunk 117.1 kB (34.4 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 226 kB chunk                                                                                                                                                                                                                                                                                               |
+| CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                                                                  |
 
 All gates pass.
+
+Phase 6 shell merge (2026-11-01, `#58`): the seven practice modes now share one `PracticeShell`
+(prompt, verdict, feedback, complete states) instead of six near-duplicate layouts, and the study
+loop was moved onto the same primitives. Dark mode followed in the same window: system, light and
+dark options backed by `next-themes`, with a dashboard toggle and reduced-motion-safe transitions.
+The dashboard itself was simplified into clear practice and theme sections (`#53`), and Settings
+gained a reload button (`#51`).
 
 Phase 4 closeout (2026-10-31): the last oversized UI files were split into focused modules without
 changing behavior — `SettingsDialog` 415 → 76 lines, `StudySession` 451 → 221, `StatsDialog`
@@ -55,15 +62,17 @@ daily queue is due-only; audio survives blocked autoplay and intentional stops w
 cache; `lang="ko"`, the contrast fixes, chart labels, reduced motion, dialog descriptions, the iOS
 standalone meta tags and the Vercel security/cache headers are in place; CI runs every push; the PWA
 precaches the shell, the audio index, Hangul and number audio; and the imported deck's part of speech
-and usage notes plus the curated examples are now guarded by tests. Every page and component is now
-under 300 lines, and the Playwright suite covers an iPhone-class WebKit engine plus the keyboard and
-screen-reader semantics that axe cannot check.
+and usage notes plus the curated examples are now guarded by tests. The Playwright suite covers an
+iPhone-class WebKit engine plus the keyboard and screen-reader semantics that axe cannot check.
 
 What is open: the Korean wording still has room for a later naturalness polish (see Phase 3 — content
-trust). The repo is 48 MB with 26 MB of audio in git. The 300-line target holds for UI code, but
-the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lines) and
-`vocabulary.ts` (1.6k) are deck data, and `useStudyState.ts` (559), `alphabet.ts` (491),
-`audioPlayer.ts` (384) and `romanize.ts` (314) remain over 300.
+trust). Audio is 27 MB of the roughly 53 MB clean clone (26 MB of tracked files plus a 27 MB pack).
+The 300-line target holds for almost all UI
+code; `components/FlashCard.tsx` is 314 after the sentence-audio control moved in, and the data and
+shared modules remain larger: `essentialVocabulary.ts` (7.7k lines) and `vocabulary.ts` (1.7k) are
+deck data, and `grammar.ts` (594), `useStudyState.ts` (586), `essentialTaxonomy.ts` (566),
+`essentialFrequency.ts` (523), `alphabet.ts` (493), `audioPlayer.ts` (443) and `romanize.ts` (314)
+are over 300.
 
 ## How we work
 
@@ -90,11 +99,12 @@ the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lin
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0 Repairs                       | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                  |
 | 1 Learning loop and measurement | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                        |
-| 2 Structure                     | Done; main chunk 108.6 kB raw / 31.7 kB gzipped with vendor chunks; every page and component under 300 lines                                                                 |
+| 2 Structure                     | Done; main chunk 117.1 kB raw / 34.4 kB gzipped with vendor chunks; one component over 300 lines (`FlashCard` 314)                                                           |
 | 3 Content                       | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
-| 4 Delivery and accessibility    | Done; headers, iOS meta, `lang`, contrast, focus rings, 22 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
-| 5 Tune from data                | Blocked on 30 days of use                                                                                                                                                    |
-| 6 Sentence audio and grammar    | In progress; sentence audio wired with a 20-clip deck sample and 36 grammar clips; 12 lessons ship, Korean review open                                                       |
+| 4 Delivery and accessibility    | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
+| 5 Tune from data                | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                        |
+| 6 Sentence audio and grammar    | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                |
+| 7 Content trust completion      | Planned; starts after Phase 6 closes (see Phase 7)                                                                                                                           |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -383,7 +393,8 @@ new audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, d
 
 ## Phase 5: Tune from real data (after 30 days)
 
-Only after Phase 1 has produced a review log:
+The 30-day window opened on 2026-11-01 with the Phase 1 review log, so the first honest read is around
+2026-12-01. Only after Phase 1 has produced a review log:
 
 1. Retention first: if learners forget too much, reduce `Good` growth before changing the daily goal.
 2. Workload second: if queues grow, revisit the 90-day cap and `Easy` growth.
@@ -440,8 +451,14 @@ grammar content that reuses it.
      has the clip, so a partially generated library still works. `useSentenceAudioIds` hides the
      sentence player where no clip exists.
    - UI: "Hear sentence" on the study card back and a speaker control beside each example in Browse.
-   - Cost: 639 examples, about 12.1k characters per voice. Done (2026-10-31): plumbing plus a
-     20-clip male sample generated for review; the full batch waits on maintainer approval.
+   - State (2026-11-01): 56 male clips are committed — the 20-clip deck sample plus all 36 grammar
+     examples. No female sentence clips exist yet (`female.sentences` is absent from
+     `public/audio/index.json`), so the female voice falls back to the male clip today.
+   - Cost of the full batch: 639 deck examples plus 36 grammar examples, about 12.1k characters per
+     voice. At the measured 29.5 kB per sentence clip, a full two-voice library adds roughly 38 MB and
+     takes `public/audio` from 27 MB to about 65 MB. That is the point where the Phase 4 decision to
+     keep audio in git should be re-checked.
+   - Blocked on: maintainer approval of the ElevenLabs spend, then one batch PR.
    - Acceptance for the full batch: every deck card with an example has a clip in both voices,
      `data.test.ts` passes, and the sample is spot-checked for pacing and pronunciation.
 
@@ -461,7 +478,39 @@ grammar content that reuses it.
    - Acceptance: the 12 lessons render, the check records a best score, an older save loads, and the
      lesson surfaces pass the axe scan.
 
+## Phase 7: Content trust completion (after Phase 6)
+
+Phase 3 sampled 96 of the imported cards and found 24 failing (25%). The systemic fixes landed, but
+roughly 408 imported cards have never been sampled, and the naturalness polish was deferred. Content is
+still the defect code cannot repair for an existing user, and it is the first thing 30-day retention
+will be blamed on. This phase measures whether the fixes moved the rate, then spends only where the
+evidence points.
+
+Order matters: measure first, rewrite second.
+
+1. **Re-measure the error rate.** Two fresh deterministic samples of the imported deck (seeds beyond
+   the Phase 3 pair), scored against the same five-point rubric by a non-authoring model plus a Korean
+   speaker spot check of 10 cards. Commit the verdicts under `docs/audits/` like
+   `essential-sample-1.json`.
+   - Decision rule: under 5% fail — fix the sample and stop; 5–15% — audit the remaining deck in
+     batches; over 15% — treat the whole imported deck as untrusted before any new feature work.
+   - Acceptance: a verdict exists for every sampled id, `scripts/audit-verdicts.test.ts` covers the new
+     sheets, and this section records the measured rate.
+2. **Naturalness polish.** Rewrite the wording the Phase 3 Korean-speaker check flagged, plus every
+   naturalness issue from the new samples, in batches of 25–50 cards. Keep `exampleEnglish` in sync,
+   keep the same rubric, and reuse the Phase 3 guard-test pattern so a repaired phrase cannot return.
+   - No new audio: the generator speaks headwords only, so sentence rewrites are free (Phase 3 rule).
+   - Acceptance: per batch, the deck and romanization tests pass, the sheet re-audits clean, and the PR
+     stays under ~400 lines.
+3. **Sweep if step 1 says so.** 50 cards per PR, same rubric and verdict format, until every imported
+   card has a recorded verdict.
+
+Out of scope: new cards, FSRS, more grammar lessons, and any UI change. Phase 5 runs alongside this
+phase because it is a read-only tuning exercise.
+
+Sequencing: full sentence batch → Korean grammar review → Phase 7 step 1 (while the Phase 5 window
+closes around 2026-12-01) → Phase 7 fixes and sweep.
+
 ## Deferred, not decided
 
-Accounts and sync, push reminders, grammar lessons, a real TTS fallback, multi-deck user imports, and
-any paid tier.
+Accounts and sync, push reminders, a real TTS fallback, multi-deck user imports, and any paid tier.

@@ -6,8 +6,12 @@ React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the
 
 - **Deck:** 136 curated cards plus 504 imported Essential 600 cards (640 total), each with a Korean
   example and ElevenLabs pronunciation in two voices.
+- **Practice:** seven modes on one shared shell — daily study, Hangul, grammar, listening, survival
+  scenarios, shadowing, and weak-word review — plus twelve TOPIK I grammar lessons with tracked
+  progress.
 - **Scheduling:** a small, tested SM-2 variant. The rules live in `docs/improvement-plan.md`.
 - **Progress:** `localStorage`, moved between devices with JSON export/import.
+- **Theme:** system, light and dark, persisted per device.
 - **Analytics:** Vercel Web Analytics and Speed Insights — aggregate, cookieless page views and Core Web Vitals; no accounts or personal data.
 
 ## Requirements
@@ -43,9 +47,10 @@ CI also runs `pnpm test:e2e`, which builds the app and serves it with `vite prev
 ## Layout
 
 ```
-client/src/pages/         Home dashboard shell (the app is a single page)
-client/src/components/    Dashboard sections (header, progress, plan, alerts), practice modes,
-                          Browse/Stats/Settings dialogs, study session
+client/src/pages/         App shell (Home) and the standalone Hangul practice page
+client/src/components/    Dashboard sections (header, progress, plan, alerts), the shared practice
+                          shell, seven practice modes, grammar course, Browse/Stats/Settings dialogs,
+                          study session, theme toggle
 client/src/components/ui/ shadcn primitives (only the imported ones are kept)
 client/src/lib/           Deck data, scheduler, queue, XP, audio player, persistence helpers
 client/src/hooks/         Dashboard state, study sessions, deck loading and saved state
@@ -81,7 +86,7 @@ The sample flag writes the same clips and index entries as a full run, so the ap
 before spending on the whole library. The female voice writes to `female.sentences`.
 Do not commit regenerated clips without checking their size and whether the existing ones are fine.
 
-The ~26 MB vocabulary library stays committed to git and is served as static files from
+The ~27 MB audio library stays committed to git and is served as static files from
 `public/audio/`. That keeps the Vercel deploy and the offline cache simple: every clip is a normal
 build artifact with no extra host or credentials. Revisit this if clone/CI checkout or deploy size
 becomes a burden, or if regenerated clips start causing merge conflicts on most audio changes.
