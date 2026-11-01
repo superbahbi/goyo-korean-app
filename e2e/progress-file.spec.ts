@@ -9,6 +9,7 @@ test("exports progress and imports the same file back", async ({ page }) => {
 
   // Leave one graded card behind so the exported file carries real progress.
   await page.getByRole("button", { name: /start daily session/i }).click();
+  await page.keyboard.press("Enter");
   await page.keyboard.press("Space");
   await page.keyboard.press("2");
   await page.keyboard.press("Escape");

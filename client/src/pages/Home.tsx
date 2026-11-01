@@ -66,7 +66,8 @@ export default function Home() {
     cardsRemaining,
     plannedCards,
     newCardsPlanned,
-    progressPercent,
+    firstRun,
+    todayProgress,
     dailyGoalReached,
     levelTitle,
     nextLevelXp,
@@ -78,6 +79,7 @@ export default function Home() {
     studyReady,
     cardStates: state.cardStates,
     studyDays: state.studyDays,
+    reviewEntries: state.reviewLog.entries.length,
     today,
     dailyGoal: state.settings.dailyGoal,
     newCardsPerDay: state.settings.newCardsPerDay,
@@ -156,10 +158,8 @@ export default function Home() {
         />
 
         <ProgressCards
-          cardsStudiedToday={cardsStudiedToday}
-          dailyGoal={state.settings.dailyGoal}
-          newCardsPerDay={state.settings.newCardsPerDay}
-          progressPercent={progressPercent}
+          firstRun={firstRun}
+          todayProgress={todayProgress}
           level={state.stats.level}
           levelTitle={levelTitle}
           levelProgress={levelProgress}
@@ -167,18 +167,23 @@ export default function Home() {
           nextLevelXp={nextLevelXp}
           totalCardsLearned={state.stats.totalCardsLearned}
           studyReadyCount={studyReady.length}
+          onStartSession={startSession}
+          onOpenAlphabet={() => setShowAlphabet(true)}
         />
 
-        <ReviewPlanCard
-          today={today}
-          overdueCount={overdueCount}
-          nextScheduledReview={nextScheduledReview}
-          forecast={reviewForecast}
-          forecastPeak={forecastPeak}
-          workloadStatus={workloadStatus}
-        />
+        {!firstRun && (
+          <ReviewPlanCard
+            today={today}
+            overdueCount={overdueCount}
+            nextScheduledReview={nextScheduledReview}
+            forecast={reviewForecast}
+            forecastPeak={forecastPeak}
+            workloadStatus={workloadStatus}
+          />
+        )}
 
         <PracticeMenu
+          quiet={firstRun}
           weakCardCount={weakCards.length}
           learningCardCount={learningCards.length}
           grammarCompleted={state.grammar.completedLessonIds.length}
@@ -200,18 +205,20 @@ export default function Home() {
           onOpenStats={() => setShowStats(true)}
         />
 
-        <CategoryGrid
-          categories={categoryMastery}
-          vocabularyCount={vocabulary.length}
-          onViewAll={() => {
-            setBrowseCategory(null);
-            setShowBrowse(true);
-          }}
-          onSelectCategory={categoryId => {
-            setBrowseCategory(categoryId);
-            setShowBrowse(true);
-          }}
-        />
+        {!firstRun && (
+          <CategoryGrid
+            categories={categoryMastery}
+            vocabularyCount={vocabulary.length}
+            onViewAll={() => {
+              setBrowseCategory(null);
+              setShowBrowse(true);
+            }}
+            onSelectCategory={categoryId => {
+              setBrowseCategory(categoryId);
+              setShowBrowse(true);
+            }}
+          />
+        )}
       </main>
 
       <HomeDialogs

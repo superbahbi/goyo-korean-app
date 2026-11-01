@@ -20,6 +20,9 @@ function readGrammar(page: Page) {
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => window.localStorage.clear());
   await page.goto("/");
+  // A first-run dashboard keeps the practice grid collapsed behind a disclosure,
+  // so open it before looking for a tile (and cover that toggle here too).
+  await page.getByRole("button", { name: /show all \d+/i }).click();
 });
 
 test("reads a grammar lesson, plays an example and records the check", async ({

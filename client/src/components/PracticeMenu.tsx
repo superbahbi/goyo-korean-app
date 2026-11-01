@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { SectionHeading } from "@/components/SectionHeading";
 import {
   BookMarked,
   BookOpen,
   Brain,
+  ChevronDown,
+  ChevronUp,
   Headphones,
   Languages,
   MapPin,
@@ -10,6 +13,8 @@ import {
 } from "lucide-react";
 
 interface PracticeMenuProps {
+  /** First run: keep the menu one tap away instead of a wall of tiles. */
+  quiet?: boolean;
   weakCardCount: number;
   learningCardCount: number;
   grammarCompleted: number;
@@ -27,6 +32,7 @@ interface PracticeMenuProps {
  * session stays the one loud action on the dashboard.
  */
 export function PracticeMenu({
+  quiet = false,
   weakCardCount,
   learningCardCount,
   grammarCompleted,
@@ -38,6 +44,8 @@ export function PracticeMenu({
   onStartWeakSession,
   onStartLearningSession,
 }: PracticeMenuProps) {
+  const [showAll, setShowAll] = useState(false);
+  const tilesVisible = !quiet || showAll;
   const tiles = [
     {
       key: "hangul",
@@ -117,10 +125,31 @@ export function PracticeMenu({
     <section className="space-y-3" aria-labelledby="practice-heading">
       <SectionHeading
         id="practice-heading"
-        eyebrow="Beyond the daily queue"
+        eyebrow={quiet ? "More ways to practice" : "Beyond the daily queue"}
         title="Practice"
+        action={
+          quiet ? (
+            <button
+              type="button"
+              onClick={() => setShowAll(current => !current)}
+              aria-expanded={showAll}
+              aria-controls="practice-grid"
+              className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-semibold text-foreground/70 transition-colors hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:hover:text-emerald-300"
+            >
+              {showAll ? (
+                <ChevronUp size={16} aria-hidden="true" />
+              ) : (
+                <ChevronDown size={16} aria-hidden="true" />
+              )}
+              {showAll ? "Show less" : `Show all ${tiles.length}`}
+            </button>
+          ) : undefined
+        }
       />
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
+      <div
+        id="practice-grid"
+        className={`grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 ${tilesVisible ? "" : "hidden"}`}
+      >
         {tiles.map(tile => {
           const Icon = tile.icon;
           return (

@@ -35,6 +35,11 @@ describe("review log", () => {
     expect(log.entries.map(item => item.cardId)).toEqual(["a", "b"]);
   });
 
+  it("marks new entries with the v2 flow and leaves old ones alone", () => {
+    const log = appendReviewEntry(createReviewLog(), entry());
+    expect(log.entries[0].flow).toBe("v2");
+  });
+
   it("drops the oldest entry once the cap is reached", () => {
     let log = createReviewLog();
     for (let index = 0; index <= REVIEW_LOG_LIMIT; index += 1) {
@@ -106,6 +111,20 @@ describe("sanitizeReviewLog", () => {
       responseTimeMs: 1000,
       mode: "listening",
     });
+  });
+
+  it("keeps a v2 flow marker, omits it on older entries, and drops unknown markers", () => {
+    const log = sanitizeReviewLog({
+      entries: [
+        entry({ cardId: "old" }),
+        { ...entry({ cardId: "new" }), flow: "v2" },
+        { ...entry({ cardId: "unknown" }), flow: "v9" },
+      ],
+    });
+
+    expect(log.entries[0]).not.toHaveProperty("flow");
+    expect(log.entries[1].flow).toBe("v2");
+    expect(log.entries[2]).not.toHaveProperty("flow");
   });
 
   it("caps an imported log at the most recent entries", () => {

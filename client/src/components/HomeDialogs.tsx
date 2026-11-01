@@ -161,6 +161,7 @@ export function HomeDialogs({
       {isStudying && sessionQueue.length > 0 && (
         <StudySession
           queue={sessionQueue}
+          cardStates={state.cardStates}
           onGrade={onGrade}
           onClose={onCloseSession}
           allowRepeat={

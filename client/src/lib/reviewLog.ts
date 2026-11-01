@@ -15,6 +15,9 @@ export const STUDY_MODES = [
 ] as const;
 export type StudyMode = (typeof STUDY_MODES)[number];
 
+/** Cohort marker for the Phase 5 retention analysis. */
+export type StudyFlow = "v2";
+
 export interface ReviewLogEntry {
   cardId: string;
   /** ISO 8601 timestamp of the grade. */
@@ -22,6 +25,11 @@ export interface ReviewLogEntry {
   rating: SrsRating;
   responseTimeMs: number | null;
   mode: StudyMode;
+  /**
+   * Stamped on entries written by the v2 study flow. Older saves and entries
+   * written before the introduction step keep no marker.
+   */
+  flow?: StudyFlow;
 }
 
 export interface ReviewLog {
@@ -49,12 +57,16 @@ export function createReviewLog(): ReviewLog {
   return { schemaVersion: REVIEW_LOG_SCHEMA_VERSION, entries: [] };
 }
 
-/** Append one grade, dropping the oldest entries past the cap. */
+/**
+ * Append one grade, dropping the oldest entries past the cap. Every entry
+ * written from now on carries the v2 flow marker; existing entries are never
+ * rewritten.
+ */
 export function appendReviewEntry(
   log: ReviewLog,
   entry: ReviewLogEntry
 ): ReviewLog {
-  const entries = [...log.entries, entry];
+  const entries = [...log.entries, { ...entry, flow: "v2" as const }];
   return {
     schemaVersion: REVIEW_LOG_SCHEMA_VERSION,
     entries:
@@ -91,6 +103,9 @@ function sanitizeEntry(value: unknown): ReviewLogEntry | null {
     rating: record.rating,
     responseTimeMs,
     mode,
+    // Missing or unknown markers stay absent instead of being invented, so old
+    // entries keep their original shape.
+    ...(record.flow === "v2" ? { flow: "v2" as const } : {}),
   };
 }
 

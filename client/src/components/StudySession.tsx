@@ -7,33 +7,18 @@ import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
 import { ProductionAttempt } from "./study/ProductionAttempt";
 import { GradeActions } from "./study/GradeActions";
 import { StudySessionSummary } from "./study/StudySessionSummary";
+import { NewCardIntro } from "./study/NewCardIntro";
 import { useStudySession } from "./study/useStudySession";
 import { PracticeShell } from "./practice/PracticeShell";
 import { VocabularyCard } from "@/lib/vocabulary";
-import { previewIntervals, type SrsCardState } from "@/lib/srs";
+import { previewIntervals } from "@/lib/srs";
 import { cn } from "@/lib/utils";
-
-// The session is handed cards, not their saved schedules, so the interval
-// labels read the same local save the dashboard persists. They are read when a
-// card is revealed, by which point every earlier grade has been written.
-const SAVED_STATE_KEY = "goyo-progress-v2";
-
-function readSavedCardStates(): Record<string, SrsCardState> | undefined {
-  if (typeof window === "undefined") return undefined;
-  try {
-    const raw = window.localStorage.getItem(SAVED_STATE_KEY);
-    if (!raw) return undefined;
-    const parsed = JSON.parse(raw) as { cardStates?: unknown } | null;
-    const states = parsed?.cardStates;
-    if (!states || typeof states !== "object") return undefined;
-    return states as Record<string, SrsCardState>;
-  } catch {
-    return undefined;
-  }
-}
+import type { CardState } from "@/lib/mastery";
 
 interface StudySessionProps {
   queue: VocabularyCard[];
+  /** Saved card states; used to teach cards the learner has never seen. */
+  cardStates?: Record<string, CardState>;
   onGrade: (
     cardId: string,
     rating: "again" | "good" | "easy",
@@ -47,18 +32,20 @@ interface StudySessionProps {
 
 export function StudySession({
   queue,
+  cardStates,
   onGrade,
   onClose,
   allowRepeat = false,
   autoPlayAudio = true,
   title = "Daily Session",
 }: StudySessionProps) {
-  const study = useStudySession({ queue, onGrade, onClose });
+  const study = useStudySession({ queue, cardStates, onGrade, onClose });
   const sentenceAudioIds = useSentenceAudioIds();
   const {
     index,
     sessionQueue,
     currentCard,
+    showIntro,
     flipped,
     completed,
     results,
@@ -67,6 +54,7 @@ export function StudySession({
     setProductionAttempt,
     productionDone,
     setProductionDone,
+    dismissIntro,
     handleFlip,
     handleGrade,
     restartSession,
@@ -81,12 +69,14 @@ export function StudySession({
   );
   const showProduction = productionOpenFor === index;
 
+  // Preview against the card's saved schedule. Renders after a grade use the
+  // state the parent just persisted, so the labels match what was saved.
   const intervals = useMemo(
     () =>
       previewIntervals(
-        flipped ? readSavedCardStates()?.[currentCard?.id ?? ""] : undefined
+        flipped ? cardStates?.[currentCard?.id ?? ""] : undefined
       ),
-    [flipped, currentCard?.id]
+    [flipped, currentCard?.id, cardStates]
   );
 
   if (completed) {
@@ -102,6 +92,34 @@ export function StudySession({
   }
 
   if (!currentCard) return null;
+
+  // Teach a never-reviewed word before testing it. This branch never grades,
+  // so grades, XP and the schedule still begin on the recall card.
+  if (showIntro) {
+    return (
+      <PracticeShell
+        title={title}
+        showTitle={false}
+        tone="emerald"
+        closeLabel="Close study session"
+        onClose={closeSession}
+        progress={(index / sessionQueue.length) * 100}
+        progressLabel="Session progress"
+        counter={`${index + 1} / ${sessionQueue.length}`}
+        center
+      >
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          New word. Press Enter or Space to start practising.
+        </p>
+        <NewCardIntro
+          card={currentCard}
+          autoPlayAudio={autoPlayAudio}
+          sentenceAudioReady={sentenceAudioIds.has(currentCard.id)}
+          onStart={dismissIntro}
+        />
+      </PracticeShell>
+    );
+  }
 
   return (
     <PracticeShell

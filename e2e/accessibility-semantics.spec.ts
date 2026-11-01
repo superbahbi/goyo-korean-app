@@ -123,16 +123,20 @@ test("keyboard study flow: Space reveals, 1/2/3 grade, Escape closes", async ({
   await expect(dialog).toBeVisible();
   expect(await focusedInsideDialog(page)).toBe(true);
 
+  // Each never-seen word is introduced first; Enter starts its recall card.
+  await page.keyboard.press("Enter");
   // Space reveals and moves the prompt to the grading choices.
   await page.keyboard.press("Space");
   await expect(dialog.getByText("How did that feel?")).toBeVisible();
   expect(await focusedInsideDialog(page)).toBe(true);
 
   // 1 Again, 2 Good, 3 Easy. A failed card returns once at the end, so the
-  // fourth review is the retry of card one.
+  // fourth review is the retry of card one, which needs no new introduction.
   await page.keyboard.press("1");
+  await page.keyboard.press("Enter");
   await page.keyboard.press("Space");
   await page.keyboard.press("2");
+  await page.keyboard.press("Enter");
   await page.keyboard.press("Space");
   await page.keyboard.press("3");
   await page.keyboard.press("Space");
@@ -164,6 +168,7 @@ test("Escape closes a session in progress and returns focus to its opener", asyn
 
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
+  await page.keyboard.press("Enter");
   await page.keyboard.press("Space");
   await expect(dialog.getByText("How did that feel?")).toBeVisible();
   await page.keyboard.press("Escape");
@@ -180,6 +185,7 @@ test("grade buttons and the dialog have accessible names", async ({ page }) => {
   const dialog = page.getByRole("dialog");
   await expect(dialog).toHaveAccessibleName("Daily Session");
 
+  await page.keyboard.press("Enter");
   await page.keyboard.press("Space");
   await expect(dialog.getByText("How did that feel?")).toBeVisible();
 
@@ -195,6 +201,11 @@ test("aria-live regions announce each prompt after a grade", async ({
   const dialog = page.getByRole("dialog");
   const liveRegion = dialog.locator('[aria-live="polite"][aria-atomic="true"]');
 
+  await expect(liveRegion).toHaveText(
+    /New word\. Press Enter or Space to start practising\./
+  );
+
+  await page.keyboard.press("Enter");
   await expect(liveRegion).toHaveText(/Card 1 of 3\. Press Space to reveal\./);
 
   await page.keyboard.press("Space");
@@ -203,7 +214,9 @@ test("aria-live regions announce each prompt after a grade", async ({
   );
 
   await page.keyboard.press("2");
-  await expect(liveRegion).toHaveText(/Card 2 of 3\. Press Space to reveal\./);
+  await expect(liveRegion).toHaveText(
+    /New word\. Press Enter or Space to start practising\./
+  );
 });
 
 test("Listening verdict is exposed through a polite live region", async ({
