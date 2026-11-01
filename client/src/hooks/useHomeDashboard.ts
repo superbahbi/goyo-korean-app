@@ -246,6 +246,7 @@ export function useHomeDashboard({
 
   const firstRun = isFirstRunState({
     reviewEntries,
+    cardStates: Object.keys(cardStates).length,
     studiedToday: cardsStudiedToday,
   });
   // Once the daily goal is reached the queue becomes optional repeat practice,

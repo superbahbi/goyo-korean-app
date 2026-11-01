@@ -82,15 +82,27 @@ describe("describeTodayProgress", () => {
 });
 
 describe("isFirstRunState", () => {
-  it("is true only with no review history and nothing studied today", () => {
-    expect(isFirstRunState({ reviewEntries: 0, studiedToday: 0 })).toBe(true);
+  it("is true only with no history at all", () => {
+    expect(
+      isFirstRunState({ reviewEntries: 0, cardStates: 0, studiedToday: 0 })
+    ).toBe(true);
   });
 
   it("is false once any review has been logged", () => {
-    expect(isFirstRunState({ reviewEntries: 1, studiedToday: 0 })).toBe(false);
+    expect(
+      isFirstRunState({ reviewEntries: 1, cardStates: 0, studiedToday: 0 })
+    ).toBe(false);
+  });
+
+  it("is false for a save that has card states but no review log", () => {
+    expect(
+      isFirstRunState({ reviewEntries: 0, cardStates: 3, studiedToday: 0 })
+    ).toBe(false);
   });
 
   it("is false when today has studied cards even if the log is missing", () => {
-    expect(isFirstRunState({ reviewEntries: 0, studiedToday: 1 })).toBe(false);
+    expect(
+      isFirstRunState({ reviewEntries: 0, cardStates: 0, studiedToday: 1 })
+    ).toBe(false);
   });
 });

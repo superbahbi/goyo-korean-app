@@ -53,15 +53,22 @@ export function describeTodayProgress({
 }
 
 /**
- * First run means nothing has ever been reviewed and nothing was studied
- * today. Any review history, or a graded card today, shows the full dashboard.
+ * First run means nothing has ever been reviewed, no card has a saved state,
+ * and nothing was studied today. A save with card states but no review log
+ * (an import or an older save) is history, so it shows the full dashboard.
  */
 export function isFirstRunState({
   reviewEntries,
+  cardStates,
   studiedToday,
 }: {
   reviewEntries: number;
+  cardStates: number;
   studiedToday: number;
 }): boolean {
-  return count(reviewEntries) === 0 && count(studiedToday) === 0;
+  return (
+    count(reviewEntries) === 0 &&
+    count(cardStates) === 0 &&
+    count(studiedToday) === 0
+  );
 }
