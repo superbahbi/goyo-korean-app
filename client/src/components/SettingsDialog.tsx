@@ -8,6 +8,7 @@ import {
 import { DownloadAllAudio } from "@/components/DownloadAllAudio";
 import { AudioSpeakerSetting } from "@/components/settings/AudioSpeakerSetting";
 import { ProgressFileSection } from "@/components/settings/ProgressFileSection";
+import { ReloadSetting } from "@/components/settings/ReloadSetting";
 import {
   AutoPlaySetting,
   DailyGoalSetting,
@@ -53,7 +54,7 @@ export function SettingsDialog({
         <DialogHeader className="shrink-0 border-b px-6 pt-6 pr-12 pb-4 text-left">
           <DialogTitle>Settings</DialogTitle>
           <DialogDescription className="sr-only">
-            Daily goal, Korean speaker, and progress export and import.
+            Daily goal, Korean speaker, progress export and import, and reload.
           </DialogDescription>
         </DialogHeader>
         <div
@@ -80,6 +81,7 @@ export function SettingsDialog({
           />
           <ProgressFileSection state={state} progressFile={progressFile} />
           <DownloadAllAudio />
+          <ReloadSetting />
         </div>
       </DialogContent>
     </Dialog>
