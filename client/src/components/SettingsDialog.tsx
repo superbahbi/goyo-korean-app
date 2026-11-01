@@ -43,14 +43,25 @@ export function SettingsDialog({
         onOpenChange(next);
       }}
     >
-      <DialogContent className="max-h-[90vh] max-w-md overflow-y-auto">
-        <DialogHeader>
+      {/*
+        The title stays put and only the options scroll. `dvh` (with `vh` as the
+        fallback) keeps the card inside the visible area on phones: `vh` is the
+        height with the browser toolbar hidden, so 90vh can put the bottom of the
+        card under the toolbar where no scroll can reach it.
+      */}
+      <DialogContent className="flex max-h-[90vh] w-[calc(100%-2rem)] max-w-md flex-col gap-0 overflow-hidden p-0 supports-[height:100dvh]:max-h-[90dvh]">
+        <DialogHeader className="shrink-0 border-b px-6 pt-6 pr-12 pb-4 text-left">
           <DialogTitle>Settings</DialogTitle>
           <DialogDescription className="sr-only">
             Daily goal, Korean speaker, and progress export and import.
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4 py-4">
+        <div
+          role="group"
+          aria-label="Settings options"
+          tabIndex={0}
+          className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-6 py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+        >
           <DailyGoalSetting
             settings={state.settings}
             updateSettings={updateSettings}
