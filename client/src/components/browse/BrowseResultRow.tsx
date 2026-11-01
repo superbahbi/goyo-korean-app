@@ -12,9 +12,12 @@ interface BrowseResultRowProps {
   card: VocabularyCard;
   mastery: MasteryState;
   isCardPlaying: boolean;
+  hasSentenceAudio: boolean;
+  isSentencePlaying: boolean;
   isSpeaking: boolean;
   isShowingRoman: boolean;
   onSpeak: () => void;
+  onSpeakSentence: () => void;
   onToggleRomanization: () => void;
 }
 
@@ -22,9 +25,12 @@ export function BrowseResultRow({
   card,
   mastery,
   isCardPlaying,
+  hasSentenceAudio,
+  isSentencePlaying,
   isSpeaking,
   isShowingRoman,
   onSpeak,
+  onSpeakSentence,
   onToggleRomanization,
 }: BrowseResultRowProps) {
   const romanization = card.romanization || "";
@@ -60,11 +66,26 @@ export function BrowseResultRow({
             </div>
           )}
           {card.example && (
-            <div
-              className="text-xs text-slate-500 italic mt-2 line-clamp-2"
-              lang="ko"
-            >
-              "{card.example}"
+            <div className="mt-2 flex items-start gap-2">
+              <p
+                className="min-w-0 flex-1 text-xs italic text-slate-500 line-clamp-2"
+                lang="ko"
+              >
+                "{card.example}"
+              </p>
+              {hasSentenceAudio && (
+                <button
+                  type="button"
+                  onClick={onSpeakSentence}
+                  aria-label={`${isSentencePlaying ? "Playing" : "Play"} example sentence for ${card.front}`}
+                  className="shrink-0 rounded-full p-1.5 text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1"
+                >
+                  <Volume2
+                    size={13}
+                    className={isSentencePlaying ? "animate-pulse" : ""}
+                  />
+                </button>
+              )}
             </div>
           )}
         </div>

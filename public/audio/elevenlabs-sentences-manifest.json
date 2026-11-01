@@ -1,0 +1,175 @@
+{
+  "generatedAt": "2026-11-01T05:15:34.962Z",
+  "voiceId": "h5eZa8VFAq0EQ8E81dfL",
+  "modelId": "eleven_v4",
+  "counts": {
+    "total": 20,
+    "generated": 20,
+    "skipped": 0,
+    "failed": 0
+  },
+  "vocabulary": [],
+  "alphabet": [],
+  "sentences": [
+    {
+      "id": "daily_001",
+      "text": "만나서 반가워요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_001.cff9faa1.mp3",
+      "status": "generated",
+      "bytes": 26792
+    },
+    {
+      "id": "daily_002",
+      "text": "요즘 잘 지내요?",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_002.7933668a.mp3",
+      "status": "generated",
+      "bytes": 25538
+    },
+    {
+      "id": "daily_003",
+      "text": "제 친구는 한국 음식을 좋아해요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_003.3215a24a.mp3",
+      "status": "generated",
+      "bytes": 39331
+    },
+    {
+      "id": "daily_004",
+      "text": "동생은 매운 음식을 싫어해요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_004.5f290bd5.mp3",
+      "status": "generated",
+      "bytes": 38077
+    },
+    {
+      "id": "daily_005",
+      "text": "이 영화는 재미있어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_005.f8b64315.mp3",
+      "status": "generated",
+      "bytes": 29300
+    },
+    {
+      "id": "daily_006",
+      "text": "이 책은 지루해요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_006.cb7a3e11.mp3",
+      "status": "generated",
+      "bytes": 31807
+    },
+    {
+      "id": "daily_007",
+      "text": "오늘 하루가 피곤해요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_007.c7ab7ab3.mp3",
+      "status": "generated",
+      "bytes": 34315
+    },
+    {
+      "id": "daily_008",
+      "text": "오늘은 정말 행복해요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_008.516d073a.mp3",
+      "status": "generated",
+      "bytes": 34315
+    },
+    {
+      "id": "daily_009",
+      "text": "그 소식을 들으니 슬퍼요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_009.8aaf79b0.mp3",
+      "status": "generated",
+      "bytes": 35569
+    },
+    {
+      "id": "daily_010",
+      "text": "동생은 아침부터 화났어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_daily_010.87dcca20.mp3",
+      "status": "generated",
+      "bytes": 36823
+    },
+    {
+      "id": "surv_001",
+      "text": "안녕하세요, 저는 학생입니다.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_001.7572fc52.mp3",
+      "status": "generated",
+      "bytes": 38077
+    },
+    {
+      "id": "surv_002",
+      "text": "도와주셔서 감사합니다.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_002.a46c011b.mp3",
+      "status": "generated",
+      "bytes": 28046
+    },
+    {
+      "id": "surv_003",
+      "text": "늦어서 죄송합니다.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_003.140ab71d.mp3",
+      "status": "generated",
+      "bytes": 28046
+    },
+    {
+      "id": "surv_004",
+      "text": "네, 맞습니다.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_004.42ea2531.mp3",
+      "status": "generated",
+      "bytes": 23030
+    },
+    {
+      "id": "surv_005",
+      "text": "아니요, 저는 학생이 아닙니다.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_005.20078600.mp3",
+      "status": "generated",
+      "bytes": 40585
+    },
+    {
+      "id": "surv_006",
+      "text": "죄송하지만 모르겠습니다.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_006.3ea35a52.mp3",
+      "status": "generated",
+      "bytes": 36823
+    },
+    {
+      "id": "surv_007",
+      "text": "이 문제를 풀 수 있게 도와주세요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_007.ca25fa01.mp3",
+      "status": "generated",
+      "bytes": 38077
+    },
+    {
+      "id": "surv_008",
+      "text": "화장실은 어디입니까?",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_008.1e185247.mp3",
+      "status": "generated",
+      "bytes": 30554
+    },
+    {
+      "id": "surv_009",
+      "text": "이 책은 얼마입니까?",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_009.29a3c23a.mp3",
+      "status": "generated",
+      "bytes": 30554
+    },
+    {
+      "id": "surv_010",
+      "text": "저는 영어를 합니다.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_surv_010.8c4b0f0c.mp3",
+      "status": "generated",
+      "bytes": 26792
+    }
+  ]
+}

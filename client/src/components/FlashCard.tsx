@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Volume2, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { playVocabularyAudio } from "@/lib/audioPlayer";
+import { playSentenceAudio, playVocabularyAudio } from "@/lib/audioPlayer";
 
 interface FlashCardProps {
   wordId: string;
@@ -15,6 +15,8 @@ interface FlashCardProps {
   usageNote?: string;
   tag: string;
   romanization?: string;
+  /** True when the example sentence has a generated clip to play. */
+  sentenceAudioReady?: boolean;
   onFlip?: (flipped: boolean) => void;
   autoSpeak?: boolean;
   audioFirst?: boolean;
@@ -39,6 +41,7 @@ function FlashCardBase({
   autoSpeak = true,
   audioFirst = false,
   revealed,
+  sentenceAudioReady = false,
 }: FlashCardProps) {
   const [flipped, setFlipped] = useState(false);
   const [showRoman, setShowRoman] = useState(false);
@@ -264,6 +267,28 @@ function FlashCardBase({
                   <p className="mt-2 text-xs leading-relaxed text-slate-500">
                     {exampleEnglish}
                   </p>
+                )}
+                {sentenceAudioReady && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="mt-2 h-8 gap-1.5 px-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+                    aria-label={`Hear sentence for ${cleanKoreanText(front)}`}
+                    onClick={event => {
+                      event.stopPropagation();
+                      void playSentenceAudio(wordId).then(played => {
+                        if (!played) {
+                          toast.error("Sentence audio unavailable", {
+                            description: "The word pronunciation still works.",
+                          });
+                        }
+                      });
+                    }}
+                  >
+                    <Volume2 size={14} />
+                    Hear sentence
+                  </Button>
                 )}
               </div>
             )}

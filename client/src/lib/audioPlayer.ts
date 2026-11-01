@@ -9,8 +9,11 @@ import { AUDIO_CACHE_NAME } from "./audioCache";
 
 interface AudioIndex {
   vocabulary: Record<string, string>;
+  /** Example-sentence clips, keyed by the card or grammar example id. */
+  sentences?: Record<string, string>;
   female?: {
     vocabulary: Record<string, string>;
+    sentences?: Record<string, string>;
     alphabet: {
       consonants: Record<string, string>;
       vowels: Record<string, string>;
@@ -134,6 +137,24 @@ function resolveVocabularyAudioFile(
   return vocabularyIndex?.[wordId];
 }
 
+function resolveSentenceAudioFile(
+  index: AudioIndex,
+  sentenceId: string
+): string | undefined {
+  const preferred =
+    selectedSpeaker === "elevenlabs-female"
+      ? index.female?.sentences
+      : index.sentences;
+  const fallback =
+    selectedSpeaker === "elevenlabs-female"
+      ? index.sentences
+      : index.female?.sentences;
+  // Sentence clips can lag behind the word library while a batch is generated.
+  // A missing clip in the chosen voice falls back to the other one rather than
+  // failing the tap.
+  return preferred?.[sentenceId] ?? fallback?.[sentenceId];
+}
+
 function resolveAlphabetAudioFile(
   index: AudioIndex,
   characterId: string,
@@ -215,6 +236,44 @@ export async function playAlphabetAudio(
   } catch (error) {
     if (error instanceof PlaybackStoppedError) return;
     console.error("Alphabet audio failed:", error);
+  }
+}
+
+/**
+ * Plays the example sentence for a card or grammar example. Returns false when
+ * the clip is missing or cannot start, so a caller that offers the button can
+ * explain why nothing happened.
+ */
+export async function playSentenceAudio(sentenceId: string): Promise<boolean> {
+  try {
+    const index = audioIndex ?? (await loadAudioIndex());
+    const audioFile = resolveSentenceAudioFile(index, sentenceId);
+    if (!audioFile) {
+      throw new Error(`No sentence audio mapped for ${sentenceId}`);
+    }
+    await playAudioFile(`/audio/${audioFile}`);
+    return true;
+  } catch (error) {
+    if (error instanceof PlaybackStoppedError) return true;
+    console.error("Sentence audio failed:", error);
+    return false;
+  }
+}
+
+/**
+ * Sentence ids that have a clip in at least one voice. UI uses this to show the
+ * sentence player only where audio exists, since the library is generated in
+ * batches and older users may have a stale offline index.
+ */
+export async function getAvailableSentenceIds(): Promise<Set<string>> {
+  try {
+    const index = await loadAudioIndex();
+    return new Set([
+      ...Object.keys(index.sentences ?? {}),
+      ...Object.keys(index.female?.sentences ?? {}),
+    ]);
+  } catch {
+    return new Set();
   }
 }
 

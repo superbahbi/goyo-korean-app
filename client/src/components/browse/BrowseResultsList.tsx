@@ -10,8 +10,11 @@ interface BrowseResultsListProps {
   cardStates: Record<string, CardState>;
   showRomanization: Record<string, boolean>;
   playingCardId: string | null;
+  playingSentenceId: string | null;
+  sentenceAudioIds: ReadonlySet<string>;
   isSpeaking: boolean;
   onSpeak: (cardId: string) => void;
+  onSpeakSentence: (cardId: string) => void;
   onToggleRomanization: (cardId: string) => void;
   onLoadMore: () => void;
 }
@@ -22,8 +25,11 @@ export function BrowseResultsList({
   cardStates,
   showRomanization,
   playingCardId,
+  playingSentenceId,
+  sentenceAudioIds,
   isSpeaking,
   onSpeak,
+  onSpeakSentence,
   onToggleRomanization,
   onLoadMore,
 }: BrowseResultsListProps) {
@@ -37,9 +43,12 @@ export function BrowseResultsList({
               card={card}
               mastery={getMasteryState(cardStates[card.id])}
               isCardPlaying={playingCardId === card.id}
+              hasSentenceAudio={sentenceAudioIds.has(card.id)}
+              isSentencePlaying={playingSentenceId === card.id}
               isSpeaking={isSpeaking}
               isShowingRoman={showRomanization[card.id]}
               onSpeak={() => onSpeak(card.id)}
+              onSpeakSentence={() => onSpeakSentence(card.id)}
               onToggleRomanization={() => onToggleRomanization(card.id)}
             />
           ))
