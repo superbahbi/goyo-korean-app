@@ -159,13 +159,6 @@ for (const { file, audit, sheetIds } of audits) {
     });
 
     it("resolves every fix and leaves no open verdicts", () => {
-      // Samples 1 and 2 were fixed in Phase 3. Phase 7 records the new
-      // defects first; step 2 is where those get fixed and resolved.
-      if (audit.sample > 2) {
-        expect(audit.reaudit, file).toBeUndefined();
-        return;
-      }
-
       const fixes = audit.verdicts.filter(verdict => verdict.verdict === "fix");
 
       expect(audit.summary.resolved).toBe(fixes.length);

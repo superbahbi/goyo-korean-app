@@ -26,7 +26,7 @@ Verified on 2026-11-01 on `main` after the Phase 6 practice-shell merge (`#58`):
 | `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `vitest run`       | 228 tests pass in 25 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up, imported taxonomy, grammar, grammar progress, backup status)                                                                                                                                                                                |
+| `vitest run`       | 252 tests pass in 26 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up, imported taxonomy, grammar, grammar progress, backup status)                                                                                                                                                                                |
 | `playwright test`  | 25 checks pass against the production build: seven flow smokes (study loop, failed-card retry, Browse search and audio, progress export/import, offline reload, Settings scroll, grammar lesson), six axe scans (dashboard, study, dialogs, Hangul, recognition overlays, grammar), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker) |
 | `vite build`       | Passes. Main chunk 117.1 kB (34.4 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 226 kB chunk                                                                                                                                                                                                                                                                                               |
 | CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                                                                  |
@@ -95,17 +95,17 @@ are over 300.
 
 ## Status
 
-| Phase                               | State                                                                                                                                                                              |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                        |
-| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                              |
-| 2 Structure                         | Done; main chunk 117.1 kB raw / 34.4 kB gzipped with vendor chunks; one component over 300 lines (`FlashCard` 314)                                                                 |
-| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                        |
-| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done       |
-| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                              |
-| 6 Sentence audio and grammar        | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                      |
-| 7 Content trust completion          | In progress; step 1 re-measured 2026-11-01 at 10.4% of 96 (down from 25%), inside the 5–15% band, so the 319 unsampled cards get batched audits; Korean-speaker spot check pending |
-| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                   |
+| Phase                               | State                                                                                                                                                                                                    |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                                              |
+| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                                                    |
+| 2 Structure                         | Done; main chunk 117.1 kB raw / 34.4 kB gzipped with vendor chunks; one component over 300 lines (`FlashCard` 314)                                                                                       |
+| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                                              |
+| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done                             |
+| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                                                    |
+| 6 Sentence audio and grammar        | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                                            |
+| 7 Content trust completion          | In progress; re-measured 2026-11-01 at 10.4% of 96 (down from 25%) and fixed the 10 defects it found; the 319-card sweep and the deferred naturalness polish are open, Korean-speaker spot check pending |
+| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                         |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -520,6 +520,15 @@ Order matters: measure first, rewrite second.
    - No new audio: the generator speaks headwords only, so sentence rewrites are free (Phase 3 rule).
    - Acceptance: per batch, the deck and romanization tests pass, the sheet re-audits clean, and the PR
      stays under ~400 lines.
+   - Done (2026-11-01) for the ten defects the re-measurement found: the four misleading usage notes
+     (섬, 곧장, 냄새를 맡다, 입다), the 키가 작다 gloss, the two bad examples (돌다, 이빨), the 밖에 and
+     다섯 번째 part-of-speech tags, the 다섯 번째 spacing plus romanization, and 앉다 `anta` → `anda`.
+     Fixing 앉다 also removed the transliterator's documented but wrong ㄵ+ㄷ special case, which
+     claimed the ㅈ surfaces; Revised Romanization gives `anda`. `phase7Followup.test.ts` guards all ten,
+     both sheets were regenerated from the same seeds, and the verdicts carry `resolvedAt`/`resolution`
+     with `openFix: 0`. No clip was regenerated: the 다섯 번째 spacing and the 앉다 romanization leave the
+     spoken form unchanged, and the other eight fixes are text only. The deferred Phase 3 naturalness
+     polish is still open, so this step is partly done.
 3. **Sweep if step 1 says so.** 50 cards per PR, same rubric and verdict format, until every imported
    card has a recorded verdict.
 
