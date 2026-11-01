@@ -1,3 +1,7 @@
+import { useMemo, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { SectionHeading } from "@/components/SectionHeading";
+
 interface CategorySummary {
   id: string;
   name: string;
@@ -16,76 +20,110 @@ interface CategoryGridProps {
   onSelectCategory: (categoryId: string) => void;
 }
 
-/** Theme cards that deep-link into the browse dialog. */
+const COLLAPSED_THEMES = 6;
+
+/**
+ * Theme cards that deep-link into the browse dialog. The grid starts collapsed
+ * so the dashboard stays short; themes already in progress come first.
+ */
 export function CategoryGrid({
   categories,
   vocabularyCount,
   onViewAll,
   onSelectCategory,
 }: CategoryGridProps) {
+  const [showAll, setShowAll] = useState(false);
+
+  const ordered = useMemo(
+    () =>
+      [...categories].sort((a, b) => {
+        if (a.reviewed === 0 && b.reviewed > 0) return 1;
+        if (b.reviewed === 0 && a.reviewed > 0) return -1;
+        return b.reviewed - a.reviewed;
+      }),
+    [categories]
+  );
+
+  const visible = showAll ? ordered : ordered.slice(0, COLLAPSED_THEMES);
+  const canExpand = categories.length > COLLAPSED_THEMES;
+
   return (
-    <section className="space-y-4" aria-labelledby="categories-heading">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">
-            Your library
-          </p>
-          <h2
-            id="categories-heading"
-            className="mt-1 font-serif text-2xl text-slate-900"
+    <section className="space-y-3" aria-labelledby="categories-heading">
+      <SectionHeading
+        id="categories-heading"
+        eyebrow="Your library"
+        title="Learn by theme"
+        action={
+          <button
+            type="button"
+            className="rounded text-sm font-semibold text-emerald-700 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            onClick={onViewAll}
           >
-            Learn by theme
-          </h2>
-        </div>
-        <button
-          type="button"
-          className="rounded text-sm font-semibold text-emerald-700 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
-          onClick={onViewAll}
-        >
-          View all {vocabularyCount}
-        </button>
-      </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {categories.map(category => (
+            View all {vocabularyCount}
+          </button>
+        }
+      />
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
+        {visible.map(category => (
           <button
             type="button"
             key={category.id}
             onClick={() => onSelectCategory(category.id)}
-            className="group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+            className="group rounded-2xl border border-slate-200 bg-white p-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 sm:p-4"
           >
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <span
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl text-lg ${category.color}`}
-                  aria-hidden="true"
-                >
-                  {category.icon}
-                </span>
-                <div>
-                  <h3 className="font-semibold text-slate-800 group-hover:text-emerald-700">
-                    {category.name}
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    {category.total} cards
-                  </p>
-                </div>
+            <div className="flex items-center gap-2.5">
+              <span
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base ${category.color}`}
+                aria-hidden="true"
+              >
+                {category.icon}
+              </span>
+              <div className="min-w-0 flex-1">
+                <h3 className="truncate text-sm font-semibold text-slate-800 group-hover:text-emerald-700">
+                  {category.name}
+                </h3>
+                <p className="truncate text-[11px] text-slate-500">
+                  {category.total} cards
+                </p>
               </div>
               <span className="text-xs font-semibold text-emerald-700">
                 {category.coverage}%
               </span>
             </div>
-            <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-slate-100">
+            <div
+              className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-slate-100"
+              aria-hidden="true"
+            >
               <div
                 className="h-full rounded-full bg-emerald-500 transition-all"
                 style={{ width: `${category.coverage}%` }}
               />
             </div>
-            <p className="mt-2 text-xs text-slate-500">
-              {category.known} known · {category.reviewed} reviewed
+            <p className="mt-1.5 truncate text-[11px] text-slate-500">
+              {category.reviewed > 0
+                ? `${category.known} known · ${category.reviewed} reviewed`
+                : "Not started yet"}
             </p>
           </button>
         ))}
       </div>
+      {canExpand && (
+        <button
+          type="button"
+          onClick={() => setShowAll(current => !current)}
+          aria-expanded={showAll}
+          className="mx-auto flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+        >
+          {showAll ? (
+            <ChevronUp size={16} aria-hidden="true" />
+          ) : (
+            <ChevronDown size={16} aria-hidden="true" />
+          )}
+          {showAll
+            ? "Show fewer themes"
+            : `Show all ${categories.length} themes`}
+        </button>
+      )}
     </section>
   );
 }

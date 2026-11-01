@@ -63,13 +63,13 @@ export default function Home() {
     workloadStatus,
     cardsRemaining,
     plannedCards,
+    newCardsPlanned,
     progressPercent,
     dailyGoalReached,
     levelTitle,
     nextLevelXp,
     levelProgress,
     overdueCount,
-    overduePrefix,
     nextScheduledReview,
   } = useHomeDashboard({
     vocabulary,
@@ -135,22 +135,20 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
       <HomeHeader
-        level={state.stats.level}
-        levelTitle={levelTitle}
-        levelProgress={levelProgress}
         streak={state.stats.streak}
         totalXp={state.stats.totalXp}
         onOpenSettings={() => setShowSettings(true)}
       />
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+      <main className="mx-auto max-w-5xl space-y-5 px-4 py-5 sm:space-y-7 sm:px-6 sm:py-8">
         <SaveAlerts saveBlocked={saveBlocked} saveError={saveError} />
 
         <WelcomeCard
           cardsRemaining={cardsRemaining}
           plannedCards={plannedCards}
-          overduePrefix={overduePrefix}
+          newCards={newCardsPlanned}
+          overdueCount={overdueCount}
           dailyGoalReached={dailyGoalReached}
           onStartSession={startSession}
         />
@@ -176,7 +174,6 @@ export default function Home() {
           forecast={reviewForecast}
           forecastPeak={forecastPeak}
           workloadStatus={workloadStatus}
-          onStartSession={startSession}
         />
 
         <PracticeMenu

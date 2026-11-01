@@ -141,6 +141,12 @@ export function useHomeDashboard({
     newCardsPerDay,
   ]);
 
+  // New cards in today's queue, used by the hero's plan summary.
+  const newCardsPlanned = useMemo(
+    () => queue.filter(card => !cardStates[card.id]?.timesReviewed).length,
+    [queue, cardStates]
+  );
+
   // Recognition practice never introduces a card: due and weak reviews come
   // first, then the rest of the learner's existing cards.
   const recognitionCards = useMemo(() => {
@@ -197,7 +203,7 @@ export function useHomeDashboard({
         offset === 0
           ? "Today"
           : offset === 1
-            ? "Tomorrow"
+            ? "Tmrw"
             : new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, {
                 weekday: "short",
               }),
@@ -226,10 +232,6 @@ export function useHomeDashboard({
   const cardsRemaining = Math.max(0, dailyGoal - cardsStudiedToday);
   const dailyGoalReached = cardsStudiedToday >= dailyGoal;
   const overdueCount = countOverdue(studyReady, cardStates, today);
-  const overduePrefix =
-    overdueCount > 0
-      ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · `
-      : "";
   const nextScheduledReview = getNextScheduledReview(
     cardStates,
     vocabulary,
@@ -255,13 +257,13 @@ export function useHomeDashboard({
     workloadStatus,
     cardsRemaining,
     plannedCards: queue.length,
+    newCardsPlanned,
     progressPercent: (cardsStudiedToday / dailyGoal) * 100,
     dailyGoalReached,
     levelTitle: getLevelTitle(level),
     nextLevelXp: xpToReachLevel(level + 1),
     levelProgress: getLevelProgress(totalXp, level),
     overdueCount,
-    overduePrefix,
     nextScheduledReview,
   };
 }
