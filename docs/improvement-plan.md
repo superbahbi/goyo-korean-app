@@ -88,7 +88,7 @@ the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lin
 
 | Phase                           | State                                                                                                                                                                        |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                       | Done (#2–#7); browser checks outstanding                                                                                                                                     |
+| 0 Repairs                       | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                  |
 | 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                                                 |
 | 2 Structure                     | Done; main chunk 108.6 kB raw / 31.7 kB gzipped with vendor chunks; every page and component under 300 lines                                                                 |
 | 3 Content                       | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
@@ -96,9 +96,11 @@ the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lin
 | 5 Tune from data                | Blocked on 30 days of use                                                                                                                                                    |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
-settings (#5), protected progress (#6) and the update notice (#7). Its browser checks — blocked
-audio, auto-play off and `storage.persisted()` on first grade — still need a browser; the iPhone
-install hint and update toast were covered by the Phase 4 real-device pass.
+settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
+2026-10-31: blocking `*/audio/*` showed the fallback and the session continued, auto-play off stayed
+silent until the speaker was tapped, and `navigator.storage.persist()` was called once after the
+first grade. The iPhone install hint and update toast were covered by the Phase 4 real-device pass,
+so Phase 0 has no manual checks left.
 
 Phase 1 is merged: review log (#9), study-day history (#10), same-session retry (#11), recognition
 caps (#12), keyboard shortcuts (#13), queue module (#14) and new-card pace (#15). Task 5's theme
