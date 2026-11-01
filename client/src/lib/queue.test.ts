@@ -19,7 +19,7 @@ function card(id: string): VocabularyCard {
     front: id,
     back: id,
     romanization: id,
-    tag: "essential",
+    tag: "daily",
     example: "",
     difficulty: "beginner",
     partOfSpeech: "noun",
@@ -117,7 +117,7 @@ describe("buildDailyQueue", () => {
 
   it("introduces new cards in beginner theme order", () => {
     const themed = [
-      { ...card("essential_1"), tag: "essential" },
+      { ...card("unthemed_1"), tag: "unthemed" },
       { ...card("food_1"), tag: "food" },
       { ...card("survival_1"), tag: "survival" },
       { ...card("daily_1"), tag: "daily" },
@@ -125,6 +125,17 @@ describe("buildDailyQueue", () => {
     expect(
       buildDailyQueue(themed, {}, today, 10, 0, 3).map(item => item.id)
     ).toEqual(["survival_1", "daily_1", "food_1"]);
+  });
+
+  it("orders imported cards by frequency inside a theme, after curated ones", () => {
+    const themed = [
+      { ...card("food_common"), tag: "food", frequencyRank: 2 },
+      { ...card("food_rare"), tag: "food", frequencyRank: 40 },
+      { ...card("food_curated"), tag: "food" },
+    ];
+    expect(
+      buildDailyQueue(themed, {}, today, 10, 0, 3).map(item => item.id)
+    ).toEqual(["food_curated", "food_common", "food_rare"]);
   });
 
   it("never repeats a card and respects the cards left in the goal", () => {

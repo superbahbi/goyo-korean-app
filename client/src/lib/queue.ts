@@ -6,16 +6,26 @@ export type CardStates = Record<string, CardState>;
 
 export const DEFAULT_NEW_CARDS_PER_DAY = 3;
 
-// Curated categories are ordered the way a beginner should meet them. Cards
-// without a themed tag (the imported deck) come after every themed card.
+// Categories are ordered the way a beginner should meet them. Cards without a
+// known tag come after every themed card. Within a theme, curated cards keep
+// their hand-picked order and imported cards follow by frequency rank, so a
+// beginner meets the most common new words first.
 const THEME_ORDER = new Map(
   CATEGORIES.map((category, index) => [category.id, index])
 );
 
 function orderNewCardsByTheme(cards: VocabularyCard[]): VocabularyCard[] {
   return [...cards].sort((a, b) => {
-    const aRank = THEME_ORDER.get(a.tag) ?? THEME_ORDER.size;
-    const bRank = THEME_ORDER.get(b.tag) ?? THEME_ORDER.size;
+    const themeDiff =
+      (THEME_ORDER.get(a.tag) ?? THEME_ORDER.size) -
+      (THEME_ORDER.get(b.tag) ?? THEME_ORDER.size);
+    if (themeDiff !== 0) return themeDiff;
+
+    const aRank = a.frequencyRank;
+    const bRank = b.frequencyRank;
+    if (aRank === undefined && bRank === undefined) return 0;
+    if (aRank === undefined) return -1;
+    if (bRank === undefined) return 1;
     return aRank - bRank;
   });
 }
