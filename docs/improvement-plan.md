@@ -51,11 +51,10 @@ precaches the shell, the audio index, Hangul and number audio; and the imported 
 and usage notes plus the curated examples are now guarded by tests.
 
 What is open: the Korean-speaker spot check of the audited cards is still pending (see Phase 3 —
-content trust), and the browser, screen-reader and iPhone checks still need a real device;
-audio filenames are not content-hashed; and the repo is 48 MB with 26 MB of audio in git. The Phase 2
-split is done, but its
-300-line target is only met by `Home.tsx` (274 lines): `SettingsDialog` (415), `StudySession` (446) and
-several practice views are still longer.
+content trust), and the browser, screen-reader and iPhone checks still need a real device. The repo
+is 48 MB with 26 MB of audio in git. The Phase 2 split is done, but its 300-line target is only met
+by `Home.tsx` (274 lines): `SettingsDialog` (415), `StudySession` (446) and several practice views
+are still longer.
 
 ## How we work
 
@@ -78,14 +77,14 @@ several practice views are still longer.
 
 ## Status
 
-| Phase                           | State                                                                                                                                                       |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                                         |
-| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                                |
-| 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                                          |
-| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                                             |
-| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels, reduced motion, focus rings and Playwright smokes done; device checks and hashed audio open |
-| 5 Tune from data                | Blocked on 30 days of use                                                                                                                                   |
+| Phase                           | State                                                                                                                                                    |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                                      |
+| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                             |
+| 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                                       |
+| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                                          |
+| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels, reduced motion, focus rings, Playwright smokes and hashed audio done; device checks open |
+| 5 Tune from data                | Blocked on 30 days of use                                                                                                                                |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its device checks — blocked
@@ -320,16 +319,21 @@ audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, devic
      The real-browser, screen-reader and overlay checks remain.
 2. Vercel headers: long-lived immutable caching for `/assets/*` and hashed audio, a modest `max-age` for
    `sw.js`, and baseline security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`).
-   - Done apart from hashed audio (item 3): `vercel.json` ships a CSP, `X-Content-Type-Options: nosniff`,
-     `Referrer-Policy`, `Permissions-Policy` and `X-Frame-Options`. `/assets/*` is immutable for a year,
-     `/audio/*` caches for one day with stale-while-revalidate, and `sw.js` plus `index.html` are
+   - Done: `vercel.json` ships a CSP, `X-Content-Type-Options: nosniff`,
+     `Referrer-Policy`, `Permissions-Policy` and `X-Frame-Options`. `/assets/*` and every content-hashed
+     `/audio/*.mp3` are immutable for a year, `audio/index.json` and `sw.js` plus `index.html` are
      `no-cache`. The iOS standalone meta tags ship in `index.html`.
 3. Audio delivery: content-hashed filenames so a regenerated clip cannot be served stale, and decide
    whether 26 MB of mp3s keeps living in git (repo is 48 MB) or moves to object storage or LFS.
    - Decision (2026-10-31): the ~26 MB library stays committed to git for now; it keeps the Vercel
      deploy and offline cache simple, with no extra host or credentials. Revisit if clone/CI checkout
      or deploy size becomes a burden, or if regenerated clips cause merge conflicts on most audio
-     changes. Content-hashed filenames are still open.
+     changes.
+   - Done (2026-10-31): every clip is named `<base>.<sha256-8>.mp3`, so a regenerated clip changes its
+     URL and no browser, service-worker or CDN cache can serve the old bytes. `pnpm audio:hash`
+     renames the library and rewrites `audio/index.json`; the generator calls the same routine at the
+     end of a run. `data.test.ts` verifies each filename against its bytes and checks every index entry
+     exists, and `/audio/*.mp3` is now immutable for a year while `index.json` is `no-cache`.
 4. Playwright smoke tests: study loop, Browse search and play, import/export, offline shell reload.
    - Done (2026-10-31): `playwright.config.ts` builds the app and serves it with `vite preview`, and
      `e2e/` holds five smokes: the full three-card daily loop driven by Space and `2` (with the saved

@@ -6,6 +6,7 @@
   "packageManager": "pnpm@10.15.1",
   "scripts": {
     "audit:content": "tsx scripts/audit-content.ts",
+    "audio:hash": "tsx scripts/hash-audio.ts",
     "dev": "vite --host",
     "build": "vite build",
     "start": "vite preview --host",
