@@ -2,6 +2,11 @@ import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
+import {
+  practiceToneBackground,
+  type PracticeTone,
+} from "@/components/practice/PracticeShell";
 
 interface PracticeCompleteProps {
   /** Dialog label; also the heading when `heading` is omitted. */
@@ -10,6 +15,8 @@ interface PracticeCompleteProps {
   heading?: string;
   icon: ReactNode;
   closeLabel: string;
+  /** Accent wash matching the practice mode that just finished. */
+  tone?: PracticeTone;
   /** Omit both restart props to show a single close action. */
   restartLabel?: ReactNode;
   restartClassName?: string;
@@ -27,6 +34,7 @@ export function PracticeComplete({
   heading,
   icon,
   closeLabel,
+  tone = "emerald",
   restartLabel,
   restartClassName = "bg-emerald-600 hover:bg-emerald-700",
   onClose,
@@ -46,7 +54,16 @@ export function PracticeComplete({
         aria-modal="true"
         aria-describedby={undefined}
         showCloseButton={false}
-        className="inset-0 top-0 left-0 z-50 data-[state=open]:animate-none data-[state=closed]:animate-none flex max-w-none translate-x-0 translate-y-0 items-center justify-center gap-0 overflow-y-auto rounded-none border-0 bg-slate-950/40 p-4 shadow-none backdrop-blur-sm sm:max-w-none"
+        className={cn(
+          // Opaque, full-screen finish screen: the dashboard behind the practice
+          // must never leak through, so this reuses the shell's tone wash
+          // instead of a translucent scrim.
+          "inset-0 top-0 left-0 z-50 data-[state=open]:animate-none data-[state=closed]:animate-none flex max-w-none translate-x-0 translate-y-0 items-center justify-center gap-0 overflow-y-auto rounded-none border-0 p-4 shadow-none sm:max-w-none",
+          practiceToneBackground[tone],
+          // Opaque base colour beneath the wash, so the dashboard can never
+          // show through even if the gradient image fails to paint.
+          "[background-color:var(--background)]"
+        )}
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
         <motion.div

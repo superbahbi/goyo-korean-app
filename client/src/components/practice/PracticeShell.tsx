@@ -18,7 +18,7 @@ export type PracticeTone =
 // One full-screen shell for every practice mode: same gradient rhythm, same
 // close/progress/counter header, same scroll area and footer. Only the accent
 // colour changes, so a learner always knows where they are.
-const toneBackground: Record<PracticeTone, string> = {
+export const practiceToneBackground: Record<PracticeTone, string> = {
   emerald:
     "bg-gradient-to-br from-background via-emerald-50 to-muted dark:via-emerald-950/40 dark:to-background",
   teal: "bg-gradient-to-br from-background via-teal-50 to-muted dark:via-teal-950/40 dark:to-background",
@@ -89,10 +89,15 @@ export function PracticeShell({
         showCloseButton={false}
         className={cn(
           "inset-0 top-0 left-0 z-50 data-[state=open]:animate-none data-[state=closed]:animate-none flex h-[100dvh] max-h-[100dvh] min-h-0 max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 p-0 shadow-none sm:max-w-none",
-          toneBackground[tone]
+          practiceToneBackground[tone],
+          // Solid fallback under the gradient so the dashboard can never show
+          // through, even if the gradient image fails to paint. Written as an
+          // arbitrary property so it does not replace the gradient the way a
+          // `bg-*` colour utility would.
+          "[background-color:var(--background)]"
         )}
       >
-        <header className="flex shrink-0 items-center gap-1.5 border-b border-border bg-card/80 px-3 py-2.5 backdrop-blur-md sm:px-4 sm:py-3">
+        <header className="flex shrink-0 items-center gap-1.5 border-b border-border bg-card px-3 py-2.5 sm:px-4 sm:py-3">
           <Button
             variant="ghost"
             size="icon"
@@ -171,7 +176,7 @@ export function PracticeShell({
         </main>
 
         {footer && (
-          <footer className="shrink-0 border-t border-border bg-card/80 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur-md sm:px-6 sm:py-4">
+          <footer className="shrink-0 border-t border-border bg-card px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 sm:px-6 sm:py-4">
             {footer}
           </footer>
         )}
