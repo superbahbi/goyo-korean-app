@@ -26,7 +26,7 @@ Verified on 2026-11-01 on `main` after the Phase 6 practice-shell merge (`#58`):
 | `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `vitest run`       | 210 tests pass in 23 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up, imported taxonomy, grammar, grammar progress, backup status)                                                                                                                                                                                |
+| `vitest run`       | 228 tests pass in 25 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up, imported taxonomy, grammar, grammar progress, backup status)                                                                                                                                                                                |
 | `playwright test`  | 25 checks pass against the production build: seven flow smokes (study loop, failed-card retry, Browse search and audio, progress export/import, offline reload, Settings scroll, grammar lesson), six axe scans (dashboard, study, dialogs, Hangul, recognition overlays, grammar), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker) |
 | `vite build`       | Passes. Main chunk 117.1 kB (34.4 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 226 kB chunk                                                                                                                                                                                                                                                                                               |
 | CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                                                                  |
@@ -95,17 +95,17 @@ are over 300.
 
 ## Status
 
-| Phase                               | State                                                                                                                                                                        |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                  |
-| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                        |
-| 2 Structure                         | Done; main chunk 117.1 kB raw / 34.4 kB gzipped with vendor chunks; one component over 300 lines (`FlashCard` 314)                                                           |
-| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
-| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
-| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                        |
-| 6 Sentence audio and grammar        | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                |
-| 7 Content trust completion          | Planned; starts after Phase 6 closes (see Phase 7)                                                                                                                           |
-| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                             |
+| Phase                               | State                                                                                                                                                                              |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                        |
+| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                              |
+| 2 Structure                         | Done; main chunk 117.1 kB raw / 34.4 kB gzipped with vendor chunks; one component over 300 lines (`FlashCard` 314)                                                                 |
+| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                        |
+| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done       |
+| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                              |
+| 6 Sentence audio and grammar        | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                      |
+| 7 Content trust completion          | In progress; step 1 re-measured 2026-11-01 at 10.4% of 96 (down from 25%), inside the 5–15% band, so the 319 unsampled cards get batched audits; Korean-speaker spot check pending |
+| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                   |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -482,7 +482,7 @@ grammar content that reuses it.
 ## Phase 7: Content trust completion (after Phase 6)
 
 Phase 3 sampled 96 of the imported cards and found 24 failing (25%). The systemic fixes landed, but
-roughly 408 imported cards have never been sampled, and the naturalness polish was deferred. Content is
+roughly 319 imported cards have never been sampled, and the naturalness polish was deferred. Content is
 still the defect code cannot repair for an existing user, and it is the first thing 30-day retention
 will be blamed on. This phase measures whether the fixes moved the rate, then spends only where the
 evidence points.
@@ -497,6 +497,23 @@ Order matters: measure first, rewrite second.
      batches; over 15% — treat the whole imported deck as untrusted before any new feature work.
    - Acceptance: a verdict exists for every sampled id, `scripts/audit-verdicts.test.ts` covers the new
      sheets, and this section records the measured rate.
+   - Done (2026-11-01): two fresh deterministic samples chosen for minimal overlap with the Phase 3
+     pair — seed 10 (`essential-sample-3.md/json`) and seed 61 (`essential-sample-4.md/json`). Sample 3
+     fails 6 of 50 (12%) and sample 4 fails 4 of 50 (8%); combined that is 10 of 96 unique cards
+     (10.4%), down from 25% in Phase 3. 89 of the 96 cards had never been audited, so 185 unique
+     imported cards (36.7% of 504) now carry a verdict. Seven cards also appeared in Phase 3: the four
+     that were fixes there (338, 350, 506, 520) now pass, the three that already passed still do, and
+     the four cards shared by both new sheets agreed 4/4. The remaining defects are four misleading
+     usage notes (섬, 곧장, 냄새를 맡다, 입다), one malformed gloss (키가 작다), two examples that do not
+     use the headword or make sense (돌다, 이빨), two part-of-speech tags (밖에, 다섯번째) and two
+     romanizations (다섯번째 spacing, 앉다 `anta` → `anda`). At 10.4%, the 5–15% decision applies: audit
+     the roughly 319 unsampled imported cards in batches before treating the deck as trusted.
+     `scripts/audit-verdicts.test.ts` now covers both sheets and recomputes the combined rate, fresh
+     cards, deck coverage and mutual agreement. The Korean-speaker spot check of 10 of these cards is
+     still pending, so the phase stays open.
+   - Started early on 2026-11-01 because this step is read-only: Phase 6's remaining work is blocked on
+     the ElevenLabs spend approval and the Korean grammar review, neither of which this measurement
+     touches.
 2. **Naturalness polish.** Rewrite the wording the Phase 3 Korean-speaker check flagged, plus every
    naturalness issue from the new samples, in batches of 25–50 cards. Keep `exampleEnglish` in sync,
    keep the same rubric, and reuse the Phase 3 guard-test pattern so a repaired phrase cannot return.
@@ -510,7 +527,9 @@ Out of scope: new cards, FSRS, more grammar lessons, and any UI change. Phase 5 
 phase because it is a read-only tuning exercise.
 
 Sequencing: full sentence batch → Korean grammar review → Phase 7 step 1 (while the Phase 5 window
-closes around 2026-12-01) → Phase 7 fixes and sweep.
+closes around 2026-12-01) → Phase 7 fixes and sweep. Step 1 ran early on 2026-11-01 as a read-only
+measurement; the batched audits and fixes still wait behind Phase 6's spend approval and Korean
+review.
 
 ## Phase 8: First session and card experience
 

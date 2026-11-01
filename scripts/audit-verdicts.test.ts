@@ -46,6 +46,18 @@ interface AuditFile {
     overlapIds: string[];
     overlapAgreement: string;
   };
+  phase7Combined?: {
+    samples: number[];
+    uniqueCards: number;
+    uniqueFix: number;
+    uniquePass: number;
+    errorRate: number;
+    freshCards: number;
+    cardsAuditedAcrossPhases: number;
+    deckCoverage: number;
+    mutualRecheckIds: string[];
+    mutualAgreement: string;
+  };
   systemicIssues: Array<{
     issue: string;
     category: string;
@@ -57,7 +69,12 @@ interface AuditFile {
 }
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..");
-const AUDIT_FILES = ["essential-sample-1.json", "essential-sample-2.json"];
+const AUDIT_FILES = [
+  "essential-sample-1.json",
+  "essential-sample-2.json",
+  "essential-sample-3.json",
+  "essential-sample-4.json",
+];
 
 const audits = AUDIT_FILES.map(file => {
   const audit = JSON.parse(
@@ -142,6 +159,13 @@ for (const { file, audit, sheetIds } of audits) {
     });
 
     it("resolves every fix and leaves no open verdicts", () => {
+      // Samples 1 and 2 were fixed in Phase 3. Phase 7 records the new
+      // defects first; step 2 is where those get fixed and resolved.
+      if (audit.sample > 2) {
+        expect(audit.reaudit, file).toBeUndefined();
+        return;
+      }
+
       const fixes = audit.verdicts.filter(verdict => verdict.verdict === "fix");
 
       expect(audit.summary.resolved).toBe(fixes.length);
@@ -161,10 +185,14 @@ for (const { file, audit, sheetIds } of audits) {
 }
 
 describe("combined audit evidence", () => {
+  // Phase 3 only: samples 3-4 re-check some fixed cards, so their verdicts
+  // are expected to change from fix to pass.
+  const phase3 = audits.filter(({ audit }) => audit.sample <= 2);
+
   it("recomputes the combined rate and checks overlapping verdicts", () => {
     const merged = new Map<string, "pass" | "fix">();
 
-    for (const { audit } of audits) {
+    for (const { audit } of phase3) {
       for (const verdict of audit.verdicts) {
         const previous = merged.get(verdict.id);
         if (previous !== undefined)
@@ -214,5 +242,71 @@ describe("resolved sample fixes", () => {
 
     expect(deck.get("essential_350")?.partOfSpeech).toBe("adverb");
     expect(deck.get("essential_370")?.partOfSpeech).toBe("number");
+  });
+});
+
+describe("phase 7 re-measurement", () => {
+  const phase3 = audits.filter(({ audit }) => audit.sample <= 2);
+  const phase7 = audits.filter(({ audit }) => audit.sample >= 3);
+
+  it("samples fresh sheets with seeds beyond the Phase 3 pair", () => {
+    expect(phase7.map(({ audit }) => audit.sample)).toEqual([3, 4]);
+    expect(new Set(phase7.map(({ audit }) => audit.seed)).size).toBe(2);
+
+    for (const { audit } of phase7) {
+      expect(audit.seed, `sample ${audit.sample}`).toBeGreaterThan(2);
+      expect(audit.limit).toBe(50);
+    }
+  });
+
+  it("recomputes the combined rate, fresh cards and rechecked verdicts", () => {
+    const sheetIds = new Set(audits.flatMap(entry => [...entry.sheetIds]));
+    const phase3Ids = new Set(phase3.flatMap(entry => [...entry.sheetIds]));
+    const merged = new Map<string, "pass" | "fix">();
+
+    for (const { audit } of phase7)
+      for (const verdict of audit.verdicts) {
+        const previous = merged.get(verdict.id);
+        if (previous !== undefined)
+          expect(verdict.verdict, verdict.id).toBe(previous);
+        merged.set(verdict.id, verdict.verdict);
+      }
+
+    const fixes = [...merged.values()].filter(
+      verdict => verdict === "fix"
+    ).length;
+    const fresh = [...merged.keys()].filter(id => !phase3Ids.has(id)).length;
+
+    const [first, second] = phase7.map(
+      ({ audit }) =>
+        new Map(audit.verdicts.map(verdict => [verdict.id, verdict.verdict]))
+    );
+    const mutualRecheckIds = [...first.keys()].filter(id => second.has(id));
+    const agreed = mutualRecheckIds.filter(
+      id => first.get(id) === second.get(id)
+    ).length;
+
+    const combined = phase7.find(({ audit }) => audit.sample === 4)!.audit
+      .phase7Combined;
+
+    expect(combined, "sample 4 phase7Combined block").toBeDefined();
+    expect(combined!.samples).toEqual([3, 4]);
+    expect(combined!.uniqueCards).toBe(merged.size);
+    expect(combined!.uniqueFix).toBe(fixes);
+    expect(combined!.uniquePass).toBe(merged.size - fixes);
+    expect(combined!.errorRate).toBeCloseTo(fixes / merged.size, 2);
+    expect(combined!.freshCards).toBe(fresh);
+    expect(combined!.cardsAuditedAcrossPhases).toBe(sheetIds.size);
+    expect(combined!.deckCoverage).toBeCloseTo(
+      sheetIds.size / ESSENTIAL_WORDS.length,
+      2
+    );
+    expect(combined!.mutualRecheckIds).toHaveLength(mutualRecheckIds.length);
+    expect(new Set(combined!.mutualRecheckIds)).toEqual(
+      new Set(mutualRecheckIds)
+    );
+    expect(combined!.mutualAgreement).toBe(
+      `${agreed}/${mutualRecheckIds.length}`
+    );
   });
 });

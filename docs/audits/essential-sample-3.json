@@ -1,0 +1,398 @@
+{
+  "sample": 3,
+  "sheet": "docs/audits/essential-sample-3.md",
+  "deck": "Essential 600 imported deck",
+  "deckSize": 504,
+  "seed": 10,
+  "limit": 50,
+  "auditedAt": "2026-11-01",
+  "auditor": "DeepSeek V4.1 Flash model pass; native-speaker spot check pending.",
+  "rubric": [
+    "translation accuracy",
+    "Korean naturalness",
+    "politeness consistency",
+    "part of speech",
+    "romanization/batchim"
+  ],
+  "issueCategories": [
+    "translation",
+    "naturalness",
+    "politeness",
+    "part-of-speech",
+    "romanization",
+    "usage-note",
+    "spelling"
+  ],
+  "summary": {
+    "cards": 50,
+    "pass": 44,
+    "fix": 6,
+    "errorRate": 0.12,
+    "decision": "6 of 50 fail (12%, inside the 5-15% band), so audit the remaining imported deck in batches before treating the content as trusted."
+  },
+  "systemicIssues": [
+    {
+      "issue": "Usage notes with false or self-contradictory claims",
+      "category": "usage-note",
+      "cards": 4,
+      "ids": [
+        "essential_307",
+        "essential_358",
+        "essential_423",
+        "essential_473"
+      ],
+      "detail": "Four notes still mislead: 섬's note cites 무인도, which is formed with 도 (島), not 섬; 곧장's note says 'not a noun despite given POS' though the card is tagged adverb; 냄새를 맡다 takes 냄새 as its object, not the thing smelled; and 입다 does not take accessories, which use 쓰다/차다/끼다."
+    },
+    {
+      "issue": "Malformed gloss text",
+      "category": "translation",
+      "cards": 1,
+      "ids": ["essential_481"],
+      "detail": "키가 작다's back reads 'to be short (short)'; the parenthetical repeats the gloss instead of disambiguating height."
+    },
+    {
+      "issue": "Examples that use a different verb than the headword",
+      "category": "naturalness",
+      "cards": 1,
+      "ids": ["essential_457"],
+      "detail": "돌다's example uses 머리를 돌려 보세요, which is the causative 돌리다, so the sentence never shows the headword in use."
+    }
+  ],
+  "notes": [
+    "All 50 rows were read in sheet order against the five-point rubric (translation, naturalness, politeness, part of speech, romanization); this file records verdicts only and no deck data was edited.",
+    "This is a model screen, not the pending Korean-speaker spot check.",
+    "Three ids overlap sample 2 (essential_084, essential_111, essential_350): the first two pass again, and 350 now passes because its Phase 3 adverb retag holds. No id overlaps sample 1, and the four ids shared with the parallel sample 4 (essential_063, essential_148, essential_182, essential_387) were judged independently here."
+  ],
+  "verdicts": [
+    {
+      "id": "essential_009",
+      "source": "600 essential words · row 15",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_013",
+      "source": "600 essential words · row 19",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_015",
+      "source": "600 essential words · row 21",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_040",
+      "source": "600 essential words · row 46",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_044",
+      "source": "600 essential words · row 50",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_051",
+      "source": "600 essential words · row 57",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_063",
+      "source": "600 essential words · row 69",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_084",
+      "source": "600 essential words · row 90",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_095",
+      "source": "600 essential words · row 101",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_111",
+      "source": "600 essential words · row 117",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_121",
+      "source": "600 essential words · row 127",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_130",
+      "source": "600 essential words · row 136",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_144",
+      "source": "600 essential words · row 150",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_148",
+      "source": "600 essential words · row 154",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_166",
+      "source": "600 essential words · row 172",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_176",
+      "source": "600 essential words · row 182",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_182",
+      "source": "600 essential words · row 188",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_183",
+      "source": "600 essential words · row 189",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_191",
+      "source": "600 essential words · row 197",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_192",
+      "source": "600 essential words · row 198",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_203",
+      "source": "600 essential words · row 209",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_214",
+      "source": "600 essential words · row 220",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_224",
+      "source": "600 essential words · row 230",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_225",
+      "source": "600 essential words · row 231",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_229",
+      "source": "600 essential words · row 235",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_232",
+      "source": "600 essential words · row 238",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_240",
+      "source": "600 essential words · row 246",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_286",
+      "source": "600 essential words · row 292",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_307",
+      "source": "600 essential words · row 313",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "The note says 섬 'can be combined (e.g., 무인도)', but 무인도 is 무인 + 도 (島), not a compound containing 섬. Replace the example with a real 섬 compound such as 섬마을, or explain that 도 is the Sino-Korean island element."
+        }
+      ]
+    },
+    {
+      "id": "essential_314",
+      "source": "600 essential words · row 320",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_350",
+      "source": "600 essential words · row 356",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_358",
+      "source": "600 essential words · row 364",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "The note ends 'not a noun despite given POS', but the card's partOfSpeech is adverb, so the clause contradicts the row. Remove the stale clause or rewrite it as '곧장 is an adverb, not a noun.'"
+        }
+      ]
+    },
+    {
+      "id": "essential_382",
+      "source": "600 essential words · row 441",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_386",
+      "source": "600 essential words · row 445",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_387",
+      "source": "600 essential words · row 446",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_394",
+      "source": "600 essential words · row 453",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_410",
+      "source": "600 essential words · row 470",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_421",
+      "source": "600 essential words · row 481",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_423",
+      "source": "600 essential words · row 483",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "The note says the verb takes 'the thing smelled as object', but the object is 냄새; the source takes 에서 or 의 (강아지의 목줄에서 냄새를 맡다). Rewrite the note to describe 냄새를 맡다 and the 에서/의 source."
+        }
+      ]
+    },
+    {
+      "id": "essential_432",
+      "source": "600 essential words · row 492",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_457",
+      "source": "600 essential words · row 517",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "The example 머리를 돌려 보세요 uses 돌리다 (causative 'turn something'), not the headword 돌다. Rewrite with 돌다 (e.g., 팽이가 빙글빙글 돌아요) or change the headword to 돌리다."
+        }
+      ]
+    },
+    {
+      "id": "essential_458",
+      "source": "600 essential words · row 518",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_467",
+      "source": "600 essential words · row 527",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_473",
+      "source": "600 essential words · row 533",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "The note says 입다 covers 'clothing or accessories', but accessories take 쓰다/차다/끼다/걸다 (모자를 쓰다, 목걸이를 차다, 반지를 끼다); 입다 is for clothing. Remove 'or accessories'."
+        }
+      ]
+    },
+    {
+      "id": "essential_481",
+      "source": "600 essential words · row 541",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "translation",
+          "detail": "The back reads 'to be short (short)'; the parenthetical repeats the gloss and does not disambiguate height. Use 'to be short (in height)' or just 'to be short'."
+        }
+      ]
+    },
+    {
+      "id": "essential_483",
+      "source": "600 essential words · row 543",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_493",
+      "source": "600 essential words · row 553",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_501",
+      "source": "600 essential words · row 561",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_517",
+      "source": "600 essential words · row 577",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_533",
+      "source": "600 essential words · row 593",
+      "verdict": "pass",
+      "issues": []
+    }
+  ]
+}
