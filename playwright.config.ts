@@ -21,9 +21,25 @@ export default defineConfig({
   use: {
     baseURL,
     trace: "on-first-retry",
-    ...(channel ? { channel } : {}),
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    {
+      name: "chromium",
+      testIgnore: /iphone\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        ...(channel ? { channel } : {}),
+      },
+    },
+    // WebKit is the engine behind every iPhone browser and installed iOS PWA.
+    // Only the iPhone spec runs here: the desktop specs already cover behaviour
+    // in Chromium, and running them twice would only slow the suite.
+    {
+      name: "webkit-iphone",
+      testMatch: /iphone\.spec\.ts/,
+      use: { ...devices["iPhone 15"] },
+    },
+  ],
   webServer: {
     command: `pnpm build && pnpm exec vite preview --host 127.0.0.1 --port ${PORT} --strictPort`,
     url: baseURL,
