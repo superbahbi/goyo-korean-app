@@ -9,9 +9,9 @@ AUDIO.mkdir(parents=True, exist_ok=True)
 INDEX_PATH = AUDIO / 'index.json'
 SOURCE = ROOT / 'client/src/lib/essentialVocabulary.ts'
 API_KEY = os.environ.get('ELEVENLABS_API_KEY', '')
-MODELS = {'male': 'eleven_multilingual_v2', 'female': 'eleven_v4'}
-VOICES = {'male': ('ZJCNdZEjYwkOElxugmW2', 'elevenlabs_'), 'female': ('0oqpliV6dVSr9XomngOW', 'elevenlabs_female_')}
-VOICE_NAMES = {'male': 'Hyuk - Cold and Clear', 'female': 'Jini - Warm & Intelligent Korean Female'}
+MODELS = {'male': 'eleven_v4', 'female': 'eleven_v4'}
+VOICES = {'male': ('h5eZa8VFAq0EQ8E81dfL', 'elevenlabs_'), 'female': ('0oqpliV6dVSr9XomngOW', 'elevenlabs_female_')}
+VOICE_NAMES = {'male': 'Yong Gyu - Calm Korean Male Narrator', 'female': 'Jini - Warm & Intelligent Korean Female'}
 
 def write_manifest_atomically(manifest_data, target_path: Path):
     tmp_path = target_path.parent / f"{target_path.name}.tmp"

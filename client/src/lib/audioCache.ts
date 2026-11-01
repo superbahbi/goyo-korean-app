@@ -5,4 +5,4 @@
  * on this value. Bump the version whenever the audio library is replaced so
  * devices drop stale clips instead of serving them for a year.
  */
-export const AUDIO_CACHE_NAME = "goyo-audio-v3";
+export const AUDIO_CACHE_NAME = "goyo-audio-v4";

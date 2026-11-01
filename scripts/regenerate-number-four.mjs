@@ -10,7 +10,7 @@ const targetPath = path.join(
   "elevenlabs_num_004.mp3"
 );
 
-const voiceId = process.env.ELEVENLABS_VOICE_ID || "ZJCNdZEjYwkOElxugmW2";
+const voiceId = process.env.ELEVENLABS_VOICE_ID || "h5eZa8VFAq0EQ8E81dfL";
 const apiKey = process.env.ELEVENLABS_API_KEY;
 if (!apiKey) throw new Error("ELEVENLABS_API_KEY is missing");
 const response = await fetch(
@@ -24,7 +24,7 @@ const response = await fetch(
     },
     body: JSON.stringify({
       text: "넷",
-      model_id: "eleven_multilingual_v2",
+      model_id: "eleven_v4",
       language_code: "ko",
       voice_settings: {
         stability: 0.62,

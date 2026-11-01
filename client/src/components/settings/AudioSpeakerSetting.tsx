@@ -40,14 +40,16 @@ export function AudioSpeakerSetting({
           <SelectValue placeholder="Choose a speaker" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="elevenlabs">Hyuk · Cold &amp; Clear</SelectItem>
+          <SelectItem value="elevenlabs">
+            Yong Gyu · Calm &amp; Clear
+          </SelectItem>
           <SelectItem value="elevenlabs-female">
             Jini · Warm &amp; Intelligent
           </SelectItem>
         </SelectContent>
       </Select>
       <p className="text-xs leading-relaxed text-slate-600">
-        Goyo uses ElevenLabs recordings only. Choose Hyuk for a cold, clear
+        Goyo uses ElevenLabs recordings only. Choose Yong Gyu for a calm, clear
         delivery or Jini for a warm, intelligent Seoul Korean voice.
       </p>
     </div>
