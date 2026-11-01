@@ -33,10 +33,11 @@ test.beforeEach(async ({ page }) => {
 test("completes the daily session with the keyboard and saves progress", async ({
   page,
 }) => {
+  // A fresh learner gets the first-run start block instead of the welcome
+  // hero, so wait on the first-session action and then start the session.
   await expect(
     page.getByRole("button", { name: /start first session/i })
   ).toBeVisible();
-
   await startFreshSession(page);
 
   // A fresh learner gets the default three new cards. Each word is introduced

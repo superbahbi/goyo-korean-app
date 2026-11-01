@@ -22,8 +22,10 @@ test("reloads the shell and serves precached audio offline", async ({
   // activates, and the offline reload must be served by it.
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
   await page.reload();
+  // A fresh learner gets the first-run start block instead of the welcome
+  // hero, so wait on the session action, which exists in both states.
   await expect(
-    page.getByRole("button", { name: /start first session/i })
+    page.getByRole("button", { name: /start (daily|first) session/i })
   ).toBeVisible();
   await expect
     .poll(() =>
@@ -35,7 +37,7 @@ test("reloads the shell and serves precached audio offline", async ({
   try {
     await page.reload();
     await expect(
-      page.getByRole("button", { name: /start first session/i })
+      page.getByRole("button", { name: /start (daily|first) session/i })
     ).toBeVisible();
 
     // The audio map and the Hangul clips are precached, so both must resolve

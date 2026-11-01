@@ -8,6 +8,7 @@ test("exports progress and imports the same file back", async ({ page }) => {
   await page.goto("/");
 
   // Leave one graded card behind so the exported file carries real progress.
+  // A fresh learner starts from the first-run start block, not the hero.
   await page
     .getByRole("button", { name: /start (daily|first) session/i })
     .click();
