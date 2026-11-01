@@ -8,6 +8,7 @@ import type {
 import type { UserState } from "@/hooks/useStudyState";
 import type { SessionMode } from "@/hooks/useHomeSessions";
 import type { VocabularyCard } from "@/lib/vocabulary";
+import type { GrammarProgress } from "@/lib/grammarProgress";
 
 // Practice modes and dialogs stay lazily loaded so the initial bundle stays
 // focused on the Daily Session flow.
@@ -44,6 +45,11 @@ const SettingsDialog = lazy(() =>
 const StatsDialog = lazy(() =>
   import("@/components/StatsDialog").then(module => ({
     default: module.StatsDialog,
+  }))
+);
+const GrammarDialog = lazy(() =>
+  import("@/components/grammar/GrammarDialog").then(module => ({
+    default: module.GrammarDialog,
   }))
 );
 
@@ -83,10 +89,14 @@ interface HomeDialogsProps {
   onShadowingGrade: (cardId: string, rating: "again" | "good") => void;
 
   showAlphabet: boolean;
+  showGrammar: boolean;
+  grammarProgress: GrammarProgress;
+  onGrammarComplete: (lessonId: string, correct: number, total: number) => void;
   showListening: boolean;
   showScenarios: boolean;
   showShadowing: boolean;
   onCloseAlphabet: () => void;
+  onCloseGrammar: () => void;
   onCloseListening: () => void;
   onCloseScenarios: () => void;
   onCloseShadowing: () => void;
@@ -123,10 +133,14 @@ export function HomeDialogs({
   onScenarioGrade,
   onShadowingGrade,
   showAlphabet,
+  showGrammar,
+  grammarProgress,
+  onGrammarComplete,
   showListening,
   showScenarios,
   showShadowing,
   onCloseAlphabet,
+  onCloseGrammar,
   onCloseListening,
   onCloseScenarios,
   onCloseShadowing,
@@ -170,6 +184,21 @@ export function HomeDialogs({
         <Suspense fallback={<ModalLoadingFallback />}>
           <LazyBoundary onClose={onCloseAlphabet}>
             <AlphabetPractice onClose={onCloseAlphabet} />
+          </LazyBoundary>
+        </Suspense>
+      )}
+
+      {showGrammar && (
+        <Suspense fallback={<ModalLoadingFallback />}>
+          <LazyBoundary onClose={onCloseGrammar}>
+            <GrammarDialog
+              open
+              onOpenChange={open => {
+                if (!open) onCloseGrammar();
+              }}
+              progress={grammarProgress}
+              onCompleteLesson={onGrammarComplete}
+            />
           </LazyBoundary>
         </Suspense>
       )}

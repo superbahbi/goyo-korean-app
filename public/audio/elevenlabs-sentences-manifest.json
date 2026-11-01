@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-01T05:15:34.962Z",
+  "generatedAt": "2026-11-01T05:30:44.507Z",
   "voiceId": "h5eZa8VFAq0EQ8E81dfL",
   "modelId": "eleven_v4",
   "counts": {
-    "total": 20,
-    "generated": 20,
+    "total": 36,
+    "generated": 36,
     "skipped": 0,
     "failed": 0
   },
@@ -12,164 +12,292 @@
   "alphabet": [],
   "sentences": [
     {
-      "id": "daily_001",
-      "text": "만나서 반가워요.",
+      "id": "grammar_and-then_1",
+      "text": "밥을 먹고 커피를 마셔요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_daily_001.cff9faa1.mp3",
+      "filename": "elevenlabs_sent_grammar_and-then_1.1ed21495.mp3",
+      "status": "generated",
+      "bytes": 34315
+    },
+    {
+      "id": "grammar_and-then_2",
+      "text": "저는 학생이고 동생은 의사예요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_and-then_2.082941bf.mp3",
+      "status": "generated",
+      "bytes": 43510
+    },
+    {
+      "id": "grammar_and-then_3",
+      "text": "책을 읽고 잤어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_and-then_3.73325f6f.mp3",
       "status": "generated",
       "bytes": 26792
     },
     {
-      "id": "daily_002",
-      "text": "요즘 잘 지내요?",
+      "id": "grammar_but_1",
+      "text": "한국어는 어렵지만 재미있어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_daily_002.7933668a.mp3",
+      "filename": "elevenlabs_sent_grammar_but_1.2f3ed488.mp3",
       "status": "generated",
-      "bytes": 25538
+      "bytes": 41838
     },
     {
-      "id": "daily_003",
-      "text": "제 친구는 한국 음식을 좋아해요.",
+      "id": "grammar_but_2",
+      "text": "비가 왔지만 갔어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_daily_003.3215a24a.mp3",
-      "status": "generated",
-      "bytes": 39331
-    },
-    {
-      "id": "daily_004",
-      "text": "동생은 매운 음식을 싫어해요.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_daily_004.5f290bd5.mp3",
-      "status": "generated",
-      "bytes": 38077
-    },
-    {
-      "id": "daily_005",
-      "text": "이 영화는 재미있어요.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_daily_005.f8b64315.mp3",
-      "status": "generated",
-      "bytes": 29300
-    },
-    {
-      "id": "daily_006",
-      "text": "이 책은 지루해요.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_daily_006.cb7a3e11.mp3",
+      "filename": "elevenlabs_sent_grammar_but_2.5077dc97.mp3",
       "status": "generated",
       "bytes": 31807
     },
     {
-      "id": "daily_007",
-      "text": "오늘 하루가 피곤해요.",
+      "id": "grammar_but_3",
+      "text": "커피는 좋아하지만 차는 안 마셔요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_daily_007.c7ab7ab3.mp3",
-      "status": "generated",
-      "bytes": 34315
-    },
-    {
-      "id": "daily_008",
-      "text": "오늘은 정말 행복해요.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_daily_008.516d073a.mp3",
-      "status": "generated",
-      "bytes": 34315
-    },
-    {
-      "id": "daily_009",
-      "text": "그 소식을 들으니 슬퍼요.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_daily_009.8aaf79b0.mp3",
-      "status": "generated",
-      "bytes": 35569
-    },
-    {
-      "id": "daily_010",
-      "text": "동생은 아침부터 화났어요.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_daily_010.87dcca20.mp3",
-      "status": "generated",
-      "bytes": 36823
-    },
-    {
-      "id": "surv_001",
-      "text": "안녕하세요, 저는 학생입니다.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_surv_001.7572fc52.mp3",
-      "status": "generated",
-      "bytes": 38077
-    },
-    {
-      "id": "surv_002",
-      "text": "도와주셔서 감사합니다.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_surv_002.a46c011b.mp3",
-      "status": "generated",
-      "bytes": 28046
-    },
-    {
-      "id": "surv_003",
-      "text": "늦어서 죄송합니다.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_surv_003.140ab71d.mp3",
-      "status": "generated",
-      "bytes": 28046
-    },
-    {
-      "id": "surv_004",
-      "text": "네, 맞습니다.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_surv_004.42ea2531.mp3",
-      "status": "generated",
-      "bytes": 23030
-    },
-    {
-      "id": "surv_005",
-      "text": "아니요, 저는 학생이 아닙니다.",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_surv_005.20078600.mp3",
+      "filename": "elevenlabs_sent_grammar_but_3.0af6cf17.mp3",
       "status": "generated",
       "bytes": 40585
     },
     {
-      "id": "surv_006",
-      "text": "죄송하지만 모르겠습니다.",
+      "id": "grammar_can-do_1",
+      "text": "한국어를 할 수 있어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_surv_006.3ea35a52.mp3",
+      "filename": "elevenlabs_sent_grammar_can-do_1.ef983c4c.mp3",
       "status": "generated",
-      "bytes": 36823
+      "bytes": 28046
     },
     {
-      "id": "surv_007",
-      "text": "이 문제를 풀 수 있게 도와주세요.",
+      "id": "grammar_can-do_2",
+      "text": "내일은 갈 수 없어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_surv_007.ca25fa01.mp3",
-      "status": "generated",
-      "bytes": 38077
-    },
-    {
-      "id": "surv_008",
-      "text": "화장실은 어디입니까?",
-      "group": "sentences",
-      "filename": "elevenlabs_sent_surv_008.1e185247.mp3",
+      "filename": "elevenlabs_sent_grammar_can-do_2.bd9f3449.mp3",
       "status": "generated",
       "bytes": 30554
     },
     {
-      "id": "surv_009",
-      "text": "이 책은 얼마입니까?",
+      "id": "grammar_can-do_3",
+      "text": "여기 앉을 수 있어요?",
       "group": "sentences",
-      "filename": "elevenlabs_sent_surv_009.29a3c23a.mp3",
+      "filename": "elevenlabs_sent_grammar_can-do_3.64bf2815.mp3",
+      "status": "generated",
+      "bytes": 28046
+    },
+    {
+      "id": "grammar_copula_1",
+      "text": "저는 학생이에요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_copula_1.e3c748b1.mp3",
+      "status": "generated",
+      "bytes": 24284
+    },
+    {
+      "id": "grammar_copula_2",
+      "text": "이건 커피예요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_copula_2.0b317f58.mp3",
+      "status": "generated",
+      "bytes": 25538
+    },
+    {
+      "id": "grammar_copula_3",
+      "text": "여기는 학교예요?",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_copula_3.44d1d949.mp3",
+      "status": "generated",
+      "bytes": 24284
+    },
+    {
+      "id": "grammar_existence_1",
+      "text": "시간이 있어요?",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_existence_1.764355a2.mp3",
+      "status": "generated",
+      "bytes": 17597
+    },
+    {
+      "id": "grammar_existence_2",
+      "text": "화장실이 어디에 있어요?",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_existence_2.99822a4d.mp3",
       "status": "generated",
       "bytes": 30554
     },
     {
-      "id": "surv_010",
-      "text": "저는 영어를 합니다.",
+      "id": "grammar_existence_3",
+      "text": "저는 차가 없어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_surv_010.8c4b0f0c.mp3",
+      "filename": "elevenlabs_sent_grammar_existence_3.72efc1c7.mp3",
+      "status": "generated",
+      "bytes": 29300
+    },
+    {
+      "id": "grammar_object-marker_1",
+      "text": "저는 밥을 먹어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_object-marker_1.e1add0da.mp3",
+      "status": "generated",
+      "bytes": 25538
+    },
+    {
+      "id": "grammar_object-marker_2",
+      "text": "커피를 마셔요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_object-marker_2.e394702a.mp3",
+      "status": "generated",
+      "bytes": 23030
+    },
+    {
+      "id": "grammar_object-marker_3",
+      "text": "한국어를 공부해요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_object-marker_3.e06a7581.mp3",
+      "status": "generated",
+      "bytes": 25538
+    },
+    {
+      "id": "grammar_past_1",
+      "text": "어제 영화를 봤어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_past_1.86bca19a.mp3",
+      "status": "generated",
+      "bytes": 31807
+    },
+    {
+      "id": "grammar_past_2",
+      "text": "아침을 먹었어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_past_2.a39c9882.mp3",
+      "status": "generated",
+      "bytes": 24284
+    },
+    {
+      "id": "grammar_past_3",
+      "text": "주말에 공부했어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_past_3.db51e534.mp3",
       "status": "generated",
       "bytes": 26792
+    },
+    {
+      "id": "grammar_place-particles_1",
+      "text": "아침에 커피를 마셔요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_place-particles_1.9f0ccc10.mp3",
+      "status": "generated",
+      "bytes": 29300
+    },
+    {
+      "id": "grammar_place-particles_2",
+      "text": "도서관에서 공부해요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_place-particles_2.2eec0e08.mp3",
+      "status": "generated",
+      "bytes": 28046
+    },
+    {
+      "id": "grammar_place-particles_3",
+      "text": "내일 학교에 가요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_place-particles_3.b60682c1.mp3",
+      "status": "generated",
+      "bytes": 25538
+    },
+    {
+      "id": "grammar_polite-present_1",
+      "text": "저는 매일 한국어를 공부해요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_polite-present_1.12c2f575.mp3",
+      "status": "generated",
+      "bytes": 40585
+    },
+    {
+      "id": "grammar_polite-present_2",
+      "text": "아침을 먹어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_polite-present_2.1a88ca06.mp3",
+      "status": "generated",
+      "bytes": 23030
+    },
+    {
+      "id": "grammar_polite-present_3",
+      "text": "이 영화는 재미있어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_polite-present_3.fdab6165.mp3",
+      "status": "generated",
+      "bytes": 29300
+    },
+    {
+      "id": "grammar_polite-request_1",
+      "text": "천천히 말씀해 주세요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_polite-request_1.84fa37f2.mp3",
+      "status": "generated",
+      "bytes": 31807
+    },
+    {
+      "id": "grammar_polite-request_2",
+      "text": "여기 앉으세요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_polite-request_2.d9e21439.mp3",
+      "status": "generated",
+      "bytes": 20105
+    },
+    {
+      "id": "grammar_polite-request_3",
+      "text": "물 좀 주세요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_polite-request_3.b36bf6da.mp3",
+      "status": "generated",
+      "bytes": 20105
+    },
+    {
+      "id": "grammar_topic-subject_1",
+      "text": "저는 한국 사람이에요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_topic-subject_1.2688a9b8.mp3",
+      "status": "generated",
+      "bytes": 29300
+    },
+    {
+      "id": "grammar_topic-subject_2",
+      "text": "오늘은 비가 와요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_topic-subject_2.9aff2469.mp3",
+      "status": "generated",
+      "bytes": 26792
+    },
+    {
+      "id": "grammar_topic-subject_3",
+      "text": "누가 왔어요? 제 친구가 왔어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_topic-subject_3.7ae2425a.mp3",
+      "status": "generated",
+      "bytes": 40585
+    },
+    {
+      "id": "grammar_want-to_1",
+      "text": "한국에 가고 싶어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_want-to_1.f96ab344.mp3",
+      "status": "generated",
+      "bytes": 26792
+    },
+    {
+      "id": "grammar_want-to_2",
+      "text": "뭐 먹고 싶어요?",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_want-to_2.7b73a78f.mp3",
+      "status": "generated",
+      "bytes": 16343
+    },
+    {
+      "id": "grammar_want-to_3",
+      "text": "오늘은 집에서 쉬고 싶어요.",
+      "group": "sentences",
+      "filename": "elevenlabs_sent_grammar_want-to_3.302dff1c.mp3",
+      "status": "generated",
+      "bytes": 36823
     }
   ]
 }

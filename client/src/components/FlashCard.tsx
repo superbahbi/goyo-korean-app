@@ -274,7 +274,7 @@ function FlashCardBase({
                     variant="ghost"
                     size="sm"
                     className="mt-2 h-8 gap-1.5 px-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-                    aria-label={`Play the example sentence for ${cleanKoreanText(front)}`}
+                    aria-label={`Hear sentence for ${cleanKoreanText(front)}`}
                     onClick={event => {
                       event.stopPropagation();
                       void playSentenceAudio(wordId).then(played => {

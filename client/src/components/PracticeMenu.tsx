@@ -1,5 +1,6 @@
 import { SectionHeading } from "@/components/SectionHeading";
 import {
+  BookMarked,
   BookOpen,
   Brain,
   Headphones,
@@ -11,7 +12,9 @@ import {
 interface PracticeMenuProps {
   weakCardCount: number;
   learningCardCount: number;
+  grammarCompleted: number;
   onOpenAlphabet: () => void;
+  onOpenGrammar: () => void;
   onOpenListening: () => void;
   onOpenScenarios: () => void;
   onOpenShadowing: () => void;
@@ -26,7 +29,9 @@ interface PracticeMenuProps {
 export function PracticeMenu({
   weakCardCount,
   learningCardCount,
+  grammarCompleted,
   onOpenAlphabet,
+  onOpenGrammar,
   onOpenListening,
   onOpenScenarios,
   onOpenShadowing,
@@ -41,6 +46,18 @@ export function PracticeMenu({
       icon: Languages,
       tone: "bg-indigo-50 text-indigo-600",
       onClick: onOpenAlphabet,
+      disabled: false,
+    },
+    {
+      key: "grammar",
+      title: "Grammar Lessons",
+      meta:
+        grammarCompleted > 0
+          ? `${grammarCompleted} of 12 lessons complete`
+          : "12 TOPIK I patterns",
+      icon: BookMarked,
+      tone: "bg-teal-50 text-teal-700",
+      onClick: onOpenGrammar,
       disabled: false,
     },
     {

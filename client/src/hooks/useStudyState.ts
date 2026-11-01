@@ -22,11 +22,17 @@ import {
   type MasteryState,
 } from "@/lib/mastery";
 import { levelFromXp } from "@/lib/xp";
+import {
+  emptyGrammarProgress,
+  recordGrammarAttempt,
+  sanitizeGrammarProgress,
+  type GrammarProgress,
+} from "@/lib/grammarProgress";
 
 export { getLocalDateKey, getMasteryState };
 export type { CardState, MasteryState };
 
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 5;
 
 export interface UserStats {
   totalXp: number;
@@ -50,6 +56,8 @@ export interface UserState {
   reviewLog: ReviewLog;
   /** One entry per studied day, keyed by local `YYYY-MM-DD`. */
   studyDays: StudyDays;
+  /** Lesson completion and best quiz scores. Travels with the export. */
+  grammar: GrammarProgress;
 }
 
 export interface GradeOptions {
@@ -82,6 +90,7 @@ function createDefaultState(): UserState {
     },
     reviewLog: createReviewLog(),
     studyDays: {},
+    grammar: emptyGrammarProgress(),
   };
 }
 
@@ -242,6 +251,7 @@ export function parseSavedState(
       settings,
       reviewLog: sanitizeReviewLog(parsed.reviewLog),
       studyDays,
+      grammar: sanitizeGrammarProgress(parsed.grammar),
     };
   } catch (error) {
     console.error("Failed to load saved progress, starting fresh:", error);
@@ -284,6 +294,7 @@ export function buildExportPayload(
     stats: state.stats,
     settings: state.settings,
     studyDays: state.studyDays,
+    grammar: state.grammar,
   };
   // The review log is for local analysis: it is large and not needed to restore
   // progress, so it only travels when the learner asks for it.
@@ -544,6 +555,21 @@ export function useStudyState() {
     []
   );
 
+  const recordGrammarResult = useCallback(
+    (lessonId: string, correct: number, total: number) => {
+      setState(current => ({
+        ...current,
+        grammar: recordGrammarAttempt(
+          current.grammar,
+          lessonId,
+          correct,
+          total
+        ),
+      }));
+    },
+    []
+  );
+
   const replaceState = useCallback((next: UserState) => {
     setState(next);
   }, []);
@@ -552,6 +578,7 @@ export function useStudyState() {
     state,
     gradeCard,
     updateSettings,
+    recordGrammarResult,
     replaceState,
     saveBlocked,
     saveError,
