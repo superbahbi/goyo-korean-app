@@ -81,6 +81,7 @@ export function ListeningPractice({
         eyebrow="Listening complete"
         heading="A quiet step forward"
         icon={<CheckCircle2 size={34} />}
+        tone="emerald"
         closeLabel="Done"
         restartLabel={
           <>

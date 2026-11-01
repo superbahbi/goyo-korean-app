@@ -87,6 +87,7 @@ export function ShadowingPractice({
         eyebrow="Shadowing complete"
         heading="Your Korean had a voice"
         icon={<Mic size={34} />}
+        tone="violet"
         closeLabel="Return to dashboard"
         restartLabel={
           <>

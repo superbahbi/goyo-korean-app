@@ -102,6 +102,7 @@ export function ScenarioPractice({
         eyebrow="Scenario practice complete"
         heading="You used Korean in context"
         icon={<Check size={34} />}
+        tone="rose"
         closeLabel="Return to dashboard"
         restartLabel={
           <>

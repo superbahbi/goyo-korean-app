@@ -32,6 +32,7 @@ export function StudySessionSummary({
       eyebrow="Session complete"
       heading="Well practiced"
       icon={<Check size={34} />}
+      tone="emerald"
       closeLabel="Return to dashboard"
       restartLabel={allowRepeat ? "Practice again" : undefined}
       restartClassName="bg-emerald-700 hover:bg-emerald-800"

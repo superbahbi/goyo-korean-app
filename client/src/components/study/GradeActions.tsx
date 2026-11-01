@@ -71,7 +71,7 @@ export function GradeActions({ intervals, onGrade }: GradeActionsProps) {
                 <Icon size={16} aria-hidden="true" />
                 {label}
               </span>
-              <span className="text-[11px] font-normal opacity-80 sm:text-xs">
+              <span className="text-[11px] font-normal sm:text-xs">
                 {daysLabel(days)}
               </span>
               <span className="sr-only">
