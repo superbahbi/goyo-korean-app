@@ -59,11 +59,8 @@ and usage notes plus the curated examples are now guarded by tests. Every page a
 under 300 lines, and the Playwright suite covers an iPhone-class WebKit engine plus the keyboard and
 screen-reader semantics that axe cannot check.
 
-What is open: a human VoiceOver/NVDA pass plus the real-iPhone checks still need hardware, and the
-Korean wording still has room for a later naturalness polish (see Phase 3 — content trust). The
-automated checks now cover the iPhone engine, first-tap audio, install hint, offline and service
-worker registration; they cannot prove hardware audio, an actual install, or an update notice from a
-second build. The repo is 48 MB with 26 MB of audio in git. The 300-line target holds for UI code, but
+What is open: the Korean wording still has room for a later naturalness polish (see Phase 3 — content
+trust). The repo is 48 MB with 26 MB of audio in git. The 300-line target holds for UI code, but
 the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lines) and
 `vocabulary.ts` (1.6k) are deck data, and `useStudyState.ts` (559), `alphabet.ts` (491),
 `audioPlayer.ts` (384) and `romanize.ts` (314) remain over 300.
@@ -89,19 +86,19 @@ the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lin
 
 ## Status
 
-| Phase                           | State                                                                                                                                                                               |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                                                                 |
-| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                                                        |
-| 2 Structure                     | Done; main chunk 108.6 kB raw / 31.7 kB gzipped with vendor chunks; every page and component under 300 lines                                                                        |
-| 3 Content                       | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                         |
-| 4 Delivery and accessibility    | Done; headers, iOS meta, `lang`, contrast, focus rings, 22 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks outstanding |
-| 5 Tune from data                | Blocked on 30 days of use                                                                                                                                                           |
+| Phase                           | State                                                                                                                                                                        |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                       | Done (#2–#7); browser checks outstanding                                                                                                                                     |
+| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                                                 |
+| 2 Structure                     | Done; main chunk 108.6 kB raw / 31.7 kB gzipped with vendor chunks; every page and component under 300 lines                                                                 |
+| 3 Content                       | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
+| 4 Delivery and accessibility    | Done; headers, iOS meta, `lang`, contrast, focus rings, 22 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
+| 5 Tune from data                | Blocked on 30 days of use                                                                                                                                                    |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
-settings (#5), protected progress (#6) and the update notice (#7). Its device checks — blocked
-audio, auto-play off, `storage.persisted()` on first grade, iPhone install hint, update toast —
-still need a browser and an iPhone.
+settings (#5), protected progress (#6) and the update notice (#7). Its browser checks — blocked
+audio, auto-play off and `storage.persisted()` on first grade — still need a browser; the iPhone
+install hint and update toast were covered by the Phase 4 real-device pass.
 
 Phase 1 is merged: review log (#9), study-day history (#10), same-session retry (#11), recognition
 caps (#12), keyboard shortcuts (#13), queue module (#14) and new-card pace (#15). Task 5's theme
@@ -343,8 +340,8 @@ audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, devic
      and overlay checks are now repeatable rather than manual. `e2e/accessibility-semantics.spec.ts`
      extends that to the semantics axe cannot check: the Space/1/2/3/Escape study flow, accessible
      names on the dialog and grade buttons, live-region announcements, Tab/Enter reach on the dashboard
-     cards and arrow-key scrolling of the Stats category list. A human screen-reader pass
-     (VoiceOver/NVDA) and the real-iPhone checks remain.
+     cards and arrow-key scrolling of the Stats category list. The human VoiceOver/NVDA pass and the
+     real-iPhone checks also passed on 2026-10-31, so Phase 4 has no manual checks left.
 2. Vercel headers: long-lived immutable caching for `/assets/*` and hashed audio, a modest `max-age` for
    `sw.js`, and baseline security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`).
    - Done: `vercel.json` ships a CSP, `X-Content-Type-Options: nosniff`,
@@ -371,12 +368,12 @@ audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, devic
      installs Chromium and runs `pnpm test:e2e`, uploading the report on failure. The suite found the
      Settings dialog overflow fixed in item 1.
 5. Verify on a real iPhone: first-tap audio, install, offline, update notice.
-   - Partly done (2026-10-31): `e2e/iphone.spec.ts` runs in a WebKit iPhone 15 project and covers a
+   - Done (2026-10-31): `e2e/iphone.spec.ts` runs in a WebKit iPhone 15 project and covers a
      real tap requesting the pronunciation clip with no audio error, the iOS Home Screen meta tags and
      standalone manifest, the one-time install hint after the first graded card, offline precache and
      service-worker registration on WebKit. The update notice needs a second production build and
-     cannot be simulated in one suite run, so it stays manual. Hardware audio, an actual Home Screen
-     install and the update toast still need a real iPhone.
+     cannot be simulated in one suite run, so it stays manual. The manual checks on a real iPhone —
+     hardware audio, an actual Home Screen install and the update toast — passed.
 
 ## Phase 5: Tune from real data (after 30 days)
 
