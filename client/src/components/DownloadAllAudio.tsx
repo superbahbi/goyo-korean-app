@@ -134,7 +134,11 @@ export function DownloadAllAudio() {
       </p>
       {download ? (
         <div className="space-y-2" role="status" aria-live="polite">
-          <Progress value={progress} className="h-2" />
+          <Progress
+            value={progress}
+            aria-label="Audio download progress"
+            className="h-2"
+          />
           <div className="flex items-center justify-between text-xs text-slate-500">
             <span>
               {download.done} / {download.total} clips

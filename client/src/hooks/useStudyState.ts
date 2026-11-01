@@ -303,8 +303,12 @@ export type ImportValidation =
 
 // Rejects anything that is not a complete progress save. Missing or unknown
 // top-level keys beyond the required ones are ignored, and parseSavedState
-// decides how each saved field is sanitized.
-export function validateImportPayload(raw: string): ImportValidation {
+// decides how each saved field is sanitized. `today` is injectable so the
+// derived streak can be tested without depending on the wall clock.
+export function validateImportPayload(
+  raw: string,
+  today = getLocalDateKey()
+): ImportValidation {
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
@@ -356,7 +360,12 @@ export function validateImportPayload(raw: string): ImportValidation {
   const hasReviewLog =
     isRecord(parsed.reviewLog) && Array.isArray(parsed.reviewLog.entries);
 
-  return { ok: true, state: parseSavedState(raw), exportedAt, hasReviewLog };
+  return {
+    ok: true,
+    state: parseSavedState(raw, today),
+    exportedAt,
+    hasReviewLog,
+  };
 }
 
 /**

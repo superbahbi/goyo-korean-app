@@ -95,7 +95,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                   >
                     <div className="text-5xl mb-4">{category.icon}</div>
                     <h2 className="text-2xl font-bold mb-2">{category.name}</h2>
-                    <p className="text-sm opacity-75">
+                    <p className="text-sm">
                       {category.id === "consonants"
                         ? "19 letter names"
                         : category.id === "vowels"
@@ -248,7 +248,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
               <Button
                 onClick={handleNext}
                 disabled={currentIndex === cards.length - 1 || isSpeaking}
-                className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl"
+                className="px-6 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl"
               >
                 Next →
               </Button>
@@ -269,7 +269,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                     transition={{ delay: idx * 0.02 }}
                     className={`aspect-square rounded-lg font-bold text-2xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
                       idx === currentIndex
-                        ? "bg-emerald-500 text-white shadow-lg scale-110"
+                        ? "bg-emerald-700 text-white shadow-lg scale-110"
                         : "bg-white text-slate-900 border-2 border-slate-200 hover:border-emerald-300"
                     }`}
                   >

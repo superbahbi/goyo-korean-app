@@ -84,7 +84,7 @@ export function ShadowingPractice({
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
               <Check size={34} />
             </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Shadowing complete
             </p>
             <h2 className="mt-2 font-serif text-3xl text-slate-900">
@@ -132,7 +132,11 @@ export function ShadowingPractice({
             <X size={20} />
           </Button>
           <div className="max-w-xs flex-1 px-4">
-            <Progress value={(index / queue.length) * 100} className="h-2" />
+            <Progress
+              value={(index / queue.length) * 100}
+              aria-label="Shadowing progress"
+              className="h-2"
+            />
           </div>
           <div className="min-w-[60px] text-right text-sm font-semibold text-slate-500">
             {index + 1} / {queue.length}
@@ -159,7 +163,7 @@ export function ShadowingPractice({
                 <Volume2 size={36} />
                 <span className="text-xs">Play model</span>
               </Button>
-              <p className="mt-5 text-sm text-slate-400">
+              <p className="mt-5 text-sm text-slate-500">
                 Replay as many times as you need.
               </p>
               {visible ? (
@@ -170,7 +174,7 @@ export function ShadowingPractice({
                   >
                     {currentCard.front}
                   </p>
-                  <p className="mt-2 font-mono text-emerald-600">
+                  <p className="mt-2 font-mono text-emerald-700">
                     {currentCard.romanization}
                   </p>
                   <p className="mt-4 text-sm italic text-slate-500" lang="ko">

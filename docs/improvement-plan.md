@@ -21,15 +21,15 @@ Every stage is done only when its gate passes.
 
 Verified on 2026-10-31 on `main` after Phase 3 (`4af340d` plus the Phase 3 batches and the post-close review):
 
-| Check              | Result                                                                                                                                                                                                             |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `tsc --noEmit`     | Passes                                                                                                                                                                                                             |
-| `eslint .`         | Passes                                                                                                                                                                                                             |
-| `prettier --check` | Passes                                                                                                                                                                                                             |
-| `vitest run`       | 179 tests pass in 19 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up) |
-| `playwright test`  | 5 smokes pass against the production build: study loop with the keyboard, failed-card retry, Browse search and audio, progress export/import, offline reload                                                       |
-| `vite build`       | Passes. Main chunk 105.6 kB (30.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk                                                   |
-| CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                                                                                |
+| Check              | Result                                                                                                                                                                                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                           |
+| `eslint .`         | Passes                                                                                                                                                                                                                                           |
+| `prettier --check` | Passes                                                                                                                                                                                                                                           |
+| `vitest run`       | 179 tests pass in 19 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up)                               |
+| `playwright test`  | 10 checks pass against the production build: the five flow smokes (study loop, failed-card retry, Browse search and audio, progress export/import, offline reload) plus five axe scans (dashboard, study, dialogs, Hangul, recognition overlays) |
+| `vite build`       | Passes. Main chunk 107.8 kB (31.5 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 209 kB chunk                                                                                 |
+| CI                 | Type check, lint, format check, tests and build are green on `main`                                                                                                                                                                              |
 
 All gates pass.
 
@@ -51,10 +51,10 @@ precaches the shell, the audio index, Hangul and number audio; and the imported 
 and usage notes plus the curated examples are now guarded by tests.
 
 What is open: the Korean-speaker spot check of the audited cards is still pending (see Phase 3 —
-content trust), and the browser, screen-reader and iPhone checks still need a real device. The repo
-is 48 MB with 26 MB of audio in git. The Phase 2 split is done, but its 300-line target is only met
-by `Home.tsx` (274 lines): `SettingsDialog` (415), `StudySession` (446) and several practice views
-are still longer.
+content trust), and the screen-reader and iPhone checks still need a real device. The browser and
+practice-overlay checks are now automated with axe. The repo is 48 MB with 26 MB of audio in git. The
+Phase 2 split is done, but its 300-line target is only met by `Home.tsx` (274 lines):
+`SettingsDialog` (415), `StudySession` (446) and several practice views are still longer.
 
 ## How we work
 
@@ -77,14 +77,14 @@ are still longer.
 
 ## Status
 
-| Phase                           | State                                                                                                                                                    |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                                      |
-| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                             |
-| 2 Structure                     | Done; main chunk 105.6 kB raw / 30.8 kB gzipped with vendor chunks                                                                                       |
-| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                                          |
-| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels, reduced motion, focus rings, Playwright smokes and hashed audio done; device checks open |
-| 5 Tune from data                | Blocked on 30 days of use                                                                                                                                |
+| Phase                           | State                                                                                                                                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                       | Done (#2–#7); browser and iPhone checks outstanding                                                                                                                                   |
+| 1 Learning loop and measurement | Done (#9–#15); device checks outstanding; item 5 partly open                                                                                                                          |
+| 2 Structure                     | Done; main chunk 107.8 kB raw / 31.5 kB gzipped with vendor chunks                                                                                                                    |
+| 3 Content                       | Done; five tasks and a post-close review complete; Korean-speaker spot check of the audited cards still pending                                                                       |
+| 4 Delivery and accessibility    | In progress; headers, iOS meta, `lang`, contrast, chart labels, reduced motion, focus rings, Playwright smokes, axe scans and hashed audio done; screen-reader and device checks open |
+| 5 Tune from data                | Blocked on 30 days of use                                                                                                                                                             |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its device checks — blocked
@@ -316,7 +316,16 @@ audio, deck expansion, and FSRS. Phase 4 (Playwright smokes, hashed audio, devic
      choice buttons and text links shipped. Every icon-only control already carries a label, and the
      Scenario verdict now announces through `aria-live` like Listening and Study. The smoke suite also
      caught the Settings dialog overflowing a laptop-height viewport, so it now scrolls like Stats does.
-     The real-browser, screen-reader and overlay checks remain.
+   - Done (2026-10-31): `e2e/accessibility.spec.ts` scans the dashboard, the study front/back/summary,
+     Browse, Stats, Settings, Hangul and all three recognition overlays with `@axe-core/playwright`
+     (WCAG 2.0/2.1 A and AA) against the production build, with seeded progress so every surface has
+     real data. It found and this PR fixed: two unnamed dashboard progress bars (the Radix root now
+     also receives `value`, so screen readers get the real percentage), low-contrast header and Stats
+     labels in orange/yellow/emerald/cyan/amber, the pulsing "Tap to reveal" hint at 2.3:1, dimmed
+     Hangul category subtitles, a Stats category list with no keyboard access, and a Browse play
+     button whose `aria-label` dropped its visible "Speak" text. All five scans pass, so the browser
+     and overlay checks are now repeatable rather than manual. A human screen-reader pass
+     (VoiceOver/NVDA) and the iPhone checks remain.
 2. Vercel headers: long-lived immutable caching for `/assets/*` and hashed audio, a modest `max-age` for
    `sw.js`, and baseline security headers (CSP, `X-Content-Type-Options`, `Referrer-Policy`).
    - Done: `vercel.json` ships a CSP, `X-Content-Type-Options: nosniff`,

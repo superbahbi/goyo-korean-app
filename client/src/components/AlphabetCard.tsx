@@ -41,7 +41,7 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
       {/* Speak Button */}
       <Button
         onClick={() => onSpeak(card.id, card.type)}
-        className="w-full h-12 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold gap-2 rounded-xl"
+        className="w-full h-12 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold gap-2 rounded-xl"
       >
         <Volume2 size={20} />
         Hear Pronunciation

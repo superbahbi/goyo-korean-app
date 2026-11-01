@@ -68,8 +68,8 @@ export function HomeHeader({
               fill="currentColor"
               aria-hidden="true"
             />
-            <span className="text-sm font-bold text-orange-600">{streak}</span>
-            <span className="hidden text-xs text-orange-500 sm:inline">
+            <span className="text-sm font-bold text-orange-700">{streak}</span>
+            <span className="hidden text-xs text-orange-700 sm:inline">
               day streak
             </span>
           </div>
@@ -83,8 +83,8 @@ export function HomeHeader({
               fill="currentColor"
               aria-hidden="true"
             />
-            <span className="text-sm font-bold text-yellow-600">{totalXp}</span>
-            <span className="hidden text-xs text-yellow-600 sm:inline">XP</span>
+            <span className="text-sm font-bold text-yellow-700">{totalXp}</span>
+            <span className="hidden text-xs text-yellow-700 sm:inline">XP</span>
           </div>
           <Button
             type="button"

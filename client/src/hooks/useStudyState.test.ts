@@ -337,7 +337,9 @@ describe("progress export and import", () => {
       new Date("2026-10-30T12:00:00Z"),
       { includeReviewLog: true }
     );
-    const result = validateImportPayload(JSON.stringify(payload));
+    // Pin the day: the streak is derived from studyDays against `today`, so
+    // using the wall clock made this test fail after midnight.
+    const result = validateImportPayload(JSON.stringify(payload), today);
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.hasReviewLog).toBe(true);
@@ -348,7 +350,7 @@ describe("progress export and import", () => {
   });
 
   it("accepts a valid current-version file", () => {
-    const result = validateImportPayload(JSON.stringify(save));
+    const result = validateImportPayload(JSON.stringify(save), today);
     expect(result.ok).toBe(true);
     if (result.ok) {
       expect(result.state.cardStates.surv_001).toEqual(card);
