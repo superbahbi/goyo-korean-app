@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { BookOpen, Eye, EyeOff, Search, Volume2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { BookOpen, Search } from "lucide-react";
+import { BrowseResultsList } from "@/components/browse/BrowseResultsList";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +11,6 @@ import {
 import {
   getMasteryState,
   MASTERY_LABELS,
-  MASTERY_STYLES,
   type CardState,
   type MasteryState,
 } from "@/lib/mastery";
@@ -91,8 +89,11 @@ export function BrowseDialog({
     }
   };
 
-  const getRomanization = (card: VocabularyCard) => {
-    return card.romanization || "";
+  const toggleRomanization = (cardId: string) => {
+    setShowRomanization({
+      ...showRomanization,
+      [cardId]: !showRomanization[cardId],
+    });
   };
 
   return (
@@ -172,178 +173,21 @@ export function BrowseDialog({
             )}
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto">
-          <div className="space-y-3 px-5 py-4 sm:px-6">
-            {filteredCards.length > 0 ? (
-              visibleCards.map(card => {
-                const romanization = getRomanization(card);
-                const isShowingRoman = showRomanization[card.id];
-                const isCardPlaying = playingCardId === card.id;
-                const mastery = getMasteryState(cardStates[card.id]);
-                return (
-                  <div
-                    key={card.id}
-                    aria-busy={isCardPlaying}
-                    className={`rounded-2xl border p-4 transition-all ${
-                      isCardPlaying
-                        ? "audio-card-playing border-emerald-400 bg-emerald-50/80 ring-2 ring-emerald-200 shadow-lg shadow-emerald-100"
-                        : "border-slate-200 bg-white hover:border-emerald-300 hover:shadow-sm"
-                    }`}
-                  >
-                    <div className="flex justify-between items-start gap-3 mb-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <div
-                            className="text-xl font-bold text-slate-900"
-                            lang="ko"
-                          >
-                            {card.front}
-                          </div>
-                          {isShowingRoman && romanization && (
-                            <span className="text-xs font-mono text-emerald-700">
-                              {romanization}
-                            </span>
-                          )}
-                        </div>
-                        <div className="mt-1 text-sm font-medium text-slate-600">
-                          {card.back}
-                        </div>
-                        {isShowingRoman && romanization && (
-                          <div className="text-sm text-emerald-700 font-mono font-semibold mt-1">
-                            <span className="text-xs text-slate-500 mr-2">
-                              Romanization:
-                            </span>
-                            {romanization}
-                          </div>
-                        )}
-                        {card.example && (
-                          <div
-                            className="text-xs text-slate-500 italic mt-2 line-clamp-2"
-                            lang="ko"
-                          >
-                            "{card.example}"
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 flex-shrink-0">
-                        {isCardPlaying && (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-700 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
-                            <span
-                              className="h-1.5 w-1.5 rounded-full bg-white animate-pulse"
-                              aria-hidden="true"
-                            />
-                            Playing
-                          </span>
-                        )}
-                        <Badge
-                          variant="secondary"
-                          className="capitalize whitespace-nowrap bg-slate-100 text-slate-600"
-                        >
-                          {card.tag}
-                        </Badge>
-                        <Badge
-                          className={`whitespace-nowrap ${MASTERY_STYLES[mastery]}`}
-                        >
-                          {MASTERY_LABELS[mastery]}
-                        </Badge>
-                        {card.audioReady === false && (
-                          <Badge
-                            variant="outline"
-                            className="whitespace-nowrap border-amber-200 bg-amber-50 text-amber-700"
-                          >
-                            Audio pending
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex gap-2 pt-2 border-t border-slate-100">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        disabled={isSpeaking || card.audioReady === false}
-                        className={`flex-1 h-8 text-xs gap-1 disabled:opacity-50 ${
-                          isCardPlaying
-                            ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                        }`}
-                        onClick={() => speakKorean(card.id)}
-                        aria-label={
-                          card.audioReady === false
-                            ? `Audio pending for ${card.front}`
-                            : isCardPlaying
-                              ? `Playing pronunciation for ${card.front}`
-                              : `Speak pronunciation for ${card.front}`
-                        }
-                      >
-                        <Volume2
-                          size={14}
-                          className={isCardPlaying ? "animate-pulse" : ""}
-                        />
-                        {card.audioReady === false
-                          ? "Audio pending"
-                          : isCardPlaying
-                            ? "Playing..."
-                            : "Speak"}
-                      </Button>
-                      {romanization && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          aria-pressed={Boolean(isShowingRoman)}
-                          aria-label={`${isShowingRoman ? "Hide" : "Show"} romanization for ${card.front}`}
-                          className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                          onClick={() =>
-                            setShowRomanization({
-                              ...showRomanization,
-                              [card.id]: !isShowingRoman,
-                            })
-                          }
-                        >
-                          {isShowingRoman ? (
-                            <>
-                              <EyeOff size={14} />
-                              Hide
-                            </>
-                          ) : (
-                            <>
-                              <Eye size={14} />
-                              Show
-                            </>
-                          )}
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
-                <Search size={28} className="mx-auto text-slate-300" />
-                <p className="mt-3 font-semibold text-slate-700">
-                  No matching cards
-                </p>
-                <p className="mt-1 text-sm text-slate-500">
-                  Try a different search or clear your filters.
-                </p>
-              </div>
-            )}
-            {visibleCards.length < filteredCards.length && (
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full rounded-xl border-emerald-200 text-emerald-700 hover:bg-emerald-50"
-                onClick={() =>
-                  setVisibleCount(count =>
-                    Math.min(count + BROWSE_PAGE_SIZE, filteredCards.length)
-                  )
-                }
-              >
-                Load 40 more · {filteredCards.length - visibleCards.length}{" "}
-                remaining
-              </Button>
-            )}
-          </div>
-        </div>
+        <BrowseResultsList
+          visibleCards={visibleCards}
+          matchingCount={filteredCards.length}
+          cardStates={cardStates}
+          showRomanization={showRomanization}
+          playingCardId={playingCardId}
+          isSpeaking={isSpeaking}
+          onSpeak={cardId => speakKorean(cardId)}
+          onToggleRomanization={toggleRomanization}
+          onLoadMore={() =>
+            setVisibleCount(count =>
+              Math.min(count + BROWSE_PAGE_SIZE, filteredCards.length)
+            )
+          }
+        />
       </DialogContent>
     </Dialog>
   );
