@@ -7,7 +7,7 @@ interface CategoryMasteryListProps {
 export function CategoryMasteryList({ categories }: CategoryMasteryListProps) {
   return (
     <div className="mt-5 border-t border-slate-100 pt-4">
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h3 className="font-semibold text-slate-800">Category mastery</h3>
         <span className="text-xs text-slate-500">Accuracy · coverage</span>
       </div>

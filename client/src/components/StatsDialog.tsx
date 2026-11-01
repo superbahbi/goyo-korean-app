@@ -39,7 +39,7 @@ export function StatsDialog({
 }: StatsDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
             <Target size={20} className="text-emerald-700" /> Your Korean
@@ -69,7 +69,7 @@ export function StatsDialog({
               style={{ width: `${stats.levelProgress}%` }}
             />
           </div>
-          <div className="mt-2 flex justify-between text-xs text-emerald-100">
+          <div className="mt-2 flex flex-wrap justify-between gap-x-3 gap-y-0.5 text-xs text-emerald-100">
             <span>{stats.totalXp} XP earned</span>
             <span>
               {Math.max(0, stats.nextLevelXp - stats.totalXp)} XP to next level

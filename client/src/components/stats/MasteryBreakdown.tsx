@@ -11,7 +11,7 @@ interface MasteryBreakdownProps {
 export function MasteryBreakdown({ masteryCounts }: MasteryBreakdownProps) {
   return (
     <div className="mt-5 border-t border-slate-100 pt-4">
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h3 className="font-semibold text-slate-800">Ability states</h3>
         <span className="text-xs text-slate-500">Based on spaced recall</span>
       </div>

@@ -12,8 +12,8 @@ export function ForecastOutlook({ forecast, today }: ForecastOutlookProps) {
       : "30-day review forecast: no scheduled reviews";
 
   return (
-    <div className="mt-5 border-t border-slate-100 pt-4">
-      <div className="mb-3 flex items-start justify-between gap-3">
+    <div className="mt-5 min-w-0 border-t border-slate-100 pt-4">
+      <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
         <div>
           <h3 className="font-semibold text-slate-800">
             30-day review outlook
