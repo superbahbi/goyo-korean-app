@@ -127,29 +127,32 @@ export function BrowseDialog({
       }}
     >
       <DialogContent className="flex max-h-[90vh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0">
-        <div className="shrink-0 border-b border-slate-200 bg-gradient-to-br from-emerald-50 to-white px-5 pb-4 pt-5 sm:px-6">
+        <div className="shrink-0 border-b border-border bg-gradient-to-br from-emerald-50 dark:from-emerald-950/40 to-background px-5 pb-4 pt-5 sm:px-6">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-2xl text-slate-900">
-              <BookOpen size={21} className="text-emerald-600" />
+            <DialogTitle className="flex items-center gap-2 text-2xl text-foreground">
+              <BookOpen
+                size={21}
+                className="text-emerald-600 dark:text-emerald-400"
+              />
               {category
                 ? `${CATEGORIES.find(c => c.id === category)?.name} library`
                 : "Vocabulary library"}
             </DialogTitle>
           </DialogHeader>
-          <DialogDescription className="mt-1 text-sm text-slate-500">
+          <DialogDescription className="mt-1 text-sm text-muted-foreground">
             Search Korean, meanings, examples, or romanization.
           </DialogDescription>
           <div className="relative mt-4">
             <Search
               size={17}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/80"
             />
             <input
               value={query}
               onChange={event => setQuery(event.target.value)}
               placeholder="Search the deck..."
               aria-label="Search vocabulary library"
-              className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              className="h-11 w-full rounded-xl border border-border bg-card pl-10 pr-4 text-sm text-foreground outline-none transition focus:border-emerald-400 dark:focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900/60"
             />
           </div>
           <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
@@ -160,7 +163,7 @@ export function BrowseDialog({
                   key={filter}
                   onClick={() => setMasteryFilter(filter)}
                   aria-pressed={masteryFilter === filter}
-                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${masteryFilter === filter ? "bg-slate-900 text-white" : "bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50"}`}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${masteryFilter === filter ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900" : "bg-card text-muted-foreground ring-1 ring-border hover:bg-muted/60"}`}
                 >
                   {filter === "all" ? "All cards" : MASTERY_LABELS[filter]}
                   <span className="ml-1">
@@ -172,7 +175,7 @@ export function BrowseDialog({
               )
             )}
           </div>
-          <div className="mt-3 flex items-center justify-between text-xs text-slate-500">
+          <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
             <span>
               {filteredCards.length} matching card
               {filteredCards.length === 1 ? "" : "s"}
@@ -180,7 +183,7 @@ export function BrowseDialog({
             {(category || query || masteryFilter !== "all") && (
               <button
                 type="button"
-                className="rounded font-semibold text-emerald-700 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                className="rounded font-semibold text-emerald-700 dark:text-emerald-300 hover:text-emerald-900 dark:hover:text-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                 onClick={() => {
                   setCategory(null);
                   setQuery("");

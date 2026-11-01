@@ -135,7 +135,7 @@ export default function Home() {
   const { totalReviews, overallAccuracy, medianResponseTime } = reviewStats;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-background via-emerald-50 dark:via-emerald-950/40 to-muted">
       <HomeHeader
         streak={state.stats.streak}
         totalXp={state.stats.totalXp}

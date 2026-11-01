@@ -124,11 +124,15 @@ export function DownloadAllAudio() {
 
   return (
     <div className="border-t pt-4 space-y-2">
-      <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
-        <WifiOff size={15} className="text-emerald-600" aria-hidden="true" />
+      <div className="flex items-center gap-2 text-sm font-medium text-foreground/80">
+        <WifiOff
+          size={15}
+          className="text-emerald-600 dark:text-emerald-400"
+          aria-hidden="true"
+        />
         Offline audio
       </div>
-      <p className="text-xs leading-relaxed text-slate-500">
+      <p className="text-xs leading-relaxed text-muted-foreground">
         Hangul and number audio is always available offline. Download{" "}
         {sizeLabel} to keep every word playable without a connection.
       </p>
@@ -139,7 +143,7 @@ export function DownloadAllAudio() {
             aria-label="Audio download progress"
             className="h-2"
           />
-          <div className="flex items-center justify-between text-xs text-slate-500">
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>
               {download.done} / {download.total} clips
             </span>
@@ -147,7 +151,7 @@ export function DownloadAllAudio() {
               type="button"
               variant="outline"
               size="sm"
-              className="h-7 bg-white text-xs"
+              className="h-7 bg-card text-xs"
               onClick={cancel}
             >
               Cancel
@@ -158,7 +162,7 @@ export function DownloadAllAudio() {
         <Button
           type="button"
           variant="outline"
-          className="w-full bg-white"
+          className="w-full bg-card"
           onClick={start}
         >
           Download all audio

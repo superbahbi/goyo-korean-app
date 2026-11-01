@@ -12,7 +12,7 @@ export function QuickLinks({ onOpenBrowse, onOpenStats }: QuickLinksProps) {
     <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
       <Button
         variant="outline"
-        className="h-10 border-slate-200 bg-white/70 text-slate-600 hover:bg-slate-50"
+        className="h-10 border-border bg-card/70 text-foreground/70 hover:bg-muted/60"
         onClick={onOpenBrowse}
       >
         <BookOpen className="mr-2" size={16} aria-hidden="true" />
@@ -20,7 +20,7 @@ export function QuickLinks({ onOpenBrowse, onOpenStats }: QuickLinksProps) {
       </Button>
       <Button
         variant="outline"
-        className="h-10 border-slate-200 bg-white/70 text-slate-600 hover:bg-slate-50"
+        className="h-10 border-border bg-card/70 text-foreground/70 hover:bg-muted/60"
         onClick={onOpenStats}
       >
         <BarChart2 className="mr-2" size={16} aria-hidden="true" />

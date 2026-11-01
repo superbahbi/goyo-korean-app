@@ -76,7 +76,7 @@ export function StudySession({
         aria-modal="true"
         aria-describedby={undefined}
         showCloseButton={false}
-        className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-white p-0 shadow-none sm:max-w-none"
+        className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-card p-0 shadow-none sm:max-w-none"
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
         <p className="sr-only" aria-live="polite" aria-atomic="true">
@@ -85,7 +85,7 @@ export function StudySession({
             : `Card ${index + 1} of ${sessionQueue.length}. Press Space to reveal.`}
         </p>
         {/* Header */}
-        <header className="p-4 flex items-center justify-between border-b bg-gradient-to-r from-slate-50 to-slate-100">
+        <header className="p-4 flex items-center justify-between border-b bg-gradient-to-r from-background to-muted">
           <Button
             variant="ghost"
             size="icon"
@@ -103,9 +103,9 @@ export function StudySession({
               className="h-2"
             />
           </div>
-          <div className="text-sm font-medium text-slate-500 min-w-[60px] text-right">
+          <div className="text-sm font-medium text-muted-foreground min-w-[60px] text-right">
             {index + 1} / {sessionQueue.length}
-            <span className="block text-xs text-slate-500">
+            <span className="block text-xs text-muted-foreground">
               {title} · {flipped ? "Choose a rating" : "Recall first"}
             </span>
           </div>
@@ -138,10 +138,10 @@ export function StudySession({
         </main>
 
         {/* Footer with Grading Buttons */}
-        <footer className="shrink-0 border-t bg-slate-50 p-4 sm:p-8">
+        <footer className="shrink-0 border-t bg-muted/60 p-4 sm:p-8">
           {!flipped ? (
             <Button
-              className="h-14 w-full rounded-2xl bg-slate-900 text-lg font-bold transition-all hover:bg-slate-800 sm:h-16 sm:text-xl"
+              className="h-14 w-full rounded-2xl bg-slate-900 text-lg font-bold text-white transition-all hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 sm:h-16 sm:text-xl"
               onClick={() => handleFlip(true)}
             >
               Reveal Korean &amp; Meaning
@@ -154,7 +154,7 @@ export function StudySession({
                 done={productionDone}
                 onDone={() => setProductionDone(true)}
               />
-              <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 How did that feel?
               </p>
               <div className="grid grid-cols-3 gap-2 sm:gap-4">
@@ -165,12 +165,12 @@ export function StudySession({
                 >
                   <Button
                     variant="outline"
-                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-red-100 text-red-700 hover:bg-red-50 sm:h-24"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-red-100 dark:border-red-900/60 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/40 sm:h-24"
                     onClick={() => handleGrade("again")}
                   >
                     <X size={24} />
                     <span>Again</span>
-                    <span className="text-[10px] font-normal text-red-700">
+                    <span className="text-[10px] font-normal text-red-700 dark:text-red-300">
                       Rebuild tomorrow
                     </span>
                   </Button>
@@ -183,12 +183,12 @@ export function StudySession({
                 >
                   <Button
                     variant="outline"
-                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-emerald-100 text-emerald-700 hover:bg-emerald-50 sm:h-24"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-emerald-100 dark:border-emerald-900/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 sm:h-24"
                     onClick={() => handleGrade("good")}
                   >
                     <Check size={24} />
                     <span>Good</span>
-                    <span className="text-[10px] font-normal text-emerald-700">
+                    <span className="text-[10px] font-normal text-emerald-700 dark:text-emerald-300">
                       Build the interval
                     </span>
                   </Button>
@@ -201,12 +201,12 @@ export function StudySession({
                 >
                   <Button
                     variant="outline"
-                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-blue-100 text-blue-700 hover:bg-blue-50 sm:h-24"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-blue-100 dark:border-blue-900/60 text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 sm:h-24"
                     onClick={() => handleGrade("easy")}
                   >
                     <Star size={24} />
                     <span>Easy</span>
-                    <span className="text-[10px] font-normal text-blue-700">
+                    <span className="text-[10px] font-normal text-blue-700 dark:text-blue-300">
                       Stretch the interval
                     </span>
                   </Button>
@@ -214,7 +214,7 @@ export function StudySession({
               </div>
             </div>
           )}
-          <p className="mt-3 hidden text-center text-xs text-slate-500 sm:block">
+          <p className="mt-3 hidden text-center text-xs text-muted-foreground sm:block">
             Space reveals · 1 Again · 2 Good · 3 Easy · Esc closes
           </p>
         </footer>

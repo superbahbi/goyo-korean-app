@@ -1,14 +1,52 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark";
+export type Theme = "light" | "dark" | "system";
+export type ResolvedTheme = "light" | "dark";
+
+export const THEME_STORAGE_KEY = "goyo-theme";
 
 interface ThemeContextType {
+  /** The user's choice: light, dark, or follow the OS. */
   theme: Theme;
-  toggleTheme?: () => void;
+  /** The theme actually painted right now. */
+  resolvedTheme: ResolvedTheme;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
   switchable: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+const darkQuery = "(prefers-color-scheme: dark)";
+
+function systemPrefersDark(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia(darkQuery).matches;
+}
+
+function readStoredTheme(fallback: Theme): Theme {
+  try {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    if (stored === "light" || stored === "dark" || stored === "system") {
+      return stored;
+    }
+  } catch {
+    // Storage can be unavailable (private mode, blocked cookies); fall back.
+  }
+  return fallback;
+}
+
+function applyTheme(resolved: ResolvedTheme) {
+  const root = document.documentElement;
+  root.classList.toggle("dark", resolved === "dark");
+  root.style.colorScheme = resolved;
+  const meta = document.querySelector<HTMLMetaElement>(
+    'meta[name="theme-color"]'
+  );
+  if (meta) {
+    meta.content = resolved === "dark" ? "#111a18" : "#f8fafc";
+  }
+}
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -18,38 +56,49 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({
   children,
-  defaultTheme = "light",
-  switchable = false,
+  defaultTheme = "system",
+  switchable = true,
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (switchable) {
-      const stored = localStorage.getItem("theme");
-      return (stored as Theme) || defaultTheme;
-    }
-    return defaultTheme;
-  });
+  const [theme, setThemeState] = useState<Theme>(() =>
+    switchable ? readStoredTheme(defaultTheme) : defaultTheme
+  );
+  const [systemDark, setSystemDark] = useState<boolean>(systemPrefersDark);
+
+  // Track the OS preference so "system" follows it live.
+  useEffect(() => {
+    const media = window.matchMedia(darkQuery);
+    const onChange = (event: MediaQueryListEvent) =>
+      setSystemDark(event.matches);
+    setSystemDark(media.matches);
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  const resolvedTheme: ResolvedTheme =
+    theme === "system" ? (systemDark ? "dark" : "light") : theme;
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    applyTheme(resolvedTheme);
+  }, [resolvedTheme]);
 
-    if (switchable) {
-      localStorage.setItem("theme", theme);
+  const setTheme = (next: Theme) => {
+    setThemeState(next);
+    if (!switchable) return;
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next);
+    } catch {
+      // Persisting is best effort; the in-memory choice still applies.
     }
-  }, [theme, switchable]);
+  };
 
-  const toggleTheme = switchable
-    ? () => {
-        setTheme(prev => (prev === "light" ? "dark" : "light"));
-      }
-    : undefined;
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, switchable }}>
+    <ThemeContext.Provider
+      value={{ theme, resolvedTheme, setTheme, toggleTheme, switchable }}
+    >
       {children}
     </ThemeContext.Provider>
   );

@@ -86,7 +86,7 @@ export function ScenarioPractice({
           className="max-w-md rounded-3xl"
         >
           <DialogTitle>Nothing to practice yet</DialogTitle>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600">
+          <p className="mt-2 text-sm leading-relaxed text-foreground/70">
             Scenarios reuse phrases you have already studied, so nothing new is
             introduced here. Review a few survival phrases in a daily session,
             then come back.
@@ -161,10 +161,10 @@ export function ScenarioPractice({
         aria-modal="true"
         aria-describedby={undefined}
         showCloseButton={false}
-        className="inset-0 top-0 left-0 z-50 flex h-[100dvh] max-h-[100dvh] min-h-0 max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 bg-gradient-to-br from-amber-50 via-white to-emerald-50 p-0 shadow-none sm:max-w-none"
+        className="inset-0 top-0 left-0 z-50 flex h-[100dvh] max-h-[100dvh] min-h-0 max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 bg-gradient-to-br from-amber-50 dark:from-amber-950 via-background to-emerald-50 dark:to-emerald-950 p-0 shadow-none sm:max-w-none"
       >
         <DialogTitle className="sr-only">What would you say?</DialogTitle>
-        <header className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white/80 p-4 backdrop-blur-md">
+        <header className="flex shrink-0 items-center justify-between border-b border-border bg-card/80 p-4 backdrop-blur-md">
           <Button
             variant="ghost"
             size="icon"
@@ -180,9 +180,9 @@ export function ScenarioPractice({
               className="h-2"
             />
           </div>
-          <div className="min-w-[60px] text-right text-sm font-semibold text-slate-500">
+          <div className="min-w-[60px] text-right text-sm font-semibold text-muted-foreground">
             {index + 1} / {scenarios.length}
-            <span className="block text-xs text-slate-500">
+            <span className="block text-xs text-muted-foreground">
               Survival Korean
             </span>
           </div>

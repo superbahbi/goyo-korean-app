@@ -27,7 +27,7 @@ export function AudioSpeakerSetting({
   return (
     <div className="border-t pt-4 space-y-2">
       <label
-        className="text-sm font-medium text-slate-700"
+        className="text-sm font-medium text-foreground/80"
         htmlFor="audio-speaker"
       >
         Korean speaker
@@ -36,7 +36,7 @@ export function AudioSpeakerSetting({
         value={settings.audioSpeaker}
         onValueChange={value => handleSpeakerChange(value as AudioSpeaker)}
       >
-        <SelectTrigger id="audio-speaker" className="w-full bg-white">
+        <SelectTrigger id="audio-speaker" className="w-full bg-card">
           <SelectValue placeholder="Choose a speaker" />
         </SelectTrigger>
         <SelectContent>
@@ -48,7 +48,7 @@ export function AudioSpeakerSetting({
           </SelectItem>
         </SelectContent>
       </Select>
-      <p className="text-xs leading-relaxed text-slate-600">
+      <p className="text-xs leading-relaxed text-foreground/70">
         Goyo uses ElevenLabs recordings only. Choose Yong Gyu for a calm, clear
         delivery or Jini for a warm, intelligent Seoul Korean voice.
       </p>

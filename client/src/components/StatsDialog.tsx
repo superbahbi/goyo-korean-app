@@ -42,15 +42,18 @@ export function StatsDialog({
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
-            <Target size={20} className="text-emerald-700" /> Your Korean
-            ability
+            <Target
+              size={20}
+              className="text-emerald-700 dark:text-emerald-300"
+            />{" "}
+            Your Korean ability
           </DialogTitle>
-          <DialogDescription className="text-sm text-slate-600">
+          <DialogDescription className="text-sm text-foreground/70">
             Progress measured by recall, coverage, and durable review—not just
             completion.
           </DialogDescription>
         </DialogHeader>
-        <div className="mt-4 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 p-5 text-white shadow-lg shadow-emerald-100">
+        <div className="mt-4 rounded-2xl bg-gradient-to-br from-emerald-600 to-teal-700 p-5 text-white shadow-lg shadow-emerald-100 dark:shadow-black/40">
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100">

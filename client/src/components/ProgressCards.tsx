@@ -80,21 +80,21 @@ export function ProgressCards({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 * index }}
           >
-            <Card className="h-full gap-0 border-slate-100 bg-white py-0 shadow-sm transition-shadow hover:shadow-md">
+            <Card className="h-full gap-0 border-border/70 bg-card py-0 shadow-sm transition-shadow hover:shadow-md">
               <div className="flex h-full flex-col p-3 sm:p-5">
-                <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 sm:text-xs">
+                <div className="flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground sm:text-xs">
                   <Icon size={14} aria-hidden="true" />
                   <span className="truncate">{tile.label}</span>
                 </div>
-                <div className="mt-1.5 truncate text-xl font-bold text-slate-900 tabular-nums sm:text-3xl">
+                <div className="mt-1.5 truncate text-xl font-bold text-foreground tabular-nums sm:text-3xl">
                   {tile.value}
                 </div>
                 <Progress
                   value={tile.percent}
                   aria-label={tile.ariaLabel}
-                  className="mt-2 h-1.5 bg-slate-100"
+                  className="mt-2 h-1.5 bg-muted"
                 />
-                <p className="mt-2 hidden text-xs leading-snug text-slate-500 sm:block">
+                <p className="mt-2 hidden text-xs leading-snug text-muted-foreground sm:block">
                   {tile.detail}
                 </p>
               </div>

@@ -19,8 +19,8 @@ async function reloadApp(): Promise<void> {
 export function ReloadSetting() {
   return (
     <div className="space-y-2 border-t pt-4">
-      <div className="text-sm font-medium text-slate-700">App version</div>
-      <p className="text-xs leading-relaxed text-slate-600">
+      <div className="text-sm font-medium text-foreground/80">App version</div>
+      <p className="text-xs leading-relaxed text-foreground/70">
         Reload Goyo to pick up a new version. Your saved progress is kept.
       </p>
       <Button

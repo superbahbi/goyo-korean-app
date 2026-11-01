@@ -142,10 +142,10 @@ export function ListeningPractice({
         aria-modal="true"
         aria-describedby={undefined}
         showCloseButton={false}
-        className="inset-0 top-0 left-0 z-50 flex h-[100dvh] max-h-[100dvh] min-h-0 max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 bg-gradient-to-br from-slate-50 via-emerald-50 to-slate-100 p-0 shadow-none sm:max-w-none"
+        className="inset-0 top-0 left-0 z-50 flex h-[100dvh] max-h-[100dvh] min-h-0 max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 bg-gradient-to-br from-background via-emerald-50 dark:via-emerald-950 to-muted p-0 shadow-none sm:max-w-none"
       >
         <DialogTitle className="sr-only">What did you hear?</DialogTitle>
-        <header className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white/80 px-3 py-3 backdrop-blur-md sm:px-4 sm:py-4">
+        <header className="flex shrink-0 items-center justify-between border-b border-border bg-card/80 px-3 py-3 backdrop-blur-md sm:px-4 sm:py-4">
           <Button
             variant="ghost"
             size="icon"
@@ -161,7 +161,7 @@ export function ListeningPractice({
               className="h-2"
             />
           </div>
-          <div className="min-w-[70px] text-right text-sm font-semibold text-slate-500">
+          <div className="min-w-[70px] text-right text-sm font-semibold text-muted-foreground">
             {index + 1} / {questions.length}
           </div>
         </header>
@@ -169,13 +169,13 @@ export function ListeningPractice({
         <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 [scrollbar-gutter:stable] sm:px-5 sm:py-8">
           <div className="mx-auto flex w-full max-w-2xl flex-col justify-start sm:min-h-full sm:justify-center">
             <div className="mb-5 text-center sm:mb-6">
-              <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
+              <Badge className="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50">
                 Listening practice
               </Badge>
-              <h1 className="mt-3 font-serif text-2xl text-slate-900 sm:mt-4 sm:text-3xl">
+              <h1 className="mt-3 font-serif text-2xl text-foreground sm:mt-4 sm:text-3xl">
                 What did you hear?
               </h1>
-              <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500">
+              <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
                 Listen first. Choose the meaning that matches the Korean
                 recording.
               </p>

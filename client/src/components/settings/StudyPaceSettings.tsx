@@ -29,7 +29,7 @@ export function DailyGoalSetting({
   return (
     <div>
       <label
-        className="text-sm font-medium text-slate-700"
+        className="text-sm font-medium text-foreground/80"
         htmlFor="daily-goal"
       >
         Daily Goal
@@ -38,7 +38,7 @@ export function DailyGoalSetting({
         value={String(settings.dailyGoal)}
         onValueChange={handleDailyGoalChange}
       >
-        <SelectTrigger id="daily-goal" className="mt-2 w-full bg-white">
+        <SelectTrigger id="daily-goal" className="mt-2 w-full bg-card">
           <SelectValue placeholder="Choose a daily goal" />
         </SelectTrigger>
         <SelectContent>
@@ -48,7 +48,7 @@ export function DailyGoalSetting({
           <SelectItem value="20">20 cards · Intensive</SelectItem>
         </SelectContent>
       </Select>
-      <p className="mt-2 text-xs leading-relaxed text-slate-600">
+      <p className="mt-2 text-xs leading-relaxed text-foreground/70">
         Choose a goal you can sustain. Consistent recall is more valuable than a
         large daily streak.
       </p>
@@ -70,7 +70,7 @@ export function NewCardsPerDaySetting({
   return (
     <div className="border-t pt-4">
       <label
-        className="text-sm font-medium text-slate-700"
+        className="text-sm font-medium text-foreground/80"
         htmlFor="new-cards-per-day"
       >
         New cards per day
@@ -79,7 +79,7 @@ export function NewCardsPerDaySetting({
         value={String(settings.newCardsPerDay)}
         onValueChange={handleNewCardsPerDayChange}
       >
-        <SelectTrigger id="new-cards-per-day" className="mt-2 w-full bg-white">
+        <SelectTrigger id="new-cards-per-day" className="mt-2 w-full bg-card">
           <SelectValue placeholder="Choose a new-card pace" />
         </SelectTrigger>
         <SelectContent>
@@ -90,7 +90,7 @@ export function NewCardsPerDaySetting({
           ))}
         </SelectContent>
       </Select>
-      <p className="mt-2 text-xs leading-relaxed text-slate-600">
+      <p className="mt-2 text-xs leading-relaxed text-foreground/70">
         Brand-new words are capped at this number each day, so the daily goal
         can run shorter on a fresh deck. Due reviews still come first, so a
         lower pace keeps the session short without hiding scheduled work.
@@ -113,12 +113,12 @@ export function AutoPlaySetting({
       <div className="flex items-center justify-between gap-4">
         <div>
           <label
-            className="text-sm font-medium text-slate-700"
+            className="text-sm font-medium text-foreground/80"
             htmlFor="auto-play-audio"
           >
             Auto-play pronunciation
           </label>
-          <p className="mt-1 text-xs leading-relaxed text-slate-600">
+          <p className="mt-1 text-xs leading-relaxed text-foreground/70">
             Play the clip as each card appears. Off leaves audio to the speaker
             button, so nothing plays until you tap.
           </p>

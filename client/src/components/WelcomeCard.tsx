@@ -67,7 +67,7 @@ export function WelcomeCard({
 
           <button
             type="button"
-            className="relative z-10 flex h-12 w-full shrink-0 touch-manipulation items-center justify-center rounded-xl bg-white px-6 text-base font-bold text-emerald-700 shadow-sm transition-colors hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/60 active:scale-[0.99] sm:h-14 sm:w-auto sm:min-w-[15rem] sm:text-lg"
+            className="relative z-10 flex h-12 w-full shrink-0 touch-manipulation items-center justify-center rounded-xl bg-white px-6 text-base font-bold text-emerald-700 shadow-sm transition-colors hover:bg-emerald-50 dark:text-emerald-800 dark:hover:bg-emerald-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/60 active:scale-[0.99] sm:h-14 sm:w-auto sm:min-w-[15rem] sm:text-lg"
             onClick={event => {
               event.preventDefault();
               event.stopPropagation();

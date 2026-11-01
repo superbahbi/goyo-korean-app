@@ -54,18 +54,18 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
     return (
       <section
         aria-labelledby="grammar-quiz-result"
-        className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 text-center"
+        className="rounded-2xl border border-emerald-200 dark:border-emerald-800/70 bg-emerald-50/70 dark:bg-emerald-950/40 p-5 text-center"
       >
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
           Check complete
         </p>
         <h3
           id="grammar-quiz-result"
-          className="mt-2 font-serif text-2xl text-slate-900"
+          className="mt-2 font-serif text-2xl text-foreground"
         >
           {correctCount} of {lesson.quiz.length} correct
         </h3>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-foreground/70">
           {perfect
             ? "You have this pattern. Review it once more in a few days."
             : "Read the explanation above, then try the check again."}
@@ -73,7 +73,7 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
         <Button
           type="button"
           variant="outline"
-          className="mt-4 gap-2 border-emerald-300 bg-white text-emerald-800 hover:bg-emerald-50"
+          className="mt-4 gap-2 border-emerald-300 dark:border-emerald-700 bg-card text-emerald-800 dark:text-emerald-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
           onClick={retake}
         >
           <RotateCcw size={15} />
@@ -88,18 +88,18 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
       <div className="flex items-baseline justify-between gap-3">
         <h3
           id="grammar-quiz-heading"
-          className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700"
+          className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300"
         >
           Check yourself
         </h3>
-        <span className="text-xs font-medium text-slate-600">
+        <span className="text-xs font-medium text-foreground/70">
           {index + 1} / {lesson.quiz.length}
           {best ? ` · best ${best.correct}/${best.total}` : ""}
         </span>
       </div>
 
       <p
-        className="mt-3 rounded-xl bg-white px-4 py-3 text-lg font-semibold text-slate-900 ring-1 ring-slate-200"
+        className="mt-3 rounded-xl bg-card px-4 py-3 text-lg font-semibold text-foreground ring-1 ring-border"
         lang={/[가-힣]/.test(question.prompt) ? "ko" : undefined}
       >
         {question.prompt}
@@ -117,26 +117,33 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
             correct={optionIndex === question.answerIndex}
             onChoose={() => choose(optionIndex)}
             sizeClass="min-h-12"
-            correctIcon={<Check size={18} className="text-emerald-600" />}
-            wrongIcon={<X size={18} className="text-red-500" />}
+            correctIcon={
+              <Check
+                size={18}
+                className="text-emerald-600 dark:text-emerald-400"
+              />
+            }
+            wrongIcon={
+              <X size={18} className="text-red-500 dark:text-red-400" />
+            }
           />
         ))}
       </div>
 
       <div aria-live="polite">
         {answered && (
-          <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="mt-4 rounded-2xl border border-border bg-card p-4">
             <p
-              className={`text-sm font-semibold ${isCorrect ? "text-emerald-700" : "text-red-700"}`}
+              className={`text-sm font-semibold ${isCorrect ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}
             >
               {isCorrect ? "Correct." : "Not quite."}
             </p>
-            <p className="mt-1 text-sm leading-relaxed text-slate-600">
+            <p className="mt-1 text-sm leading-relaxed text-foreground/70">
               {question.explanation}
             </p>
             <Button
               type="button"
-              className="mt-3 min-h-11 w-full bg-slate-900 hover:bg-slate-800"
+              className="mt-3 min-h-11 w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
               onClick={next}
             >
               {isLast ? "See result" : "Next question"}

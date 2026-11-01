@@ -58,11 +58,11 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
           aria-modal="true"
           aria-describedby={undefined}
           showCloseButton={false}
-          className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-white p-0 shadow-none sm:max-w-none"
+          className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-card p-0 shadow-none sm:max-w-none"
         >
           <DialogTitle className="sr-only">Learn Hangul</DialogTitle>
           {/* Header */}
-          <header className="p-6 border-b border-slate-200">
+          <header className="p-6 border-b border-border">
             <Button
               variant="ghost"
               size="icon"
@@ -72,8 +72,10 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
             >
               <ArrowLeft />
             </Button>
-            <h1 className="text-3xl font-bold text-slate-900">Learn Hangul</h1>
-            <p className="text-slate-600 mt-2">Master the Korean alphabet</p>
+            <h1 className="text-3xl font-bold text-foreground">Learn Hangul</h1>
+            <p className="text-foreground/70 mt-2">
+              Master the Korean alphabet
+            </p>
           </header>
 
           {/* Main Content */}
@@ -91,7 +93,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                         category.id as "consonants" | "vowels" | "numbers"
                       );
                     }}
-                    className={`p-8 rounded-2xl text-center transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 ${category.color}`}
+                    className={`p-8 rounded-2xl text-center transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 ${category.color}`}
                   >
                     <div className="text-5xl mb-4">{category.icon}</div>
                     <h2 className="text-2xl font-bold mb-2">{category.name}</h2>
@@ -112,7 +114,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                   <CardHeader>
                     <CardTitle className="text-lg">Why Learn Hangul?</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 text-sm text-slate-600">
+                  <CardContent className="space-y-3 text-sm text-foreground/70">
                     <p>
                       🎯 <strong>Foundation:</strong> Hangul is the Korean
                       alphabet. Learning it is the first step to reading and
@@ -134,7 +136,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                   <CardHeader>
                     <CardTitle className="text-lg">How to Practice</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3 text-sm text-slate-600">
+                  <CardContent className="space-y-3 text-sm text-foreground/70">
                     <p>1️⃣ Select Consonants, Vowels, or Numbers to begin</p>
                     <p>
                       2️⃣ Study each character with its pronunciation and example
@@ -192,11 +194,11 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
         aria-modal="true"
         aria-describedby={undefined}
         showCloseButton={false}
-        className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-gradient-to-br from-slate-50 to-slate-100 p-0 shadow-none sm:max-w-none"
+        className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-gradient-to-br from-background to-muted p-0 shadow-none sm:max-w-none"
       >
         <DialogTitle className="sr-only">{sectionTitle}</DialogTitle>
         {/* Header */}
-        <header className="p-6 border-b border-slate-200 bg-white">
+        <header className="p-6 border-b border-border bg-card">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
             <div>
               <Button
@@ -208,15 +210,15 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
               >
                 <ArrowLeft />
               </Button>
-              <h1 className="text-2xl font-bold text-slate-900">
+              <h1 className="text-2xl font-bold text-foreground">
                 {sectionTitle}
               </h1>
             </div>
             <div className="text-right">
-              <div className="text-sm text-slate-600">
+              <div className="text-sm text-foreground/70">
                 {currentIndex + 1} / {cards.length}
               </div>
-              <div className="w-48 h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
+              <div className="w-48 h-2 bg-muted rounded-full mt-2 overflow-hidden">
                 <div
                   className="h-full bg-emerald-500 transition-all"
                   style={{
@@ -256,7 +258,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
 
             {/* Quick Reference Grid */}
             <div className="mt-12">
-              <h2 className="text-lg font-bold text-slate-900 mb-4">
+              <h2 className="text-lg font-bold text-foreground mb-4">
                 Quick Reference
               </h2>
               <div className="grid grid-cols-5 md:grid-cols-8 gap-2">
@@ -270,7 +272,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                     className={`aspect-square rounded-lg font-bold text-2xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
                       idx === currentIndex
                         ? "bg-emerald-700 text-white shadow-lg scale-110"
-                        : "bg-white text-slate-900 border-2 border-slate-200 hover:border-emerald-300"
+                        : "bg-card text-foreground border-2 border-border hover:border-emerald-300 dark:hover:border-emerald-700"
                     }`}
                   >
                     {card.hangul}

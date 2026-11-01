@@ -40,28 +40,30 @@ export function BrowseResultRow({
       aria-busy={isCardPlaying}
       className={`rounded-2xl border p-4 transition-all ${
         isCardPlaying
-          ? "audio-card-playing border-emerald-400 bg-emerald-50/80 ring-2 ring-emerald-200 shadow-lg shadow-emerald-100"
-          : "border-slate-200 bg-white hover:border-emerald-300 hover:shadow-sm"
+          ? "audio-card-playing border-emerald-400 dark:border-emerald-600 bg-emerald-50/80 dark:bg-emerald-950/40 ring-2 ring-emerald-200 dark:ring-emerald-800/60 shadow-lg shadow-emerald-100"
+          : "border-border bg-card hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-sm"
       }`}
     >
       <div className="flex justify-between items-start gap-3 mb-3">
         <div className="flex-1 min-w-0">
-          <div className="text-xl font-bold text-slate-900" lang="ko">
+          <div className="text-xl font-bold text-foreground" lang="ko">
             {card.front}
           </div>
-          <div className="mt-1 text-sm font-medium text-slate-600">
+          <div className="mt-1 text-sm font-medium text-foreground/70">
             {card.back}
           </div>
           {isShowingRoman && romanization && (
-            <div className="text-sm text-emerald-700 font-mono font-semibold mt-1">
-              <span className="text-xs text-slate-500 mr-2">Romanization:</span>
+            <div className="text-sm text-emerald-700 dark:text-emerald-300 font-mono font-semibold mt-1">
+              <span className="text-xs text-muted-foreground mr-2">
+                Romanization:
+              </span>
               {romanization}
             </div>
           )}
           {card.example && (
             <div className="mt-2 flex items-center gap-2">
               <p
-                className="min-w-0 flex-1 text-xs italic text-slate-500 line-clamp-2"
+                className="min-w-0 flex-1 text-xs italic text-muted-foreground line-clamp-2"
                 lang="ko"
               >
                 "{card.example}"
@@ -71,7 +73,7 @@ export function BrowseResultRow({
                   type="button"
                   onClick={onSpeakSentence}
                   aria-label={`${isSentencePlaying ? "Playing" : "Play"} example sentence for ${card.front}`}
-                  className="flex size-6 shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full text-muted-foreground transition hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-700 dark:hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1"
                 >
                   <Volume2
                     size={13}
@@ -94,7 +96,7 @@ export function BrowseResultRow({
           )}
           <Badge
             variant="secondary"
-            className="capitalize whitespace-nowrap bg-slate-100 text-slate-600"
+            className="capitalize whitespace-nowrap bg-muted text-foreground/70"
           >
             {card.tag}
           </Badge>
@@ -104,22 +106,22 @@ export function BrowseResultRow({
           {card.audioReady === false && (
             <Badge
               variant="outline"
-              className="whitespace-nowrap border-amber-200 bg-amber-50 text-amber-700"
+              className="whitespace-nowrap border-amber-200 dark:border-amber-800/70 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300"
             >
               Audio pending
             </Badge>
           )}
         </div>
       </div>
-      <div className="flex gap-2 pt-2 border-t border-slate-100">
+      <div className="flex gap-2 pt-2 border-t border-border/70">
         <Button
           variant="ghost"
           size="sm"
           disabled={isSpeaking || card.audioReady === false}
           className={`flex-1 h-8 text-xs gap-1 disabled:opacity-50 ${
             isCardPlaying
-              ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+              ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200 dark:hover:bg-emerald-900/60"
+              : "text-foreground/70 hover:text-foreground hover:bg-muted"
           }`}
           onClick={onSpeak}
           aria-label={
@@ -143,7 +145,7 @@ export function BrowseResultRow({
             size="sm"
             aria-pressed={Boolean(isShowingRoman)}
             aria-label={`${isShowingRoman ? "Hide" : "Show"} romanization for ${card.front}`}
-            className="flex-1 h-8 text-xs gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            className="flex-1 h-8 text-xs gap-1 text-foreground/70 hover:text-foreground hover:bg-muted"
             onClick={onToggleRomanization}
           >
             {isShowingRoman ? (

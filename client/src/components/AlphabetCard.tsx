@@ -16,26 +16,26 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-white rounded-2xl border-2 border-slate-200 p-8 max-w-md w-full shadow-lg"
+      className="bg-card rounded-2xl border-2 border-border p-8 max-w-md w-full shadow-lg"
     >
       {/* Main Hangul Character */}
       <div className="text-center mb-8">
         <div
-          className="text-8xl font-bold text-emerald-600 mb-4 font-serif"
+          className="text-8xl font-bold text-emerald-600 dark:text-emerald-400 mb-4 font-serif"
           lang="ko"
         >
           {card.hangul}
         </div>
-        <div className="text-2xl font-bold text-slate-900 mb-2" lang="ko">
+        <div className="text-2xl font-bold text-foreground mb-2" lang="ko">
           {card.sound}
         </div>
-        <div className="text-lg text-slate-600">{card.romanization}</div>
+        <div className="text-lg text-foreground/70">{card.romanization}</div>
       </div>
 
       {/* Example */}
-      <div className="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-200">
-        <p className="text-sm text-slate-600 mb-1">Example:</p>
-        <p className="text-lg font-semibold text-slate-900">{card.example}</p>
+      <div className="bg-muted/60 rounded-xl p-4 mb-6 border border-border">
+        <p className="text-sm text-foreground/70 mb-1">Example:</p>
+        <p className="text-lg font-semibold text-foreground">{card.example}</p>
       </div>
 
       {/* Speak Button */}
@@ -52,10 +52,10 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
         <span
           className={`inline-block px-4 py-1 rounded-full text-sm font-semibold ${
             card.type === "consonant"
-              ? "bg-blue-100 text-blue-700"
+              ? "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300"
               : card.type === "vowel"
-                ? "bg-purple-100 text-purple-700"
-                : "bg-emerald-100 text-emerald-700"
+                ? "bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300"
+                : "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300"
           }`}
         >
           {card.type === "consonant"

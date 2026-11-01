@@ -56,7 +56,7 @@ export function CategoryGrid({
         action={
           <button
             type="button"
-            className="rounded text-sm font-semibold text-emerald-700 hover:text-emerald-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            className="rounded text-sm font-semibold text-emerald-700 dark:text-emerald-300 hover:text-emerald-900 dark:hover:text-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
             onClick={onViewAll}
           >
             View all {vocabularyCount}
@@ -69,7 +69,7 @@ export function CategoryGrid({
             type="button"
             key={category.id}
             onClick={() => onSelectCategory(category.id)}
-            className="group rounded-2xl border border-slate-200 bg-white p-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 sm:p-4"
+            className="group rounded-2xl border border-border bg-card p-3 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 sm:p-4"
           >
             <div className="flex items-center gap-2.5">
               <span
@@ -79,19 +79,19 @@ export function CategoryGrid({
                 {category.icon}
               </span>
               <div className="min-w-0 flex-1">
-                <h3 className="truncate text-sm font-semibold text-slate-800 group-hover:text-emerald-700">
+                <h3 className="truncate text-sm font-semibold text-foreground/90 group-hover:text-emerald-700 dark:group-hover:text-emerald-300">
                   {category.name}
                 </h3>
-                <p className="truncate text-[11px] text-slate-500">
+                <p className="truncate text-[11px] text-muted-foreground">
                   {category.total} cards
                 </p>
               </div>
-              <span className="text-xs font-semibold text-emerald-700">
+              <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">
                 {category.coverage}%
               </span>
             </div>
             <div
-              className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-slate-100"
+              className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-muted"
               aria-hidden="true"
             >
               <div
@@ -99,7 +99,7 @@ export function CategoryGrid({
                 style={{ width: `${category.coverage}%` }}
               />
             </div>
-            <p className="mt-1.5 truncate text-[11px] text-slate-500">
+            <p className="mt-1.5 truncate text-[11px] text-muted-foreground">
               {category.reviewed > 0
                 ? `${category.known} known · ${category.reviewed} reviewed`
                 : "Not started yet"}
@@ -112,7 +112,7 @@ export function CategoryGrid({
           type="button"
           onClick={() => setShowAll(current => !current)}
           aria-expanded={showAll}
-          className="mx-auto flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+          className="mx-auto flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-foreground/70 hover:text-emerald-700 dark:hover:text-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
         >
           {showAll ? (
             <ChevronUp size={16} aria-hidden="true" />

@@ -335,19 +335,21 @@ export const ALPHABET_CATEGORIES = [
     id: "consonants",
     name: "Consonants",
     icon: "🔤",
-    color: "bg-blue-100 text-blue-700",
+    color: "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300",
   },
   {
     id: "vowels",
     name: "Vowels",
     icon: "🎵",
-    color: "bg-purple-100 text-purple-700",
+    color:
+      "bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300",
   },
   {
     id: "numbers",
     name: "Numbers",
     icon: "123",
-    color: "bg-emerald-100 text-emerald-700",
+    color:
+      "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300",
   },
 ];
 

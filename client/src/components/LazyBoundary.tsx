@@ -38,21 +38,21 @@ export class LazyBoundary extends Component<
         aria-labelledby="lazy-boundary-title"
         className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
       >
-        <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl">
+        <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl">
           <div className="flex items-start gap-3">
             <AlertTriangle
-              className="mt-0.5 shrink-0 text-amber-500"
+              className="mt-0.5 shrink-0 text-amber-500 dark:text-amber-400"
               size={20}
               aria-hidden="true"
             />
             <div>
               <h2
                 id="lazy-boundary-title"
-                className="text-lg font-semibold text-slate-900"
+                className="text-lg font-semibold text-foreground"
               >
                 This practice mode could not load
               </h2>
-              <p className="mt-1 text-sm leading-relaxed text-slate-500">
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 The page may have been updated while it was open, or the
                 connection dropped. Try again, and refresh the page if it keeps
                 failing.
@@ -70,7 +70,7 @@ export class LazyBoundary extends Component<
             <Button
               type="button"
               variant="outline"
-              className="w-full bg-white sm:flex-1"
+              className="w-full bg-card sm:flex-1"
               onClick={this.props.onClose}
             >
               Close

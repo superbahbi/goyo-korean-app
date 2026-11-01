@@ -7,9 +7,32 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Goyo" />
+    <meta name="theme-color" content="#f8fafc" />
     <link rel="icon" type="image/png" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <title>Goyo: Scientific Korean Practice</title>
+    <!--
+      Apply the saved (or OS) theme before the first paint so a dark-mode user
+      never sees a white flash while React hydrates. Keep the storage key in
+      sync with THEME_STORAGE_KEY in src/contexts/ThemeContext.tsx.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("goyo-theme");
+          var dark =
+            stored === "dark" ||
+            ((stored === null || stored === "system") &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.toggle("dark", dark);
+          document.documentElement.style.colorScheme = dark ? "dark" : "light";
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", dark ? "#111a18" : "#f8fafc");
+        } catch (e) {
+          /* localStorage can be blocked; the light theme is a safe default. */
+        }
+      })();
+    </script>
     <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

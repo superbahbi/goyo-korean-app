@@ -12,11 +12,11 @@ export function SaveAlerts({ saveBlocked, saveError }: SaveAlertsProps) {
       {saveBlocked && (
         <div
           role="alert"
-          className="flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-amber-950 shadow-sm"
+          className="flex items-start gap-3 rounded-2xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40 p-4 text-amber-950 dark:text-amber-50 shadow-sm"
         >
           <AlertTriangle
             size={20}
-            className="mt-0.5 shrink-0 text-amber-600"
+            className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400"
             aria-hidden="true"
           />
           <div>
@@ -36,11 +36,11 @@ export function SaveAlerts({ saveBlocked, saveError }: SaveAlertsProps) {
       {saveError && (
         <div
           role="alert"
-          className="flex items-start gap-3 rounded-2xl border border-red-300 bg-red-50 p-4 text-red-900 shadow-sm"
+          className="flex items-start gap-3 rounded-2xl border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950/40 p-4 text-red-900 dark:text-red-100 shadow-sm"
         >
           <AlertTriangle
             size={20}
-            className="mt-0.5 shrink-0 text-red-600"
+            className="mt-0.5 shrink-0 text-red-600 dark:text-red-400"
             aria-hidden="true"
           />
           <div>

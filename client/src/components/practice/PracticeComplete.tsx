@@ -45,16 +45,18 @@ export function PracticeComplete({
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-2xl"
+          className="w-full max-w-md rounded-3xl bg-card p-8 text-center shadow-2xl"
         >
-          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400">
             {icon}
           </div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
             {eyebrow}
           </p>
-          <h2 className="mt-2 font-serif text-3xl text-slate-900">{heading}</h2>
-          <p className="mt-3 text-slate-600">{children}</p>
+          <h2 className="mt-2 font-serif text-3xl text-foreground">
+            {heading}
+          </h2>
+          <p className="mt-3 text-foreground/70">{children}</p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Button
               variant="outline"

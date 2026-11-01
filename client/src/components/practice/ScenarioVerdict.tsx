@@ -20,9 +20,9 @@ export function ScenarioVerdict({
   return (
     <div aria-live="polite">
       {answered && (
-        <div className="mt-5 rounded-2xl bg-white/85 p-5 text-center">
+        <div className="mt-5 rounded-2xl bg-card/85 p-5 text-center">
           <p
-            className={`font-semibold ${correct ? "text-emerald-700" : "text-red-700"}`}
+            className={`font-semibold ${correct ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}
           >
             {correct ? (
               "That fits the situation."
@@ -32,11 +32,11 @@ export function ScenarioVerdict({
               </>
             )}
           </p>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-muted-foreground">
             {card.back} · <span lang="ko">{card.example}</span>
           </p>
           <Button
-            className="mt-4 min-h-12 w-full bg-slate-900 hover:bg-slate-800"
+            className="mt-4 min-h-12 w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
             onClick={onNext}
           >
             {isLast ? "See results" : "Next situation"}

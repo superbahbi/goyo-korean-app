@@ -60,7 +60,7 @@ function ModalLoadingFallback() {
       role="status"
       aria-label="Loading practice mode"
     >
-      <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+      <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 dark:border-emerald-800/70 border-t-emerald-600" />
     </div>
   );
 }

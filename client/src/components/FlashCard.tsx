@@ -120,35 +120,35 @@ function FlashCardBase({
             pointerEvents: isRevealed ? "none" : "auto",
           }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 overflow-y-auto bg-white border-2 border-slate-100 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
+          className="absolute inset-0 overflow-y-auto bg-card border-2 border-border/70 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
         >
           <Badge
             variant="outline"
-            className="mb-8 capitalize text-slate-500 font-medium bg-slate-50 border-slate-200"
+            className="mb-8 capitalize text-muted-foreground font-medium bg-muted/60 border-border"
           >
             {tag}
           </Badge>
           {audioFirst ? (
             <>
-              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400">
                 <Volume2 size={36} />
               </div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
                 Listen &amp; recall
               </p>
-              <h2 className="mt-3 text-2xl font-bold text-slate-800">
+              <h2 className="mt-3 text-2xl font-bold text-foreground/90">
                 What does this mean?
               </h2>
-              <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-500">
+              <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
                 Say the meaning silently before revealing the Korean and
                 example.
               </p>
               {audioFailed && (
                 <div
                   role="status"
-                  className="mt-5 flex max-w-xs flex-col items-center gap-2 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3"
+                  className="mt-5 flex max-w-xs flex-col items-center gap-2 rounded-2xl border border-amber-200 dark:border-amber-800/70 bg-amber-50 dark:bg-amber-950/40 px-4 py-3"
                 >
-                  <p className="text-xs leading-relaxed text-amber-800">
+                  <p className="text-xs leading-relaxed text-amber-800 dark:text-amber-200">
                     Audio isn&apos;t available, so you can&apos;t hear this
                     card. Reveal it to keep going.
                   </p>
@@ -156,7 +156,7 @@ function FlashCardBase({
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="border-amber-300 bg-white text-amber-900 hover:bg-amber-100"
+                    className="border-amber-300 dark:border-amber-700 bg-card text-amber-900 dark:text-amber-100 hover:bg-amber-100 dark:hover:bg-amber-900/50"
                     onClick={event => {
                       event.stopPropagation();
                       handleFlip();
@@ -168,7 +168,7 @@ function FlashCardBase({
               )}
             </>
           ) : (
-            <h2 className="text-5xl font-bold text-slate-900 mb-6" lang="ko">
+            <h2 className="text-5xl font-bold text-foreground mb-6" lang="ko">
               {cleanKoreanText(front)}
             </h2>
           )}
@@ -177,7 +177,7 @@ function FlashCardBase({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="text-2xl text-emerald-600 font-mono font-semibold mb-8"
+              className="text-2xl text-emerald-600 dark:text-emerald-400 font-mono font-semibold mb-8"
             >
               {romanization}
             </motion.p>
@@ -201,7 +201,7 @@ function FlashCardBase({
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-slate-500 hover:text-slate-700"
+                className="text-muted-foreground hover:text-foreground/80"
                 onClick={e => {
                   e.stopPropagation();
                   setShowRoman(!showRoman);
@@ -211,7 +211,7 @@ function FlashCardBase({
               </Button>
             )}
           </div>
-          <div className="absolute bottom-12 flex items-center gap-2 text-sm text-slate-500">
+          <div className="absolute bottom-12 flex items-center gap-2 text-sm text-muted-foreground">
             {audioFirst ? "Tap to reveal meaning" : "Tap to reveal"}{" "}
             <ChevronRight size={16} />
           </div>
@@ -226,7 +226,7 @@ function FlashCardBase({
             pointerEvents: isRevealed ? "auto" : "none",
           }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-7 text-center shadow-xl sm:p-9"
+          className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 dark:border-emerald-800/70 bg-gradient-to-br from-emerald-50 dark:from-emerald-950 via-background to-teal-50 dark:to-teal-950 p-7 text-center shadow-xl sm:p-9"
         >
           <div className="flex min-h-full flex-col items-center justify-center">
             <Badge className="mb-5 bg-emerald-700 text-white shadow-sm">
@@ -234,37 +234,37 @@ function FlashCardBase({
             </Badge>
             {audioFirst && (
               <p
-                className="text-5xl font-bold tracking-tight text-slate-900"
+                className="text-5xl font-bold tracking-tight text-foreground"
                 lang="ko"
               >
                 {cleanKoreanText(front)}
               </p>
             )}
             {romanization && (
-              <p className="mt-3 font-mono text-lg font-semibold text-emerald-700">
+              <p className="mt-3 font-mono text-lg font-semibold text-emerald-700 dark:text-emerald-300">
                 {romanization}
               </p>
             )}
-            <div className="my-6 h-px w-full max-w-xs bg-emerald-200" />
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
+            <div className="my-6 h-px w-full max-w-xs bg-emerald-200 dark:bg-emerald-900/60" />
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-foreground/70">
               Meaning
             </p>
-            <h2 className="text-3xl font-bold leading-tight text-slate-900">
+            <h2 className="text-3xl font-bold leading-tight text-foreground">
               {back}
             </h2>
             {example && (
-              <div className="mt-6 max-w-xs rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
+              <div className="mt-6 max-w-xs rounded-2xl border border-emerald-200 dark:border-emerald-800/70 bg-card/80 p-4 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
                   In context
                 </p>
                 <p
-                  className="mt-2 text-sm italic leading-relaxed text-slate-600"
+                  className="mt-2 text-sm italic leading-relaxed text-foreground/70"
                   lang="ko"
                 >
                   “{example}”
                 </p>
                 {exampleEnglish && (
-                  <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                     {exampleEnglish}
                   </p>
                 )}
@@ -273,7 +273,7 @@ function FlashCardBase({
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="mt-2 h-8 gap-1.5 px-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+                    className="mt-2 h-8 gap-1.5 px-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-800 dark:hover:text-emerald-200"
                     aria-label={`Hear sentence for ${cleanKoreanText(front)}`}
                     onClick={event => {
                       event.stopPropagation();
@@ -293,11 +293,11 @@ function FlashCardBase({
               </div>
             )}
             {usageNote && (
-              <div className="mt-3 max-w-xs rounded-2xl border border-slate-200 bg-white/60 px-4 py-3 text-left">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-600">
+              <div className="mt-3 max-w-xs rounded-2xl border border-border bg-card/60 px-4 py-3 text-left">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-foreground/70">
                   Usage note
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                <p className="mt-1 text-xs leading-relaxed text-foreground/70">
                   {usageNote}
                 </p>
               </div>

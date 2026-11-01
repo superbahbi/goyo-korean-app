@@ -70,14 +70,17 @@ export function GrammarDialog({
           </>
         ) : (
           <>
-            <div className="shrink-0 border-b border-slate-200 bg-gradient-to-br from-emerald-50 to-white px-5 pb-4 pt-6 sm:px-6">
+            <div className="shrink-0 border-b border-border bg-gradient-to-br from-emerald-50 dark:from-emerald-950/40 to-background px-5 pb-4 pt-6 sm:px-6">
               <div className="flex items-center gap-2">
-                <BookMarked size={20} className="text-emerald-600" />
-                <DialogTitle className="text-2xl font-bold text-slate-900">
+                <BookMarked
+                  size={20}
+                  className="text-emerald-600 dark:text-emerald-400"
+                />
+                <DialogTitle className="text-2xl font-bold text-foreground">
                   Grammar Lessons
                 </DialogTitle>
               </div>
-              <DialogDescription className="mt-1 text-sm text-slate-600">
+              <DialogDescription className="mt-1 text-sm text-foreground/70">
                 TOPIK I patterns in the order the deck introduces them.
               </DialogDescription>
               <div className="mt-3 flex items-center gap-3">
@@ -87,7 +90,7 @@ export function GrammarDialog({
                   aria-valuemin={0}
                   aria-valuemax={GRAMMAR_LESSON_COUNT}
                   aria-valuenow={completedCount}
-                  className="h-2 flex-1 overflow-hidden rounded-full bg-slate-200"
+                  className="h-2 flex-1 overflow-hidden rounded-full bg-muted"
                 >
                   <div
                     className="h-full rounded-full bg-emerald-600 transition-all"
@@ -96,7 +99,7 @@ export function GrammarDialog({
                     }}
                   />
                 </div>
-                <span className="text-xs font-semibold text-slate-600">
+                <span className="text-xs font-semibold text-foreground/70">
                   {completedCount} / {GRAMMAR_LESSON_COUNT}
                 </span>
               </div>
@@ -114,13 +117,13 @@ export function GrammarDialog({
                       <button
                         type="button"
                         onClick={() => setLessonId(entry.id)}
-                        className="flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 text-left transition hover:border-emerald-300 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                        className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3.5 text-left transition hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                       >
                         <span
                           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
                             completed
                               ? "bg-emerald-600 text-white"
-                              : "bg-slate-100 text-slate-500"
+                              : "bg-muted text-muted-foreground"
                           }`}
                           aria-hidden="true"
                         >
@@ -128,26 +131,26 @@ export function GrammarDialog({
                         </span>
                         <span className="min-w-0 flex-1">
                           <span
-                            className="block truncate text-[15px] font-semibold text-slate-900"
+                            className="block truncate text-[15px] font-semibold text-foreground"
                             lang="ko"
                           >
                             {entry.title}
                           </span>
-                          <span className="mt-0.5 block truncate text-xs text-slate-500">
+                          <span className="mt-0.5 block truncate text-xs text-muted-foreground">
                             {entry.subtitle}
                           </span>
                         </span>
                         {score && (
                           <Badge
                             variant="outline"
-                            className="shrink-0 border-emerald-200 bg-emerald-50 text-emerald-700"
+                            className="shrink-0 border-emerald-200 dark:border-emerald-800/70 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300"
                           >
                             {score.correct}/{score.total}
                           </Badge>
                         )}
                         <ChevronRight
                           size={16}
-                          className="shrink-0 text-slate-400"
+                          className="shrink-0 text-muted-foreground/80"
                           aria-hidden="true"
                         />
                       </button>

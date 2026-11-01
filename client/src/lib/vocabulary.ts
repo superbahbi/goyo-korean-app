@@ -1538,79 +1538,85 @@ export const CATEGORIES = [
     id: "survival",
     name: "Survival",
     icon: "🆘",
-    color: "bg-red-100 text-red-700",
+    color: "bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300",
   },
   {
     id: "daily",
     name: "Daily",
     icon: "💬",
-    color: "bg-blue-100 text-blue-700",
+    color: "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300",
   },
   {
     id: "numbers",
     name: "Numbers",
     icon: "🔢",
-    color: "bg-yellow-100 text-yellow-700",
+    color:
+      "bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300",
   },
   {
     id: "time",
     name: "Time",
     icon: "🕒",
-    color: "bg-sky-100 text-sky-700",
+    color: "bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300",
   },
   {
     id: "people",
     name: "People",
     icon: "👥",
-    color: "bg-teal-100 text-teal-700",
+    color: "bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300",
   },
   {
     id: "family",
     name: "Family",
     icon: "👨‍👩‍👧‍👦",
-    color: "bg-pink-100 text-pink-700",
+    color: "bg-pink-100 dark:bg-pink-900/50 text-pink-700 dark:text-pink-300",
   },
   {
     id: "food",
     name: "Food",
     icon: "🍜",
-    color: "bg-orange-100 text-orange-700",
+    color:
+      "bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300",
   },
   {
     id: "animals",
     name: "Animals",
     icon: "🐾",
-    color: "bg-amber-100 text-amber-700",
+    color:
+      "bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300",
   },
   {
     id: "body",
     name: "Body",
     icon: "💪",
-    color: "bg-indigo-100 text-indigo-700",
+    color:
+      "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300",
   },
   {
     id: "health",
     name: "Health",
     icon: "🩺",
-    color: "bg-rose-100 text-rose-700",
+    color: "bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300",
   },
   {
     id: "clothing",
     name: "Clothing",
     icon: "👕",
-    color: "bg-fuchsia-100 text-fuchsia-700",
+    color:
+      "bg-fuchsia-100 dark:bg-fuchsia-900/50 text-fuchsia-700 dark:text-fuchsia-300",
   },
   {
     id: "colors",
     name: "Colors",
     icon: "🎨",
-    color: "bg-cyan-100 text-cyan-700",
+    color: "bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-300",
   },
   {
     id: "emotions",
     name: "Emotions",
     icon: "😊",
-    color: "bg-purple-100 text-purple-700",
+    color:
+      "bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300",
   },
   {
     id: "home",
@@ -1622,19 +1628,20 @@ export const CATEGORIES = [
     id: "places",
     name: "Places",
     icon: "📍",
-    color: "bg-lime-100 text-lime-700",
+    color: "bg-lime-100 dark:bg-lime-900/50 text-lime-700 dark:text-lime-300",
   },
   {
     id: "transport",
     name: "Transport",
     icon: "🚌",
-    color: "bg-slate-100 text-slate-700",
+    color: "bg-muted text-foreground/80",
   },
   {
     id: "school",
     name: "School",
     icon: "🎓",
-    color: "bg-violet-100 text-violet-700",
+    color:
+      "bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300",
   },
   {
     id: "work",
@@ -1652,13 +1659,15 @@ export const CATEGORIES = [
     id: "leisure",
     name: "Leisure",
     icon: "🎬",
-    color: "bg-emerald-100 text-emerald-700",
+    color:
+      "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300",
   },
   {
     id: "nature",
     name: "Nature",
     icon: "🌿",
-    color: "bg-green-100 text-green-700",
+    color:
+      "bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300",
   },
   {
     id: "objects",
@@ -1670,13 +1679,15 @@ export const CATEGORIES = [
     id: "verbs",
     name: "Verbs",
     icon: "⚡",
-    color: "bg-green-100 text-green-700",
+    color:
+      "bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300",
   },
   {
     id: "adjectives",
     name: "Adjectives",
     icon: "✨",
-    color: "bg-indigo-100 text-indigo-700",
+    color:
+      "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300",
   },
 ];
 

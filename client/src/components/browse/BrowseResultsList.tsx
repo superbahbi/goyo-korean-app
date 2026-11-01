@@ -53,12 +53,12 @@ export function BrowseResultsList({
             />
           ))
         ) : (
-          <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
-            <Search size={28} className="mx-auto text-slate-300" />
-            <p className="mt-3 font-semibold text-slate-700">
+          <div className="rounded-2xl border border-dashed border-border bg-muted/60 px-6 py-12 text-center">
+            <Search size={28} className="mx-auto text-muted-foreground/60" />
+            <p className="mt-3 font-semibold text-foreground/80">
               No matching cards
             </p>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               Try a different search or clear your filters.
             </p>
           </div>
@@ -67,7 +67,7 @@ export function BrowseResultsList({
           <Button
             type="button"
             variant="outline"
-            className="w-full rounded-xl border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+            className="w-full rounded-xl border-emerald-200 dark:border-emerald-800/70 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
             onClick={onLoadMore}
           >
             Load 40 more · {matchingCount - visibleCards.length} remaining

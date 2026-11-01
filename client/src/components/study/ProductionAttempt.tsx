@@ -16,12 +16,12 @@ export function ProductionAttempt({
   onDone,
 }: ProductionAttemptProps) {
   return (
-    <div className="mb-4 rounded-2xl border border-indigo-100 bg-indigo-50/80 p-4 text-left">
-      <div className="flex items-center gap-2 text-sm font-semibold text-indigo-800">
+    <div className="mb-4 rounded-2xl border border-indigo-100 dark:border-indigo-900/60 bg-indigo-50/80 dark:bg-indigo-950/40 p-4 text-left">
+      <div className="flex items-center gap-2 text-sm font-semibold text-indigo-800 dark:text-indigo-200">
         <Mic2 size={16} />
         Use it in a new situation
       </div>
-      <p className="mt-1 text-xs leading-relaxed text-indigo-700">
+      <p className="mt-1 text-xs leading-relaxed text-indigo-700 dark:text-indigo-300">
         Say a new sentence aloud with this Korean word or phrase. Writing your
         attempt is optional.
       </p>
@@ -30,7 +30,7 @@ export function ProductionAttempt({
           value={value}
           onChange={event => onChange(event.target.value)}
           placeholder="Your Korean sentence (optional)"
-          className="h-10 border-indigo-200 bg-white"
+          className="h-10 border-indigo-200 dark:border-indigo-800/70 bg-card"
           onClick={event => event.stopPropagation()}
         />
         <Button
@@ -39,7 +39,7 @@ export function ProductionAttempt({
           className={
             done
               ? "h-10 shrink-0 bg-indigo-600 hover:bg-indigo-700"
-              : "h-10 shrink-0 border-indigo-200 text-indigo-700 hover:bg-indigo-100"
+              : "h-10 shrink-0 border-indigo-200 dark:border-indigo-800/70 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900/50"
           }
           onClick={onDone}
         >
