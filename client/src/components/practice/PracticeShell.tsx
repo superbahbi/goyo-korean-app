@@ -131,7 +131,7 @@ export function PracticeShell({
             <div className="min-w-[64px] text-right text-sm font-semibold text-muted-foreground">
               {counter}
               {status && (
-                <span className="block text-xs font-normal text-muted-foreground/80">
+                <span className="block text-xs font-normal text-muted-foreground">
                   {status}
                 </span>
               )}
