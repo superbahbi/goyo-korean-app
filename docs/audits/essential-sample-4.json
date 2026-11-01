@@ -1,0 +1,408 @@
+{
+  "sample": 4,
+  "sheet": "docs/audits/essential-sample-4.md",
+  "deck": "Essential 600 imported deck",
+  "deckSize": 504,
+  "seed": 61,
+  "limit": 50,
+  "auditedAt": "2026-11-01",
+  "auditor": "DeepSeek V4.1 Flash model pass; native-speaker spot check pending.",
+  "rubric": [
+    "translation accuracy",
+    "Korean naturalness",
+    "politeness consistency",
+    "part of speech",
+    "romanization/batchim"
+  ],
+  "issueCategories": [
+    "translation",
+    "naturalness",
+    "politeness",
+    "part-of-speech",
+    "romanization",
+    "usage-note",
+    "spelling"
+  ],
+  "summary": {
+    "cards": 50,
+    "pass": 46,
+    "fix": 4,
+    "errorRate": 0.08,
+    "decision": "4 of 50 fail (8%), inside the 5-15% band, so audit the rest of the imported deck in batches rather than treating it as clean or wholly untrusted."
+  },
+  "phase7Combined": {
+    "samples": [3, 4],
+    "uniqueCards": 96,
+    "uniqueFix": 10,
+    "uniquePass": 86,
+    "errorRate": 0.10416666666666667,
+    "freshCards": 89,
+    "cardsAuditedAcrossPhases": 185,
+    "deckCoverage": 0.36706349206349204,
+    "mutualRecheckIds": [
+      "essential_063",
+      "essential_148",
+      "essential_182",
+      "essential_387"
+    ],
+    "mutualAgreement": "4/4"
+  },
+  "systemicIssues": [
+    {
+      "issue": "Grammaticalized forms tagged as nouns",
+      "category": "part-of-speech",
+      "cards": 2,
+      "ids": ["essential_355", "essential_374"],
+      "detail": "Both 밖에 (noun 밖 + locative 에) and 다섯 번째 (an ordinal number) are tagged noun; tag them adverb/locative and number, matching the Phase 3 fixes for 위에 and 첫 번째."
+    },
+    {
+      "issue": "Romanization that does not follow Revised Romanization",
+      "category": "romanization",
+      "cards": 2,
+      "ids": ["essential_374", "essential_433"],
+      "detail": "앉다 is romanized anta, but Revised Romanization gives anda: the ㄵ reduces to ㄴ and 다 keeps its own romanization. The unspaced 다섯번째 also yields daseotbeonjjae instead of daseot beonjjae."
+    },
+    {
+      "issue": "Semantically nonsensical example sentence",
+      "category": "naturalness",
+      "cards": 1,
+      "ids": ["essential_259"],
+      "detail": "The example says a puppy bit the speaker's tooth; a natural sentence uses the puppy's teeth (강아지가 이빨로 제 손을 깨물었어요) with a matching English line."
+    }
+  ],
+  "notes": [
+    "Each of the 50 seed-61 rows was read against the five-point rubric (translation, naturalness, politeness, part of speech, romanization/batchim), with usage-note claims checked separately; no deck data was edited.",
+    "This is a model screen, not the pending Korean-speaker spot check.",
+    "The four ids shared with samples 1-2 (essential_338, essential_443, essential_506, essential_520) were re-read in their Phase 3 form and all pass, so no earlier defect was re-reported. The four ids shared with the parallel sample 3 (essential_063, essential_148, essential_182, essential_387) were judged independently and agreed."
+  ],
+  "verdicts": [
+    {
+      "id": "essential_004",
+      "source": "600 essential words · row 10",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_010",
+      "source": "600 essential words · row 16",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_036",
+      "source": "600 essential words · row 42",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_038",
+      "source": "600 essential words · row 44",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_062",
+      "source": "600 essential words · row 68",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_063",
+      "source": "600 essential words · row 69",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_065",
+      "source": "600 essential words · row 71",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_067",
+      "source": "600 essential words · row 73",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_104",
+      "source": "600 essential words · row 110",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_112",
+      "source": "600 essential words · row 118",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_113",
+      "source": "600 essential words · row 119",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_134",
+      "source": "600 essential words · row 140",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_148",
+      "source": "600 essential words · row 154",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_158",
+      "source": "600 essential words · row 164",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_178",
+      "source": "600 essential words · row 184",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_182",
+      "source": "600 essential words · row 188",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_206",
+      "source": "600 essential words · row 212",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_215",
+      "source": "600 essential words · row 221",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_217",
+      "source": "600 essential words · row 223",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_230",
+      "source": "600 essential words · row 236",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_231",
+      "source": "600 essential words · row 237",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_245",
+      "source": "600 essential words · row 251",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_251",
+      "source": "600 essential words · row 257",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_259",
+      "source": "600 essential words · row 265",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "\"강아지가 제 이빨을 깨물었어요\" says the puppy bit my tooth, which is nonsensical. Use 강아지가 이빨로 제 손을 깨물었어요 (\"The puppy bit my hand with its teeth\") and update exampleEnglish to match."
+        }
+      ]
+    },
+    {
+      "id": "essential_264",
+      "source": "600 essential words · row 270",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_273",
+      "source": "600 essential words · row 279",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_291",
+      "source": "600 essential words · row 297",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_292",
+      "source": "600 essential words · row 298",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_299",
+      "source": "600 essential words · row 305",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_310",
+      "source": "600 essential words · row 316",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_331",
+      "source": "600 essential words · row 337",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_338",
+      "source": "600 essential words · row 344",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_355",
+      "source": "600 essential words · row 361",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "밖에 is the noun 밖 plus the locative particle 에, not a noun; tag it adverb/locative (as 위에 was) or change the headword to 밖."
+        }
+      ]
+    },
+    {
+      "id": "essential_364",
+      "source": "600 essential words · row 370",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_368",
+      "source": "600 essential words · row 374",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_374",
+      "source": "600 essential words · row 433",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "spelling",
+          "detail": "The headword and example spell 다섯번째; the standard form is 다섯 번째 with a space (the note's \"two-word form\" is the standard, not a variant). Fixing the headword also requires regenerating both audio clips."
+        },
+        {
+          "category": "romanization",
+          "detail": "daseotbeonjjae follows the unspaced spelling; it becomes daseot beonjjae."
+        },
+        {
+          "category": "part-of-speech",
+          "detail": "다섯 번째 is an ordinal number, not a noun; tag it number, as 첫 번째 was."
+        }
+      ]
+    },
+    {
+      "id": "essential_387",
+      "source": "600 essential words · row 446",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_407",
+      "source": "600 essential words · row 467",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_433",
+      "source": "600 essential words · row 493",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "romanization",
+          "detail": "anta is the McCune-Reischauer transcription; Revised Romanization is anda (ㄵ reduces to ㄴ before ㄷ, and tensification is not written)."
+        }
+      ]
+    },
+    {
+      "id": "essential_443",
+      "source": "600 essential words · row 503",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_448",
+      "source": "600 essential words · row 508",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_476",
+      "source": "600 essential words · row 536",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_506",
+      "source": "600 essential words · row 566",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_507",
+      "source": "600 essential words · row 567",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_514",
+      "source": "600 essential words · row 574",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_520",
+      "source": "600 essential words · row 580",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_523",
+      "source": "600 essential words · row 583",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_531",
+      "source": "600 essential words · row 591",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_537",
+      "source": "600 essential words · row 597",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_544",
+      "source": "600 essential words · row 604",
+      "verdict": "pass",
+      "issues": []
+    }
+  ]
+}
