@@ -192,3 +192,15 @@ test("recognition practice has no WCAG A/AA violations", async ({ page }) => {
     []
   );
 });
+
+test("grammar lessons have no WCAG A/AA violations", async ({ page }) => {
+  await page.getByRole("button", { name: /grammar lessons/i }).click();
+  const dialog = page.getByRole("dialog");
+  expect(await audit(page, "grammar list", '[role="dialog"]')).toEqual([]);
+
+  await dialog.getByRole("button", { name: /이에요 \/ 예요/ }).click();
+  expect(await audit(page, "grammar lesson", '[role="dialog"]')).toEqual([]);
+
+  await dialog.getByRole("button", { name: /A\s*예요/ }).click();
+  expect(await audit(page, "grammar answered", '[role="dialog"]')).toEqual([]);
+});

@@ -9,7 +9,7 @@ Every stage is done only when its gate passes.
 ## Product
 
 - Free public web app. The maintainer is the first user, so the app is tuned on one real learner first.
-- Learner: English-speaking beginner. TOPIK I is the ceiling. No grammar lessons yet.
+- Learner: English-speaking beginner. TOPIK I is the ceiling, grammar lessons included (Phase 6).
 - Success: users still reviewing 4+ days a week after 30 days.
 - Budget: a few hours a week and little or no new audio spend.
 - No accounts or backend. Progress lives in `localStorage` and moves by JSON export/import.
@@ -94,7 +94,7 @@ the data and shared modules are still larger: `essentialVocabulary.ts` (7.6k lin
 | 3 Content                       | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
 | 4 Delivery and accessibility    | Done; headers, iOS meta, `lang`, contrast, focus rings, 22 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
 | 5 Tune from data                | Blocked on 30 days of use                                                                                                                                                    |
-| 6 Sentence audio and grammar    | In progress; sentence audio plumbing done with a 20-clip sample; grammar lessons next                                                                                        |
+| 6 Sentence audio and grammar    | In progress; sentence audio wired with a 20-clip deck sample and 36 grammar clips; 12 lessons ship, Korean review open                                                       |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -446,10 +446,20 @@ grammar content that reuses it.
      `data.test.ts` passes, and the sample is spot-checked for pacing and pronunciation.
 
 2. **Grammar lessons.** Twelve TOPIK I lessons with a short explanation, examples, and a
-   three-question check, in a dashboard dialog; progress travels with the export.
-   - Content follows the Phase 3 rule: written by one model, audited by another, with a Korean-speaker
-     spot check before the phase closes.
-   - Planned for the same phase, one PR.
+   two-question check, in a dashboard dialog; progress travels with the export.
+   - Done (2026-10-31): `client/src/lib/grammar.ts` holds the course (copula, 은/는 vs 이/가,
+     을/를, 에/에서, 있어요/없어요, -아요/어요, -고 싶어요, -(으)ㄹ 수 있어요, -고, -지만,
+     -(으)세요, -았/었어요). The dialog lists progress, each lesson shows points, example sentences
+     with their clips, a common-mistake note and a two-question check with explanations.
+   - Progress is `grammar` in the save (schema 5): completed ids plus best score per lesson, so one
+     export moves vocabulary and grammar together. Older saves load with an empty course.
+   - The grammar examples are part of the sentence-audio registry (`grammar_<lesson>_<n>`), and the
+     generator can refresh just those clips with `--sentences --grammar`. The 36 male clips are
+     generated; the female voice follows the full batch.
+   - Still needed before the phase closes: a Korean-speaker review of the twelve lessons, following
+     the Phase 3 content rule. The content is model-written and not yet trusted.
+   - Acceptance: the 12 lessons render, the check records a best score, an older save loads, and the
+     lesson surfaces pass the axe scan.
 
 ## Deferred, not decided
 

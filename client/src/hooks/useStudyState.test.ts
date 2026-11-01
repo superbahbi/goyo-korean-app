@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { emptyGrammarProgress } from "@/lib/grammarProgress";
 import {
   applyGrade,
   buildExportPayload,
@@ -62,7 +63,7 @@ describe("saved progress schemaVersion", () => {
       }),
       today
     );
-    expect(SCHEMA_VERSION).toBe(4);
+    expect(SCHEMA_VERSION).toBe(5);
     expect(state.schemaVersion).toBe(SCHEMA_VERSION);
     expect(state.cardStates.surv_001).toEqual(card);
     expect(state.stats).toEqual(stats);
@@ -94,6 +95,7 @@ describe("saved progress schemaVersion", () => {
       settings,
       studyDays,
       reviewLog,
+      grammar: emptyGrammarProgress(),
     };
     expect(parseSavedState(JSON.stringify(saved), today)).toEqual(saved);
   });
@@ -288,6 +290,7 @@ describe("progress export and import", () => {
     stats,
     settings,
     studyDays,
+    grammar: emptyGrammarProgress(),
   };
 
   it("exports the saved shape with an exportedAt timestamp", () => {
@@ -658,5 +661,49 @@ describe("applyGrade", () => {
     expect(retry.cardStates.surv_001.timesReviewed).toBe(
       first.cardStates.surv_001.timesReviewed
     );
+  });
+});
+
+describe("grammar progress in the save", () => {
+  const grammar = {
+    completedLessonIds: ["copula", "past"],
+    scores: { copula: { correct: 2, total: 2 } },
+    lastLessonId: "past",
+  };
+
+  it("loads saved grammar progress and sanitizes it", () => {
+    const state = parseSavedState(
+      JSON.stringify({
+        cardStates: {},
+        stats,
+        settings,
+        studyDays,
+        grammar,
+      }),
+      today
+    );
+    expect(state.grammar).toEqual(grammar);
+  });
+
+  it("defaults grammar progress for older saves", () => {
+    const state = parseSavedState(
+      JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
+      today
+    );
+    expect(state.grammar).toEqual(emptyGrammarProgress());
+  });
+
+  it("carries grammar progress in the export", () => {
+    const state = parseSavedState(
+      JSON.stringify({
+        cardStates: {},
+        stats,
+        settings,
+        studyDays,
+        grammar,
+      }),
+      today
+    );
+    expect(buildExportPayload(state)).toHaveProperty("grammar", grammar);
   });
 });

@@ -25,6 +25,7 @@ export default function Home() {
     state,
     gradeCard,
     updateSettings,
+    recordGrammarResult,
     replaceState,
     saveBlocked,
     saveError,
@@ -36,6 +37,7 @@ export default function Home() {
   const [showStats, setShowStats] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showAlphabet, setShowAlphabet] = useState(false);
+  const [showGrammar, setShowGrammar] = useState(false);
   const [showListening, setShowListening] = useState(false);
   const [showScenarios, setShowScenarios] = useState(false);
   const [showShadowing, setShowShadowing] = useState(false);
@@ -179,7 +181,9 @@ export default function Home() {
         <PracticeMenu
           weakCardCount={weakCards.length}
           learningCardCount={learningCards.length}
+          grammarCompleted={state.grammar.completedLessonIds.length}
           onOpenAlphabet={() => setShowAlphabet(true)}
+          onOpenGrammar={() => setShowGrammar(true)}
           onOpenListening={() =>
             openRecognitionPractice(() => setShowListening(true))
           }
@@ -227,10 +231,14 @@ export default function Home() {
         onScenarioGrade={handleScenarioGrade}
         onShadowingGrade={handleShadowingGrade}
         showAlphabet={showAlphabet}
+        showGrammar={showGrammar}
+        grammarProgress={state.grammar}
+        onGrammarComplete={recordGrammarResult}
         showListening={showListening}
         showScenarios={showScenarios}
         showShadowing={showShadowing}
         onCloseAlphabet={() => setShowAlphabet(false)}
+        onCloseGrammar={() => setShowGrammar(false)}
         onCloseListening={() => setShowListening(false)}
         onCloseScenarios={() => setShowScenarios(false)}
         onCloseShadowing={() => setShowShadowing(false)}

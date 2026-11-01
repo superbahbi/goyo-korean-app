@@ -73,6 +73,7 @@ by card id. They ship in batches, so the UI only shows "Hear sentence" where a c
 ```sh
 tsx --env-file=.env.local scripts/generate-elevenlabs-audio.ts --sentences --sample=20
 tsx --env-file=.env.local scripts/generate-elevenlabs-audio.ts --sentences            # full deck
+tsx --env-file=.env.local scripts/generate-elevenlabs-audio.ts --sentences --grammar   # lesson examples only
 tsx --env-file=.env.local scripts/generate-elevenlabs-audio.ts --sentences --voice jini
 ```
 
