@@ -1,59 +1,16 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Check, ChevronRight, RotateCcw, Volume2, X } from "lucide-react";
-import { motion } from "framer-motion";
+import { Check, RotateCcw, X } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 import { shuffle } from "@/lib/shuffle";
-
-interface Scenario {
-  id: string;
-  place: string;
-  prompt: string;
-  cardId: string;
-}
-
-const SCENARIOS: Scenario[] = [
-  {
-    id: "greeting",
-    place: "Meeting someone",
-    prompt: "You meet someone for the first time. Greet them politely.",
-    cardId: "surv_001",
-  },
-  {
-    id: "thanks",
-    place: "Receiving help",
-    prompt: "Someone helps you. What do you say?",
-    cardId: "surv_002",
-  },
-  {
-    id: "sorry",
-    place: "Apologizing",
-    prompt: "You are late to an appointment. Apologize politely.",
-    cardId: "surv_003",
-  },
-  {
-    id: "bathroom",
-    place: "Finding a place",
-    prompt: "You are in a café and need to ask where the bathroom is.",
-    cardId: "surv_008",
-  },
-  {
-    id: "price",
-    place: "Shopping",
-    prompt: "You want to ask the price of an item.",
-    cardId: "surv_009",
-  },
-  {
-    id: "repair",
-    place: "Conversation repair",
-    prompt: "You did not understand someone. Tell them you do not know.",
-    cardId: "surv_006",
-  },
-];
+import { ChoiceButton } from "@/components/practice/ChoiceButton";
+import { PracticeComplete } from "@/components/practice/PracticeComplete";
+import { SCENARIOS } from "@/components/practice/scenarios";
+import { ScenarioPrompt } from "@/components/practice/ScenarioPrompt";
+import { ScenarioVerdict } from "@/components/practice/ScenarioVerdict";
 
 interface ScenarioPracticeProps {
   cards: VocabularyCard[];
@@ -144,63 +101,30 @@ export function ScenarioPractice({
 
   if (complete) {
     return (
-      <Dialog
-        open
-        onOpenChange={open => {
-          if (!open) closePractice();
+      <PracticeComplete
+        title="You used Korean in context"
+        eyebrow="Scenario practice complete"
+        heading="You used Korean in context"
+        icon={<Check size={34} />}
+        closeLabel="Return to dashboard"
+        restartLabel={
+          <>
+            Practice again <RotateCcw size={16} className="ml-2" />
+          </>
+        }
+        restartClassName="bg-emerald-700 hover:bg-emerald-800"
+        onClose={closePractice}
+        onRestart={() => {
+          setIndex(0);
+          setSelectedId(null);
+          setScore(0);
+          setComplete(false);
+          setRound(value => value + 1);
         }}
       >
-        <DialogContent
-          aria-modal="true"
-          aria-describedby={undefined}
-          showCloseButton={false}
-          className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 items-center justify-center gap-0 overflow-y-auto rounded-none border-0 bg-slate-950/40 p-4 shadow-none backdrop-blur-sm sm:max-w-none"
-        >
-          <DialogTitle className="sr-only">
-            You used Korean in context
-          </DialogTitle>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-2xl"
-          >
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-              <Check size={34} />
-            </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Scenario practice complete
-            </p>
-            <h2 className="mt-2 font-serif text-3xl text-slate-900">
-              You used Korean in context
-            </h2>
-            <p className="mt-3 text-slate-600">
-              You chose the useful phrase in <strong>{score}</strong> of{" "}
-              {scenarios.length} situations.
-            </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Button
-                variant="outline"
-                className="min-h-12 flex-1"
-                onClick={closePractice}
-              >
-                Return to dashboard
-              </Button>
-              <Button
-                className="min-h-12 flex-1 bg-emerald-700 hover:bg-emerald-800"
-                onClick={() => {
-                  setIndex(0);
-                  setSelectedId(null);
-                  setScore(0);
-                  setComplete(false);
-                  setRound(value => value + 1);
-                }}
-              >
-                Practice again <RotateCcw size={16} className="ml-2" />
-              </Button>
-            </div>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
+        You chose the useful phrase in <strong>{score}</strong> of{" "}
+        {scenarios.length} situations.
+      </PracticeComplete>
     );
   }
 
@@ -265,88 +189,35 @@ export function ScenarioPractice({
         </header>
         <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-8">
           <div className="mx-auto max-w-2xl">
-            <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100">
-              {current.place}
-            </Badge>
-            <h1 className="mt-4 font-serif text-3xl text-slate-900">
-              What would you say?
-            </h1>
-            <p className="mt-2 text-lg leading-relaxed text-slate-600">
-              {current.prompt}
-            </p>
-            <div className="mt-7 rounded-3xl border border-emerald-100 bg-white p-5 shadow-lg shadow-emerald-100/40 sm:p-7">
-              <Button
-                variant="outline"
-                className="h-12 w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50"
-                onClick={() => void playVocabularyAudio(currentCard.id)}
-              >
-                <Volume2 size={18} className="mr-2" /> Hear a hint
-              </Button>
-              <p className="mt-3 text-center text-xs text-slate-500">
-                Listen for the natural Korean phrase, then choose from memory.
-              </p>
-            </div>
+            <ScenarioPrompt
+              place={current.place}
+              prompt={current.prompt}
+              onHear={() => void playVocabularyAudio(currentCard.id)}
+            />
             <div className="mt-5 grid gap-3">
-              {choices.map((choice, choiceIndex) => {
-                const chosen = selectedId === choice.id;
-                const correct = choice.id === currentCard.id;
-                const stateClass = !answered
-                  ? "border-slate-200 bg-white hover:border-emerald-400 hover:bg-emerald-50"
-                  : correct
-                    ? "border-emerald-400 bg-emerald-50 text-emerald-800"
-                    : chosen
-                      ? "border-red-300 bg-red-50 text-red-800"
-                      : "border-slate-100 bg-white/70 text-slate-400";
-                return (
-                  <button
-                    key={choice.id}
-                    disabled={answered}
-                    onClick={() => choose(choice)}
-                    className={`flex min-h-16 items-center gap-3 rounded-2xl border-2 p-4 text-left font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${stateClass}`}
-                  >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500">
-                      {String.fromCharCode(65 + choiceIndex)}
-                    </span>
-                    <span className="flex-1" lang="ko">
-                      {choice.front}
-                    </span>
-                    {answered && correct && <Check size={20} />}
-                    {answered && chosen && !correct && <X size={20} />}
-                  </button>
-                );
-              })}
+              {choices.map((choice, choiceIndex) => (
+                <ChoiceButton
+                  key={choice.id}
+                  letter={String.fromCharCode(65 + choiceIndex)}
+                  label={choice.front}
+                  labelLang="ko"
+                  answered={answered}
+                  chosen={selectedId === choice.id}
+                  correct={choice.id === currentCard.id}
+                  onChoose={() => choose(choice)}
+                  sizeClass="min-h-16"
+                  correctIcon={<Check size={20} />}
+                  wrongIcon={<X size={20} />}
+                />
+              ))}
             </div>
-            <div aria-live="polite">
-              {answered && (
-                <div className="mt-5 rounded-2xl bg-white/85 p-5 text-center">
-                  <p
-                    className={`font-semibold ${isCorrect ? "text-emerald-700" : "text-red-700"}`}
-                  >
-                    {isCorrect ? (
-                      "That fits the situation."
-                    ) : (
-                      <>
-                        A useful answer is “
-                        <span lang="ko">{currentCard.front}</span>”.
-                      </>
-                    )}
-                  </p>
-                  <p className="mt-2 text-sm text-slate-500">
-                    {currentCard.back} ·{" "}
-                    <span lang="ko">{currentCard.example}</span>
-                  </p>
-                  <Button
-                    className="mt-4 min-h-12 w-full bg-slate-900 hover:bg-slate-800"
-                    onClick={next}
-                  >
-                    {index === scenarios.length - 1
-                      ? "See results"
-                      : "Next situation"}
-                    <ChevronRight size={16} className="ml-2" />
-                  </Button>
-                </div>
-              )}
-            </div>
+            <ScenarioVerdict
+              card={currentCard}
+              answered={answered}
+              correct={isCorrect}
+              isLast={index === scenarios.length - 1}
+              onNext={next}
+            />
           </div>
         </main>
       </DialogContent>
