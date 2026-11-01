@@ -77,7 +77,7 @@ export function NewCardIntro({
           variant="secondary"
           className="rounded-full"
           data-intro-audio
-          aria-label={`Play pronunciation for ${card.front}`}
+          aria-label={`Hear it again for ${card.front}`}
           onClick={() => void playVocabularyAudio(card.id)}
         >
           <Volume2 size={18} />

@@ -104,7 +104,7 @@ test.describe("first-tap audio", () => {
 
     await page.getByRole("button", { name: /start daily session/i }).click();
     const speaker = page
-      .getByRole("button", { name: /play pronunciation for/i })
+      .getByRole("button", { name: /hear it again for/i })
       .first();
     await expect(speaker).toBeVisible();
     // Auto-play fires about 300 ms after the card mounts. Let it pass, then
