@@ -1,13 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  RotateCcw,
-  Volume2,
-  X,
-  XCircle,
-} from "lucide-react";
-import { motion } from "framer-motion";
+import { CheckCircle2, RotateCcw, X, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -15,6 +7,10 @@ import { Progress } from "@/components/ui/progress";
 import { VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 import { shuffle } from "@/lib/shuffle";
+import { ChoiceButton } from "@/components/practice/ChoiceButton";
+import { ListeningPrompt } from "@/components/practice/ListeningPrompt";
+import { ListeningVerdict } from "@/components/practice/ListeningVerdict";
+import { PracticeComplete } from "@/components/practice/PracticeComplete";
 
 interface ListeningPracticeProps {
   cards: VocabularyCard[];
@@ -79,62 +75,31 @@ export function ListeningPractice({
 
   if (isComplete) {
     return (
-      <Dialog
-        open
-        onOpenChange={open => {
-          if (!open) closePractice();
+      <PracticeComplete
+        title="A quiet step forward"
+        eyebrow="Listening complete"
+        heading="A quiet step forward"
+        icon={<CheckCircle2 size={34} />}
+        closeLabel="Done"
+        restartLabel={
+          <>
+            <RotateCcw size={16} className="mr-2" />
+            Practice again
+          </>
+        }
+        restartClassName="bg-emerald-600 hover:bg-emerald-700"
+        onClose={closePractice}
+        onRestart={() => {
+          setIndex(0);
+          setCorrectCount(0);
+          setSelectedAnswer(null);
+          setAnswerState("unanswered");
+          setRound(value => value + 1);
         }}
       >
-        <DialogContent
-          aria-modal="true"
-          aria-describedby={undefined}
-          showCloseButton={false}
-          className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 items-center justify-center gap-0 overflow-y-auto rounded-none border-0 bg-slate-950/40 p-4 shadow-none backdrop-blur-sm sm:max-w-none"
-        >
-          <DialogTitle className="sr-only">A quiet step forward</DialogTitle>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-2xl"
-          >
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-              <CheckCircle2 size={34} />
-            </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Listening complete
-            </p>
-            <h2 className="mt-2 font-serif text-3xl text-slate-900">
-              A quiet step forward
-            </h2>
-            <p className="mt-3 text-slate-600">
-              You recognized <strong>{correctCount}</strong> of{" "}
-              {questions.length} Korean recordings.
-            </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Button
-                variant="outline"
-                className="min-h-12 flex-1"
-                onClick={closePractice}
-              >
-                Done
-              </Button>
-              <Button
-                className="min-h-12 flex-1 bg-emerald-600 hover:bg-emerald-700"
-                onClick={() => {
-                  setIndex(0);
-                  setCorrectCount(0);
-                  setSelectedAnswer(null);
-                  setAnswerState("unanswered");
-                  setRound(value => value + 1);
-                }}
-              >
-                <RotateCcw size={16} className="mr-2" />
-                Practice again
-              </Button>
-            </div>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
+        You recognized <strong>{correctCount}</strong> of {questions.length}{" "}
+        Korean recordings.
+      </PracticeComplete>
     );
   }
 
@@ -163,6 +128,8 @@ export function ListeningPractice({
     setSelectedAnswer(null);
     setAnswerState("unanswered");
   };
+
+  const answered = answerState !== "unanswered";
 
   return (
     <Dialog
@@ -214,110 +181,39 @@ export function ListeningPractice({
               </p>
             </div>
 
-            <motion.div
+            <ListeningPrompt
               key={currentCard.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="rounded-3xl border border-emerald-100 bg-white p-5 text-center shadow-xl shadow-emerald-100/50 sm:p-7"
-            >
-              <Button
-                size="lg"
-                onClick={playCurrent}
-                disabled={isPlaying}
-                className="mx-auto flex h-24 w-24 flex-col gap-1 rounded-full bg-emerald-700 text-white shadow-lg shadow-emerald-200 hover:bg-emerald-800 sm:h-28 sm:w-28 sm:gap-2"
-                aria-label="Play Korean recording"
-              >
-                <Volume2
-                  size={34}
-                  className={isPlaying ? "animate-pulse" : ""}
-                />
-                <span className="text-xs">
-                  {isPlaying ? "Playing" : "Play"}
-                </span>
-              </Button>
-              <p className="mt-4 text-sm text-slate-500">
-                Replay as many times as you need
-              </p>
-
-              {answerState !== "unanswered" && (
-                <div className="mt-6 border-t border-slate-100 pt-5">
-                  <p
-                    className="text-4xl font-bold tracking-wide text-slate-900"
-                    lang="ko"
-                  >
-                    {currentCard.front}
-                  </p>
-                  <p className="mt-2 font-mono text-emerald-700">
-                    {currentCard.romanization}
-                  </p>
-                </div>
-              )}
-            </motion.div>
+              card={currentCard}
+              isPlaying={isPlaying}
+              revealed={answered}
+              onPlay={playCurrent}
+            />
 
             <div className="mt-6 grid gap-3">
-              {choices.map((choice, choiceIndex) => {
-                const isSelected = selectedAnswer === choice.id;
-                const isCorrect = choice.id === currentCard.id;
-                const statusClass =
-                  answerState === "unanswered"
-                    ? "border-slate-200 bg-white hover:border-emerald-400 hover:bg-emerald-50"
-                    : isCorrect
-                      ? "border-emerald-400 bg-emerald-50 text-emerald-800"
-                      : isSelected
-                        ? "border-red-300 bg-red-50 text-red-800"
-                        : "border-slate-100 bg-white/70 text-slate-400";
-                return (
-                  <button
-                    key={choice.id}
-                    disabled={answerState !== "unanswered"}
-                    onClick={() => chooseAnswer(choice.id)}
-                    className={`flex min-h-14 items-center gap-3 rounded-2xl border-2 p-4 text-left text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${statusClass}`}
-                  >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500">
-                      {String.fromCharCode(65 + choiceIndex)}
-                    </span>
-                    <span className="flex-1">{choice.text}</span>
-                    {answerState !== "unanswered" && isCorrect && (
-                      <CheckCircle2 size={20} />
-                    )}
-                    {answerState !== "unanswered" &&
-                      isSelected &&
-                      !isCorrect && <XCircle size={20} />}
-                  </button>
-                );
-              })}
+              {choices.map((choice, choiceIndex) => (
+                <ChoiceButton
+                  key={choice.id}
+                  letter={String.fromCharCode(65 + choiceIndex)}
+                  label={choice.text}
+                  answered={answered}
+                  chosen={selectedAnswer === choice.id}
+                  correct={choice.id === currentCard.id}
+                  onChoose={() => chooseAnswer(choice.id)}
+                  sizeClass="min-h-14 text-sm"
+                  correctIcon={<CheckCircle2 size={20} />}
+                  wrongIcon={<XCircle size={20} />}
+                />
+              ))}
             </div>
 
-            <div aria-live="polite">
-              {answerState !== "unanswered" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-5 rounded-2xl bg-white/80 p-4 text-center"
-                >
-                  <p
-                    className={`font-semibold ${answerState === "correct" ? "text-emerald-700" : "text-red-700"}`}
-                  >
-                    {answerState === "correct"
-                      ? "Correct — nice listening."
-                      : `The answer is “${currentCard.back}”.`}
-                  </p>
-                  <p className="mt-1 text-sm text-slate-500" lang="ko">
-                    {currentCard.example}
-                  </p>
-                  <Button
-                    ref={nextButtonRef}
-                    onClick={nextQuestion}
-                    className="mt-4 min-h-12 w-full bg-slate-900 hover:bg-slate-800"
-                  >
-                    {index === questions.length - 1
-                      ? "See results"
-                      : "Next recording"}
-                    <ArrowLeft size={16} className="ml-2 rotate-180" />
-                  </Button>
-                </motion.div>
-              )}
-            </div>
+            <ListeningVerdict
+              card={currentCard}
+              answered={answered}
+              correct={answerState === "correct"}
+              isLast={index === questions.length - 1}
+              nextButtonRef={nextButtonRef}
+              onNext={nextQuestion}
+            />
           </div>
         </main>
       </DialogContent>
