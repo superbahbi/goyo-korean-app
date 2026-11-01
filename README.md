@@ -66,6 +66,18 @@ Regenerating audio needs an ElevenLabs key in `.env.local` (never commit it). Se
 The generator hashes and renames the new clips and rewrites `index.json` at the end of a run. After
 adding or replacing clips by hand, run `pnpm audio:hash` for the same result. `data.test.ts` fails
 when a filename's hash does not match its bytes or when `index.json` points at a missing file.
+
+Example-sentence clips use a separate pass and live under the `sentences` key of `index.json`, keyed
+by card id. They ship in batches, so the UI only shows "Hear sentence" where a clip exists:
+
+```sh
+tsx --env-file=.env.local scripts/generate-elevenlabs-audio.ts --sentences --sample=20
+tsx --env-file=.env.local scripts/generate-elevenlabs-audio.ts --sentences            # full deck
+tsx --env-file=.env.local scripts/generate-elevenlabs-audio.ts --sentences --voice jini
+```
+
+The sample flag writes the same clips and index entries as a full run, so the app can be checked
+before spending on the whole library. The female voice writes to `female.sentences`.
 Do not commit regenerated clips without checking their size and whether the existing ones are fine.
 
 The ~26 MB vocabulary library stays committed to git and is served as static files from

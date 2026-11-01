@@ -9,6 +9,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const indexPayload = {
   vocabulary: { surv_001: "male_surv_001.mp3" },
+  sentences: { surv_001: "male_sent_surv_001.mp3" },
+  female: {
+    vocabulary: { surv_001: "female_surv_001.mp3" },
+    sentences: { surv_001: "female_sent_surv_001.mp3" },
+    alphabet: { consonants: {}, vowels: {} },
+  },
   alphabet: { consonants: {}, vowels: {} },
 };
 
@@ -107,6 +113,107 @@ function installFakeCaches() {
 
   return cache;
 }
+
+describe("playSentenceAudio", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    playBehavior = "end";
+    FakeAudio.instances = [];
+    FakeAudio.playedSources = [];
+    vi.stubGlobal("window", globalThis);
+    vi.stubGlobal("Audio", FakeAudio);
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("plays the sentence clip for the selected voice", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse(indexPayload))
+    );
+
+    const { playSentenceAudio } = await import("./audioPlayer");
+
+    await expect(playSentenceAudio("surv_001")).resolves.toBe(true);
+    expect(FakeAudio.playedSources).toEqual(["/audio/male_sent_surv_001.mp3"]);
+  });
+
+  it("uses the female sentence clip after switching speakers", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse(indexPayload))
+    );
+
+    const { playSentenceAudio, setAudioSpeaker } = await import(
+      "./audioPlayer"
+    );
+    setAudioSpeaker("elevenlabs-female");
+
+    await expect(playSentenceAudio("surv_001")).resolves.toBe(true);
+    expect(FakeAudio.playedSources).toEqual([
+      "/audio/female_sent_surv_001.mp3",
+    ]);
+  });
+
+  it("falls back to the other voice when the selected one lacks the clip", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        jsonResponse({
+          ...indexPayload,
+          female: {
+            ...indexPayload.female,
+            sentences: {},
+          },
+        })
+      )
+    );
+
+    const { playSentenceAudio, setAudioSpeaker } = await import(
+      "./audioPlayer"
+    );
+    setAudioSpeaker("elevenlabs-female");
+
+    await expect(playSentenceAudio("surv_001")).resolves.toBe(true);
+    expect(FakeAudio.playedSources).toEqual(["/audio/male_sent_surv_001.mp3"]);
+  });
+
+  it("resolves false when no sentence clip exists", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse({ ...indexPayload, sentences: {} }))
+    );
+
+    const { playSentenceAudio } = await import("./audioPlayer");
+
+    await expect(playSentenceAudio("surv_002")).resolves.toBe(false);
+  });
+
+  it("reports ids that have a clip in either voice", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        jsonResponse({
+          ...indexPayload,
+          female: {
+            ...indexPayload.female,
+            sentences: { surv_002: "female_sent_surv_002.mp3" },
+          },
+        })
+      )
+    );
+
+    const { getAvailableSentenceIds } = await import("./audioPlayer");
+
+    await expect(getAvailableSentenceIds()).resolves.toEqual(
+      new Set(["surv_001", "surv_002"])
+    );
+  });
+});
 
 describe("playVocabularyAudio", () => {
   beforeEach(() => {

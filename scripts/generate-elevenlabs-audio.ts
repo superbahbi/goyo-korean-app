@@ -12,7 +12,7 @@ import { audioBaseName, hashAudioLibrary } from "./hash-audio.ts";
 export interface AudioItem {
   id: string;
   text: string;
-  group: "vocabulary" | "alphabet";
+  group: "vocabulary" | "alphabet" | "sentences";
   filename: string;
 }
 
@@ -57,6 +57,8 @@ interface VoicePreset {
   voiceId: string;
   prefix: string;
   manifest: string;
+  sentenceManifest: string;
+  indexSlot: "male" | "female";
   modelId: string;
 }
 
@@ -68,18 +70,24 @@ const VOICE_PRESETS: Record<string, VoicePreset> = {
     voiceId: "h5eZa8VFAq0EQ8E81dfL",
     prefix: "elevenlabs_",
     manifest: "elevenlabs-manifest.json",
+    sentenceManifest: "elevenlabs-sentences-manifest.json",
+    indexSlot: "male",
     modelId: "eleven_v4",
   },
   female: {
     voiceId: "uyVNoMrnUku1dZyVEXwD",
     prefix: "elevenlabs_female_",
     manifest: "elevenlabs-female-manifest.json",
+    sentenceManifest: "elevenlabs-female-sentences-manifest.json",
+    indexSlot: "female",
     modelId: "eleven_multilingual_v2",
   },
   jini: {
     voiceId: "0oqpliV6dVSr9XomngOW",
     prefix: "elevenlabs_female_",
     manifest: "elevenlabs-female-manifest.json",
+    sentenceManifest: "elevenlabs-female-sentences-manifest.json",
+    indexSlot: "female",
     modelId: "eleven_v4",
   },
 };
@@ -88,9 +96,13 @@ const activePreset =
   (voiceCli && VOICE_PRESETS[voiceCli]) || VOICE_PRESETS.male;
 
 const filePrefix = process.env.ELEVENLABS_FILE_PREFIX || activePreset.prefix;
+const sentenceMode = process.argv.includes("--sentences");
+const sampleArg = process.argv.find(arg => arg.startsWith("--sample="));
+const sampleSize = sampleArg ? Number(sampleArg.split("=")[1]) : undefined;
 const manifestPath = path.join(
   audioDir,
-  process.env.ELEVENLABS_MANIFEST_NAME || activePreset.manifest
+  process.env.ELEVENLABS_MANIFEST_NAME ||
+    (sentenceMode ? activePreset.sentenceManifest : activePreset.manifest)
 );
 const voiceId =
   process.env.ELEVENLABS_VOICE_ID ||
@@ -189,6 +201,66 @@ async function generateOne(item: AudioItem): Promise<AudioResult> {
   };
 }
 
+/**
+ * Builds one clip per card example. The sentence id is the card id, so the app
+ * can resolve the clip from the card it already has. `prefix` lets the female
+ * voice write `elevenlabs_female_sent_*` instead of colliding with the male
+ * clip of the same card.
+ */
+export function buildSentenceItems(
+  cards: { id: string; example?: string }[],
+  prefix: string
+): AudioItem[] {
+  return cards
+    .filter(card => (card.example ?? "").trim().length > 0)
+    .map(card => ({
+      id: card.id,
+      text: (card.example as string).trim(),
+      group: "sentences" as const,
+      filename: `${prefix}sent_${card.id}.mp3`,
+    }));
+}
+
+/**
+ * Adds the generated sentence clips to audio/index.json. The index is the only
+ * file the app reads at runtime, so a clip that is not listed here is
+ * unreachable even though it exists on disk.
+ */
+async function recordSentenceIndex(
+  results: AudioResult[],
+  filenames: Map<string, string>
+): Promise<void> {
+  const indexPath = path.join(audioDir, "index.json");
+  const index = JSON.parse(await readFile(indexPath, "utf8")) as {
+    sentences?: Record<string, string>;
+    female?: { sentences?: Record<string, string> };
+  };
+  let target: Record<string, string>;
+  if (activePreset.indexSlot === "female") {
+    index.female ??= {};
+    index.female.sentences ??= {};
+    target = index.female.sentences;
+  } else {
+    index.sentences ??= {};
+    target = index.sentences;
+  }
+
+  let recorded = 0;
+  for (const result of results) {
+    if (result.status === "failed") continue;
+    const file = filenames.get(audioBaseName(result.filename));
+    if (!file) continue;
+    target[result.id] = file;
+    recorded += 1;
+  }
+  if (recorded === 0) return;
+
+  await writeFile(indexPath, `${JSON.stringify(index, null, 2)}\n`, "utf8");
+  console.log(
+    `Recorded ${recorded} sentence clips in audio/index.json (${activePreset.indexSlot}).`
+  );
+}
+
 export async function main() {
   const deck = await loadVocabularyDeck();
   const deckCards = deck.vocabulary;
@@ -232,8 +304,20 @@ export async function main() {
     );
   }
 
+  const sentences = buildSentenceItems(deckCards, filePrefix);
+  const sentenceItems =
+    sampleSize !== undefined && Number.isFinite(sampleSize) && sampleSize > 0
+      ? sentences.slice(0, Math.floor(sampleSize))
+      : sentences;
+  if (sentenceMode && sentenceItems.length === 0) {
+    throw new Error("No card examples were found to generate.");
+  }
+
+  const selectedItems = sentenceMode ? sentenceItems : items;
   console.log(
-    `Discovered ${items.length} audio items (${vocabulary.length} vocabulary across curated + imported decks, ${alphabet.length} alphabet).`
+    sentenceMode
+      ? `Discovered ${selectedItems.length} sentence items${sampleSize ? ` (sample of ${sentences.length})` : ""}.`
+      : `Discovered ${items.length} audio items (${vocabulary.length} vocabulary across curated + imported decks, ${alphabet.length} alphabet).`
   );
 
   if (!apiKey) {
@@ -253,20 +337,20 @@ export async function main() {
   const results: AudioResult[] = [];
   let cursor = 0;
   async function worker() {
-    while (cursor < items.length) {
-      const item = items[cursor];
+    while (cursor < selectedItems.length) {
+      const item = selectedItems[cursor];
       cursor += 1;
       const result = await generateOne(item);
       results.push(result);
       const completed = results.length;
       console.log(
-        `[${completed}/${items.length}] ${result.status} ${item.group}/${item.id} ${item.text}`
+        `[${completed}/${selectedItems.length}] ${result.status} ${item.group}/${item.id} ${item.text}`
       );
     }
   }
 
   await Promise.all(
-    Array.from({ length: Math.min(concurrency, items.length) }, worker)
+    Array.from({ length: Math.min(concurrency, selectedItems.length) }, worker)
   );
   results.sort((left, right) => left.id.localeCompare(right.id));
 
@@ -277,6 +361,7 @@ export async function main() {
     const resolved = filenames.get(audioBaseName(result.filename));
     if (resolved) result.filename = resolved;
   }
+  if (sentenceMode) await recordSentenceIndex(results, filenames);
 
   const summary = {
     generatedAt: new Date().toISOString(),
@@ -290,6 +375,7 @@ export async function main() {
     },
     vocabulary: results.filter(result => result.group === "vocabulary"),
     alphabet: results.filter(result => result.group === "alphabet"),
+    sentences: results.filter(result => result.group === "sentences"),
   };
 
   await writeFile(

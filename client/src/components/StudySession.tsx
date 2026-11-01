@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { X, Check, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FlashCard } from "./FlashCard";
+import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
 import { ProductionAttempt } from "./study/ProductionAttempt";
 import { StudySessionSummary } from "./study/StudySessionSummary";
 import { useStudySession } from "./study/useStudySession";
@@ -31,6 +32,7 @@ export function StudySession({
   title = "Daily Session",
 }: StudySessionProps) {
   const study = useStudySession({ queue, onGrade, onClose });
+  const sentenceAudioIds = useSentenceAudioIds();
   const {
     index,
     sessionQueue,
@@ -130,6 +132,7 @@ export function StudySession({
               revealed={flipped}
               autoSpeak={autoPlayAudio}
               audioFirst={true}
+              sentenceAudioReady={sentenceAudioIds.has(currentCard.id)}
             />
           </AnimatePresence>
         </main>

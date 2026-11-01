@@ -24,7 +24,11 @@ const manifest = JSON.parse(
   readFileSync(path.join(REPO_ROOT, "public/audio/index.json"), "utf8")
 ) as {
   vocabulary: Record<string, string>;
-  female: { vocabulary: Record<string, string> };
+  sentences?: Record<string, string>;
+  female: {
+    vocabulary: Record<string, string>;
+    sentences?: Record<string, string>;
+  };
 };
 
 // Revised Romanization writes ll for a geminate ㄹㄹ (얼룩 eolluk), so ll is only an error elsewhere.
@@ -149,6 +153,25 @@ describe("hashed audio library", () => {
     expect(filenames.length).toBeGreaterThan(0);
     for (const filename of filenames) {
       expect(existsSync(path.join(audioDir, filename)), filename).toBe(true);
+    }
+  });
+});
+
+describe("sentence audio index", () => {
+  it("keys every clip by a deck card that has an example", async () => {
+    const { vocabulary } = await loadVocabularyDeck();
+    const exampleIds = new Set(
+      vocabulary
+        .filter(card => (card.example ?? "").trim().length > 0)
+        .map(card => card.id)
+    );
+    const sentenceIds = new Set([
+      ...Object.keys(manifest.sentences ?? {}),
+      ...Object.keys(manifest.female?.sentences ?? {}),
+    ]);
+    expect(sentenceIds.size).toBeGreaterThan(0);
+    for (const id of Array.from(sentenceIds)) {
+      expect(exampleIds.has(id), id).toBe(true);
     }
   });
 });

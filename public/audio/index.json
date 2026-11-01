@@ -1419,5 +1419,27 @@
         "vowel_021": "elevenlabs_female_vowel_021.ef4537eb.mp3"
       }
     }
+  },
+  "sentences": {
+    "daily_001": "elevenlabs_sent_daily_001.cff9faa1.mp3",
+    "daily_002": "elevenlabs_sent_daily_002.7933668a.mp3",
+    "daily_003": "elevenlabs_sent_daily_003.3215a24a.mp3",
+    "daily_004": "elevenlabs_sent_daily_004.5f290bd5.mp3",
+    "daily_005": "elevenlabs_sent_daily_005.f8b64315.mp3",
+    "daily_006": "elevenlabs_sent_daily_006.cb7a3e11.mp3",
+    "daily_007": "elevenlabs_sent_daily_007.c7ab7ab3.mp3",
+    "daily_008": "elevenlabs_sent_daily_008.516d073a.mp3",
+    "daily_009": "elevenlabs_sent_daily_009.8aaf79b0.mp3",
+    "daily_010": "elevenlabs_sent_daily_010.87dcca20.mp3",
+    "surv_001": "elevenlabs_sent_surv_001.7572fc52.mp3",
+    "surv_002": "elevenlabs_sent_surv_002.a46c011b.mp3",
+    "surv_003": "elevenlabs_sent_surv_003.140ab71d.mp3",
+    "surv_004": "elevenlabs_sent_surv_004.42ea2531.mp3",
+    "surv_005": "elevenlabs_sent_surv_005.20078600.mp3",
+    "surv_006": "elevenlabs_sent_surv_006.3ea35a52.mp3",
+    "surv_007": "elevenlabs_sent_surv_007.ca25fa01.mp3",
+    "surv_008": "elevenlabs_sent_surv_008.1e185247.mp3",
+    "surv_009": "elevenlabs_sent_surv_009.29a3c23a.mp3",
+    "surv_010": "elevenlabs_sent_surv_010.8c4b0f0c.mp3"
   }
 }
