@@ -126,6 +126,26 @@ export function scheduleRecall(
   };
 }
 
+export interface IntervalPreview {
+  again: number;
+  good: number;
+  easy: number;
+}
+
+/**
+ * The interval each grade would schedule, in days, for the grade buttons.
+ *
+ * Pure and built on `scheduleRecall`, so the labels shown before grading cannot
+ * drift from what grading actually saves.
+ */
+export function previewIntervals(state?: SrsCardState): IntervalPreview {
+  return {
+    again: scheduleRecall(state, "again").interval,
+    good: scheduleRecall(state, "good").interval,
+    easy: scheduleRecall(state, "easy").interval,
+  };
+}
+
 export interface SrsReviewResult {
   schedule: SrsSchedule;
   // False when a same-day repeat left the schedule (and review counters) untouched.

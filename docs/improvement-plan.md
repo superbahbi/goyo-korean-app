@@ -105,6 +105,7 @@ are over 300.
 | 5 Tune from data                | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                        |
 | 6 Sentence audio and grammar    | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                |
 | 7 Content trust completion      | Planned; starts after Phase 6 closes (see Phase 7)                                                                                                                           |
+| 8 First session and card        | In progress; 8.1 mobile card layout and 8.2 interval labels done; 8.3 first-run home and 8.4 new-card introduction land in parallel PRs                                      |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -510,6 +511,28 @@ phase because it is a read-only tuning exercise.
 
 Sequencing: full sentence batch → Korean grammar review → Phase 7 step 1 (while the Phase 5 window
 closes around 2026-12-01) → Phase 7 fixes and sweep.
+
+## Phase 8: First session and card experience
+
+The first session is where a new learner decides whether to come back. Split across parallel PRs so
+each surface stays small and reviewable.
+
+1. **Mobile card layout.** Done (2026-11-01). At 390×844 the revealed card now fits Korean,
+   romanization, meaning and the example without scrolling: the card uses a flexible height on
+   phones (desktop keeps the 3:4 portrait card) and the footer drops from about 55% to about 16% of
+   the viewport. The optional production box is collapsed behind a "Say it in a new sentence"
+   disclosure, and the redundant "Tap to reveal" line is gone, leaving the card surface plus the
+   labelled footer button as the only reveal path. The speaker button stays in normal flow, so it no
+   longer overlaps at 320px, where the card scrolls instead.
+2. **Interval labels on the grade buttons.** Done (2026-11-01). `previewIntervals` in `lib/srs.ts`
+   runs the saved card state through `scheduleRecall`; the three compact grade buttons show the real
+   next interval ("Again 1d", "Good 2d", "Easy 4d") for new, mature and lapsed cards. Unit tests
+   cover all three.
+3. **First-run home.** Landing in a parallel PR.
+4. **New-card introduction.** Landing in a parallel PR.
+
+Acceptance: the revealed card fits at 390×844 and stays usable at 320px, the grade labels match the
+scheduler, the session offers one reveal path, and the local gate plus the e2e suite are green.
 
 ## Deferred, not decided
 
