@@ -61,7 +61,6 @@ export function GradeActions({ intervals, onGrade }: GradeActionsProps) {
           >
             <Button
               variant="outline"
-              aria-label={`${label}, next review in ${daysDescription(days)}`}
               className={cn(
                 "h-14 w-full flex-col gap-0.5 rounded-2xl border-2 px-2 py-1 sm:h-16",
                 className
@@ -74,6 +73,9 @@ export function GradeActions({ intervals, onGrade }: GradeActionsProps) {
               </span>
               <span className="text-[11px] font-normal opacity-80 sm:text-xs">
                 {daysLabel(days)}
+              </span>
+              <span className="sr-only">
+                , next review in {daysDescription(days)}
               </span>
             </Button>
           </motion.div>
