@@ -60,14 +60,15 @@ interface VoicePreset {
   modelId: string;
 }
 
-// Named presets keep the CLI terse: --voice male|female|jini. `jini` reuses the
-// female filename prefix and index slot so the app's female speaker plays Jini.
+// Named presets keep the CLI terse: --voice male|female|jini. The male preset
+// is Yong Gyu and `jini` reuses the female filename prefix and index slot, so
+// the app's speakers play Yong Gyu and Jini.
 const VOICE_PRESETS: Record<string, VoicePreset> = {
   male: {
-    voiceId: "ZJCNdZEjYwkOElxugmW2",
+    voiceId: "h5eZa8VFAq0EQ8E81dfL",
     prefix: "elevenlabs_",
     manifest: "elevenlabs-manifest.json",
-    modelId: "eleven_multilingual_v2",
+    modelId: "eleven_v4",
   },
   female: {
     voiceId: "uyVNoMrnUku1dZyVEXwD",

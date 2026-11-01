@@ -445,9 +445,9 @@ export const ALPHABET_CATEGORY_DESCRIPTIONS = {
 } as const;
 export const ALPHABET_FULL_INVENTORY_LABEL =
   "Full modern Hangul inventory · 40 characters";
-export const ALPHABET_AUDIO_VOICE = "Hyuk - Cold and Clear";
-export const ALPHABET_AUDIO_VOICE_ID = "ZJCNdZEjYwkOElxugmW2";
-export const ALPHABET_AUDIO_MODEL = "eleven_multilingual_v2";
+export const ALPHABET_AUDIO_VOICE = "Yong Gyu - Calm Korean Male Narrator";
+export const ALPHABET_AUDIO_VOICE_ID = "h5eZa8VFAq0EQ8E81dfL";
+export const ALPHABET_AUDIO_MODEL = "eleven_v4";
 export const ALPHABET_TTS_MODE = "letter-name" as const;
 export const ALPHABET_AUDIO_TEXT: Record<string, string> = Object.fromEntries(
   ALPHABET_DATA.map(card => [
