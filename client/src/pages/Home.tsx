@@ -148,14 +148,17 @@ export default function Home() {
       <main className="mx-auto max-w-5xl space-y-5 px-4 py-5 sm:space-y-7 sm:px-6 sm:py-8">
         <SaveAlerts saveBlocked={saveBlocked} saveError={saveError} />
 
-        <WelcomeCard
-          cardsRemaining={cardsRemaining}
-          plannedCards={plannedCards}
-          newCards={newCardsPlanned}
-          overdueCount={overdueCount}
-          dailyGoalReached={dailyGoalReached}
-          onStartSession={startSession}
-        />
+        {/* First run gets one primary action, not a hero plus a start card. */}
+        {!firstRun && (
+          <WelcomeCard
+            cardsRemaining={cardsRemaining}
+            plannedCards={plannedCards}
+            newCards={newCardsPlanned}
+            overdueCount={overdueCount}
+            dailyGoalReached={dailyGoalReached}
+            onStartSession={startSession}
+          />
+        )}
 
         <ProgressCards
           firstRun={firstRun}
