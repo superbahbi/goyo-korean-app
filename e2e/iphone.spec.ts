@@ -72,6 +72,8 @@ function trackConsoleErrors(page: Page) {
 }
 
 async function gradeOneCard(page: Page) {
+  // The first card is new, so Enter clears its introduction before the reveal.
+  await page.keyboard.press("Enter");
   await page.keyboard.press("Space");
   await expect(page.getByText("How did that feel?")).toBeVisible();
   await page.keyboard.press("2");

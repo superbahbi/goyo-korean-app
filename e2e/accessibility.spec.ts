@@ -119,13 +119,19 @@ test("dashboard has no WCAG A/AA violations", async ({ page }) => {
 
 test("study session has no WCAG A/AA violations", async ({ page }) => {
   await page.getByRole("button", { name: /start daily session/i }).click();
+  expect(await audit(page, "study intro", '[role="dialog"]')).toEqual([]);
+
+  await page.keyboard.press("Enter");
   expect(await audit(page, "study front", '[role="dialog"]')).toEqual([]);
 
   await page.keyboard.press("Space");
   expect(await audit(page, "study back", '[role="dialog"]')).toEqual([]);
 
   for (let graded = 1; graded <= 3; graded += 1) {
-    if (graded > 1) await page.keyboard.press("Space");
+    if (graded > 1) {
+      await page.keyboard.press("Enter");
+      await page.keyboard.press("Space");
+    }
     await page.keyboard.press("2");
   }
   await expect(
