@@ -143,7 +143,7 @@ export function BrowseDialog({
                   className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${masteryFilter === filter ? "bg-slate-900 text-white" : "bg-white text-slate-500 ring-1 ring-slate-200 hover:bg-slate-50"}`}
                 >
                   {filter === "all" ? "All cards" : MASTERY_LABELS[filter]}
-                  <span className="ml-1 opacity-70">
+                  <span className="ml-1">
                     {filter === "all"
                       ? vocabulary.length
                       : masteryCounts[filter]}
@@ -200,7 +200,7 @@ export function BrowseDialog({
                             {card.front}
                           </div>
                           {isShowingRoman && romanization && (
-                            <span className="text-xs font-mono text-emerald-600">
+                            <span className="text-xs font-mono text-emerald-700">
                               {romanization}
                             </span>
                           )}
@@ -209,7 +209,7 @@ export function BrowseDialog({
                           {card.back}
                         </div>
                         {isShowingRoman && romanization && (
-                          <div className="text-sm text-emerald-600 font-mono font-semibold mt-1">
+                          <div className="text-sm text-emerald-700 font-mono font-semibold mt-1">
                             <span className="text-xs text-slate-500 mr-2">
                               Romanization:
                             </span>
@@ -227,7 +227,7 @@ export function BrowseDialog({
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         {isCardPlaying && (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-700 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
                             <span
                               className="h-1.5 w-1.5 rounded-full bg-white animate-pulse"
                               aria-hidden="true"
@@ -272,7 +272,7 @@ export function BrowseDialog({
                             ? `Audio pending for ${card.front}`
                             : isCardPlaying
                               ? `Playing pronunciation for ${card.front}`
-                              : `Play pronunciation for ${card.front}`
+                              : `Speak pronunciation for ${card.front}`
                         }
                       >
                         <Volume2

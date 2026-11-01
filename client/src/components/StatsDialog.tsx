@@ -76,10 +76,10 @@ export function StatsDialog({
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
-            <Target size={20} className="text-emerald-600" /> Your Korean
+            <Target size={20} className="text-emerald-700" /> Your Korean
             ability
           </DialogTitle>
-          <DialogDescription className="text-sm text-slate-500">
+          <DialogDescription className="text-sm text-slate-600">
             Progress measured by recall, coverage, and durable review—not just
             completion.
           </DialogDescription>
@@ -112,31 +112,31 @@ export function StatsDialog({
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
           <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-4">
-            <div className="text-xs text-yellow-600 font-medium">Total XP</div>
+            <div className="text-xs text-yellow-700 font-medium">Total XP</div>
             <div className="text-3xl font-bold text-yellow-700">
               {stats.totalXp}
             </div>
           </div>
           <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4">
-            <div className="text-xs font-medium text-orange-600">Streak</div>
+            <div className="text-xs font-medium text-orange-700">Streak</div>
             <div className="text-3xl font-bold text-orange-700">
               {stats.streak}d
             </div>
           </div>
           <div className="rounded-2xl border border-indigo-200 bg-indigo-50 p-4">
-            <div className="text-xs font-medium text-indigo-600">Recall</div>
+            <div className="text-xs font-medium text-indigo-700">Recall</div>
             <div className="text-3xl font-bold text-indigo-700">
               {stats.overallAccuracy}%
             </div>
           </div>
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
-            <div className="text-xs font-medium text-emerald-600">Known</div>
+            <div className="text-xs font-medium text-emerald-700">Known</div>
             <div className="text-3xl font-bold text-emerald-700">
               {stats.masteredCount}
             </div>
           </div>
           <div className="rounded-2xl border border-cyan-200 bg-cyan-50 p-4">
-            <div className="text-xs font-medium text-cyan-600">
+            <div className="text-xs font-medium text-cyan-700">
               Recall tempo
             </div>
             <div className="text-3xl font-bold text-cyan-700">
@@ -144,7 +144,7 @@ export function StatsDialog({
                 ? `${Math.round(stats.medianResponseTime / 1000)}s`
                 : "—"}
             </div>
-            <div className="mt-1 text-[11px] text-cyan-600">
+            <div className="mt-1 text-[11px] text-cyan-700">
               median response
             </div>
           </div>
@@ -169,16 +169,16 @@ export function StatsDialog({
             </div>
           </div>
           <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
-            <div className="text-xs font-medium text-amber-600">Due now</div>
+            <div className="text-xs font-medium text-amber-700">Due now</div>
             <div className="mt-1 text-2xl font-bold text-amber-700">
               {stats.overdueCount}
             </div>
-            <div className="mt-1 text-[11px] text-amber-600">reviews</div>
+            <div className="mt-1 text-[11px] text-amber-700">reviews</div>
           </div>
         </div>
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-3">
-            <div className="text-xs font-medium text-indigo-600">
+            <div className="text-xs font-medium text-indigo-700">
               Days studied · last 7
             </div>
             <div className="mt-1 text-2xl font-bold text-indigo-700">
@@ -190,13 +190,13 @@ export function StatsDialog({
             </div>
           </div>
           <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-            <div className="text-xs font-medium text-emerald-600">
+            <div className="text-xs font-medium text-emerald-700">
               Days studied · last 30
             </div>
             <div className="mt-1 text-2xl font-bold text-emerald-700">
               {stats.daysStudied30} / 30
             </div>
-            <div className="mt-1 text-[11px] text-emerald-600">
+            <div className="mt-1 text-[11px] text-emerald-700">
               days with a review
             </div>
           </div>
@@ -236,7 +236,12 @@ export function StatsDialog({
             <h3 className="font-semibold text-slate-800">Category mastery</h3>
             <span className="text-xs text-slate-500">Accuracy · coverage</span>
           </div>
-          <div className="max-h-56 space-y-2 overflow-y-auto pr-1">
+          <div
+            role="group"
+            aria-label="Category mastery by category"
+            tabIndex={0}
+            className="max-h-56 space-y-2 overflow-y-auto rounded-lg pr-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+          >
             {stats.categories.map(category => (
               <div
                 key={category.id}
@@ -289,7 +294,7 @@ export function StatsDialog({
               </div>
             </div>
             <div className="rounded-xl border border-amber-100 bg-amber-50 p-3">
-              <div className="text-[11px] font-medium text-amber-600">
+              <div className="text-[11px] font-medium text-amber-700">
                 Peak day
               </div>
               <div className="mt-1 text-xl font-bold text-amber-700">

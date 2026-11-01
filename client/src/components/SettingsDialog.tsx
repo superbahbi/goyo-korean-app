@@ -201,7 +201,7 @@ export function SettingsDialog({
                 <SelectItem value="20">20 cards · Intensive</SelectItem>
               </SelectContent>
             </Select>
-            <p className="mt-2 text-xs leading-relaxed text-slate-500">
+            <p className="mt-2 text-xs leading-relaxed text-slate-600">
               Choose a goal you can sustain. Consistent recall is more valuable
               than a large daily streak.
             </p>
@@ -231,7 +231,7 @@ export function SettingsDialog({
                 ))}
               </SelectContent>
             </Select>
-            <p className="mt-2 text-xs leading-relaxed text-slate-500">
+            <p className="mt-2 text-xs leading-relaxed text-slate-600">
               Brand-new words are capped at this number each day, so the daily
               goal can run shorter on a fresh deck. Due reviews still come
               first, so a lower pace keeps the session short without hiding
@@ -247,7 +247,7 @@ export function SettingsDialog({
                 >
                   Auto-play pronunciation
                 </label>
-                <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                <p className="mt-1 text-xs leading-relaxed text-slate-600">
                   Play the clip as each card appears. Off leaves audio to the
                   speaker button, so nothing plays until you tap.
                 </p>
@@ -284,7 +284,7 @@ export function SettingsDialog({
                 </SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-xs leading-relaxed text-slate-500">
+            <p className="text-xs leading-relaxed text-slate-600">
               Goyo uses ElevenLabs recordings only. Choose Hyuk for a cold,
               clear delivery or Jini for a warm, intelligent Seoul Korean voice.
             </p>
@@ -293,12 +293,12 @@ export function SettingsDialog({
             <div className="text-sm font-medium text-slate-700">
               Progress file
             </div>
-            <p className="text-xs leading-relaxed text-slate-500">
+            <p className="text-xs leading-relaxed text-slate-600">
               Progress is saved only in this browser. Export a JSON file to move
               it to another device, then import that file there.
             </p>
             <div className="flex items-center justify-between gap-3">
-              <p className="text-xs leading-relaxed text-slate-500">
+              <p className="text-xs leading-relaxed text-slate-600">
                 {describeBackupAge(lastBackupAt)}
               </p>
               {isBackupOverdue(lastBackupAt) && (

@@ -23,7 +23,7 @@ test("searches the library and plays a pronunciation clip", async ({
       request.url().includes("/audio/") && request.url().endsWith(".mp3")
   );
   await page
-    .getByRole("button", { name: "Play pronunciation for 안녕하세요" })
+    .getByRole("button", { name: "Speak pronunciation for 안녕하세요" })
     .click();
 
   // The first curated card is the one the search filtered down to, so the clip

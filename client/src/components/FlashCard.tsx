@@ -208,7 +208,7 @@ function FlashCardBase({
               </Button>
             )}
           </div>
-          <div className="absolute bottom-12 flex items-center gap-2 text-sm text-slate-300 animate-pulse">
+          <div className="absolute bottom-12 flex items-center gap-2 text-sm text-slate-500">
             {audioFirst ? "Tap to reveal meaning" : "Tap to reveal"}{" "}
             <ChevronRight size={16} />
           </div>
@@ -226,7 +226,7 @@ function FlashCardBase({
           className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50 p-7 text-center shadow-xl sm:p-9"
         >
           <div className="flex min-h-full flex-col items-center justify-center">
-            <Badge className="mb-5 bg-emerald-600 text-white shadow-sm">
+            <Badge className="mb-5 bg-emerald-700 text-white shadow-sm">
               {audioFirst ? "Korean + meaning" : "Meaning"}
             </Badge>
             {audioFirst && (
@@ -243,7 +243,7 @@ function FlashCardBase({
               </p>
             )}
             <div className="my-6 h-px w-full max-w-xs bg-emerald-200" />
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
               Meaning
             </p>
             <h2 className="text-3xl font-bold leading-tight text-slate-900">
@@ -251,7 +251,7 @@ function FlashCardBase({
             </h2>
             {example && (
               <div className="mt-6 max-w-xs rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
+                <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700">
                   In context
                 </p>
                 <p
@@ -269,7 +269,7 @@ function FlashCardBase({
             )}
             {usageNote && (
               <div className="mt-3 max-w-xs rounded-2xl border border-slate-200 bg-white/60 px-4 py-3 text-left">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-600">
                   Usage note
                 </p>
                 <p className="mt-1 text-xs leading-relaxed text-slate-600">

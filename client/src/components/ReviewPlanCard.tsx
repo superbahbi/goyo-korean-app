@@ -68,7 +68,7 @@ export function ReviewPlanCard({
               const isToday = day.key === today;
               const intensity =
                 day.count === 0
-                  ? "bg-slate-100 text-slate-400"
+                  ? "bg-slate-100 text-slate-600"
                   : day.count <= 2
                     ? "bg-emerald-100 text-emerald-700"
                     : day.count <= 5
@@ -77,7 +77,7 @@ export function ReviewPlanCard({
               return (
                 <div key={day.key} className="text-center">
                   <div
-                    className={`mb-1 text-[10px] font-semibold ${isToday ? "text-emerald-700" : "text-slate-400"}`}
+                    className={`mb-1 text-[10px] font-semibold ${isToday ? "text-emerald-700" : "text-slate-600"}`}
                   >
                     {day.label}
                   </div>

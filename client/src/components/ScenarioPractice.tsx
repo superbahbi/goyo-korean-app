@@ -167,7 +167,7 @@ export function ScenarioPractice({
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
               <Check size={34} />
             </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Scenario practice complete
             </p>
             <h2 className="mt-2 font-serif text-3xl text-slate-900">
@@ -186,7 +186,7 @@ export function ScenarioPractice({
                 Return to dashboard
               </Button>
               <Button
-                className="min-h-12 flex-1 bg-emerald-600 hover:bg-emerald-700"
+                className="min-h-12 flex-1 bg-emerald-700 hover:bg-emerald-800"
                 onClick={() => {
                   setIndex(0);
                   setSelectedId(null);
@@ -252,12 +252,13 @@ export function ScenarioPractice({
           <div className="max-w-xs flex-1 px-4">
             <Progress
               value={(index / scenarios.length) * 100}
+              aria-label="Scenario progress"
               className="h-2"
             />
           </div>
           <div className="min-w-[60px] text-right text-sm font-semibold text-slate-500">
             {index + 1} / {scenarios.length}
-            <span className="block text-xs text-slate-400">
+            <span className="block text-xs text-slate-500">
               Survival Korean
             </span>
           </div>
@@ -281,7 +282,7 @@ export function ScenarioPractice({
               >
                 <Volume2 size={18} className="mr-2" /> Hear a hint
               </Button>
-              <p className="mt-3 text-center text-xs text-slate-400">
+              <p className="mt-3 text-center text-xs text-slate-500">
                 Listen for the natural Korean phrase, then choose from memory.
               </p>
             </div>

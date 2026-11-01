@@ -205,7 +205,7 @@ export function StudySession({
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
               <Check size={34} />
             </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Session complete
             </p>
             <h2 className="mt-2 font-serif text-3xl text-slate-900">
@@ -231,7 +231,7 @@ export function StudySession({
                 <div className="text-xs text-red-700">Again</div>
               </div>
               <div className="rounded-2xl bg-emerald-50 p-3">
-                <div className="text-2xl font-bold text-emerald-600">
+                <div className="text-2xl font-bold text-emerald-700">
                   {results.good}
                 </div>
                 <div className="text-xs text-emerald-700">Good</div>
@@ -253,7 +253,7 @@ export function StudySession({
               </Button>
               {allowRepeat && (
                 <Button
-                  className="min-h-12 flex-1 bg-emerald-600 hover:bg-emerald-700"
+                  className="min-h-12 flex-1 bg-emerald-700 hover:bg-emerald-800"
                   onClick={restartSession}
                 >
                   Practice again
@@ -302,19 +302,24 @@ export function StudySession({
               value={
                 ((index + (flipped ? 0.5 : 0)) / sessionQueue.length) * 100
               }
+              aria-label="Session progress"
               className="h-2"
             />
           </div>
           <div className="text-sm font-medium text-slate-500 min-w-[60px] text-right">
             {index + 1} / {sessionQueue.length}
-            <span className="block text-xs text-slate-400">
+            <span className="block text-xs text-slate-500">
               {title} · {flipped ? "Choose a rating" : "Recall first"}
             </span>
           </div>
         </header>
 
         {/* Main Study Area */}
-        <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6">
+        <main
+          tabIndex={0}
+          aria-label="Study card"
+          className="min-h-0 flex-1 overflow-y-auto p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-inset sm:p-6"
+        >
           <AnimatePresence mode="wait">
             <FlashCard
               key={currentCard.id}
@@ -387,12 +392,12 @@ export function StudySession({
                 >
                   <Button
                     variant="outline"
-                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-red-100 text-red-600 hover:bg-red-50 sm:h-24"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-red-100 text-red-700 hover:bg-red-50 sm:h-24"
                     onClick={() => handleGrade("again")}
                   >
                     <X size={24} />
                     <span>Again</span>
-                    <span className="text-[10px] font-normal text-red-400">
+                    <span className="text-[10px] font-normal text-red-700">
                       Rebuild tomorrow
                     </span>
                   </Button>
@@ -405,12 +410,12 @@ export function StudySession({
                 >
                   <Button
                     variant="outline"
-                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-emerald-100 text-emerald-600 hover:bg-emerald-50 sm:h-24"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-emerald-100 text-emerald-700 hover:bg-emerald-50 sm:h-24"
                     onClick={() => handleGrade("good")}
                   >
                     <Check size={24} />
                     <span>Good</span>
-                    <span className="text-[10px] font-normal text-emerald-400">
+                    <span className="text-[10px] font-normal text-emerald-700">
                       Build the interval
                     </span>
                   </Button>
@@ -423,12 +428,12 @@ export function StudySession({
                 >
                   <Button
                     variant="outline"
-                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-blue-100 text-blue-600 hover:bg-blue-50 sm:h-24"
+                    className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-blue-100 text-blue-700 hover:bg-blue-50 sm:h-24"
                     onClick={() => handleGrade("easy")}
                   >
                     <Star size={24} />
                     <span>Easy</span>
-                    <span className="text-[10px] font-normal text-blue-400">
+                    <span className="text-[10px] font-normal text-blue-700">
                       Stretch the interval
                     </span>
                   </Button>

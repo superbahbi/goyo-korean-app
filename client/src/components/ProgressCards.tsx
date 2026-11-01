@@ -51,6 +51,7 @@ export function ProgressCards({
             </div>
             <Progress
               value={progressPercent}
+              aria-label="Today's cards studied"
               className="h-2 mt-3 bg-slate-100"
             />
             <p className="text-xs text-slate-500 mt-2">
@@ -78,11 +79,15 @@ export function ProgressCards({
               <div className="text-2xl font-bold text-slate-900">
                 {levelTitle}
               </div>
-              <div className="text-sm font-semibold text-emerald-600">
+              <div className="text-sm font-semibold text-emerald-700">
                 Lv. {level}
               </div>
             </div>
-            <Progress value={levelProgress} className="mt-3 h-2 bg-slate-100" />
+            <Progress
+              value={levelProgress}
+              aria-label={`Level ${level} progress`}
+              className="mt-3 h-2 bg-slate-100"
+            />
             <p className="mt-2 text-xs text-slate-500">
               {Math.max(0, nextLevelXp - totalXp)} XP to next level
             </p>

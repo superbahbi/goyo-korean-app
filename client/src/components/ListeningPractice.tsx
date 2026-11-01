@@ -100,7 +100,7 @@ export function ListeningPractice({
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
               <CheckCircle2 size={34} />
             </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Listening complete
             </p>
             <h2 className="mt-2 font-serif text-3xl text-slate-900">
@@ -190,6 +190,7 @@ export function ListeningPractice({
           <div className="flex-1 px-5">
             <Progress
               value={(index / questions.length) * 100}
+              aria-label="Listening progress"
               className="h-2"
             />
           </div>
@@ -223,7 +224,7 @@ export function ListeningPractice({
                 size="lg"
                 onClick={playCurrent}
                 disabled={isPlaying}
-                className="mx-auto flex h-24 w-24 flex-col gap-1 rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-200 hover:bg-emerald-700 sm:h-28 sm:w-28 sm:gap-2"
+                className="mx-auto flex h-24 w-24 flex-col gap-1 rounded-full bg-emerald-700 text-white shadow-lg shadow-emerald-200 hover:bg-emerald-800 sm:h-28 sm:w-28 sm:gap-2"
                 aria-label="Play Korean recording"
               >
                 <Volume2
@@ -234,7 +235,7 @@ export function ListeningPractice({
                   {isPlaying ? "Playing" : "Play"}
                 </span>
               </Button>
-              <p className="mt-4 text-sm text-slate-400">
+              <p className="mt-4 text-sm text-slate-500">
                 Replay as many times as you need
               </p>
 
@@ -246,7 +247,7 @@ export function ListeningPractice({
                   >
                     {currentCard.front}
                   </p>
-                  <p className="mt-2 font-mono text-emerald-600">
+                  <p className="mt-2 font-mono text-emerald-700">
                     {currentCard.romanization}
                   </p>
                 </div>
