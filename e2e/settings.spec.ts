@@ -32,13 +32,13 @@ test("the Settings dialog keeps its header and scrolls to the last option", asyn
   await options.evaluate(element => {
     element.scrollTop = element.scrollHeight;
   });
-  const audioButton = dialog.getByRole("button", {
-    name: "Download all audio",
+  const reloadButton = dialog.getByRole("button", {
+    name: "Reload app",
   });
-  const audioBox = await audioButton.boundingBox();
+  const reloadBox = await reloadButton.boundingBox();
   const viewport = page.viewportSize()!;
-  expect(audioBox).not.toBeNull();
-  expect(audioBox!.y + audioBox!.height).toBeLessThanOrEqual(viewport.height);
+  expect(reloadBox).not.toBeNull();
+  expect(reloadBox!.y + reloadBox!.height).toBeLessThanOrEqual(viewport.height);
   await expect(
     dialog.getByRole("heading", { name: "Settings" })
   ).toBeInViewport();
