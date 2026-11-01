@@ -38,6 +38,14 @@ interface AuditFile {
     method: string;
     result: string;
   };
+  sweep?: {
+    batch: number;
+    batchSize: number;
+    cardsAuditedBefore: number;
+    cardsAuditedAfter: number;
+    deckCoverage: number;
+    remaining: number;
+  };
   combined?: {
     samples: number;
     uniqueCards: number;
@@ -74,6 +82,7 @@ const AUDIT_FILES = [
   "essential-sample-2.json",
   "essential-sample-3.json",
   "essential-sample-4.json",
+  "essential-sample-5.json",
 ];
 
 const audits = AUDIT_FILES.map(file => {
@@ -240,24 +249,30 @@ describe("resolved sample fixes", () => {
 
 describe("phase 7 re-measurement", () => {
   const phase3 = audits.filter(({ audit }) => audit.sample <= 2);
-  const phase7 = audits.filter(({ audit }) => audit.sample >= 3);
+  const recheck = audits.filter(
+    ({ audit }) => audit.sample === 3 || audit.sample === 4
+  );
 
   it("samples fresh sheets with seeds beyond the Phase 3 pair", () => {
-    expect(phase7.map(({ audit }) => audit.sample)).toEqual([3, 4]);
-    expect(new Set(phase7.map(({ audit }) => audit.seed)).size).toBe(2);
+    expect(recheck.map(({ audit }) => audit.sample)).toEqual([3, 4]);
+    expect(new Set(recheck.map(({ audit }) => audit.seed)).size).toBe(2);
 
-    for (const { audit } of phase7) {
+    for (const { audit } of recheck) {
       expect(audit.seed, `sample ${audit.sample}`).toBeGreaterThan(2);
       expect(audit.limit).toBe(50);
     }
   });
 
   it("recomputes the combined rate, fresh cards and rechecked verdicts", () => {
-    const sheetIds = new Set(audits.flatMap(entry => [...entry.sheetIds]));
+    const allAuditedIds = new Set(
+      audits
+        .filter(({ audit }) => audit.sample <= 4)
+        .flatMap(entry => [...entry.sheetIds])
+    );
     const phase3Ids = new Set(phase3.flatMap(entry => [...entry.sheetIds]));
     const merged = new Map<string, "pass" | "fix">();
 
-    for (const { audit } of phase7)
+    for (const { audit } of recheck)
       for (const verdict of audit.verdicts) {
         const previous = merged.get(verdict.id);
         if (previous !== undefined)
@@ -270,7 +285,7 @@ describe("phase 7 re-measurement", () => {
     ).length;
     const fresh = [...merged.keys()].filter(id => !phase3Ids.has(id)).length;
 
-    const [first, second] = phase7.map(
+    const [first, second] = recheck.map(
       ({ audit }) =>
         new Map(audit.verdicts.map(verdict => [verdict.id, verdict.verdict]))
     );
@@ -279,7 +294,7 @@ describe("phase 7 re-measurement", () => {
       id => first.get(id) === second.get(id)
     ).length;
 
-    const combined = phase7.find(({ audit }) => audit.sample === 4)!.audit
+    const combined = recheck.find(({ audit }) => audit.sample === 4)!.audit
       .phase7Combined;
 
     expect(combined, "sample 4 phase7Combined block").toBeDefined();
@@ -289,9 +304,9 @@ describe("phase 7 re-measurement", () => {
     expect(combined!.uniquePass).toBe(merged.size - fixes);
     expect(combined!.errorRate).toBeCloseTo(fixes / merged.size, 2);
     expect(combined!.freshCards).toBe(fresh);
-    expect(combined!.cardsAuditedAcrossPhases).toBe(sheetIds.size);
+    expect(combined!.cardsAuditedAcrossPhases).toBe(allAuditedIds.size);
     expect(combined!.deckCoverage).toBeCloseTo(
-      sheetIds.size / ESSENTIAL_WORDS.length,
+      allAuditedIds.size / ESSENTIAL_WORDS.length,
       2
     );
     expect(combined!.mutualRecheckIds).toHaveLength(mutualRecheckIds.length);
@@ -301,5 +316,44 @@ describe("phase 7 re-measurement", () => {
     expect(combined!.mutualAgreement).toBe(
       `${agreed}/${mutualRecheckIds.length}`
     );
+  });
+});
+
+describe("phase 7 sweep", () => {
+  const priorIds = new Set(
+    audits
+      .filter(({ audit }) => audit.sample <= 4)
+      .flatMap(entry => [...entry.sheetIds])
+  );
+  const sweep = audits.filter(({ audit }) => audit.sample >= 5);
+
+  it("audits only cards that had no verdict before the batch", () => {
+    expect(sweep.length).toBeGreaterThan(0);
+
+    for (const { audit } of sweep) {
+      expect(audit.limit, `sample ${audit.sample}`).toBe(50);
+      for (const verdict of audit.verdicts)
+        expect(priorIds.has(verdict.id), verdict.id).toBe(false);
+    }
+  });
+
+  it("records the deck coverage after each batch", () => {
+    let audited = priorIds.size;
+
+    for (const { audit, sheetIds } of sweep) {
+      const auditedAfter = audited + sheetIds.length;
+
+      expect(audit.sweep, `sample ${audit.sample} sweep block`).toBeDefined();
+      expect(audit.sweep!.cardsAuditedBefore).toBe(audited);
+      expect(audit.sweep!.cardsAuditedAfter).toBe(auditedAfter);
+      expect(audit.sweep!.remaining).toBe(
+        ESSENTIAL_WORDS.length - auditedAfter
+      );
+      expect(audit.sweep!.deckCoverage).toBeCloseTo(
+        auditedAfter / ESSENTIAL_WORDS.length,
+        2
+      );
+      audited = auditedAfter;
+    }
   });
 });

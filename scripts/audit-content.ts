@@ -2,7 +2,7 @@
 //
 // The sheet is evidence, not deck data: this script never writes outside
 // docs/audits/ and never touches client/src/lib/essentialVocabulary.ts.
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { ESSENTIAL_WORDS } from "../client/src/lib/essentialVocabulary";
@@ -14,7 +14,7 @@ export const AUDIT_DIR = path.join(REPO_ROOT, "docs", "audits");
 export const DEFAULT_LIMIT = 50;
 export const DEFAULT_SEED = 1;
 
-const USAGE = `Usage: pnpm audit:content [--limit N] [--seed N] [--out FILE]
+const USAGE = `Usage: pnpm audit:content [--limit N] [--seed N] [--out FILE] [--unaudited] [--from FILE]
 
 Sample imported Essential 600 cards into a deterministic Markdown audit sheet.
 
@@ -22,6 +22,8 @@ Sample imported Essential 600 cards into a deterministic Markdown audit sheet.
   --seed N     Sample seed (default ${DEFAULT_SEED}); the same seed always picks the same cards
   --out FILE   Sheet path relative to docs/audits/
                (default essential-audit-seed-<seed>-limit-<limit>.md)
+  --unaudited  Skip every card that already has a verdict in docs/audits/*.json
+  --from FILE  Re-render the cards listed in an existing sheet, keeping its seed and mode
   -h, --help   Show this help`;
 
 export interface AuditOptions {
@@ -29,6 +31,8 @@ export interface AuditOptions {
   limit: number;
   seed: number;
   out?: string;
+  unaudited: boolean;
+  from?: string;
 }
 
 /**
@@ -69,18 +73,89 @@ export function seededShuffle<T>(items: readonly T[], seed: number): T[] {
 export function sampleCards(
   cards: readonly VocabularyCard[],
   limit: number,
-  seed: number
+  seed: number,
+  excludeIds?: ReadonlySet<string>
 ): VocabularyCard[] {
   if (!Number.isInteger(limit) || limit < 1)
     throw new Error(`Limit must be a positive integer, got ${limit}.`);
-  if (limit > cards.length)
+
+  const pool = excludeIds
+    ? cards.filter(card => !excludeIds.has(card.id))
+    : cards;
+  if (limit > pool.length)
     throw new Error(
-      `Limit ${limit} exceeds the ${cards.length}-card imported deck.`
+      excludeIds
+        ? `Limit ${limit} exceeds the ${pool.length} unaudited cards left in the imported deck.`
+        : `Limit ${limit} exceeds the ${pool.length}-card imported deck.`
     );
 
-  return seededShuffle(cards, seed)
+  return seededShuffle(pool, seed)
     .slice(0, limit)
     .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+}
+
+/**
+ * Ids that already carry a verdict, so a sweep batch never re-audits a card
+ * that a previous sample covered. Sorted file order keeps the set stable.
+ */
+export function loadAuditedIds(dir: string = AUDIT_DIR): Set<string> {
+  const audited = new Set<string>();
+  let files: string[];
+
+  try {
+    files = readdirSync(dir);
+  } catch {
+    return audited;
+  }
+
+  for (const file of files.filter(name => name.endsWith(".json")).sort()) {
+    const parsed = JSON.parse(readFileSync(path.join(dir, file), "utf8")) as {
+      verdicts?: Array<{ id?: unknown }>;
+    };
+
+    for (const verdict of parsed.verdicts ?? [])
+      if (typeof verdict.id === "string") audited.add(verdict.id);
+  }
+
+  return audited;
+}
+
+/** Resolve a sheet path and refuse anything outside docs/audits/. */
+export function resolveSheetPath(file: string): string {
+  const resolved = path.resolve(AUDIT_DIR, file);
+
+  if (resolved === AUDIT_DIR || !resolved.startsWith(AUDIT_DIR + path.sep))
+    throw new Error(
+      `Refusing to read outside ${path.relative(REPO_ROOT, AUDIT_DIR)}/: ${file}`
+    );
+
+  return resolved;
+}
+
+export interface SheetSource {
+  ids: string[];
+  seed: number;
+  unaudited: boolean;
+}
+
+/**
+ * Read a committed sheet back, so a fixed batch can be re-rendered against the
+ * current deck without re-sampling a different set of cards.
+ */
+export function readSheet(file: string): SheetSource {
+  const text = readFileSync(resolveSheetPath(file), "utf8");
+  const ids = text
+    .split("\n")
+    .filter(line => line.startsWith("| essential_"))
+    .map(line => line.slice(1, -1).split(" | ")[0].trim());
+  const seed = text.match(/imported cards, seed (\d+)/);
+
+  return {
+    ids,
+    seed: seed ? Number(seed[1]) : DEFAULT_SEED,
+    unaudited:
+      text.includes("unaudited sample") || text.includes("--unaudited"),
+  };
 }
 
 function cell(value: string | undefined): string {
@@ -91,6 +166,8 @@ export interface AuditSheetMeta {
   seed: number;
   limit: number;
   deckSize: number;
+  unaudited?: boolean;
+  from?: string;
 }
 
 /** Markdown table: one row per sampled card, with every audit field. */
@@ -101,9 +178,11 @@ export function renderAuditSheet(
   const lines = [
     "# Essential 600 audit sheet",
     "",
-    `${cards.length} of ${meta.deckSize} imported cards, seed ${meta.seed}.`,
+    `${cards.length} of ${meta.deckSize} imported cards, seed ${meta.seed}${meta.unaudited ? ", unaudited sample" : ""}.`,
     "",
-    `Generated with \`pnpm audit:content --limit ${meta.limit} --seed ${meta.seed}\`. The same seed always selects the same cards. This file is generated: record verdicts in a separate JSON file instead of editing it.`,
+    meta.from
+      ? `Re-rendered from \`${meta.from}\` with \`pnpm audit:content --from ${meta.from}\` against the current deck. This file is generated: record verdicts in a separate JSON file instead of editing it.`
+      : `Generated with \`pnpm audit:content --limit ${meta.limit} --seed ${meta.seed}${meta.unaudited ? " --unaudited" : ""}\`. The same seed always selects the same cards${meta.unaudited ? " from the cards without a verdict when the sheet was written" : ""}. This file is generated: record verdicts in a separate JSON file instead of editing it.`,
     "",
     "| id | front | back | romanization | part of speech | example | example English | usage note | source |",
     "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
@@ -172,6 +251,7 @@ export function parseArgs(argv: readonly string[]): AuditOptions {
     help: false,
     limit: DEFAULT_LIMIT,
     seed: DEFAULT_SEED,
+    unaudited: false,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -192,6 +272,13 @@ export function parseArgs(argv: readonly string[]): AuditOptions {
         options.out = requireValue(argv, index, arg);
         index += 1;
         break;
+      case "--unaudited":
+        options.unaudited = true;
+        break;
+      case "--from":
+        options.from = requireValue(argv, index, arg);
+        index += 1;
+        break;
       default:
         throw new Error(`Unknown option: ${arg}\n\n${USAGE}`);
     }
@@ -208,13 +295,50 @@ function main(argv: readonly string[]): void {
       return;
     }
 
-    const cards = sampleCards(ESSENTIAL_WORDS, options.limit, options.seed);
-    const sheet = renderAuditSheet(cards, {
-      seed: options.seed,
-      limit: options.limit,
-      deckSize: ESSENTIAL_WORDS.length,
-    });
-    const output = resolveOutputPath(options.out, options.seed, options.limit);
+    let cards: VocabularyCard[];
+    let meta: AuditSheetMeta;
+
+    if (options.from) {
+      const source = readSheet(options.from);
+      const byId = new Map(ESSENTIAL_WORDS.map(card => [card.id, card]));
+      const pool = source.ids.map(id => {
+        const card = byId.get(id);
+        if (!card)
+          throw new Error(
+            `Sheet ${options.from} lists ${id}, which is not in the imported deck.`
+          );
+        return card;
+      });
+
+      cards = sampleCards(pool, pool.length, source.seed);
+      meta = {
+        seed: source.seed,
+        limit: pool.length,
+        deckSize: ESSENTIAL_WORDS.length,
+        unaudited: source.unaudited,
+        from: options.from,
+      };
+    } else {
+      cards = sampleCards(
+        ESSENTIAL_WORDS,
+        options.limit,
+        options.seed,
+        options.unaudited ? loadAuditedIds() : undefined
+      );
+      meta = {
+        seed: options.seed,
+        limit: options.limit,
+        deckSize: ESSENTIAL_WORDS.length,
+        unaudited: options.unaudited,
+      };
+    }
+
+    const sheet = renderAuditSheet(cards, meta);
+    const output = resolveOutputPath(
+      options.out ?? options.from,
+      meta.seed,
+      meta.limit
+    );
 
     mkdirSync(path.dirname(output), { recursive: true });
     writeFileSync(output, sheet, "utf8");
