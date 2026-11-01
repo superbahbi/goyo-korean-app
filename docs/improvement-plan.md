@@ -106,7 +106,6 @@ are over 300.
 | 6 Sentence audio and grammar        | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                |
 | 7 Content trust completion          | Planned; starts after Phase 6 closes (see Phase 7)                                                                                                                           |
 | 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                             |
-| 8 First session and card            | In progress; 8.1 mobile card layout and 8.2 interval labels done; 8.3 first-run home and 8.4 new-card introduction land in parallel PRs                                      |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
