@@ -1,10 +1,22 @@
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { ArrowLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  Hash,
+  Languages,
+  Music2,
+  Sparkles,
+  Timer,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { AlphabetCard } from "@/components/AlphabetCard";
+import {
+  PracticePrimaryButton,
+  PracticeShell,
+} from "@/components/practice/PracticeShell";
 import {
   ALPHABET_DATA,
   ALPHABET_CATEGORIES,
@@ -15,6 +27,36 @@ import { playAlphabetAudio, playVocabularyAudio } from "@/lib/audioPlayer";
 interface AlphabetPracticeProps {
   onClose: () => void;
 }
+
+const CATEGORY_DETAILS: Record<string, string> = {
+  consonants: "19 letter names",
+  vowels: "21 vowel sounds",
+  numbers: "1–10 in native Korean",
+};
+
+const CATEGORY_ICONS = {
+  consonants: Languages,
+  vowels: Music2,
+  numbers: Hash,
+} as const;
+
+const TIPS = [
+  {
+    icon: BookOpen,
+    title: "Start with the shapes",
+    body: "Hangul is a real alphabet: each shape maps to one predictable sound.",
+  },
+  {
+    icon: Sparkles,
+    title: "Say it out loud",
+    body: "Tap “Hear Pronunciation” and repeat the example to anchor the sound.",
+  },
+  {
+    icon: Timer,
+    title: "A few minutes a day",
+    body: "Most beginners can read their first Korean words within a few hours.",
+  },
+];
 
 export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
   const [selectedType, setSelectedType] = useState<
@@ -48,108 +90,78 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
 
   if (!selectedType) {
     return (
-      <Dialog
-        open
-        onOpenChange={open => {
-          if (!open) onClose();
-        }}
+      <PracticeShell
+        key="categories"
+        title="Learn Hangul"
+        badge={
+          <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-900/50">
+            Korean alphabet
+          </Badge>
+        }
+        description="Pick a set, listen to each shape, and move at your own pace."
+        tone="indigo"
+        closeLabel="Close Hangul practice"
+        onClose={onClose}
       >
-        <DialogContent
-          aria-modal="true"
-          aria-describedby={undefined}
-          showCloseButton={false}
-          className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-card p-0 shadow-none sm:max-w-none"
-        >
-          <DialogTitle className="sr-only">Learn Hangul</DialogTitle>
-          {/* Header */}
-          <header className="p-6 border-b border-border">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="mb-4"
-              aria-label="Close Hangul practice"
-            >
-              <ArrowLeft />
-            </Button>
-            <h1 className="text-3xl font-bold text-foreground">Learn Hangul</h1>
-            <p className="text-foreground/70 mt-2">
-              Master the Korean alphabet
-            </p>
-          </header>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {ALPHABET_CATEGORIES.map(category => {
+            const Icon =
+              CATEGORY_ICONS[category.id as keyof typeof CATEGORY_ICONS];
+            return (
+              <motion.button
+                key={category.id}
+                type="button"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                onClick={() => {
+                  setCurrentIndex(0);
+                  setSelectedType(
+                    category.id as "consonants" | "vowels" | "numbers"
+                  );
+                }}
+                className={`flex min-h-36 flex-col items-center justify-center rounded-2xl p-6 text-center transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${category.color}`}
+              >
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/60 dark:bg-black/20">
+                  <Icon size={24} aria-hidden="true" />
+                </span>
+                <span className="mt-3 text-xl font-bold">{category.name}</span>
+                <span className="mt-1 text-sm">
+                  {CATEGORY_DETAILS[category.id]}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
 
-          {/* Main Content */}
-          <main className="flex-1 overflow-auto p-6">
-            <div className="max-w-2xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {ALPHABET_CATEGORIES.map(category => (
-                  <motion.button
-                    key={category.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    onClick={() => {
-                      setCurrentIndex(0);
-                      setSelectedType(
-                        category.id as "consonants" | "vowels" | "numbers"
-                      );
-                    }}
-                    className={`p-8 rounded-2xl text-center transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 ${category.color}`}
+        <div className="mt-6 rounded-2xl border border-border bg-card/85 p-4 sm:p-5">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-700 dark:text-indigo-300">
+            How it works
+          </h2>
+          <ul className="mt-3 space-y-3">
+            {TIPS.map(tip => {
+              const Icon = tip.icon;
+              return (
+                <li key={tip.title} className="flex items-start gap-3">
+                  <span
+                    className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400"
+                    aria-hidden="true"
                   >
-                    <div className="text-5xl mb-4">{category.icon}</div>
-                    <h2 className="text-2xl font-bold mb-2">{category.name}</h2>
-                    <p className="text-sm">
-                      {category.id === "consonants"
-                        ? "19 letter names"
-                        : category.id === "vowels"
-                          ? "21 vowel sounds"
-                          : "1–10 in native Korean"}
-                    </p>
-                  </motion.button>
-                ))}
-              </div>
-
-              {/* Info Cards */}
-              <div className="mt-12 space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Why Learn Hangul?</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm text-foreground/70">
-                    <p>
-                      🎯 <strong>Foundation:</strong> Hangul is the Korean
-                      alphabet. Learning it is the first step to reading and
-                      writing Korean.
-                    </p>
-                    <p>
-                      🔊 <strong>Pronunciation:</strong> Each character has a
-                      consistent sound, making Korean pronunciation logical and
-                      learnable.
-                    </p>
-                    <p>
-                      ⚡ <strong>Quick to Learn:</strong> Most people can learn
-                      Hangul in just a few hours!
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">How to Practice</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3 text-sm text-foreground/70">
-                    <p>1️⃣ Select Consonants, Vowels, or Numbers to begin</p>
-                    <p>
-                      2️⃣ Study each character with its pronunciation and example
-                    </p>
-                    <p>3️⃣ Click "Hear Pronunciation" to listen to the sound</p>
-                    <p>4️⃣ Navigate through all characters at your own pace</p>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </main>
-        </DialogContent>
-      </Dialog>
+                    <Icon size={16} />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold text-foreground/90">
+                      {tip.title}
+                    </span>
+                    <span className="mt-0.5 block text-sm leading-relaxed text-muted-foreground">
+                      {tip.body}
+                    </span>
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </PracticeShell>
     );
   }
 
@@ -184,105 +196,77 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
         : "Numbers";
 
   return (
-    <Dialog
-      open
-      onOpenChange={open => {
-        if (!open) onClose();
-      }}
+    <PracticeShell
+      key={selectedType}
+      title={sectionTitle}
+      titleLang="en"
+      badge={
+        <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-900/50">
+          Hangul
+        </Badge>
+      }
+      description="Tap the speaker to hear the name, then move through the set."
+      tone="indigo"
+      closeLabel="Close Hangul practice"
+      onClose={onClose}
+      onBack={() => setSelectedType(null)}
+      backLabel="Back to categories"
+      progress={((currentIndex + 1) / cards.length) * 100}
+      progressLabel={`${sectionTitle} progress`}
+      counter={`${currentIndex + 1} / ${cards.length}`}
+      status={sectionTitle}
+      footer={
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            variant="outline"
+            onClick={handlePrev}
+            disabled={currentIndex === 0 || isSpeaking}
+            className="min-h-12 rounded-xl"
+          >
+            <ArrowLeft size={16} className="mr-2" /> Previous
+          </Button>
+          <PracticePrimaryButton
+            onClick={handleNext}
+            disabled={currentIndex === cards.length - 1 || isSpeaking}
+          >
+            Next <ArrowRight size={16} className="ml-2" />
+          </PracticePrimaryButton>
+        </div>
+      }
     >
-      <DialogContent
-        aria-modal="true"
-        aria-describedby={undefined}
-        showCloseButton={false}
-        className="inset-0 top-0 left-0 z-50 flex max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-gradient-to-br from-background to-muted p-0 shadow-none sm:max-w-none"
-      >
-        <DialogTitle className="sr-only">{sectionTitle}</DialogTitle>
-        {/* Header */}
-        <header className="p-6 border-b border-border bg-card">
-          <div className="max-w-4xl mx-auto flex items-center justify-between">
-            <div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setSelectedType(null)}
-                className="mb-2"
-                aria-label="Back to categories"
-              >
-                <ArrowLeft />
-              </Button>
-              <h1 className="text-2xl font-bold text-foreground">
-                {sectionTitle}
-              </h1>
-            </div>
-            <div className="text-right">
-              <div className="text-sm text-foreground/70">
-                {currentIndex + 1} / {cards.length}
-              </div>
-              <div className="w-48 h-2 bg-muted rounded-full mt-2 overflow-hidden">
-                <div
-                  className="h-full bg-emerald-500 transition-all"
-                  style={{
-                    width: `${((currentIndex + 1) / cards.length) * 100}%`,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </header>
+      {currentCard && (
+        <div className="flex justify-center">
+          <AlphabetCard card={currentCard} onSpeak={handleSpeak} />
+        </div>
+      )}
 
-        {/* Main Content */}
-        <main className="flex-1 flex flex-col items-center justify-center p-6 overflow-auto">
-          <div className="max-w-2xl w-full">
-            {currentCard && (
-              <AlphabetCard card={currentCard} onSpeak={handleSpeak} />
-            )}
-
-            {/* Navigation Buttons */}
-            <div className="flex gap-4 mt-8 justify-center">
-              <Button
-                onClick={handlePrev}
-                disabled={currentIndex === 0 || isSpeaking}
-                variant="outline"
-                className="px-6 py-2 rounded-xl"
-              >
-                ← Previous
-              </Button>
-              <Button
-                onClick={handleNext}
-                disabled={currentIndex === cards.length - 1 || isSpeaking}
-                className="px-6 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl"
-              >
-                Next →
-              </Button>
-            </div>
-
-            {/* Quick Reference Grid */}
-            <div className="mt-12">
-              <h2 className="text-lg font-bold text-foreground mb-4">
-                Quick Reference
-              </h2>
-              <div className="grid grid-cols-5 md:grid-cols-8 gap-2">
-                {cards.map((card, idx) => (
-                  <motion.button
-                    key={card.id}
-                    onClick={() => setCurrentIndex(idx)}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: idx * 0.02 }}
-                    className={`aspect-square rounded-lg font-bold text-2xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
-                      idx === currentIndex
-                        ? "bg-emerald-700 text-white shadow-lg scale-110"
-                        : "bg-card text-foreground border-2 border-border hover:border-emerald-300 dark:hover:border-emerald-700"
-                    }`}
-                  >
-                    {card.hangul}
-                  </motion.button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </main>
-      </DialogContent>
-    </Dialog>
+      <div className="mt-8">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          Quick reference
+        </h2>
+        <div className="mt-3 grid grid-cols-5 gap-2 sm:grid-cols-8">
+          {cards.map((card, idx) => (
+            <motion.button
+              key={card.id}
+              type="button"
+              onClick={() => setCurrentIndex(idx)}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: idx * 0.02 }}
+              aria-label={`Go to ${card.hangul}`}
+              aria-current={idx === currentIndex ? "true" : undefined}
+              className={`aspect-square rounded-xl text-2xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
+                idx === currentIndex
+                  ? "scale-105 bg-emerald-700 text-white shadow-lg"
+                  : "border-2 border-border bg-card text-foreground hover:border-emerald-300 dark:hover:border-emerald-700"
+              }`}
+              lang="ko"
+            >
+              {card.hangul}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </PracticeShell>
   );
 }

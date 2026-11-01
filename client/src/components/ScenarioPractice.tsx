@@ -1,16 +1,18 @@
 import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Check, RotateCcw, X } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Check, RotateCcw } from "lucide-react";
 import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 import { shuffle } from "@/lib/shuffle";
 import { ChoiceButton } from "@/components/practice/ChoiceButton";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
+import { PracticeFeedback } from "@/components/practice/PracticeFeedback";
+import {
+  PracticePrimaryButton,
+  PracticeShell,
+} from "@/components/practice/PracticeShell";
 import { SCENARIOS } from "@/components/practice/scenarios";
 import { ScenarioPrompt } from "@/components/practice/ScenarioPrompt";
-import { ScenarioVerdict } from "@/components/practice/ScenarioVerdict";
 
 interface ScenarioPracticeProps {
   cards: VocabularyCard[];
@@ -73,36 +75,30 @@ export function ScenarioPractice({
 
   if (scenarios.length === 0) {
     return (
-      <Dialog
-        open
-        onOpenChange={open => {
-          if (!open) closePractice();
-        }}
-      >
-        <DialogContent
-          aria-modal="true"
-          aria-describedby={undefined}
-          showCloseButton={false}
-          className="max-w-md rounded-3xl"
-        >
-          <DialogTitle>Nothing to practice yet</DialogTitle>
-          <p className="mt-2 text-sm leading-relaxed text-foreground/70">
-            Scenarios reuse phrases you have already studied, so nothing new is
-            introduced here. Review a few survival phrases in a daily session,
-            then come back.
-          </p>
-          <Button className="mt-5 min-h-12 w-full" onClick={closePractice}>
+      <PracticeShell
+        title="Nothing to practice yet"
+        description="Scenarios reuse phrases you have already studied, so nothing new is introduced here. Review a few survival phrases in a daily session, then come back."
+        tone="rose"
+        closeLabel="Close scenario practice"
+        onClose={closePractice}
+        footer={
+          <PracticePrimaryButton onClick={closePractice}>
             Back to dashboard
-          </Button>
-        </DialogContent>
-      </Dialog>
+          </PracticePrimaryButton>
+        }
+      >
+        <p className="rounded-2xl border border-amber-200 bg-amber-50/70 px-4 py-3 text-center text-sm leading-relaxed text-amber-900 dark:border-amber-800/70 dark:bg-amber-950/40 dark:text-amber-100">
+          Scenarios are drawn only from cards you have already reviewed, so the
+          daily queue is the fastest way to unlock them.
+        </p>
+      </PracticeShell>
     );
   }
 
   if (complete) {
     return (
       <PracticeComplete
-        title="You used Korean in context"
+        title="Scenario practice complete"
         eyebrow="Scenario practice complete"
         heading="You used Korean in context"
         icon={<Check size={34} />}
@@ -151,76 +147,62 @@ export function ScenarioPractice({
   };
 
   return (
-    <Dialog
-      open
-      onOpenChange={open => {
-        if (!open) closePractice();
-      }}
+    <PracticeShell
+      title="What would you say?"
+      badge={
+        <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100 dark:bg-amber-900/50 dark:text-amber-300 dark:hover:bg-amber-900/50">
+          {current.place}
+        </Badge>
+      }
+      description={current.prompt}
+      tone="rose"
+      closeLabel="Close scenario practice"
+      onClose={closePractice}
+      progress={(index / scenarios.length) * 100}
+      progressLabel="Scenario progress"
+      counter={`${index + 1} / ${scenarios.length}`}
+      status="Survival Korean"
+      center
+      footer={
+        answered ? (
+          <PracticePrimaryButton onClick={next}>
+            {index === scenarios.length - 1 ? "See results" : "Next situation"}
+          </PracticePrimaryButton>
+        ) : undefined
+      }
     >
-      <DialogContent
-        aria-modal="true"
-        aria-describedby={undefined}
-        showCloseButton={false}
-        className="inset-0 top-0 left-0 z-50 flex h-[100dvh] max-h-[100dvh] min-h-0 max-w-none translate-x-0 translate-y-0 flex-col gap-0 overflow-hidden rounded-none border-0 bg-gradient-to-br from-amber-50 dark:from-amber-950 via-background to-emerald-50 dark:to-emerald-950 p-0 shadow-none sm:max-w-none"
-      >
-        <DialogTitle className="sr-only">What would you say?</DialogTitle>
-        <header className="flex shrink-0 items-center justify-between border-b border-border bg-card/80 p-4 backdrop-blur-md">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={closePractice}
-            aria-label="Close scenario practice"
-          >
-            <X size={20} />
-          </Button>
-          <div className="max-w-xs flex-1 px-4">
-            <Progress
-              value={(index / scenarios.length) * 100}
-              aria-label="Scenario progress"
-              className="h-2"
-            />
-          </div>
-          <div className="min-w-[60px] text-right text-sm font-semibold text-muted-foreground">
-            {index + 1} / {scenarios.length}
-            <span className="block text-xs text-muted-foreground">
-              Survival Korean
-            </span>
-          </div>
-        </header>
-        <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-8">
-          <div className="mx-auto max-w-2xl">
-            <ScenarioPrompt
-              place={current.place}
-              prompt={current.prompt}
-              onHear={() => void playVocabularyAudio(currentCard.id)}
-            />
-            <div className="mt-5 grid gap-3">
-              {choices.map((choice, choiceIndex) => (
-                <ChoiceButton
-                  key={choice.id}
-                  letter={String.fromCharCode(65 + choiceIndex)}
-                  label={choice.front}
-                  labelLang="ko"
-                  answered={answered}
-                  chosen={selectedId === choice.id}
-                  correct={choice.id === currentCard.id}
-                  onChoose={() => choose(choice)}
-                  sizeClass="min-h-16"
-                  correctIcon={<Check size={20} />}
-                  wrongIcon={<X size={20} />}
-                />
-              ))}
-            </div>
-            <ScenarioVerdict
-              card={currentCard}
-              answered={answered}
-              correct={isCorrect}
-              isLast={index === scenarios.length - 1}
-              onNext={next}
-            />
-          </div>
-        </main>
-      </DialogContent>
-    </Dialog>
+      <ScenarioPrompt onHear={() => void playVocabularyAudio(currentCard.id)} />
+
+      <div className="mt-5 grid gap-3">
+        {choices.map((choice, choiceIndex) => (
+          <ChoiceButton
+            key={choice.id}
+            letter={String.fromCharCode(65 + choiceIndex)}
+            label={choice.front}
+            labelLang="ko"
+            answered={answered}
+            chosen={selectedId === choice.id}
+            correct={choice.id === currentCard.id}
+            onChoose={() => choose(choice)}
+          />
+        ))}
+      </div>
+
+      <PracticeFeedback
+        answered={answered}
+        correct={isCorrect}
+        correctText="That fits the situation."
+        wrongText={
+          <>
+            A useful answer is “<span lang="ko">{currentCard.front}</span>”.
+          </>
+        }
+        detail={
+          <>
+            {currentCard.back} · <span lang="ko">{currentCard.example}</span>
+          </>
+        }
+      />
+    </PracticeShell>
   );
 }
