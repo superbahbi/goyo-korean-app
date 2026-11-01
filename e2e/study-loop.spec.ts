@@ -25,11 +25,13 @@ test.beforeEach(async ({ page }) => {
 test("completes the daily session with the keyboard and saves progress", async ({
   page,
 }) => {
-  await expect(
-    page.getByText("Ready to practice?", { exact: true })
-  ).toBeVisible();
-
-  await page.getByRole("button", { name: /start daily session/i }).click();
+  // A fresh learner gets the first-run start block instead of the welcome
+  // hero, so wait on the session action, which exists in both states.
+  const startButton = page.getByRole("button", {
+    name: /start (daily|first) session/i,
+  });
+  await expect(startButton).toBeVisible();
+  await startButton.click();
 
   // A fresh learner gets the default three new cards. Each word is introduced
   // first (Enter), then Space reveals and 2 grades Good, so the whole session
@@ -67,7 +69,9 @@ test("completes the daily session with the keyboard and saves progress", async (
 });
 
 test("introduces a new word without logging a grade", async ({ page }) => {
-  await page.getByRole("button", { name: /start daily session/i }).click();
+  await page
+    .getByRole("button", { name: /start (daily|first) session/i })
+    .click();
 
   await expect(page.getByText("New word", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: /start practising/i }).click();
@@ -87,7 +91,9 @@ test("introduces a new word without logging a grade", async ({ page }) => {
 });
 
 test("brings a failed card back once before the summary", async ({ page }) => {
-  await page.getByRole("button", { name: /start daily session/i }).click();
+  await page
+    .getByRole("button", { name: /start (daily|first) session/i })
+    .click();
 
   // Fail the first card: it re-enters at the end, so the session runs four
   // reviews while the deck still only gains three cards.
