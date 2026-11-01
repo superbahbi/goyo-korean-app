@@ -95,17 +95,18 @@ are over 300.
 
 ## Status
 
-| Phase                           | State                                                                                                                                                                        |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                       | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                  |
-| 1 Learning loop and measurement | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                        |
-| 2 Structure                     | Done; main chunk 117.1 kB raw / 34.4 kB gzipped with vendor chunks; one component over 300 lines (`FlashCard` 314)                                                           |
-| 3 Content                       | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
-| 4 Delivery and accessibility    | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
-| 5 Tune from data                | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                        |
-| 6 Sentence audio and grammar    | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                |
-| 7 Content trust completion      | Planned; starts after Phase 6 closes (see Phase 7)                                                                                                                           |
-| 8 First session and card        | In progress; 8.1 mobile card layout and 8.2 interval labels done; 8.3 first-run home and 8.4 new-card introduction land in parallel PRs                                      |
+| Phase                               | State                                                                                                                                                                        |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                  |
+| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                        |
+| 2 Structure                         | Done; main chunk 117.1 kB raw / 34.4 kB gzipped with vendor chunks; one component over 300 lines (`FlashCard` 314)                                                           |
+| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                  |
+| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done |
+| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                        |
+| 6 Sentence audio and grammar        | In progress; sentence audio wired with 56 male clips (20 deck + 36 grammar) and 0 female; 12 lessons ship, Korean review open                                                |
+| 7 Content trust completion          | Planned; starts after Phase 6 closes (see Phase 7)                                                                                                                           |
+| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                             |
+| 8 First session and card            | In progress; 8.1 mobile card layout and 8.2 interval labels done; 8.3 first-run home and 8.4 new-card introduction land in parallel PRs                                      |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -528,8 +529,19 @@ each surface stays small and reviewable.
    runs the saved card state through `scheduleRecall`; the three compact grade buttons show the real
    next interval ("Again 1d", "Good 2d", "Easy 4d") for new, mature and lapsed cards. Unit tests
    cover all three.
-3. **First-run home.** Landing in a parallel PR.
-4. **New-card introduction.** Landing in a parallel PR.
+3. **First-run home.** Done (2026-11-01). A save with no review log, no card states and nothing
+   studied today opens on one "Start here" block: a single "Start first session · 3 new words"
+   action, a Hangul link, and one sentence explaining that reviews return tomorrow. The all-zero
+   review plan, theme grid and empty stats stay hidden until there is history, and the practice grid
+   starts collapsed behind "Show all". Progress measures today's planned work ("0 of 3 planned") with
+   the daily goal as a secondary line, and the welcome hero is skipped on first run so there is
+   exactly one primary action. `isFirstRunState` treats a save with card states (an import or an
+   older save) as history, so those keep the full dashboard.
+4. **New-card introduction.** Done (2026-11-01). A never-reviewed card opens on a "New word" view —
+   Korean, romanization, meaning, the example with its translation, and the pronunciation — and
+   "Start practising" moves to the normal recall card for the same word. The introduction never
+   grades, writes card state, logs a review, or changes the queue or schedule. New review-log entries
+   carry an optional `flow: "v2"` marker so the Phase 5 analysis can segment cohorts.
 
 Acceptance: the revealed card fits at 390×844 and stays usable at 320px, the grade labels match the
 scheduler, the session offers one reveal path, and the local gate plus the e2e suite are green.

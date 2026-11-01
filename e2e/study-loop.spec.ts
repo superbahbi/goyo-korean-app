@@ -16,6 +16,14 @@ function readProgress(page: Page) {
   }, PROGRESS_KEY);
 }
 
+// A fresh save hides the dashboard hero, so wait on the first-session action
+// instead of the returning-learner heading.
+async function startFreshSession(page: Page) {
+  await page
+    .getByRole("button", { name: /start (daily|first) session/i })
+    .click();
+}
+
 test.beforeEach(async ({ page }) => {
   // Every smoke starts from a fresh learner: no saved progress, no backup age.
   await page.addInitScript(() => window.localStorage.clear());
@@ -26,12 +34,11 @@ test("completes the daily session with the keyboard and saves progress", async (
   page,
 }) => {
   // A fresh learner gets the first-run start block instead of the welcome
-  // hero, so wait on the session action, which exists in both states.
-  const startButton = page.getByRole("button", {
-    name: /start (daily|first) session/i,
-  });
-  await expect(startButton).toBeVisible();
-  await startButton.click();
+  // hero, so wait on the first-session action and then start the session.
+  await expect(
+    page.getByRole("button", { name: /start first session/i })
+  ).toBeVisible();
+  await startFreshSession(page);
 
   // A fresh learner gets the default three new cards. Each word is introduced
   // first (Enter), then Space reveals and 2 grades Good, so the whole session
@@ -69,9 +76,7 @@ test("completes the daily session with the keyboard and saves progress", async (
 });
 
 test("introduces a new word without logging a grade", async ({ page }) => {
-  await page
-    .getByRole("button", { name: /start (daily|first) session/i })
-    .click();
+  await startFreshSession(page);
 
   await expect(page.getByText("New word", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: /start practising/i }).click();
@@ -91,9 +96,7 @@ test("introduces a new word without logging a grade", async ({ page }) => {
 });
 
 test("brings a failed card back once before the summary", async ({ page }) => {
-  await page
-    .getByRole("button", { name: /start (daily|first) session/i })
-    .click();
+  await startFreshSession(page);
 
   // Fail the first card: it re-enters at the end, so the session runs four
   // reviews while the deck still only gains three cards.
