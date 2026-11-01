@@ -1,14 +1,18 @@
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { X, Check, Star } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Check, ChevronDown, Mic2 } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { FlashCard } from "./FlashCard";
 import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
 import { ProductionAttempt } from "./study/ProductionAttempt";
+import { GradeActions } from "./study/GradeActions";
 import { StudySessionSummary } from "./study/StudySessionSummary";
 import { NewCardIntro } from "./study/NewCardIntro";
 import { useStudySession } from "./study/useStudySession";
 import { PracticeShell } from "./practice/PracticeShell";
 import { VocabularyCard } from "@/lib/vocabulary";
+import { previewIntervals } from "@/lib/srs";
+import { cn } from "@/lib/utils";
 import type { CardState } from "@/lib/mastery";
 
 interface StudySessionProps {
@@ -56,6 +60,24 @@ export function StudySession({
     restartSession,
     closeSession,
   } = study;
+
+  // The optional production box is collapsed by default: on a phone it used to
+  // take more space than the card itself. Tracking the card the panel was
+  // opened for collapses it again on the next card without an effect.
+  const [productionOpenFor, setProductionOpenFor] = useState<number | null>(
+    null
+  );
+  const showProduction = productionOpenFor === index;
+
+  // Preview against the card's saved schedule. Renders after a grade use the
+  // state the parent just persisted, so the labels match what was saved.
+  const intervals = useMemo(
+    () =>
+      previewIntervals(
+        flipped ? cardStates?.[currentCard?.id ?? ""] : undefined
+      ),
+    [flipped, currentCard?.id, cardStates]
+  );
 
   if (completed) {
     return (
@@ -120,69 +142,45 @@ export function StudySession({
           </Button>
         ) : (
           <div>
-            <ProductionAttempt
-              value={productionAttempt}
-              onChange={setProductionAttempt}
-              done={productionDone}
-              onDone={() => setProductionDone(true)}
-            />
-            <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="mb-2 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               How did that feel?
             </p>
-            <div className="grid grid-cols-3 gap-2 sm:gap-4">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-              >
-                <Button
-                  variant="outline"
-                  className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-red-100 text-red-700 hover:bg-red-50 dark:border-red-900/60 dark:text-red-300 dark:hover:bg-red-950/40 sm:h-24"
-                  onClick={() => handleGrade("again")}
-                >
-                  <X size={24} />
-                  <span>Again</span>
-                  <span className="text-[10px] font-normal text-red-700 dark:text-red-300">
-                    Rebuild tomorrow
-                  </span>
-                </Button>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-              >
-                <Button
-                  variant="outline"
-                  className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-emerald-100 text-emerald-700 hover:bg-emerald-50 dark:border-emerald-900/60 dark:text-emerald-300 dark:hover:bg-emerald-950/40 sm:h-24"
-                  onClick={() => handleGrade("good")}
-                >
-                  <Check size={24} />
-                  <span>Good</span>
-                  <span className="text-[10px] font-normal text-emerald-700 dark:text-emerald-300">
-                    Build the interval
-                  </span>
-                </Button>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Button
-                  variant="outline"
-                  className="h-20 w-full flex-col gap-1 rounded-2xl border-2 border-blue-100 text-blue-700 hover:bg-blue-50 dark:border-blue-900/60 dark:text-blue-300 dark:hover:bg-blue-950/40 sm:h-24"
-                  onClick={() => handleGrade("easy")}
-                >
-                  <Star size={24} />
-                  <span>Easy</span>
-                  <span className="text-[10px] font-normal text-blue-700 dark:text-blue-300">
-                    Stretch the interval
-                  </span>
-                </Button>
-              </motion.div>
+            <GradeActions intervals={intervals} onGrade={handleGrade} />
+            <button
+              type="button"
+              aria-expanded={showProduction}
+              aria-controls="production-attempt"
+              onClick={() =>
+                setProductionOpenFor(current =>
+                  current === index ? null : index
+                )
+              }
+              className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1"
+            >
+              <Mic2 size={14} aria-hidden="true" />
+              Say it in a new sentence
+              {productionDone && (
+                <span className="flex items-center gap-0.5 font-semibold text-emerald-700 dark:text-emerald-300">
+                  <Check size={12} aria-hidden="true" />
+                  Tried
+                </span>
+              )}
+              <ChevronDown
+                size={14}
+                aria-hidden="true"
+                className={cn(
+                  "transition-transform",
+                  showProduction && "rotate-180"
+                )}
+              />
+            </button>
+            <div id="production-attempt" hidden={!showProduction}>
+              <ProductionAttempt
+                value={productionAttempt}
+                onChange={setProductionAttempt}
+                done={productionDone}
+                onDone={() => setProductionDone(true)}
+              />
             </div>
           </div>
         )

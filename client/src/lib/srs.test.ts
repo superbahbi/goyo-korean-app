@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { scheduleRecall, scheduleReview } from "./srs";
+import { previewIntervals, scheduleRecall, scheduleReview } from "./srs";
 
 describe("SRS scheduling", () => {
   const firstGood = scheduleRecall(undefined, "good");
@@ -205,5 +205,52 @@ describe("SRS scheduling", () => {
     );
     expect(recovered.interval).toBe(2);
     expect(recovered.lapseCount).toBe(1);
+  });
+
+  describe("interval previews for the grade buttons", () => {
+    it("offers 1/2/4 days on a new card", () => {
+      expect(previewIntervals(undefined)).toEqual({
+        again: 1,
+        good: 2,
+        easy: 4,
+      });
+      expect(previewIntervals({})).toEqual({ again: 1, good: 2, easy: 4 });
+    });
+
+    it("matches scheduleRecall for every rating on a mature card", () => {
+      const mature = {
+        interval: 10,
+        easeFactor: 2.5,
+        consecutiveCorrect: 3,
+        timesReviewed: 4,
+        timesCorrect: 4,
+        lastReviewDate: "2026-10-29",
+      };
+      expect(previewIntervals(mature)).toEqual({
+        again: scheduleRecall(mature, "again").interval,
+        good: scheduleRecall(mature, "good").interval,
+        easy: scheduleRecall(mature, "easy").interval,
+      });
+      expect(previewIntervals(mature).again).toBe(1);
+      expect(previewIntervals(mature).good).toBe(25);
+      expect(previewIntervals(mature).easy).toBe(34);
+    });
+
+    it("previews the recovery intervals of a lapsed card", () => {
+      const lapsed = {
+        interval: 1,
+        easeFactor: 2.15,
+        consecutiveCorrect: 0,
+        lapseCount: 1,
+        timesReviewed: 3,
+        timesCorrect: 2,
+        lastReviewDate: "2026-10-30",
+      };
+      expect(previewIntervals(lapsed)).toEqual({
+        again: 1,
+        good: 2,
+        easy: 4,
+      });
+    });
   });
 });

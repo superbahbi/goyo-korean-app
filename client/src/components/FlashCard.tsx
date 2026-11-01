@@ -1,7 +1,7 @@
 import { memo, useCallback, useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Volume2, ChevronRight } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { playSentenceAudio, playVocabularyAudio } from "@/lib/audioPlayer";
@@ -102,13 +102,12 @@ function FlashCardBase({
       transition={{ duration: 0.3 }}
       className="w-full h-full flex flex-col items-center justify-center"
     >
-      {/* Mouse-only shortcut for flipping. The keyboard path is the labelled reveal
-          button in the session footer, so this surface stays a plain div and the
-          card never nests interactive controls inside a button role. */}
+      {/* The card surface is the mouse/touch reveal; the keyboard path is the
+          labelled reveal button in the session footer. No third hint is needed.
+          A flexible height on phones keeps the whole back visible above the
+          footer, while desktop keeps the portrait 3:4 card. */}
       <div
-        className={`w-full max-w-md aspect-[3/4] relative transition-all duration-500 cursor-pointer ${
-          isRevealed ? "scale-105" : ""
-        }`}
+        className="relative h-[min(60dvh,32rem)] w-full max-w-md cursor-pointer sm:h-auto sm:aspect-[3/4]"
         onClick={handleFlip}
       >
         {/* Front */}
@@ -120,23 +119,23 @@ function FlashCardBase({
             pointerEvents: isRevealed ? "none" : "auto",
           }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 overflow-y-auto bg-card border-2 border-border/70 rounded-3xl shadow-xl p-8 flex flex-col items-center justify-center text-center"
+          className="absolute inset-0 flex flex-col items-center justify-center overflow-y-auto rounded-3xl border-2 border-border/70 bg-card p-6 text-center shadow-xl sm:p-8"
         >
           <Badge
             variant="outline"
-            className="mb-8 capitalize text-muted-foreground font-medium bg-muted/60 border-border"
+            className="mb-6 capitalize border-border bg-muted/60 font-medium text-muted-foreground sm:mb-8"
           >
             {tag}
           </Badge>
           {audioFirst ? (
             <>
-              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400">
-                <Volume2 size={36} />
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400 sm:mb-5 sm:h-20 sm:w-20">
+                <Volume2 size={32} />
               </div>
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
                 Listen &amp; recall
               </p>
-              <h2 className="mt-3 text-2xl font-bold text-foreground/90">
+              <h2 className="mt-2 text-xl font-bold text-foreground/90 sm:mt-3 sm:text-2xl">
                 What does this mean?
               </h2>
               <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
@@ -168,7 +167,10 @@ function FlashCardBase({
               )}
             </>
           ) : (
-            <h2 className="text-5xl font-bold text-foreground mb-6" lang="ko">
+            <h2
+              className="mb-4 text-4xl font-bold text-foreground sm:mb-6 sm:text-5xl"
+              lang="ko"
+            >
               {cleanKoreanText(front)}
             </h2>
           )}
@@ -177,12 +179,12 @@ function FlashCardBase({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="text-2xl text-emerald-600 dark:text-emerald-400 font-mono font-semibold mb-8"
+              className="mb-6 font-mono text-xl font-semibold text-emerald-600 dark:text-emerald-400 sm:mb-8 sm:text-2xl"
             >
               {romanization}
             </motion.p>
           )}
-          <div className="mt-8 flex gap-4">
+          <div className="mt-5 flex items-center gap-3 sm:mt-8 sm:gap-4">
             <Button
               variant="secondary"
               size="icon"
@@ -211,10 +213,6 @@ function FlashCardBase({
               </Button>
             )}
           </div>
-          <div className="absolute bottom-12 flex items-center gap-2 text-sm text-muted-foreground">
-            {audioFirst ? "Tap to reveal meaning" : "Tap to reveal"}{" "}
-            <ChevronRight size={16} />
-          </div>
         </motion.div>
 
         {/* Back */}
@@ -226,34 +224,34 @@ function FlashCardBase({
             pointerEvents: isRevealed ? "auto" : "none",
           }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 dark:border-emerald-800/70 bg-gradient-to-br from-emerald-50 dark:from-emerald-950 via-background to-teal-50 dark:to-teal-950 p-7 text-center shadow-xl sm:p-9"
+          className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-background to-teal-50 p-5 text-center shadow-xl dark:border-emerald-800/70 dark:from-emerald-950 dark:to-teal-950 sm:p-9"
         >
           <div className="flex min-h-full flex-col items-center justify-center">
-            <Badge className="mb-5 bg-emerald-700 text-white shadow-sm">
+            <Badge className="mb-3 bg-emerald-700 text-white shadow-sm sm:mb-5">
               {audioFirst ? "Korean + meaning" : "Meaning"}
             </Badge>
             {audioFirst && (
               <p
-                className="text-5xl font-bold tracking-tight text-foreground"
+                className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl"
                 lang="ko"
               >
                 {cleanKoreanText(front)}
               </p>
             )}
             {romanization && (
-              <p className="mt-3 font-mono text-lg font-semibold text-emerald-700 dark:text-emerald-300">
+              <p className="mt-2 font-mono text-base font-semibold text-emerald-700 dark:text-emerald-300 sm:mt-3 sm:text-lg">
                 {romanization}
               </p>
             )}
-            <div className="my-6 h-px w-full max-w-xs bg-emerald-200 dark:bg-emerald-900/60" />
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-foreground/70">
+            <div className="my-4 h-px w-full max-w-xs bg-emerald-200 dark:bg-emerald-900/60 sm:my-6" />
+            <p className="mb-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-foreground/70 sm:mb-2">
               Meaning
             </p>
-            <h2 className="text-3xl font-bold leading-tight text-foreground">
+            <h2 className="text-2xl font-bold leading-tight text-foreground sm:text-3xl">
               {back}
             </h2>
             {example && (
-              <div className="mt-6 max-w-xs rounded-2xl border border-emerald-200 dark:border-emerald-800/70 bg-card/80 p-4 shadow-sm">
+              <div className="mt-4 max-w-xs rounded-2xl border border-emerald-200 bg-card/80 p-3 shadow-sm dark:border-emerald-800/70 sm:mt-6 sm:p-4">
                 <p className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
                   In context
                 </p>
@@ -293,7 +291,7 @@ function FlashCardBase({
               </div>
             )}
             {usageNote && (
-              <div className="mt-3 max-w-xs rounded-2xl border border-border bg-card/60 px-4 py-3 text-left">
+              <div className="mt-2 max-w-xs rounded-2xl border border-border bg-card/60 px-4 py-3 text-left sm:mt-3">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-foreground/70">
                   Usage note
                 </p>
