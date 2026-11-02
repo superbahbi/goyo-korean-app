@@ -1,7 +1,8 @@
+import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-const PROGRESS_KEY = "goyo-progress-v2";
+const PROGRESS_KEY = PROGRESS_STORAGE_KEY;
 
 function dayKey(offset = 0) {
   const date = new Date();

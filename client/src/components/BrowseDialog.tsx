@@ -21,6 +21,7 @@ import {
   stopAudio,
 } from "@/lib/audioPlayer";
 import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
+import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 
 const BROWSE_PAGE_SIZE = 40;
 
@@ -49,11 +50,16 @@ export function BrowseDialog({
   const [showRomanization, setShowRomanization] = useState<
     Record<string, boolean>
   >({});
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [playingCardId, setPlayingCardId] = useState<string | null>(null);
-  const [playingSentenceId, setPlayingSentenceId] = useState<string | null>(
-    null
-  );
+  const playback = useAudioPlayback();
+  const playingCardId =
+    playback.playing && playback.clip?.kind === "vocabulary"
+      ? playback.clip.id
+      : null;
+  const playingSentenceId =
+    playback.playing && playback.clip?.kind === "sentence"
+      ? playback.clip.id
+      : null;
+  const isSpeaking = playingCardId !== null;
   const sentenceAudioIds = useSentenceAudioIds();
 
   useEffect(() => {
@@ -87,24 +93,12 @@ export function BrowseDialog({
   });
   const visibleCards = filteredCards.slice(0, visibleCount);
 
-  const speakKorean = async (wordId: string) => {
-    setIsSpeaking(true);
-    setPlayingCardId(wordId);
-    try {
-      await playVocabularyAudio(wordId);
-    } finally {
-      setIsSpeaking(false);
-      setPlayingCardId(null);
-    }
+  const speakKorean = (wordId: string) => {
+    void playVocabularyAudio(wordId);
   };
 
-  const speakSentence = async (cardId: string) => {
-    setPlayingSentenceId(cardId);
-    try {
-      await playSentenceAudio(cardId);
-    } finally {
-      setPlayingSentenceId(null);
-    }
+  const speakSentence = (cardId: string) => {
+    void playSentenceAudio(cardId);
   };
 
   const toggleRomanization = (cardId: string) => {
@@ -120,8 +114,6 @@ export function BrowseDialog({
       onOpenChange={next => {
         if (!next) {
           stopAudio();
-          setPlayingCardId(null);
-          setPlayingSentenceId(null);
         }
         onOpenChange(next);
       }}
@@ -204,8 +196,8 @@ export function BrowseDialog({
           playingSentenceId={playingSentenceId}
           sentenceAudioIds={sentenceAudioIds}
           isSpeaking={isSpeaking}
-          onSpeak={cardId => speakKorean(cardId)}
-          onSpeakSentence={cardId => void speakSentence(cardId)}
+          onSpeak={speakKorean}
+          onSpeakSentence={speakSentence}
           onToggleRomanization={toggleRomanization}
           onLoadMore={() =>
             setVisibleCount(count =>

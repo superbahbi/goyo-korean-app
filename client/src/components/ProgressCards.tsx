@@ -1,12 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import type { TodayProgress } from "@/lib/dashboardProgress";
+import type { TodayPlan } from "@/lib/dashboardView";
 import { BookOpen, Languages, Play, TrendingUp, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface ProgressCardsProps {
-  firstRun: boolean;
-  todayProgress: TodayProgress;
+  plan: TodayPlan;
   level: number;
   levelTitle: string;
   levelProgress: number;
@@ -20,8 +19,7 @@ interface ProgressCardsProps {
 
 /** Compact stat strip, or the first-run "start here" block. */
 export function ProgressCards({
-  firstRun,
-  todayProgress,
+  plan,
   level,
   levelTitle,
   levelProgress,
@@ -32,6 +30,7 @@ export function ProgressCards({
   onStartSession,
   onOpenAlphabet,
 }: ProgressCardsProps) {
+  const { firstRun, progress: todayProgress } = plan;
   if (firstRun) {
     const words = todayProgress.planned;
     return (

@@ -1,3 +1,4 @@
+import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // axe checks markup rules. These checks cover what it does not: the keyboard
@@ -5,7 +6,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 // what the aria-live regions expose after a grade, and whether Tab and arrow
 // keys reach the dashboard cards and the Stats category list.
 
-const PROGRESS_KEY = "goyo-progress-v2";
+const PROGRESS_KEY = PROGRESS_STORAGE_KEY;
 
 function dayKey(offset = 0) {
   const date = new Date();

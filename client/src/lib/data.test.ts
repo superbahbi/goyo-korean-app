@@ -6,6 +6,7 @@ import { loadVocabularyDeck, CURATED_CARDS } from "./vocabulary";
 import { ESSENTIAL_WORDS } from "./essentialVocabulary";
 import { romanize } from "./romanize";
 import { GRAMMAR_SENTENCE_LINES } from "./grammar";
+import { parseAudioManifest } from "./audioIndex";
 
 // Genuine homonyms kept as separate cards: 차 car/tea, 눈 eye/snow, 배 boat-pear/stomach,
 // 다리 bridge/leg, 열 ten/fever, 분 minute/honorific person, 공 ball/zero, 병 bottle/illness.
@@ -21,16 +22,11 @@ const HOMONYM_FRONTS = [
 ].sort();
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..", "..", "..");
-const manifest = JSON.parse(
-  readFileSync(path.join(REPO_ROOT, "public/audio/index.json"), "utf8")
-) as {
-  vocabulary: Record<string, string>;
-  sentences?: Record<string, string>;
-  female: {
-    vocabulary: Record<string, string>;
-    sentences?: Record<string, string>;
-  };
-};
+const manifest = parseAudioManifest(
+  JSON.parse(
+    readFileSync(path.join(REPO_ROOT, "public/audio/index.json"), "utf8")
+  )
+);
 
 // Revised Romanization writes ll for a geminate ㄹㄹ (얼룩 eolluk), so ll is only an error elsewhere.
 function hasGeminateRieul(text: string): boolean {
@@ -95,13 +91,14 @@ describe("combined vocabulary deck", async () => {
   it("gives every study-ready card a male and female audio entry in the manifest", () => {
     for (const card of STUDY_READY_VOCABULARY) {
       const male = manifest.vocabulary[card.id];
-      const female = manifest.female.vocabulary[card.id];
+      const female = manifest.female?.vocabulary[card.id];
       expect(male, `male ${card.id}`).toMatch(
         new RegExp(`^elevenlabs_${card.id}\\.[0-9a-f]{8}\\.mp3$`)
       );
       expect(female, `female ${card.id}`).toMatch(
         new RegExp(`^elevenlabs_female_${card.id}\\.[0-9a-f]{8}\\.mp3$`)
       );
+      if (!female) continue;
       expect(existsSync(path.join(REPO_ROOT, "public/audio", male)), male).toBe(
         true
       );

@@ -1,3 +1,4 @@
+import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -7,7 +8,7 @@ import path from "node:path";
 // cannot: gesture-gated audio, the iOS Home Screen meta tags and WebKit's
 // service worker and offline behaviour.
 
-const PROGRESS_KEY = "goyo-progress-v2";
+const PROGRESS_KEY = PROGRESS_STORAGE_KEY;
 const INSTALL_HINT_KEY = "goyo-ios-install-hint";
 
 function dayKey(offset = 0) {

@@ -39,7 +39,13 @@ interface GradeRecord {
   responseTimeMs: number;
 }
 
-function setup(options: { queue?: VocabularyCard[]; startAt?: number } = {}) {
+function setup(
+  options: {
+    queue?: VocabularyCard[];
+    startAt?: number;
+    isNewCard?: (cardId: string) => boolean;
+  } = {}
+) {
   let now = options.startAt ?? 0;
   const grades: GradeRecord[] = [];
   const stopAudio = vi.fn();
@@ -47,6 +53,7 @@ function setup(options: { queue?: VocabularyCard[]; startAt?: number } = {}) {
   const session = createStudySession({
     queue: options.queue ?? [card("a"), card("b")],
     clock: () => now,
+    isNewCard: options.isNewCard ?? (() => true),
     onGrade: (cardId, rating, gradeOptions) => {
       grades.push({
         cardId,
@@ -151,12 +158,95 @@ describe("grade lock", () => {
     const { session, grades } = setup();
 
     session.grade("good");
-    session.releaseGradeLock();
+    session.cardShown();
     session.grade("easy");
 
     expect(grades).toHaveLength(2);
     expect(grades[1]).toMatchObject({ cardId: "b", rating: "easy" });
     expect(session.getState().completed).toBe(true);
+  });
+});
+
+describe("lock handshake", () => {
+  it("keeps the lock until cardShown is called, not just until the index moves", () => {
+    const { session, grades } = setup();
+
+    session.grade("good");
+    session.grade("good");
+    expect(grades).toHaveLength(1);
+    expect(session.getState().gradingLocked).toBe(true);
+
+    session.cardShown();
+    expect(session.getState().gradingLocked).toBe(false);
+  });
+
+  it("ignores a second grade while the lock is held, even on a new index", () => {
+    const { session, grades } = setup();
+
+    session.grade("again");
+    session.grade("easy");
+
+    expect(grades).toHaveLength(1);
+    expect(session.getState().index).toBe(1);
+    expect(session.getState().results.again).toBe(1);
+  });
+});
+
+describe("phase", () => {
+  it("opens a never-seen card on its intro phase", () => {
+    const { session } = setup({ queue: [card("a")] });
+
+    expect(session.getState().phase).toBe("intro");
+  });
+
+  it("skips the intro for a card with saved state", () => {
+    const { session } = setup({
+      queue: [card("a")],
+      isNewCard: () => false,
+    });
+
+    expect(session.getState().phase).toBe("recall");
+  });
+
+  it("moves intro → recall → revealed and back", () => {
+    const { session } = setup({ queue: [card("a")] });
+
+    session.dismissIntro();
+    expect(session.getState().phase).toBe("recall");
+
+    session.setRevealed(true);
+    expect(session.getState().phase).toBe("revealed");
+
+    session.setRevealed(false);
+    expect(session.getState().phase).toBe("recall");
+  });
+
+  it("shows the next card's phase after a grade and completes after the last", () => {
+    const { session } = setup({ queue: [card("a"), card("b")] });
+
+    session.dismissIntro();
+    session.setRevealed(true);
+    session.grade("good");
+    session.cardShown();
+    expect(session.getState()).toMatchObject({ index: 1, phase: "intro" });
+
+    session.dismissIntro();
+    session.setRevealed(true);
+    session.grade("good");
+    expect(session.getState().phase).toBe("completed");
+  });
+
+  it("returns to the first card's phase after restart", () => {
+    const { session } = setup({ queue: [card("a")] });
+
+    session.dismissIntro();
+    session.setRevealed(true);
+    session.grade("good");
+    session.restart();
+
+    expect(session.getState().phase).toBe("intro");
+    session.dismissIntro();
+    expect(session.getState().phase).toBe("recall");
   });
 });
 
@@ -177,7 +267,7 @@ describe("again retries", () => {
     const { session, grades } = setup({ queue: [card("a")] });
 
     session.grade("again");
-    session.releaseGradeLock();
+    session.cardShown();
     session.grade("again");
 
     const state = session.getState();
@@ -191,7 +281,7 @@ describe("again retries", () => {
     const { session } = setup({ queue: [card("a")] });
 
     session.grade("again");
-    session.releaseGradeLock();
+    session.cardShown();
     session.grade("good");
 
     expect(session.getState().results).toEqual({
@@ -227,9 +317,9 @@ describe("restart", () => {
     session.markProductionDone();
     session.setRevealed(true);
     session.grade("again");
-    session.releaseGradeLock();
+    session.cardShown();
     session.grade("good");
-    session.releaseGradeLock();
+    session.cardShown();
     session.grade("easy");
 
     expect(session.getState().completed).toBe(true);

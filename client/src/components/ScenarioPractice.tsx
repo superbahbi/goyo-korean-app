@@ -14,6 +14,7 @@ import {
 import { SCENARIOS } from "@/components/practice/scenarios";
 import { ScenarioPrompt } from "@/components/practice/ScenarioPrompt";
 import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
+import { ratingForVerdict } from "@/lib/practiceVerdict";
 
 interface ScenarioPracticeProps {
   cards: VocabularyCard[];
@@ -35,7 +36,7 @@ export function ScenarioPractice({
   onGrade,
   onClose,
 }: ScenarioPracticeProps) {
-  const { state, current, answer, next, restart } =
+  const { state, current, verdict, answer, next, restart } =
     useQuestionLoop<ScenarioQuestion>(() => {
       const cardMap = new Map(cards.map(card => [card.id, card]));
       // Scenarios only use cards the learner has already met, so this mode
@@ -65,9 +66,7 @@ export function ScenarioPractice({
       });
     });
 
-  const answered = state.verdict !== "unanswered";
-  const isCorrect = state.verdict === "correct";
-  const isLast = state.index === state.questions.length - 1;
+  const { answered, isCorrect, isLast } = verdict;
 
   const closePractice = () => {
     stopAudio();
@@ -123,7 +122,7 @@ export function ScenarioPractice({
   const choose = (card: VocabularyCard) => {
     if (answered) return;
     const result = answer(card.id);
-    onGrade(current.card.id, result.verdict === "correct" ? "good" : "again");
+    onGrade(current.card.id, ratingForVerdict(result.verdict === "correct"));
   };
 
   const nextScenario = () => {
@@ -170,7 +169,7 @@ export function ScenarioPractice({
             labelLang="ko"
             answered={answered}
             chosen={state.selectedId === choice.id}
-            correct={choice.id === current.card.id}
+            correct={choice.id === verdict.correctId}
             onChoose={() => choose(choice)}
           />
         ))}

@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { playSentenceAudio, playVocabularyAudio } from "@/lib/audioPlayer";
+import { useAutoPlayOnce } from "@/hooks/useAutoPlayOnce";
 import type { VocabularyCard } from "@/lib/vocabulary";
 
 interface NewCardIntroProps {
@@ -24,16 +24,11 @@ export function NewCardIntro({
   onStart,
 }: NewCardIntroProps) {
   // Auto-play the pronunciation once per word, not on every re-render.
-  const autoPlayedId = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (!autoPlayAudio || autoPlayedId.current === card.id) return;
-    const timer = window.setTimeout(() => {
-      autoPlayedId.current = card.id;
-      void playVocabularyAudio(card.id);
-    }, 300);
-    return () => window.clearTimeout(timer);
-  }, [autoPlayAudio, card.id]);
+  useAutoPlayOnce({
+    clipId: card.id,
+    enabled: autoPlayAudio,
+    play: playVocabularyAudio,
+  });
 
   return (
     <div className="mx-auto mt-2 w-full max-w-md rounded-3xl border border-emerald-200 bg-card/95 p-6 text-center shadow-xl dark:border-emerald-800/70 sm:p-8">

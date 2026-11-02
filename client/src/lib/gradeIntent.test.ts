@@ -52,7 +52,7 @@ describe("evaluateGrade", () => {
       advanced: true,
       countsAsNewCard: true,
       goalJustReached: false,
-      repeatPractice: false,
+      repeatable: false,
     });
   });
 
@@ -63,7 +63,7 @@ describe("evaluateGrade", () => {
       countsAsNewCard: true,
       xp: 0,
       goalJustReached: false,
-      repeatPractice: true,
+      repeatable: true,
     });
   });
 
@@ -75,11 +75,11 @@ describe("evaluateGrade", () => {
   it("keeps earning XP in weak and learning practice past the goal", () => {
     expect(decide({ mode: "weak", studiedToday: 10 })).toMatchObject({
       xp: 10,
-      repeatPractice: false,
+      repeatable: true,
     });
     expect(decide({ mode: "learning", studiedToday: 10 })).toMatchObject({
       xp: 10,
-      repeatPractice: false,
+      repeatable: true,
     });
   });
 
@@ -148,7 +148,7 @@ describe("evaluateGrade", () => {
       countsAsNewCard: false,
       xp: 0,
       goalJustReached: false,
-      repeatPractice: false,
+      repeatable: false,
     });
   });
 });

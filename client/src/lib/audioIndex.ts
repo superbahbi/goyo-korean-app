@@ -192,14 +192,14 @@ export interface AudioIndexStore {
   get(): Promise<AudioManifest>;
   /** Start loading without waiting; a failure is left for the next get(). */
   prefetch(): void;
-  reset(): void;
   /**
-   * Store one clip under its real URL for offline playback. Resolves without a
-   * request when the clip is already cached or the Cache API is unavailable.
-   * Rejects when the network, cache lookup, or cache put fails so a batch
-   * download can report failure; playback callers swallow the rejection.
+   * Store one clip under its real URL for offline playback. Resolves true when
+   * the clip is stored or already cached, false when it was skipped (no Cache
+   * API, no fetch, a non-200, or a non-audio response). Rejects when the
+   * network, cache lookup, or cache put fails so a batch download can report
+   * failure; playback callers swallow the rejection.
    */
-  warm(audioPath: string): Promise<void>;
+  warm(audioPath: string): Promise<boolean>;
   /** Drop one clip from the offline cache. Always resolves. */
   forget(audioPath: string): Promise<void>;
 }
@@ -261,18 +261,13 @@ export function createAudioIndexStore(
     void get().catch(() => {});
   };
 
-  const reset = () => {
-    manifest = null;
-    pending = null;
-  };
-
-  const warm = async (audioPath: string): Promise<void> => {
+  const warm = async (audioPath: string): Promise<boolean> => {
     const cacheStorage = dependencies.caches ?? browserCaches();
     const fetchImpl = dependencies.fetch ?? browserFetch();
-    if (!cacheStorage || !fetchImpl) return;
+    if (!cacheStorage || !fetchImpl) return false;
 
     const cache = await cacheStorage.open(AUDIO_CACHE_NAME);
-    if (await cache.match(audioPath)) return;
+    if (await cache.match(audioPath)) return true;
 
     // The ?warm=1 suffix keeps this out of the service worker's mp3 rule, so
     // the response is a complete 200 the Cache API can store under the real
@@ -282,7 +277,9 @@ export function createAudioIndexStore(
     const type = response.headers.get("content-type") ?? "";
     if (response.status === 200 && type.startsWith("audio/")) {
       await cache.put(audioPath, response);
+      return true;
     }
+    return false;
   };
 
   const forget = async (audioPath: string): Promise<void> => {
@@ -296,7 +293,7 @@ export function createAudioIndexStore(
     }
   };
 
-  return { peek: () => manifest, get, prefetch, reset, warm, forget };
+  return { peek: () => manifest, get, prefetch, warm, forget };
 }
 
 const defaultStore = createAudioIndexStore();
@@ -313,15 +310,7 @@ export function getAudioIndex(): Promise<AudioManifest> {
   return defaultStore.get();
 }
 
-export function prefetchAudioIndex(): void {
-  defaultStore.prefetch();
-}
-
-export function resetAudioIndex(): void {
-  defaultStore.reset();
-}
-
-export function warmAudioClip(audioPath: string): Promise<void> {
+export function warmAudioClip(audioPath: string): Promise<boolean> {
   return defaultStore.warm(audioPath);
 }
 

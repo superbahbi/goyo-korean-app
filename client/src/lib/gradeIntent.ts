@@ -106,8 +106,8 @@ export interface GradeDecision {
   xp: number;
   /** This grade crosses the daily goal for the first time. */
   goalJustReached: boolean;
-  /** Daily practice offered after the goal is met. */
-  repeatPractice: boolean;
+  /** Practice-again is offered on the session summary after this grade. */
+  repeatable: boolean;
 }
 
 export function evaluateGrade(
@@ -124,7 +124,7 @@ export function evaluateGrade(
       countsAsNewCard: false,
       xp: 0,
       goalJustReached: false,
-      repeatPractice: false,
+      repeatable: false,
     };
   }
 
@@ -140,19 +140,23 @@ export function evaluateGrade(
   const earnsXp =
     policy.xpEligibility === "always" ||
     (policy.xpEligibility === "until-goal" && !progress.reached);
+  // The day counter keys off distinct cards, not XP: a same-day lapse can award
+  // XP without crossing the goal.
+  const goalJustReached =
+    !progress.reached &&
+    countsAsNewCard &&
+    context.studiedToday + 1 >= context.dailyGoal;
 
   return {
     schedule,
     advanced,
     countsAsNewCard,
     xp: earnsXp && advanced ? XP_BY_RATING[rating] : 0,
-    // The day counter keys off distinct cards, not XP: a same-day lapse can
-    // award XP without crossing the goal.
-    goalJustReached:
-      !progress.reached &&
-      countsAsNewCard &&
-      context.studiedToday + 1 >= context.dailyGoal,
-    repeatPractice: policy.xpEligibility === "until-goal" && progress.reached,
+    goalJustReached,
+    repeatable: repeatableSession(
+      context.mode,
+      progress.reached || goalJustReached
+    ),
   };
 }
 

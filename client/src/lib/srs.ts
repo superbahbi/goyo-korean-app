@@ -243,8 +243,3 @@ export function scheduleReview(
     schedule: capRecognitionSchedule(result.schedule, existing),
   };
 }
-
-export function getRecallAccuracy(state?: SrsCardState) {
-  if (!state?.timesReviewed) return 0;
-  return Math.round(((state.timesCorrect ?? 0) / state.timesReviewed) * 100);
-}

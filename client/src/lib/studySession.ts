@@ -1,4 +1,5 @@
 import type { CardState } from "@/lib/mastery";
+import type { StudyPhase } from "@/lib/studyKeys";
 import type { VocabularyCard } from "@/lib/vocabulary";
 
 export type StudyRating = "again" | "good" | "easy";
@@ -64,6 +65,8 @@ export interface StudySessionState {
   production: StudyProductionState;
   /** True from a grade until the next card has painted. */
   gradingLocked: boolean;
+  /** What the current card is showing: intro, recall, revealed, or summary. */
+  phase: StudyPhase;
   /** Clock reading when the current card became the prompt. */
   cardStartedAt: number;
   /** Display-to-first-reveal latency; null until the card is revealed. */
@@ -85,6 +88,11 @@ export interface StudySessionDependencies {
 
 export interface StudySessionConfig extends StudySessionDependencies {
   queue: readonly VocabularyCard[];
+  /**
+   * Whether a card has no saved state yet. The machine uses this, plus the cards
+   * already introduced this session, to derive the intro phase.
+   */
+  isNewCard: (cardId: string) => boolean;
 }
 
 /**
@@ -105,8 +113,11 @@ export interface StudySession {
   dismissIntro(): void;
   setRevealed(revealed: boolean): void;
   grade(rating: StudyRating): void;
-  /** Release the grade lock once the next card has painted. */
-  releaseGradeLock(): void;
+  /**
+   * The next card has painted. This is the only command that releases the grade
+   * lock, so a double click cannot grade the same card twice.
+   */
+  cardShown(): void;
   restart(): void;
   setProductionAttempt(value: string): void;
   markProductionDone(): void;
@@ -118,6 +129,7 @@ export interface StudySession {
 export function createStudySession({
   queue,
   clock,
+  isNewCard,
   onGrade,
   stopAudio,
   onClose,
@@ -134,6 +146,7 @@ export function createStudySession({
     introducedIds: new Set(),
     production: COLLAPSED_PRODUCTION,
     gradingLocked: false,
+    phase: "recall",
     cardStartedAt: clock(),
     recallTimeMs: null,
   };
@@ -143,10 +156,22 @@ export function createStudySession({
 
   const listeners = new Set<() => void>();
 
+  /** The view phase is derived here, from the same state the view renders. */
+  const derivePhase = (next: StudySessionState): StudyPhase => {
+    if (next.completed) return "completed";
+    const card = next.queue[next.index];
+    if (card && !next.introducedIds.has(card.id) && isNewCard(card.id)) {
+      return "intro";
+    }
+    return next.revealed ? "revealed" : "recall";
+  };
+
   const setState = (next: StudySessionState) => {
-    state = next;
+    state = { ...next, phase: derivePhase(next) };
     listeners.forEach(listener => listener());
   };
+
+  state = { ...state, phase: derivePhase(state) };
 
   const dismissIntro = () => {
     const card = state.queue[state.index];
@@ -223,9 +248,9 @@ export function createStudySession({
   };
 
   // Releasing inside the grade handler would let the second click of a double
-  // click through before the next card renders, so the adapter does it in an
-  // effect keyed on the index.
-  const releaseGradeLock = () => {
+  // click through before the next card renders, so the adapter calls this after
+  // the next card has painted.
+  const cardShown = () => {
     if (!state.gradingLocked) return;
     setState({ ...state, gradingLocked: false });
   };
@@ -242,6 +267,7 @@ export function createStudySession({
       introducedIds: new Set(),
       production: COLLAPSED_PRODUCTION,
       gradingLocked: false,
+      phase: "recall",
       cardStartedAt: clock(),
       recallTimeMs: null,
     });
@@ -288,7 +314,7 @@ export function createStudySession({
     dismissIntro,
     setRevealed,
     grade,
-    releaseGradeLock,
+    cardShown,
     restart,
     setProductionAttempt,
     markProductionDone,

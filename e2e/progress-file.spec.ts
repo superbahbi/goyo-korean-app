@@ -1,7 +1,8 @@
+import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 
-const PROGRESS_KEY = "goyo-progress-v2";
+const PROGRESS_KEY = PROGRESS_STORAGE_KEY;
 
 test("exports progress and imports the same file back", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.clear());

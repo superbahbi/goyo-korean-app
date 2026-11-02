@@ -62,8 +62,10 @@ export function DownloadAllAudio() {
       for (let start = 0; start < urls.length; start += BATCH_SIZE) {
         if (cancelRef.current) break;
         const batch = urls.slice(start, start + BATCH_SIZE);
-        await Promise.all(batch.map(url => warmAudioClip(url)));
-        done += batch.length;
+        // Count only clips that actually landed in the cache: a missing clip
+        // must not inflate the offline total.
+        const stored = await Promise.all(batch.map(url => warmAudioClip(url)));
+        done += stored.filter(Boolean).length;
         setDownload({
           total: urls.length,
           done: Math.min(done, urls.length),
@@ -77,7 +79,10 @@ export function DownloadAllAudio() {
         });
       } else {
         toast.success("Audio is ready offline", {
-          description: `${urls.length} clips are stored on this device.`,
+          description:
+            done === urls.length
+              ? `${done} clips are stored on this device.`
+              : `${done} of ${urls.length} clips are stored on this device.`,
         });
       }
       setDownload(null);

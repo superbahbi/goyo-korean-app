@@ -16,8 +16,9 @@ import { QuickLinks } from "@/components/QuickLinks";
 import { CategoryGrid } from "@/components/CategoryGrid";
 import {
   HomeDialogHost,
-  type HomeDialogDeps,
+  type StudySessionDeps,
 } from "@/components/HomeDialogHost";
+import type { HomeDialogDeps } from "@/components/dialogs/registry";
 import {
   markIosInstallHintShown,
   shouldSuggestIosInstall,
@@ -45,35 +46,7 @@ export default function Home() {
   // never triggers the one-time iPhone install hint.
   const cardsStudiedTodayRef = useRef<number | null>(null);
 
-  const {
-    cardsStudiedToday,
-    daysStudied7,
-    daysStudied30,
-    reviews7,
-    masteryCounts,
-    reviewStats,
-    categoryMastery,
-    queue,
-    recognitionCards,
-    weakCards,
-    learningCards,
-    reviewForecast,
-    extendedReviewForecast,
-    forecastTotal,
-    forecastPeak,
-    workloadStatus,
-    cardsRemaining,
-    plannedCards,
-    newCardsPlanned,
-    firstRun,
-    todayProgress,
-    dailyGoalReached,
-    levelTitle,
-    nextLevelXp,
-    levelProgress,
-    overdueCount,
-    nextScheduledReview,
-  } = useHomeDashboard({
+  const view = useHomeDashboard({
     vocabulary,
     studyReady,
     cardStates: state.cardStates,
@@ -84,6 +57,7 @@ export default function Home() {
     newCardsPerDay: state.settings.newCardsPerDay,
     level: state.stats.level,
     totalXp: state.stats.totalXp,
+    streak: state.stats.streak,
   });
 
   const {
@@ -101,14 +75,11 @@ export default function Home() {
     handleShadowingGrade,
     closeSession,
   } = useHomeSessions({
-    cardStates: state.cardStates,
-    today,
-    dailyGoal: state.settings.dailyGoal,
-    cardsStudiedToday,
-    queue,
-    weakCards,
-    learningCards,
-    recognitionCards,
+    modes: view.modes,
+    queue: view.pools.queue,
+    weakCards: view.pools.weakCards,
+    learningCards: view.pools.learningCards,
+    recognitionCards: view.pools.recognitionCards,
     gradeCard,
   });
 
@@ -132,8 +103,6 @@ export default function Home() {
     });
   }, [state, today]);
 
-  const { totalReviews, overallAccuracy, medianResponseTime } = reviewStats;
-
   const openBrowse = (category: string | null = lastBrowseCategory.current) => {
     lastBrowseCategory.current = category;
     open({ kind: "browse", category });
@@ -142,45 +111,26 @@ export default function Home() {
   const dialogDeps: HomeDialogDeps = {
     today,
     state,
-    updateSettings,
-    replaceState,
+    settings: { updateSettings, replaceState },
+    grammar: { progress: state.grammar, onComplete: recordGrammarResult },
+    recognition: {
+      cards: recognitionSessionCards,
+      onListeningGrade: handleListeningGrade,
+      onScenarioGrade: handleScenarioGrade,
+    },
+    shadowing: { cards: studyReady, onGrade: handleShadowingGrade },
+    browse: { vocabulary },
+    stats: view.dialog.stats,
+    forecast: view.dialog.forecast,
+  };
+
+  const studyDeps: StudySessionDeps = {
     isStudying,
-    sessionQueue,
-    sessionMode,
-    dailyGoalReached,
+    queue: sessionQueue,
+    mode: sessionMode,
+    dailyGoalReached: view.today.dailyGoalReached,
     onGrade: handleGrade,
-    onCloseSession: closeSession,
-    recognitionCards: recognitionSessionCards,
-    studyReady,
-    onListeningGrade: handleListeningGrade,
-    onScenarioGrade: handleScenarioGrade,
-    onShadowingGrade: handleShadowingGrade,
-    grammarProgress: state.grammar,
-    onGrammarComplete: recordGrammarResult,
-    vocabulary,
-    stats: {
-      level: state.stats.level,
-      totalXp: state.stats.totalXp,
-      nextLevelXp,
-      streak: state.stats.streak,
-      levelTitle,
-      levelProgress,
-      totalReviews,
-      overallAccuracy,
-      masteredCount: masteryCounts.known,
-      medianResponseTime,
-      overdueCount,
-      daysStudied7,
-      daysStudied30,
-      reviews7,
-      masteryCounts,
-      categories: categoryMastery,
-    },
-    forecast: {
-      days: extendedReviewForecast,
-      total: forecastTotal,
-      peak: forecastPeak,
-    },
+    onClose: closeSession,
   };
 
   return (
@@ -196,54 +146,43 @@ export default function Home() {
         <SaveAlerts saveBlocked={saveBlocked} saveError={saveError} />
 
         {/* First run gets one primary action, not a hero plus a start card. */}
-        {!firstRun && (
-          <WelcomeCard
-            cardsRemaining={cardsRemaining}
-            plannedCards={plannedCards}
-            newCards={newCardsPlanned}
-            overdueCount={overdueCount}
-            dailyGoalReached={dailyGoalReached}
-            onStartSession={startSession}
-          />
+        {!view.today.firstRun && (
+          <WelcomeCard plan={view.today.plan} onStartSession={startSession} />
         )}
 
         <ProgressCards
-          firstRun={firstRun}
-          todayProgress={todayProgress}
+          plan={view.today.plan}
           level={state.stats.level}
-          levelTitle={levelTitle}
-          levelProgress={levelProgress}
+          levelTitle={view.stats.levelTitle}
+          levelProgress={view.stats.levelProgress}
           totalXp={state.stats.totalXp}
-          nextLevelXp={nextLevelXp}
+          nextLevelXp={view.stats.nextLevelXp}
           totalCardsLearned={state.stats.totalCardsLearned}
           studyReadyCount={studyReady.length}
           onStartSession={startSession}
           onOpenAlphabet={() => open({ kind: "alphabet" })}
         />
 
-        {!firstRun && (
-          <ReviewPlanCard
-            today={today}
-            overdueCount={overdueCount}
-            nextScheduledReview={nextScheduledReview}
-            forecast={reviewForecast}
-            forecastPeak={forecastPeak}
-            workloadStatus={workloadStatus}
-          />
+        {!view.today.firstRun && (
+          <ReviewPlanCard today={today} review={view.review} />
         )}
 
         <PracticeMenu
-          quiet={firstRun}
-          weakCardCount={weakCards.length}
-          learningCardCount={learningCards.length}
+          quiet={view.today.firstRun}
+          weakCardCount={view.pools.weakCards.length}
+          learningCardCount={view.pools.learningCards.length}
           grammarCompleted={state.grammar.completedLessonIds.length}
           onOpenAlphabet={() => open({ kind: "alphabet" })}
           onOpenGrammar={() => open({ kind: "grammar" })}
           onOpenListening={() =>
-            openRecognitionPractice(() => open({ kind: "listening" }))
+            openRecognitionPractice("listening", () =>
+              open({ kind: "listening" })
+            )
           }
           onOpenScenarios={() =>
-            openRecognitionPractice(() => open({ kind: "scenario" }))
+            openRecognitionPractice("scenario", () =>
+              open({ kind: "scenario" })
+            )
           }
           onOpenShadowing={() => open({ kind: "shadowing" })}
           onStartWeakSession={startWeakSession}
@@ -255,9 +194,9 @@ export default function Home() {
           onOpenStats={() => open({ kind: "stats" })}
         />
 
-        {!firstRun && (
+        {!view.today.firstRun && (
           <CategoryGrid
-            categories={categoryMastery}
+            categories={view.stats.categories}
             vocabularyCount={vocabulary.length}
             onViewAll={() => {
               openBrowse(null);
@@ -269,7 +208,12 @@ export default function Home() {
         )}
       </main>
 
-      <HomeDialogHost dialog={activeDialog} onClose={close} deps={dialogDeps} />
+      <HomeDialogHost
+        dialog={activeDialog}
+        onClose={close}
+        deps={dialogDeps}
+        study={studyDeps}
+      />
     </div>
   );
 }

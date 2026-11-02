@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { selectShadowingCards } from "@/lib/queue";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,6 +15,8 @@ import { motion } from "framer-motion";
 import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
+import { ratingForVerdict } from "@/lib/practiceVerdict";
+import { useAutoPlayOnce } from "@/hooks/useAutoPlayOnce";
 import {
   PracticePrimaryButton,
   PracticeShell,
@@ -30,27 +33,18 @@ export function ShadowingPractice({
   onGrade,
   onClose,
 }: ShadowingPracticeProps) {
-  const queue = useMemo(
-    () =>
-      cards
-        .filter(card => card.tag === "survival" || card.tag === "daily")
-        .slice(0, 8),
-    [cards]
-  );
+  const queue = useMemo(() => selectShadowingCards(cards), [cards]);
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [shadowed, setShadowed] = useState(false);
   const [complete, setComplete] = useState(false);
   const currentCard = queue[index];
 
-  useEffect(() => {
-    if (!currentCard || complete) return;
-    const timer = window.setTimeout(
-      () => void playVocabularyAudio(currentCard.id),
-      300
-    );
-    return () => window.clearTimeout(timer);
-  }, [currentCard, complete]);
+  useAutoPlayOnce({
+    clipId: complete ? null : (currentCard?.id ?? null),
+    enabled: true,
+    play: playVocabularyAudio,
+  });
 
   useEffect(() => () => stopAudio(), []);
 
@@ -69,7 +63,7 @@ export function ShadowingPractice({
 
   const next = () => {
     if (!currentCard) return;
-    onGrade(currentCard.id, shadowed ? "good" : "again");
+    onGrade(currentCard.id, ratingForVerdict(shadowed));
     if (index === queue.length - 1) {
       stopAudio();
       setComplete(true);

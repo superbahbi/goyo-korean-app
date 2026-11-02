@@ -1,32 +1,13 @@
 import { useMemo } from "react";
-import {
-  getMasteryState,
-  type CardState,
-  type MasteryState,
-} from "@/hooks/useStudyState";
+import type { CardState } from "@/hooks/useStudyState";
 import type { StudyDays } from "@/lib/studyDays";
-import { daysStudiedWithin, reviewsWithin } from "@/lib/studyDays";
-import { CATEGORIES, type VocabularyCard } from "@/lib/vocabulary";
 import {
-  buildDailyQueue,
-  buildReviewForecast,
-  countOverdue,
-  nextScheduledReview as getNextScheduledReview,
-  selectLearningCards,
-  selectRecognitionCards,
-  selectWeakCards,
-  summarizeForecast,
-} from "@/lib/queue";
-import {
-  levelProgress as getLevelProgress,
-  levelTitle as getLevelTitle,
-  xpToReachLevel,
-} from "@/lib/xp";
-import {
-  describeTodayProgress,
-  isFirstRunState,
-} from "@/lib/dashboardProgress";
-import { goalProgress } from "@/lib/gradeIntent";
+  buildDashboardView,
+  type DashboardView,
+  type ForecastLabelStyle,
+} from "@/lib/dashboardView";
+import { SCENARIOS } from "@/components/practice/scenarios";
+import type { VocabularyCard } from "@/lib/vocabulary";
 
 interface UseHomeDashboardOptions {
   vocabulary: VocabularyCard[];
@@ -39,11 +20,24 @@ interface UseHomeDashboardOptions {
   newCardsPerDay: number;
   level: number;
   totalXp: number;
+  streak: number;
+}
+
+const SCENARIO_CARD_IDS = SCENARIOS.map(scenario => scenario.cardId);
+
+/** Locale formatting stays at the React edge; the builder stays pure. */
+function labelDate(key: string, style: ForecastLabelStyle): string {
+  return new Date(`${key}T12:00:00`).toLocaleDateString(
+    undefined,
+    style === "weekday"
+      ? { weekday: "short" }
+      : { month: "short", day: "numeric" }
+  );
 }
 
 /**
- * Every value the dashboard sections read. Keeping the derivations here leaves
- * Home as the state, handlers, and composition layer.
+ * The dashboard's React wrapper: saved state in, one memoized view model out.
+ * Derivation and formatting policy live in `buildDashboardView`.
  */
 export function useHomeDashboard({
   vocabulary,
@@ -56,205 +50,37 @@ export function useHomeDashboard({
   newCardsPerDay,
   level,
   totalXp,
-}: UseHomeDashboardOptions) {
-  const cardsStudiedToday = studyDays[today]?.cards ?? 0;
-  const daysStudied7 = daysStudiedWithin(studyDays, today, 7);
-  const daysStudied30 = daysStudiedWithin(studyDays, today, 30);
-  const reviews7 = reviewsWithin(studyDays, today, 7);
-
-  const masteryCounts = useMemo(
+  streak,
+}: UseHomeDashboardOptions): DashboardView {
+  return useMemo(
     () =>
-      vocabulary.reduce<Record<MasteryState, number>>(
-        (counts, card) => {
-          counts[getMasteryState(cardStates?.[card.id])] += 1;
-          return counts;
-        },
-        { new: 0, learning: 0, shaky: 0, known: 0 }
-      ),
-    [vocabulary, cardStates]
-  );
-
-  const reviewStats = useMemo(() => {
-    const reviewedCards = cardStates
-      ? vocabulary.filter(card => Boolean(cardStates[card.id]?.timesReviewed))
-      : [];
-    const totalReviews = reviewedCards.reduce(
-      (sum, card) => sum + (cardStates?.[card.id]?.timesReviewed ?? 0),
-      0
-    );
-    const totalCorrect = reviewedCards.reduce(
-      (sum, card) => sum + (cardStates?.[card.id]?.timesCorrect ?? 0),
-      0
-    );
-    const overallAccuracy =
-      totalReviews > 0 ? Math.round((totalCorrect / totalReviews) * 100) : 0;
-    const responseTimes = reviewedCards
-      .map(card => cardStates?.[card.id]?.lastResponseTimeMs)
-      .filter((time): time is number => typeof time === "number" && time > 0)
-      .sort((a, b) => a - b);
-    const medianResponseTime =
-      responseTimes.length > 0
-        ? responseTimes[Math.floor(responseTimes.length / 2)]
-        : null;
-    return { totalReviews, overallAccuracy, medianResponseTime };
-  }, [vocabulary, cardStates]);
-
-  const categoryMastery = useMemo(
-    () =>
-      CATEGORIES.map(category => {
-        const cards = vocabulary.filter(card => card.tag === category.id);
-        const reviewed = cards.filter(card =>
-          Boolean(cardStates?.[card.id]?.timesReviewed)
-        );
-        const reviews = reviewed.reduce(
-          (sum, card) => sum + (cardStates?.[card.id]?.timesReviewed ?? 0),
-          0
-        );
-        const correct = reviewed.reduce(
-          (sum, card) => sum + (cardStates?.[card.id]?.timesCorrect ?? 0),
-          0
-        );
-        const known = cards.filter(
-          card => getMasteryState(cardStates?.[card.id]) === "known"
-        ).length;
-        return {
-          ...category,
-          reviewed: reviewed.length,
-          total: cards.length,
-          accuracy: reviews > 0 ? Math.round((correct / reviews) * 100) : null,
-          known,
-          coverage:
-            cards.length > 0 ? Math.round((known / cards.length) * 100) : 0,
-        };
+      buildDashboardView({
+        vocabulary,
+        studyReady,
+        cardStates,
+        studyDays,
+        reviewEntries,
+        today,
+        dailyGoal,
+        newCardsPerDay,
+        level,
+        totalXp,
+        streak,
+        scenarioCardIds: SCENARIO_CARD_IDS,
+        labelDate,
       }),
-    [vocabulary, cardStates]
-  );
-
-  // Derived from saved progress, so it is current on the same render as a grade.
-  const queue = useMemo(() => {
-    return buildDailyQueue(
+    [
+      vocabulary,
       studyReady,
       cardStates,
+      studyDays,
+      reviewEntries,
       today,
       dailyGoal,
-      cardsStudiedToday,
-      newCardsPerDay
-    );
-  }, [
-    cardStates,
-    cardsStudiedToday,
-    dailyGoal,
-    studyReady,
-    today,
-    newCardsPerDay,
-  ]);
-
-  // New cards in today's queue, used by the hero's plan summary.
-  const newCardsPlanned = useMemo(
-    () => queue.filter(card => !cardStates[card.id]?.timesReviewed).length,
-    [queue, cardStates]
+      newCardsPerDay,
+      level,
+      totalXp,
+      streak,
+    ]
   );
-
-  const recognitionCards = useMemo(
-    () => selectRecognitionCards(studyReady, cardStates, today),
-    [cardStates, studyReady, today]
-  );
-
-  const weakCards = useMemo(
-    () => selectWeakCards(studyReady, cardStates, today),
-    [studyReady, cardStates, today]
-  );
-  const learningCards = useMemo(
-    () => selectLearningCards(studyReady, cardStates, today),
-    [studyReady, cardStates, today]
-  );
-
-  const reviewForecast = useMemo(() => {
-    return buildReviewForecast(studyReady, cardStates, today, 7, {
-      overdueOnFirstDay: true,
-    }).map((day, offset) => ({
-      ...day,
-      label:
-        offset === 0
-          ? "Today"
-          : offset === 1
-            ? "Tmrw"
-            : new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, {
-                weekday: "short",
-              }),
-    }));
-  }, [studyReady, cardStates, today]);
-
-  const extendedReviewForecast = useMemo(() => {
-    return buildReviewForecast(studyReady, cardStates, today, 30).map(day => ({
-      ...day,
-      label: new Date(`${day.key}T12:00:00`).toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-      }),
-    }));
-  }, [studyReady, cardStates, today]);
-
-  const {
-    total: forecastTotal,
-    peak: forecastPeak,
-    status: workloadStatus,
-  } = useMemo(
-    () => summarizeForecast(extendedReviewForecast, dailyGoal),
-    [extendedReviewForecast, dailyGoal]
-  );
-
-  const { reached: dailyGoalReached, remaining: cardsRemaining } = goalProgress(
-    dailyGoal,
-    cardsStudiedToday
-  );
-  const overdueCount = countOverdue(studyReady, cardStates, today);
-  const nextScheduledReview = getNextScheduledReview(
-    cardStates,
-    vocabulary,
-    today
-  );
-
-  const firstRun = isFirstRunState({
-    reviewEntries,
-    cardStates: Object.keys(cardStates).length,
-    studiedToday: cardsStudiedToday,
-  });
-  // Once the daily goal is reached the queue becomes optional repeat practice,
-  // so it is no longer part of the planned work for the day.
-  const todayProgress = describeTodayProgress({
-    studied: cardsStudiedToday,
-    remaining: dailyGoalReached ? 0 : queue.length,
-    dailyGoal,
-  });
-
-  return {
-    cardsStudiedToday,
-    daysStudied7,
-    daysStudied30,
-    reviews7,
-    masteryCounts,
-    reviewStats,
-    categoryMastery,
-    queue,
-    recognitionCards,
-    weakCards,
-    learningCards,
-    reviewForecast,
-    extendedReviewForecast,
-    forecastTotal,
-    forecastPeak,
-    workloadStatus,
-    cardsRemaining,
-    plannedCards: queue.length,
-    newCardsPlanned,
-    firstRun,
-    todayProgress,
-    dailyGoalReached,
-    levelTitle: getLevelTitle(level),
-    nextLevelXp: xpToReachLevel(level + 1),
-    levelProgress: getLevelProgress(totalXp, level),
-    overdueCount,
-    nextScheduledReview,
-  };
 }

@@ -1,15 +1,9 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { stopAudio } from "@/lib/audioPlayer";
 import type { CardState } from "@/lib/mastery";
-import {
-  createStudySession,
-  shouldShowNewCardIntro,
-  type StudyRating,
-} from "@/lib/studySession";
-import { studyKeyCommand, type StudyPhase } from "@/lib/studyKeys";
+import { createStudySession, type StudyRating } from "@/lib/studySession";
+import { studyKeyCommand } from "@/lib/studyKeys";
 import type { VocabularyCard } from "@/lib/vocabulary";
-
-export type { StudyRating, StudyResults } from "@/lib/studySession";
 
 interface UseStudySessionOptions {
   queue: VocabularyCard[];
@@ -39,11 +33,16 @@ export function useStudySession({
   const onCloseRef = useRef(onClose);
   onGradeRef.current = onGrade;
   onCloseRef.current = onClose;
+  // The machine is created once; this ref lets its phase predicate see the
+  // latest saved card states without rebuilding the session.
+  const cardStatesRef = useRef(cardStates);
+  cardStatesRef.current = cardStates;
 
   const [session] = useState(() =>
     createStudySession({
       queue,
       clock: () => Date.now(),
+      isNewCard: cardId => !cardStatesRef.current?.[cardId],
       onGrade: (cardId, rating, options) =>
         onGradeRef.current(cardId, rating, options),
       stopAudio,
@@ -53,28 +52,19 @@ export function useStudySession({
 
   const state = useSyncExternalStore(session.subscribe, session.getState);
   const currentCard = state.queue[state.index];
-  const showIntro = Boolean(
-    currentCard &&
-      shouldShowNewCardIntro(currentCard.id, cardStates, state.introducedIds)
-  );
+  const showIntro = state.phase === "intro";
 
   // A new card unlocks grading. Doing this in an effect rather than inside the
   // grade handler keeps the second click of a double click locked out until the
   // next card has actually rendered.
   useEffect(() => {
-    session.releaseGradeLock();
+    session.cardShown();
   }, [session, state.index]);
 
   // Stop any lingering pronunciation when the session unmounts.
   useEffect(() => () => session.dispose(), [session]);
 
-  const phase: StudyPhase = state.completed
-    ? "completed"
-    : showIntro
-      ? "intro"
-      : state.revealed
-        ? "revealed"
-        : "recall";
+  const phase = state.phase;
   const phaseRef = useRef(phase);
   phaseRef.current = phase;
 

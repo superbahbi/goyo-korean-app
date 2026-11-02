@@ -6,7 +6,6 @@ import {
   resolveAlphabetClip,
   resolveSentenceClip,
   resolveVocabularyClip,
-  resetAudioIndex as resetAudioManifest,
   sentenceIdsWithClips,
   warmAudioClip,
 } from "./audioIndex";
@@ -26,12 +25,57 @@ let settleStoppedPlayback: (() => void) | null = null;
 export type AudioSpeaker = AudioVoice;
 let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
+/** The kind of audio a clip belongs to, so views can highlight the right row. */
+export type AudioClipKind = "vocabulary" | "sentence" | "alphabet";
+
+export interface AudioClipRef {
+  kind: AudioClipKind;
+  /** The domain id the clip was requested for. */
+  id: string;
+}
+
+export interface AudioPlaybackState {
+  /** The clip currently playing, or null when nothing is. */
+  clip: AudioClipRef | null;
+  playing: boolean;
+}
+
+const STOPPED: AudioPlaybackState = { clip: null, playing: false };
+let playback: AudioPlaybackState = STOPPED;
+const playbackListeners = new Set<() => void>();
+
+function sameClip(a: AudioClipRef | null, b: AudioClipRef | null): boolean {
+  return a?.kind === b?.kind && a?.id === b?.id;
+}
+
+/** Publish one immutable snapshot; listeners only see real transitions. */
+function publishPlayback(next: AudioPlaybackState): void {
+  if (playback.playing === next.playing && sameClip(playback.clip, next.clip)) {
+    return;
+  }
+  playback = next;
+  playbackListeners.forEach(listener => listener());
+}
+
+/** The player's current clip and whether it is actually playing. */
+export function getAudioPlayback(): AudioPlaybackState {
+  return playback;
+}
+
+/** Subscribe to now-playing transitions; returns an unsubscribe function. */
+export function subscribeAudioPlayback(listener: () => void): () => void {
+  playbackListeners.add(listener);
+  return () => {
+    playbackListeners.delete(listener);
+  };
+}
+
 /**
  * Rejection used when playback ends because a caller stopped it or replaced it
  * with a newer clip. It is not a failure: the UI must not offer a fallback or
  * log an error for it.
  */
-export class PlaybackStoppedError extends Error {
+class PlaybackStoppedError extends Error {
   constructor() {
     super("Audio playback was stopped");
     this.name = "PlaybackStoppedError";
@@ -55,7 +99,10 @@ export async function playVocabularyAudio(wordId: string): Promise<boolean> {
       if (!audioFile) {
         throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
       }
-      await playAudioFile(`/audio/${audioFile}`);
+      await playAudioFile(`/audio/${audioFile}`, {
+        kind: "vocabulary",
+        id: wordId,
+      });
       return true;
     }
 
@@ -65,7 +112,10 @@ export async function playVocabularyAudio(wordId: string): Promise<boolean> {
       throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
     }
 
-    await playAudioFile(`/audio/${audioFile}`);
+    await playAudioFile(`/audio/${audioFile}`, {
+      kind: "vocabulary",
+      id: wordId,
+    });
     return true;
   } catch (error) {
     // Stopping a clip (closing a session, moving to the next card) is expected,
@@ -93,7 +143,10 @@ export async function playAlphabetAudio(
       if (!audioFile) {
         throw new Error(`No generated audio mapped for ${type} ${characterId}`);
       }
-      await playAudioFile(`/audio/${audioFile}`);
+      await playAudioFile(`/audio/${audioFile}`, {
+        kind: "alphabet",
+        id: characterId,
+      });
       return;
     }
 
@@ -108,7 +161,10 @@ export async function playAlphabetAudio(
       throw new Error(`No generated audio mapped for ${type} ${characterId}`);
     }
 
-    await playAudioFile(`/audio/${audioFile}`);
+    await playAudioFile(`/audio/${audioFile}`, {
+      kind: "alphabet",
+      id: characterId,
+    });
   } catch (error) {
     if (error instanceof PlaybackStoppedError) return;
     console.error("Alphabet audio failed:", error);
@@ -127,7 +183,10 @@ export async function playSentenceAudio(sentenceId: string): Promise<boolean> {
     if (!audioFile) {
       throw new Error(`No sentence audio mapped for ${sentenceId}`);
     }
-    await playAudioFile(`/audio/${audioFile}`);
+    await playAudioFile(`/audio/${audioFile}`, {
+      kind: "sentence",
+      id: sentenceId,
+    });
     return true;
   } catch (error) {
     if (error instanceof PlaybackStoppedError) return true;
@@ -155,13 +214,14 @@ function warmAudioCache(audioPath: string): void {
   void warmAudioClip(audioPath).catch(() => {});
 }
 
-function playAudioFile(audioPath: string): Promise<void> {
+function playAudioFile(audioPath: string, clip: AudioClipRef): Promise<void> {
   return new Promise((resolve, reject) => {
     stopAudio();
     warmAudioCache(audioPath);
 
     const audio = new Audio();
     currentAudio = audio;
+    publishPlayback({ clip, playing: true });
     audio.preload = "auto";
     audio.playbackRate = 0.9;
     audio.volume = 1;
@@ -184,7 +244,11 @@ function playAudioFile(audioPath: string): Promise<void> {
     const finish = (error?: Error) => {
       if (settled) return;
       settled = true;
+      // A stopped clip already published its transition; only the element that
+      // still owns the player may clear it.
+      const owned = currentAudio === audio;
       cleanup();
+      if (owned) publishPlayback(STOPPED);
       if (error) reject(error);
       else resolve();
     };
@@ -265,14 +329,7 @@ export function stopAudio(): void {
   }
 
   settle?.();
-}
-
-export function isAudioPlaying(): boolean {
-  return Boolean(currentAudio && !currentAudio.paused);
-}
-
-export function resetAudioIndex(): void {
-  resetAudioManifest();
+  publishPlayback(STOPPED);
 }
 
 export function setAudioSpeaker(speaker: AudioSpeaker): void {

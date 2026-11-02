@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  knownDialogKind,
+  DIALOG_KINDS,
   NO_DIALOG,
   reduceDialog,
-  type DialogRequest,
   type DialogRequestInput,
 } from "./dialogLauncher";
 
@@ -14,7 +13,6 @@ function open(request: DialogRequestInput) {
 describe("dialog launcher", () => {
   it("opens a dialog from none", () => {
     expect(open({ kind: "stats" })).toEqual({ kind: "stats" });
-    expect(knownDialogKind({ kind: "stats" })).toBe("stats");
   });
 
   it("replaces the current dialog instead of stacking requests", () => {
@@ -25,14 +23,12 @@ describe("dialog launcher", () => {
     });
 
     expect(settings).toEqual({ kind: "settings" });
-    expect(knownDialogKind(settings)).toBe("settings");
   });
 
   it("returns to none when closed", () => {
     const openStats = open({ kind: "stats" });
 
     expect(reduceDialog(openStats, { type: "close" })).toBe(NO_DIALOG);
-    expect(knownDialogKind(NO_DIALOG)).toBeNull();
   });
 
   it("normalizes a browse request with no category", () => {
@@ -49,10 +45,16 @@ describe("dialog launcher", () => {
     });
   });
 
-  it("renders nothing for absent or unknown requests", () => {
-    expect(knownDialogKind(NO_DIALOG)).toBeNull();
-    expect(
-      knownDialogKind({ kind: "retired" } as unknown as DialogRequest)
-    ).toBeNull();
+  it("has one enumerable kind list", () => {
+    expect(DIALOG_KINDS).toEqual([
+      "browse",
+      "stats",
+      "settings",
+      "alphabet",
+      "grammar",
+      "listening",
+      "scenario",
+      "shadowing",
+    ]);
   });
 });

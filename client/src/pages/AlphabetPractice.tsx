@@ -23,6 +23,7 @@ import {
   NUMBER_DATA,
 } from "@/lib/alphabet";
 import { playAlphabetAudio, playVocabularyAudio } from "@/lib/audioPlayer";
+import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 
 interface AlphabetPracticeProps {
   onClose: () => void;
@@ -63,18 +64,13 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     "consonants" | "vowels" | "numbers" | null
   >(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const { playing } = useAudioPlayback();
 
-  const handleSpeak = async (
+  const handleSpeak = (
     characterId: string,
     type: "consonant" | "vowel" | "number"
   ) => {
-    setIsSpeaking(true);
-    try {
-      await speakHangul(characterId, type);
-    } finally {
-      setIsSpeaking(false);
-    }
+    void speakHangul(characterId, type);
   };
 
   const speakHangul = async (
@@ -220,14 +216,14 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
           <Button
             variant="outline"
             onClick={handlePrev}
-            disabled={currentIndex === 0 || isSpeaking}
+            disabled={currentIndex === 0 || playing}
             className="min-h-12 rounded-xl"
           >
             <ArrowLeft size={16} className="mr-2" /> Previous
           </Button>
           <PracticePrimaryButton
             onClick={handleNext}
-            disabled={currentIndex === cards.length - 1 || isSpeaking}
+            disabled={currentIndex === cards.length - 1 || playing}
           >
             Next <ArrowRight size={16} className="ml-2" />
           </PracticePrimaryButton>

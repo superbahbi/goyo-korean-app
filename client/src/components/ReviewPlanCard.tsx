@@ -2,30 +2,24 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { CalendarDays } from "lucide-react";
 import { motion } from "framer-motion";
-import type { ForecastDay, WorkloadStatus } from "@/lib/queue";
+import type { DashboardView, LabeledForecastDay } from "@/lib/dashboardView";
 
-export interface ReviewForecastDay extends ForecastDay {
-  label: string;
-}
+export type ReviewForecastDay = LabeledForecastDay;
 
 interface ReviewPlanCardProps {
   today: string;
-  overdueCount: number;
-  nextScheduledReview: string | null | undefined;
-  forecast: ReviewForecastDay[];
-  forecastPeak: ReviewForecastDay;
-  workloadStatus: WorkloadStatus;
+  review: DashboardView["review"];
 }
 
 /** Seven-day review forecast with the workload summary. */
-export function ReviewPlanCard({
-  today,
-  overdueCount,
-  nextScheduledReview,
-  forecast,
-  forecastPeak,
-  workloadStatus,
-}: ReviewPlanCardProps) {
+export function ReviewPlanCard({ today, review }: ReviewPlanCardProps) {
+  const {
+    overdueCount,
+    nextScheduledReview,
+    forecast,
+    peak: forecastPeak,
+    status: workloadStatus,
+  } = review;
   const hasHistory = forecastPeak.count > 0;
   return (
     <motion.div

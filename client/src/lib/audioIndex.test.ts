@@ -253,7 +253,7 @@ describe("warmAudioClip", () => {
     const fetchImpl = vi.fn(async () => clip);
     const store = createAudioIndexStore({ fetch: fetchImpl, caches: storage });
 
-    await store.warm("/audio/clip.mp3");
+    await expect(store.warm("/audio/clip.mp3")).resolves.toBe(true);
 
     expect(fetchImpl).toHaveBeenCalledWith("/audio/clip.mp3?warm=1");
     expect(cache.put).toHaveBeenCalledWith("/audio/clip.mp3", clip);
@@ -266,7 +266,7 @@ describe("warmAudioClip", () => {
     const fetchImpl = vi.fn(async () => audioResponse());
     const store = createAudioIndexStore({ fetch: fetchImpl, caches: storage });
 
-    await store.warm("/audio/clip.mp3");
+    await expect(store.warm("/audio/clip.mp3")).resolves.toBe(true);
 
     expect(fetchImpl).not.toHaveBeenCalled();
     expect(cache.put).not.toHaveBeenCalled();
@@ -279,7 +279,7 @@ describe("warmAudioClip", () => {
       caches: storage,
     });
 
-    await store.warm("/audio/clip.mp3");
+    await expect(store.warm("/audio/clip.mp3")).resolves.toBe(false);
 
     expect(cache.put).not.toHaveBeenCalled();
   });
@@ -291,26 +291,26 @@ describe("warmAudioClip", () => {
       caches: storage,
     });
 
-    await store.warm("/audio/missing.mp3");
+    await expect(store.warm("/audio/missing.mp3")).resolves.toBe(false);
 
     expect(cache.put).not.toHaveBeenCalled();
   });
 
-  it("resolves without a request when the Cache API is unavailable", async () => {
+  it("resolves false without a request when the Cache API is unavailable", async () => {
     vi.stubGlobal("caches", undefined);
     const fetchImpl = vi.fn(async () => audioResponse());
     const store = createAudioIndexStore({ fetch: fetchImpl });
 
-    await expect(store.warm("/audio/clip.mp3")).resolves.toBeUndefined();
+    await expect(store.warm("/audio/clip.mp3")).resolves.toBe(false);
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 
-  it("resolves without a request when fetch is unavailable", async () => {
+  it("resolves false without a request when fetch is unavailable", async () => {
     vi.stubGlobal("fetch", undefined);
     const { storage, cache } = memoryCaches();
     const store = createAudioIndexStore({ caches: storage });
 
-    await expect(store.warm("/audio/clip.mp3")).resolves.toBeUndefined();
+    await expect(store.warm("/audio/clip.mp3")).resolves.toBe(false);
     expect(cache.put).not.toHaveBeenCalled();
   });
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { CheckCircle2, RotateCcw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { VocabularyCard } from "@/lib/vocabulary";
@@ -14,6 +14,8 @@ import {
   PracticeShell,
 } from "@/components/practice/PracticeShell";
 import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
+import { useAudioPlayback } from "@/hooks/useAudioPlayback";
+import { ratingForVerdict } from "@/lib/practiceVerdict";
 
 interface ListeningPracticeProps {
   cards: VocabularyCard[];
@@ -35,10 +37,10 @@ export function ListeningPractice({
   onGrade,
   onClose,
 }: ListeningPracticeProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
+  const playback = useAudioPlayback();
 
-  const { state, current, answer, next, restart } =
+  const { state, current, verdict, answer, next, restart } =
     useQuestionLoop<ListeningQuestion>(() => {
       // The caller orders due and weak cards first; keep that order so the
       // session starts with what is actually slipping, and only shuffle the
@@ -64,9 +66,11 @@ export function ListeningPractice({
       });
     });
 
-  const answered = state.verdict !== "unanswered";
-  const isCorrect = state.verdict === "correct";
-  const isLast = state.index === state.questions.length - 1;
+  const { answered, isCorrect, isLast } = verdict;
+  const isPlaying =
+    playback.playing &&
+    playback.clip?.kind === "vocabulary" &&
+    playback.clip.id === current?.card.id;
 
   useEffect(() => () => stopAudio(), []);
 
@@ -104,20 +108,15 @@ export function ListeningPractice({
     );
   }
 
-  const playCurrent = async () => {
+  const playCurrent = () => {
     if (isPlaying) return;
-    setIsPlaying(true);
-    try {
-      await playVocabularyAudio(current.card.id);
-    } finally {
-      setIsPlaying(false);
-    }
+    void playVocabularyAudio(current.card.id);
   };
 
   const chooseAnswer = (choiceId: string) => {
     if (answered) return;
     const result = answer(choiceId);
-    onGrade(current.card.id, result.verdict === "correct" ? "good" : "again");
+    onGrade(current.card.id, ratingForVerdict(result.verdict === "correct"));
   };
 
   const nextQuestion = () => {
@@ -166,7 +165,7 @@ export function ListeningPractice({
             label={choice.text}
             answered={answered}
             chosen={state.selectedId === choice.id}
-            correct={choice.id === current.card.id}
+            correct={choice.id === verdict.correctId}
             onChoose={() => chooseAnswer(choice.id)}
           />
         ))}
