@@ -14,6 +14,7 @@ import {
   PracticeShell,
 } from "@/components/practice/PracticeShell";
 import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
+import { ratingForVerdict } from "@/lib/practiceVerdict";
 
 interface ListeningPracticeProps {
   cards: VocabularyCard[];
@@ -38,7 +39,7 @@ export function ListeningPractice({
   const [isPlaying, setIsPlaying] = useState(false);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
 
-  const { state, current, answer, next, restart } =
+  const { state, current, verdict, answer, next, restart } =
     useQuestionLoop<ListeningQuestion>(() => {
       // The caller orders due and weak cards first; keep that order so the
       // session starts with what is actually slipping, and only shuffle the
@@ -64,9 +65,7 @@ export function ListeningPractice({
       });
     });
 
-  const answered = state.verdict !== "unanswered";
-  const isCorrect = state.verdict === "correct";
-  const isLast = state.index === state.questions.length - 1;
+  const { answered, isCorrect, isLast } = verdict;
 
   useEffect(() => () => stopAudio(), []);
 
@@ -117,7 +116,7 @@ export function ListeningPractice({
   const chooseAnswer = (choiceId: string) => {
     if (answered) return;
     const result = answer(choiceId);
-    onGrade(current.card.id, result.verdict === "correct" ? "good" : "again");
+    onGrade(current.card.id, ratingForVerdict(result.verdict === "correct"));
   };
 
   const nextQuestion = () => {
@@ -166,7 +165,7 @@ export function ListeningPractice({
             label={choice.text}
             answered={answered}
             chosen={state.selectedId === choice.id}
-            correct={choice.id === current.card.id}
+            correct={choice.id === verdict.correctId}
             onChoose={() => chooseAnswer(choice.id)}
           />
         ))}

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChoiceButton } from "@/components/practice/ChoiceButton";
+import { PracticeFeedback } from "@/components/practice/PracticeFeedback";
 import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
 import type { GrammarLesson, GrammarQuizQuestion } from "@/lib/grammar";
 
@@ -21,7 +22,7 @@ const LETTERS = ["A", "B", "C", "D"];
 export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
   const reportedComplete = useRef(false);
 
-  const { state, current, answer, next, restart } =
+  const { state, current, verdict, answer, next, restart } =
     useQuestionLoop<GrammarQuestion>(() =>
       lesson.quiz.map(question => ({
         question,
@@ -29,9 +30,7 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
       }))
     );
 
-  const answered = state.verdict !== "unanswered";
-  const isCorrect = state.verdict === "correct";
-  const isLast = state.index === state.questions.length - 1;
+  const { answered, isCorrect, isLast } = verdict;
 
   const choose = (optionIndex: number) => {
     if (answered) return;
@@ -121,33 +120,32 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
             labelLang={/[가-힣]/.test(option) ? "ko" : undefined}
             answered={answered}
             chosen={state.selectedId === String(optionIndex)}
-            correct={optionIndex === question.answerIndex}
+            correct={String(optionIndex) === verdict.correctId}
             onChoose={() => choose(optionIndex)}
           />
         ))}
       </div>
 
-      <div aria-live="polite">
-        {answered && (
-          <div className="mt-4 rounded-2xl border border-border bg-card p-4">
-            <p
-              className={`text-sm font-semibold ${isCorrect ? "text-emerald-700 dark:text-emerald-300" : "text-red-700 dark:text-red-300"}`}
-            >
-              {isCorrect ? "Correct." : "Not quite."}
-            </p>
-            <p className="mt-1 text-sm leading-relaxed text-foreground/70">
-              {question.explanation}
-            </p>
-            <Button
-              type="button"
-              className="mt-3 min-h-11 w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
-              onClick={advance}
-            >
-              {isLast ? "See result" : "Next question"}
-            </Button>
-          </div>
-        )}
-      </div>
+      <PracticeFeedback
+        answered={answered}
+        correct={isCorrect}
+        correctText="Correct."
+        wrongText="Not quite."
+        detail={question.explanation}
+        className="mt-4 border-border bg-card p-4 text-left"
+        textClassName="text-sm"
+        detailClassName="leading-relaxed text-foreground/70"
+        animate={false}
+        action={
+          <Button
+            type="button"
+            className="mt-3 min-h-11 w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+            onClick={advance}
+          >
+            {isLast ? "See result" : "Next question"}
+          </Button>
+        }
+      />
     </section>
   );
 }

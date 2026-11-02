@@ -3,6 +3,7 @@ import {
   createQuestionLoop,
   type PracticeQuestion,
 } from "@/lib/practiceQuestion";
+import { describeVerdict } from "@/lib/practiceVerdict";
 
 /**
  * The React adapter for the question loop. It owns the subscription and the
@@ -17,6 +18,7 @@ export function useQuestionLoop<TQuestion extends PracticeQuestion>(
   return {
     state,
     current: state.questions[state.index],
+    verdict: describeVerdict(state),
     answer: loop.answer,
     next: loop.next,
     restart: loop.restart,

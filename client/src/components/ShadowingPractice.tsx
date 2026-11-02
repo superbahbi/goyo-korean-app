@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
+import { ratingForVerdict } from "@/lib/practiceVerdict";
 import {
   PracticePrimaryButton,
   PracticeShell,
@@ -69,7 +70,7 @@ export function ShadowingPractice({
 
   const next = () => {
     if (!currentCard) return;
-    onGrade(currentCard.id, shadowed ? "good" : "again");
+    onGrade(currentCard.id, ratingForVerdict(shadowed));
     if (index === queue.length - 1) {
       stopAudio();
       setComplete(true);
