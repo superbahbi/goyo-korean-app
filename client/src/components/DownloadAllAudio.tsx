@@ -3,7 +3,11 @@ import { WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { AUDIO_CACHE_NAME } from "@/lib/audioCache";
+import {
+  getAudioIndex,
+  planAudioDownload,
+  warmAudioClip,
+} from "@/lib/audioIndex";
 
 const BATCH_SIZE = 6;
 
@@ -13,22 +17,10 @@ interface DownloadState {
   cancelled: boolean;
 }
 
-function audioManifestUrls(index: unknown): string[] {
-  if (typeof index !== "object" || index === null) return [];
-  const manifest = index as {
-    vocabulary?: Record<string, string>;
-    female?: { vocabulary?: Record<string, string> };
-  };
-  const files = new Set<string>();
-  for (const file of Object.values(manifest.vocabulary ?? {})) files.add(file);
-  for (const file of Object.values(manifest.female?.vocabulary ?? {}))
-    files.add(file);
-  return Array.from(files, file => `/audio/${file}`);
-}
-
 /**
  * Caches the whole pronunciation library for offline use. Clips are fetched a few
  * at a time into the same cache the service worker uses, so later plays hit it.
+ * The manifest and cache-put rules come from `audioIndex`.
  */
 export function DownloadAllAudio() {
   const [total, setTotal] = useState<number | null>(null);
@@ -37,14 +29,9 @@ export function DownloadAllAudio() {
 
   useEffect(() => {
     let active = true;
-    fetch("/audio/index.json")
-      .then(response =>
-        response.ok
-          ? response.json()
-          : Promise.reject(new Error(String(response.status)))
-      )
+    getAudioIndex()
       .then(index => {
-        if (active) setTotal(audioManifestUrls(index).length);
+        if (active) setTotal(planAudioDownload(index).length);
       })
       .catch(() => {
         if (active) setTotal(null);
@@ -66,24 +53,16 @@ export function DownloadAllAudio() {
     setDownload({ total: 0, done: 0, cancelled: false });
 
     try {
-      const response = await fetch("/audio/index.json");
-      const urls = audioManifestUrls(await response.json());
-      const cache = await caches.open(AUDIO_CACHE_NAME);
+      // The manifest is shared with the size effect, so a run reuses that one
+      // request instead of fetching it again.
+      const urls = planAudioDownload(await getAudioIndex());
       setDownload({ total: urls.length, done: 0, cancelled: false });
 
       let done = 0;
       for (let start = 0; start < urls.length; start += BATCH_SIZE) {
         if (cancelRef.current) break;
         const batch = urls.slice(start, start + BATCH_SIZE);
-        await Promise.all(
-          batch.map(async url => {
-            if (await cache.match(url)) return;
-            const clip = await fetch(`${url}?warm=1`);
-            const type = clip.headers.get("content-type") ?? "";
-            if (clip.status === 200 && type.startsWith("audio/"))
-              await cache.put(url, clip);
-          })
-        );
+        await Promise.all(batch.map(url => warmAudioClip(url)));
         done += batch.length;
         setDownload({
           total: urls.length,

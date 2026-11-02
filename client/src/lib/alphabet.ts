@@ -457,6 +457,46 @@ export const ALPHABET_AUDIO_TEXT: Record<string, string> = Object.fromEntries(
     card.type === "number" ? card.hangul : card.sound,
   ])
 );
+/**
+ * Clip keys used by the male alphabet index for basic characters, keyed by
+ * domain id. The index also carries the ids, but older generated batches keyed
+ * these clips by mnemonic; the audio manifest resolver tries the id first and
+ * this alias second. Kept beside the alphabet metadata so ids and clip keys
+ * stay together.
+ */
+export const ALPHABET_CONSONANT_AUDIO_ALIASES: Record<string, string> = {
+  cons_001: "ga",
+  cons_002: "na",
+  cons_003: "da",
+  cons_004: "ra",
+  cons_005: "ma",
+  cons_006: "ba",
+  cons_007: "sa",
+  cons_008: "a_consonant",
+  cons_009: "ja",
+  cons_010: "cha2",
+  cons_011: "cha",
+  cons_012: "kha",
+  cons_013: "ta",
+  cons_014: "pha",
+  cons_015: "ha",
+};
+
+export const ALPHABET_VOWEL_AUDIO_ALIASES: Record<string, string> = {
+  vowel_001: "a",
+  vowel_002: "ya",
+  vowel_003: "eo",
+  vowel_004: "yeo",
+  vowel_005: "o",
+  vowel_006: "yo",
+  vowel_007: "u",
+  vowel_008: "yu",
+  vowel_009: "eu",
+  vowel_010: "i",
+  vowel_011: "ae",
+  vowel_012: "e",
+};
+
 export const ALPHABET_CONSONANT_CARDS = ALPHABET_DATA.filter(
   card => card.type === "consonant"
 );
