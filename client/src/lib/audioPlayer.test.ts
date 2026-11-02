@@ -215,6 +215,125 @@ describe("playSentenceAudio", () => {
   });
 });
 
+describe("playback state", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    playBehavior = "end";
+    FakeAudio.instances = [];
+    FakeAudio.playedSources = [];
+    vi.stubGlobal("window", globalThis);
+    vi.stubGlobal("Audio", FakeAudio);
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("publishes the vocabulary clip while playing and clears it when it ends", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse(indexPayload))
+    );
+
+    const { getAudioPlayback, playVocabularyAudio, subscribeAudioPlayback } =
+      await import("./audioPlayer");
+    const seen: unknown[] = [];
+    const unsubscribe = subscribeAudioPlayback(() =>
+      seen.push(getAudioPlayback())
+    );
+
+    await playVocabularyAudio("surv_001");
+
+    expect(seen[0]).toEqual({
+      clip: { kind: "vocabulary", id: "surv_001" },
+      playing: true,
+    });
+    expect(seen.at(-1)).toEqual({ clip: null, playing: false });
+    expect(getAudioPlayback()).toEqual({ clip: null, playing: false });
+
+    unsubscribe();
+  });
+
+  it("publishes sentence and alphabet clip identities", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        jsonResponse({
+          ...indexPayload,
+          alphabet: {
+            consonants: { cons_001: "male_cons_001.mp3" },
+            vowels: {},
+          },
+        })
+      )
+    );
+
+    const {
+      getAudioPlayback,
+      playAlphabetAudio,
+      playSentenceAudio,
+      playVocabularyAudio,
+    } = await import("./audioPlayer");
+
+    // Load the manifest first so the next calls resolve synchronously.
+    await playVocabularyAudio("surv_001");
+
+    const sentence = playSentenceAudio("surv_001");
+    expect(getAudioPlayback()).toEqual({
+      clip: { kind: "sentence", id: "surv_001" },
+      playing: true,
+    });
+    await sentence;
+
+    const alphabet = playAlphabetAudio("cons_001", "consonant");
+    expect(getAudioPlayback()).toEqual({
+      clip: { kind: "alphabet", id: "cons_001" },
+      playing: true,
+    });
+    await alphabet;
+  });
+
+  it("clears the clip as soon as playback is stopped", async () => {
+    playBehavior = "pending";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse(indexPayload))
+    );
+
+    const { getAudioPlayback, playVocabularyAudio, stopAudio } = await import(
+      "./audioPlayer"
+    );
+
+    const playback = playVocabularyAudio("surv_001");
+    await new Promise(resolve => setTimeout(resolve, 0));
+    expect(getAudioPlayback().playing).toBe(true);
+
+    stopAudio();
+
+    expect(getAudioPlayback()).toEqual({ clip: null, playing: false });
+    await expect(playback).resolves.toBe(true);
+    // The stopped promise's late finish must not clear a newer clip.
+    expect(getAudioPlayback()).toEqual({ clip: null, playing: false });
+  });
+
+  it("clears the clip when playback is blocked", async () => {
+    playBehavior = "blocked";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => jsonResponse(indexPayload))
+    );
+
+    const { getAudioPlayback, playVocabularyAudio } = await import(
+      "./audioPlayer"
+    );
+
+    await expect(playVocabularyAudio("surv_001")).resolves.toBe(false);
+    expect(getAudioPlayback()).toEqual({ clip: null, playing: false });
+  });
+});
+
 describe("playVocabularyAudio", () => {
   beforeEach(() => {
     vi.resetModules();

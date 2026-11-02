@@ -15,6 +15,7 @@ import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
 import { ratingForVerdict } from "@/lib/practiceVerdict";
+import { useAutoPlayOnce } from "@/hooks/useAutoPlayOnce";
 import {
   PracticePrimaryButton,
   PracticeShell,
@@ -44,14 +45,11 @@ export function ShadowingPractice({
   const [complete, setComplete] = useState(false);
   const currentCard = queue[index];
 
-  useEffect(() => {
-    if (!currentCard || complete) return;
-    const timer = window.setTimeout(
-      () => void playVocabularyAudio(currentCard.id),
-      300
-    );
-    return () => window.clearTimeout(timer);
-  }, [currentCard, complete]);
+  useAutoPlayOnce({
+    clipId: complete ? null : (currentCard?.id ?? null),
+    enabled: true,
+    play: playVocabularyAudio,
+  });
 
   useEffect(() => () => stopAudio(), []);
 

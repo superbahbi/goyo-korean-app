@@ -5,6 +5,7 @@ import { Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { playSentenceAudio, playVocabularyAudio } from "@/lib/audioPlayer";
+import { useAutoPlayOnce } from "@/hooks/useAutoPlayOnce";
 
 interface FlashCardProps {
   wordId: string;
@@ -51,9 +52,6 @@ function FlashCardBase({
   const [audioFailed, setAudioFailed] = useState(false);
   const audioFailureAnnounced = useRef(false);
   const isRevealed = revealed;
-  // Auto-play at most once per word per mount: flipping back to the front must
-  // not replay the pronunciation.
-  const lastAutoPlayedId = useRef<string | null>(null);
 
   const markAudioFailed = useCallback((announce: boolean) => {
     setAudioFailed(true);
@@ -69,17 +67,18 @@ function FlashCardBase({
     setAudioFailed(false);
   }, [wordId]);
 
-  useEffect(() => {
-    if (!isRevealed && autoSpeak && lastAutoPlayedId.current !== wordId) {
-      const timer = setTimeout(() => {
-        lastAutoPlayedId.current = wordId;
-        void playVocabularyAudio(wordId).then(played => {
-          if (!played) markAudioFailed(true);
-        });
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isRevealed, front, wordId, autoSpeak, markAudioFailed]);
+  // Auto-play at most once per word per mount: flipping back to the front must
+  // not replay the pronunciation.
+  const markAutoPlayFailed = useCallback(
+    () => markAudioFailed(true),
+    [markAudioFailed]
+  );
+  useAutoPlayOnce({
+    clipId: isRevealed ? null : wordId,
+    enabled: autoSpeak,
+    play: playVocabularyAudio,
+    onFailure: markAutoPlayFailed,
+  });
 
   const handleFlip = () => {
     onFlip(!isRevealed);

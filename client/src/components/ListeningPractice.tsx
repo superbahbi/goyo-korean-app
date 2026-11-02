@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { CheckCircle2, RotateCcw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { VocabularyCard } from "@/lib/vocabulary";
@@ -14,6 +14,7 @@ import {
   PracticeShell,
 } from "@/components/practice/PracticeShell";
 import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
+import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 import { ratingForVerdict } from "@/lib/practiceVerdict";
 
 interface ListeningPracticeProps {
@@ -36,8 +37,8 @@ export function ListeningPractice({
   onGrade,
   onClose,
 }: ListeningPracticeProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
+  const playback = useAudioPlayback();
 
   const { state, current, verdict, answer, next, restart } =
     useQuestionLoop<ListeningQuestion>(() => {
@@ -66,6 +67,10 @@ export function ListeningPractice({
     });
 
   const { answered, isCorrect, isLast } = verdict;
+  const isPlaying =
+    playback.playing &&
+    playback.clip?.kind === "vocabulary" &&
+    playback.clip.id === current?.card.id;
 
   useEffect(() => () => stopAudio(), []);
 
@@ -103,14 +108,9 @@ export function ListeningPractice({
     );
   }
 
-  const playCurrent = async () => {
+  const playCurrent = () => {
     if (isPlaying) return;
-    setIsPlaying(true);
-    try {
-      await playVocabularyAudio(current.card.id);
-    } finally {
-      setIsPlaying(false);
-    }
+    void playVocabularyAudio(current.card.id);
   };
 
   const chooseAnswer = (choiceId: string) => {
