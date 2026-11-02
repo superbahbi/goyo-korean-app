@@ -24,6 +24,16 @@ _Avoid_: grade options, grade flags, grade config
 The context a grade is given in, which determines the grade's intent.
 _Avoid_: session type, exercise
 
+**Dialog request**:
+The single value naming the one dashboard dialog that is open, plus any
+payload it needs; opening another replaces it rather than stacking.
+_Avoid_: dialog flags, show booleans, active modal
+
+**Dialog launcher**:
+The seam that turns a dashboard entry point into one dialog request and back to
+none; the dialog host maps that request to a lazily mounted dialog.
+_Avoid_: modal manager, dialog store, show-state bundle
+
 **Study session**:
 One run through a planned queue of cards, ending in a summary.
 _Avoid_: study flow, review run, deck run
