@@ -1,18 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
-import { evaluateGrade } from "@/lib/gradeIntent";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { applyGradeOutcome, type GradeOutcome } from "@/lib/gradeOutcome";
 import { requestPersistentStorage } from "@/lib/storageProtection";
 import {
-  appendReviewEntry,
   createReviewLog,
   sanitizeReviewLog,
   type ReviewLog,
   type StudyMode,
 } from "@/lib/reviewLog";
-import { addDays, getLocalDateKey } from "@/lib/day";
+import { getLocalDateKey } from "@/lib/day";
 import {
   deriveStreak,
   migrateLegacyDay,
-  recordStudyDay,
   sanitizeStudyDays,
   type StudyDays,
 } from "@/lib/studyDays";
@@ -388,96 +386,7 @@ export function applyGrade(
   options: GradeOptions = {},
   now = new Date()
 ): UserState {
-  const today = getLocalDateKey(now);
-  const logEntry = {
-    cardId,
-    at: now.toISOString(),
-    rating,
-    responseTimeMs:
-      typeof options.responseTimeMs === "number"
-        ? options.responseTimeMs
-        : null,
-    mode: options.mode ?? "daily",
-  } as const;
-
-  const decision = evaluateGrade(
-    {
-      mode: options.mode ?? "daily",
-      existing: state.cardStates[cardId],
-      today,
-      dailyGoal: state.settings.dailyGoal,
-      studiedToday: state.studyDays[today]?.cards ?? 0,
-    },
-    rating,
-    options.responseTimeMs
-  );
-
-  // Practice-only grades still belong in the log, but they must not move the
-  // schedule, earn XP, or count toward the daily goal.
-  if (!decision.schedule) {
-    return {
-      ...state,
-      reviewLog: appendReviewEntry(state.reviewLog, logEntry),
-    };
-  }
-
-  const existingCard = state.cardStates[cardId];
-  const { schedule, advanced } = decision;
-  const xpGain = decision.xp;
-
-  const studyDays = recordStudyDay(state.studyDays, today, {
-    cardFirstSeenToday: decision.countsAsNewCard,
-    scheduleAdvanced: advanced,
-  });
-  const newStreak = deriveStreak(studyDays, today);
-  const newHighestStreak = Math.max(state.stats.highestStreak, newStreak);
-
-  const responseTimeMs = options.responseTimeMs;
-  const newCardState: CardState = {
-    id: cardId,
-    due:
-      advanced || !existingCard
-        ? addDays(today, schedule.interval)
-        : existingCard.due,
-    interval: schedule.interval,
-    timesReviewed: (existingCard?.timesReviewed || 0) + (advanced ? 1 : 0),
-    timesCorrect:
-      (existingCard?.timesCorrect || 0) +
-      (advanced && rating !== "again" ? 1 : 0),
-    lastReviewDate: today,
-    easeFactor: schedule.easeFactor,
-    consecutiveCorrect: schedule.consecutiveCorrect,
-    lapseCount: schedule.lapseCount,
-    lastResponseTimeMs:
-      typeof responseTimeMs === "number"
-        ? responseTimeMs
-        : existingCard?.lastResponseTimeMs,
-  };
-
-  return {
-    ...state,
-    cardStates: {
-      ...state.cardStates,
-      [cardId]: newCardState,
-    },
-    stats: {
-      totalXp: state.stats.totalXp + xpGain,
-      level: levelFromXp(state.stats.totalXp + xpGain),
-      lastStudyDate: today,
-      streak: newStreak,
-      highestStreak: newHighestStreak,
-      totalCardsLearned:
-        advanced &&
-        rating !== "again" &&
-        (existingCard?.timesCorrect ?? 0) === 0
-          ? state.stats.totalCardsLearned + 1
-          : state.stats.totalCardsLearned,
-    },
-    studyDays,
-    // Every grade is logged, including a same-day repeat. The scheduler still
-    // owns whether the schedule moves; the log records what the learner did.
-    reviewLog: appendReviewEntry(state.reviewLog, logEntry),
-  };
+  return applyGradeOutcome(state, cardId, rating, options, now).state;
 }
 
 export function useStudyState() {
@@ -490,6 +399,11 @@ export function useStudyState() {
     initialLoad.blockedByNewerVersion
   );
   const [saveError, setSaveError] = useState(false);
+  // gradeCard computes the next saved state synchronously so it can hand the
+  // grade's outcome back to the caller. The ref keeps that read on the state the
+  // last grade produced, even before React has re-rendered.
+  const stateRef = useRef(state);
+  stateRef.current = state;
 
   // Another tab wrote progress: adopt it instead of overwriting it later.
   useEffect(() => {
@@ -526,12 +440,21 @@ export function useStudyState() {
       cardId: string,
       rating: "again" | "good" | "easy",
       options?: GradeOptions
-    ) => {
+    ): GradeOutcome => {
       // Persist storage is granted per origin and cannot be requested repeatedly
       // for effect; ask on the first real use, not on first paint.
       void requestPersistentStorage();
 
-      setState(current => applyGrade(current, cardId, rating, options));
+      const result = applyGradeOutcome(
+        stateRef.current,
+        cardId,
+        rating,
+        options
+      );
+      // Two grades in one tick must build on the first, not on stale state.
+      stateRef.current = result.state;
+      setState(result.state);
+      return result.outcome;
     },
     []
   );

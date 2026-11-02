@@ -46,7 +46,6 @@ export default function Home() {
   const cardsStudiedTodayRef = useRef<number | null>(null);
 
   const {
-    cardsStudiedToday,
     daysStudied7,
     daysStudied30,
     reviews7,
@@ -101,10 +100,6 @@ export default function Home() {
     handleShadowingGrade,
     closeSession,
   } = useHomeSessions({
-    cardStates: state.cardStates,
-    today,
-    dailyGoal: state.settings.dailyGoal,
-    cardsStudiedToday,
     queue,
     weakCards,
     learningCards,

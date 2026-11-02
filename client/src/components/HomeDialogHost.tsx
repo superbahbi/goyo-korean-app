@@ -10,6 +10,7 @@ import type { SessionMode } from "@/hooks/useHomeSessions";
 import type { VocabularyCard } from "@/lib/vocabulary";
 import type { GrammarProgress } from "@/lib/grammarProgress";
 import { knownDialogKind, type ActiveDialog } from "@/lib/dialogLauncher";
+import { repeatableSession } from "@/lib/gradeIntent";
 
 // Every dialog and practice mode stays lazily loaded so the initial bundle
 // stays focused on the Daily Session flow.
@@ -136,11 +137,10 @@ export function HomeDialogHost({ dialog, onClose, deps }: HomeDialogHostProps) {
           cardStates={deps.state.cardStates}
           onGrade={deps.onGrade}
           onClose={deps.onCloseSession}
-          allowRepeat={
-            deps.dailyGoalReached ||
-            deps.sessionMode === "weak" ||
-            deps.sessionMode === "learning"
-          }
+          allowRepeat={repeatableSession(
+            deps.sessionMode,
+            deps.dailyGoalReached
+          )}
           autoPlayAudio={deps.state.settings.autoPlayAudio}
           title={
             deps.sessionMode === "weak"

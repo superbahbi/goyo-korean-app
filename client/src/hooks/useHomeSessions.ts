@@ -1,17 +1,12 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import type { GradeOptions } from "@/hooks/useStudyState";
-import { evaluateGrade } from "@/lib/gradeIntent";
-import type { CardState } from "@/lib/mastery";
+import type { GradeOutcome } from "@/lib/gradeOutcome";
 import type { VocabularyCard } from "@/lib/vocabulary";
 
 export type SessionMode = "daily" | "weak" | "learning";
 
 interface UseHomeSessionsOptions {
-  cardStates: Record<string, CardState>;
-  today: string;
-  dailyGoal: number;
-  cardsStudiedToday: number;
   queue: VocabularyCard[];
   weakCards: VocabularyCard[];
   learningCards: VocabularyCard[];
@@ -20,7 +15,7 @@ interface UseHomeSessionsOptions {
     cardId: string,
     rating: "again" | "good" | "easy",
     options?: GradeOptions
-  ) => void;
+  ) => GradeOutcome;
 }
 
 /**
@@ -28,10 +23,6 @@ interface UseHomeSessionsOptions {
  * dashboard only wires callbacks to the section components.
  */
 export function useHomeSessions({
-  cardStates,
-  today,
-  dailyGoal,
-  cardsStudiedToday,
   queue,
   weakCards,
   learningCards,
@@ -64,29 +55,17 @@ export function useHomeSessions({
     rating: "again" | "good" | "easy",
     options?: { responseTimeMs?: number }
   ) => {
-    // Same decision the save applies, computed from the same pre-grade state,
-    // so the toast can only report XP that was actually awarded.
-    const decision = evaluateGrade(
-      {
-        mode: sessionMode,
-        existing: cardStates[cardId],
-        today,
-        dailyGoal,
-        studiedToday: cardsStudiedToday,
-      },
-      rating,
-      options?.responseTimeMs
-    );
-
-    gradeCard(cardId, rating, {
+    // The save returns the grade's outcome from the same write, so the toast can
+    // only report XP that was actually awarded.
+    const outcome = gradeCard(cardId, rating, {
       responseTimeMs: options?.responseTimeMs,
       mode: sessionMode,
     });
 
-    if (decision.goalJustReached) {
+    if (outcome.goalJustReached) {
       setTimeout(() => {
         toast.success("Daily goal reached! 🎉", {
-          description: `You've earned ${decision.xp} XP and maintained your streak!`,
+          description: `You've earned ${outcome.xp} XP and maintained your streak!`,
         });
       }, 300);
     }
