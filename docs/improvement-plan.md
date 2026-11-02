@@ -112,17 +112,17 @@ deck data. Modules still over 300 after the refactors: `grammar.ts` (594), `esse
 
 ## Status
 
-| Phase                               | State                                                                                                                                                                                                                             |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                                                                       |
-| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                                                                             |
-| 2 Structure                         | Done; main chunk 139.5 kB raw / 40.9 kB gzipped with vendor chunks; largest UI file is 309 lines (`FlashCard`)                                                                                                                    |
-| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                                                                       |
-| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done                                                      |
-| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                                                                             |
-| 6 Sentence audio and grammar        | Done (2026-11-02); male sentence library complete (675 clips), twelve lessons reviewed and signed off; female voice paused pending spend approval                                                                                 |
-| 7 Content trust completion          | In progress; re-measured 2026-11-01 at 10.4% of 96 (down from 25%), fixed the 10 defects, and swept 100 more cards in two batches (14 fail, 14%); 285 of 504 cards carry a verdict, 219 remain, Korean-speaker spot check pending |
-| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                                                  |
+| Phase                               | State                                                                                                                                                                                                                              |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                                                                        |
+| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                                                                              |
+| 2 Structure                         | Done; main chunk 139.5 kB raw / 40.9 kB gzipped with vendor chunks; largest UI file is 309 lines (`FlashCard`)                                                                                                                     |
+| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                                                                        |
+| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done                                                       |
+| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                                                                              |
+| 6 Sentence audio and grammar        | Done (2026-11-02); male sentence library complete (675 clips), twelve lessons reviewed and signed off; female voice paused pending spend approval                                                                                  |
+| 7 Content trust completion          | In progress; re-measured 2026-11-01 at 10.4% of 96 (down from 25%), fixed the 10 defects, and swept 200 more cards in four batches (14 fail, 14%); 385 of 504 cards carry a verdict, 119 remain, Korean-speaker spot check pending |
+| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                                                   |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -574,6 +574,10 @@ Order matters: measure first, rewrite second.
      outside the sheet. All seven are fixed, `phase7Sweep.test.ts` guards them, the same sheet was
      re-rendered, and the three rewritten examples had their male sentence clips regenerated (3 clips,
      672 skipped). 285 of 504 imported cards (56.5%) now carry a verdict; 219 remain.
+   - Done (2026-11-02), batch 3: `pnpm audit:content --limit 50 --seed 12 --unaudited` sampled 50
+     more cards with no prior verdict. All 50 pass the five-point rubric; no defects found. Romanization
+     was re-checked against the transliterator and agreed on every card. 335 of 504 imported cards
+     (66.5%) now carry a verdict; 169 remain.
 
 Out of scope: new cards, FSRS, more grammar lessons, and any UI change. Phase 5 runs alongside this
 phase because it is a read-only tuning exercise.
