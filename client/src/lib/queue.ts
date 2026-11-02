@@ -31,8 +31,24 @@ function orderNewCardsByTheme(cards: VocabularyCard[]): VocabularyCard[] {
   });
 }
 
-function accuracy(state?: CardState): number {
+export function accuracy(state?: CardState): number {
   return (state?.timesCorrect ?? 0) / (state?.timesReviewed ?? 1);
+}
+
+/** Reviewed cards whose due date has arrived, oldest due date first. */
+function dueOnOrBefore(
+  cards: VocabularyCard[],
+  states: CardStates,
+  today: string
+): VocabularyCard[] {
+  return cards
+    .filter(card => {
+      const due = states[card.id]?.due;
+      return Boolean(due && due <= today);
+    })
+    .sort((a, b) =>
+      (states[a.id]?.due ?? today).localeCompare(states[b.id]?.due ?? today)
+    );
 }
 
 /**
@@ -57,14 +73,7 @@ export function buildDailyQueue(
   newCardsPerDay = DEFAULT_NEW_CARDS_PER_DAY
 ): VocabularyCard[] {
   const progress = goalProgress(dailyGoal, cardsStudiedToday);
-  const dueCards = cards
-    .filter(card => {
-      const due = states[card.id]?.due;
-      return Boolean(due && due <= today);
-    })
-    .sort((a, b) =>
-      (states[a.id]?.due ?? today).localeCompare(states[b.id]?.due ?? today)
-    );
+  const dueCards = dueOnOrBefore(cards, states, today);
 
   // A card is introduced the first time it is reviewed: the schedule makes it
   // due later, but today's pace is already spent. Re-grading the same card
@@ -135,6 +144,39 @@ export function selectLearningCards(
       )
     )
     .slice(0, limit);
+}
+
+/**
+ * Recognition practice: only cards the learner has already reviewed, so no
+ * unseen word is introduced. Due reviews come first (oldest due date), then
+ * cards still in learning that are not due, lowest accuracy first, and finally
+ * the known remainder in deck order.
+ *
+ * This is deliberately narrower than the daily queue (no new cards, no daily
+ * cap) and than Weak Words (no reviewed-today preference, no limit, and
+ * accuracy ties keep deck order instead of breaking on review count).
+ */
+export function selectRecognitionCards(
+  cards: VocabularyCard[],
+  states: CardStates,
+  today: string
+): VocabularyCard[] {
+  const reviewed = cards.filter(card =>
+    Boolean(states[card.id]?.timesReviewed)
+  );
+  const due = dueOnOrBefore(reviewed, states, today);
+  const dueIds = new Set(due.map(card => card.id));
+  const weak = reviewed
+    .filter(
+      card =>
+        !dueIds.has(card.id) && getMasteryState(states[card.id]) !== "known"
+    )
+    .sort((a, b) => accuracy(states[a.id]) - accuracy(states[b.id]));
+  const weakIds = new Set(weak.map(card => card.id));
+  const rest = reviewed.filter(
+    card => !dueIds.has(card.id) && !weakIds.has(card.id)
+  );
+  return [...due, ...weak, ...rest];
 }
 
 /**

@@ -2,11 +2,13 @@ import { describe, it, expect } from "vitest";
 import type { CardState } from "@/lib/mastery";
 import type { VocabularyCard } from "@/lib/vocabulary";
 import {
+  accuracy,
   buildDailyQueue,
   buildReviewForecast,
   countOverdue,
   nextScheduledReview,
   selectLearningCards,
+  selectRecognitionCards,
   selectWeakCards,
   summarizeForecast,
 } from "./queue";
@@ -212,6 +214,181 @@ describe("weak and learning selections", () => {
     expect(
       selectLearningCards(cards, states, today).map(item => item.id)
     ).toEqual(["b", "c"]);
+  });
+});
+
+describe("recognition selection", () => {
+  const cards = ["a", "b", "c", "d", "e"].map(card);
+  const ids = (selection: VocabularyCard[]) => selection.map(item => item.id);
+  const known = (id: string, overrides: Partial<CardState> = {}) =>
+    state(id, {
+      timesReviewed: 4,
+      timesCorrect: 4,
+      interval: 10,
+      consecutiveCorrect: 2,
+      ...overrides,
+    });
+
+  it("returns nothing until a card has been reviewed", () => {
+    expect(ids(selectRecognitionCards([], {}, today))).toEqual([]);
+    expect(ids(selectRecognitionCards(cards, {}, today))).toEqual([]);
+
+    const unreviewed = {
+      a: state("a", { timesReviewed: 0, timesCorrect: 0, due: today }),
+    };
+    expect(ids(selectRecognitionCards(cards, unreviewed, today))).toEqual([]);
+  });
+
+  it("omits new cards while keeping every reviewed card", () => {
+    const states = {
+      a: state("a"),
+      b: state("b", { timesReviewed: 0, timesCorrect: 0, due: today }),
+      c: state("c", { timesReviewed: 2, timesCorrect: 2 }),
+    };
+    expect(ids(selectRecognitionCards(cards, states, today))).toEqual([
+      "a",
+      "c",
+    ]);
+  });
+
+  it("puts due reviews first, oldest due date first", () => {
+    const states = {
+      a: state("a", { due: "2026-10-30" }),
+      b: state("b", { due: "2026-10-28" }),
+      c: state("c", { due: today }),
+      d: known("d"),
+    };
+    expect(ids(selectRecognitionCards(cards, states, today))).toEqual([
+      "b",
+      "a",
+      "c",
+      "d",
+    ]);
+  });
+
+  it("orders not-due learning and shaky cards by accuracy", () => {
+    const states = {
+      a: state("a", { timesReviewed: 4, timesCorrect: 3 }),
+      b: state("b", { timesReviewed: 4, timesCorrect: 1 }),
+      c: state("c", { timesReviewed: 2, timesCorrect: 1 }),
+      d: known("d"),
+    };
+    expect(ids(selectRecognitionCards(cards, states, today))).toEqual([
+      "b",
+      "c",
+      "a",
+      "d",
+    ]);
+  });
+
+  it("keeps deck order for accuracy ties instead of review count", () => {
+    const pair = [card("b"), card("a")];
+    const states = {
+      b: state("b", { timesReviewed: 2, timesCorrect: 1 }),
+      a: state("a", { timesReviewed: 4, timesCorrect: 2 }),
+    };
+    expect(ids(selectRecognitionCards(pair, states, today))).toEqual([
+      "b",
+      "a",
+    ]);
+    // Weak Words breaks the same tie by review count.
+    expect(ids(selectWeakCards(pair, states, today))).toEqual(["a", "b"]);
+  });
+
+  it("keeps the known remainder last in deck order", () => {
+    const states = {
+      a: known("a"),
+      b: known("b"),
+      c: state("c", { timesReviewed: 4, timesCorrect: 1 }),
+    };
+    expect(
+      ids(selectRecognitionCards(cards.slice(0, 3), states, today))
+    ).toEqual(["c", "a", "b"]);
+  });
+
+  it("keeps a due card in front even when it is known", () => {
+    const states = {
+      a: known("a", { due: "2026-10-29" }),
+      b: state("b", { timesReviewed: 4, timesCorrect: 1 }),
+    };
+    expect(
+      ids(selectRecognitionCards(cards.slice(0, 2), states, today))
+    ).toEqual(["a", "b"]);
+  });
+
+  it("keeps deck order for cards due on the same day", () => {
+    const pair = [card("b"), card("a")];
+    const states = {
+      b: state("b", { due: today }),
+      a: state("a", { due: today }),
+    };
+    expect(ids(selectRecognitionCards(pair, states, today))).toEqual([
+      "b",
+      "a",
+    ]);
+  });
+
+  it("preserves duplicate deck entries", () => {
+    const duplicated = [card("a"), card("a"), card("b")];
+    const states = {
+      a: state("a", { timesReviewed: 2, timesCorrect: 1 }),
+      b: state("b", { timesReviewed: 4, timesCorrect: 1 }),
+    };
+    expect(ids(selectRecognitionCards(duplicated, states, today))).toEqual([
+      "b",
+      "a",
+      "a",
+    ]);
+  });
+
+  it("ignores saved states for cards no longer in the deck", () => {
+    const states = {
+      a: state("a"),
+      removed: state("removed", { due: "2026-10-01" }),
+    };
+    expect(ids(selectRecognitionCards([card("a")], states, today))).toEqual([
+      "a",
+    ]);
+  });
+
+  it("keeps every reviewed card without applying a limit", () => {
+    const states = Object.fromEntries(
+      cards.map(item => [
+        item.id,
+        state(item.id, { timesReviewed: 4, timesCorrect: 1 }),
+      ])
+    );
+    expect(selectRecognitionCards(cards, states, today)).toHaveLength(5);
+  });
+
+  it("does not skip cards already reviewed today", () => {
+    const pair = [card("a"), card("b")];
+    const states = {
+      a: state("a", {
+        timesReviewed: 4,
+        timesCorrect: 1,
+        lastReviewDate: today,
+      }),
+      b: state("b", { timesReviewed: 4, timesCorrect: 3 }),
+    };
+    expect(ids(selectRecognitionCards(pair, states, today))).toEqual([
+      "a",
+      "b",
+    ]);
+    // Weak Words prefers the card not reviewed today.
+    expect(ids(selectWeakCards(pair, states, today))).toEqual(["b"]);
+  });
+});
+
+describe("accuracy", () => {
+  it("falls back to zero for a missing state", () => {
+    expect(accuracy(undefined)).toBe(0);
+  });
+
+  it("reports correct reviews over reviews", () => {
+    expect(accuracy(state("a", { timesReviewed: 4, timesCorrect: 1 }))).toBe(
+      0.25
+    );
   });
 });
 
