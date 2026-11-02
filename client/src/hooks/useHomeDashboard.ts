@@ -13,6 +13,7 @@ import {
   countOverdue,
   nextScheduledReview as getNextScheduledReview,
   selectLearningCards,
+  selectRecognitionCards,
   selectWeakCards,
   summarizeForecast,
 } from "@/lib/queue";
@@ -154,43 +155,10 @@ export function useHomeDashboard({
     [queue, cardStates]
   );
 
-  // Recognition practice never introduces a card: due and weak reviews come
-  // first, then the rest of the learner's existing cards.
-  const recognitionCards = useMemo(() => {
-    const reviewed = studyReady.filter(card =>
-      Boolean(cardStates[card.id]?.timesReviewed)
-    );
-    const due = reviewed
-      .filter(card => {
-        const dueDate = cardStates[card.id]?.due;
-        return Boolean(dueDate && dueDate <= today);
-      })
-      .sort((a, b) =>
-        (cardStates[a.id]?.due ?? today).localeCompare(
-          cardStates[b.id]?.due ?? today
-        )
-      );
-    const dueIds = new Set(due.map(card => card.id));
-    const weak = reviewed
-      .filter(
-        card =>
-          !dueIds.has(card.id) &&
-          getMasteryState(cardStates[card.id]) !== "known"
-      )
-      .sort((a, b) => {
-        const aState = cardStates[a.id];
-        const bState = cardStates[b.id];
-        return (
-          (aState?.timesCorrect ?? 0) / (aState?.timesReviewed ?? 1) -
-          (bState?.timesCorrect ?? 0) / (bState?.timesReviewed ?? 1)
-        );
-      });
-    const weakIds = new Set(weak.map(card => card.id));
-    const rest = reviewed.filter(
-      card => !dueIds.has(card.id) && !weakIds.has(card.id)
-    );
-    return [...due, ...weak, ...rest];
-  }, [cardStates, studyReady, today]);
+  const recognitionCards = useMemo(
+    () => selectRecognitionCards(studyReady, cardStates, today),
+    [cardStates, studyReady, today]
+  );
 
   const weakCards = useMemo(
     () => selectWeakCards(studyReady, cardStates, today),
