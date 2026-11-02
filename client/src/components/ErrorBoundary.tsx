@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { clearProgress } from "@/lib/progressStorage";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Component, ErrorInfo, ReactNode } from "react";
 
@@ -11,11 +12,9 @@ interface State {
   confirmingReset: boolean;
 }
 
-const STORAGE_KEY = "goyo-progress-v2";
-
 function resetProgressAndReload() {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    clearProgress();
   } catch (error) {
     console.error("Failed to reset local progress:", error);
   }

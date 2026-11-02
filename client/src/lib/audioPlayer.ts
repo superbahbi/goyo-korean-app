@@ -6,7 +6,6 @@ import {
   resolveAlphabetClip,
   resolveSentenceClip,
   resolveVocabularyClip,
-  resetAudioIndex as resetAudioManifest,
   sentenceIdsWithClips,
   warmAudioClip,
 } from "./audioIndex";
@@ -76,7 +75,7 @@ export function subscribeAudioPlayback(listener: () => void): () => void {
  * with a newer clip. It is not a failure: the UI must not offer a fallback or
  * log an error for it.
  */
-export class PlaybackStoppedError extends Error {
+class PlaybackStoppedError extends Error {
   constructor() {
     super("Audio playback was stopped");
     this.name = "PlaybackStoppedError";
@@ -331,14 +330,6 @@ export function stopAudio(): void {
 
   settle?.();
   publishPlayback(STOPPED);
-}
-
-export function isAudioPlaying(): boolean {
-  return Boolean(currentAudio && !currentAudio.paused);
-}
-
-export function resetAudioIndex(): void {
-  resetAudioManifest();
 }
 
 export function setAudioSpeaker(speaker: AudioSpeaker): void {

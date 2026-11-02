@@ -1,6 +1,7 @@
+import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
 import { expect, test, type Page } from "@playwright/test";
 
-const PROGRESS_KEY = "goyo-progress-v2";
+const PROGRESS_KEY = PROGRESS_STORAGE_KEY;
 
 interface SavedProgress {
   cardStates: Record<string, unknown>;

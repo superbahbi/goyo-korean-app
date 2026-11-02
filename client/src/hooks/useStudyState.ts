@@ -8,6 +8,7 @@ import {
   type StudyMode,
 } from "@/lib/reviewLog";
 import { getLocalDateKey } from "@/lib/day";
+import { PROGRESS_STORAGE_KEY } from "@/lib/progressStorage";
 import {
   deriveStreak,
   migrateLegacyDay,
@@ -63,8 +64,6 @@ export interface GradeOptions {
   /** The practice mode decides whether this grade counts for progress. */
   mode?: StudyMode;
 }
-
-const STORAGE_KEY = "goyo-progress-v2";
 
 function createDefaultState(): UserState {
   return {
@@ -262,7 +261,7 @@ interface LoadedState {
 
 function loadState(): LoadedState {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
     // A newer build may still have this tab open or a shared device may have
     // upgraded. Start fresh in memory and leave their save untouched.
     if (isNewerSave(raw)) {
@@ -408,7 +407,7 @@ export function useStudyState() {
   // Another tab wrote progress: adopt it instead of overwriting it later.
   useEffect(() => {
     const onStorage = (event: StorageEvent) => {
-      if (event.key !== STORAGE_KEY) return;
+      if (event.key !== PROGRESS_STORAGE_KEY) return;
       if (isNewerSave(event.newValue)) {
         // Another build upgraded the save: do not adopt (or sanitize) it.
         setSaveBlocked(true);
@@ -427,7 +426,7 @@ export function useStudyState() {
   useEffect(() => {
     if (saveBlocked) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(state));
       setSaveError(false);
     } catch (error) {
       console.error("Failed to save progress:", error);
