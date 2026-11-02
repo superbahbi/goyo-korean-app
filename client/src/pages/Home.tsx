@@ -16,8 +16,9 @@ import { QuickLinks } from "@/components/QuickLinks";
 import { CategoryGrid } from "@/components/CategoryGrid";
 import {
   HomeDialogHost,
-  type HomeDialogDeps,
+  type StudySessionDeps,
 } from "@/components/HomeDialogHost";
+import type { HomeDialogDeps } from "@/components/dialogs/registry";
 import {
   markIosInstallHintShown,
   shouldSuggestIosInstall,
@@ -137,22 +138,15 @@ export default function Home() {
   const dialogDeps: HomeDialogDeps = {
     today,
     state,
-    updateSettings,
-    replaceState,
-    isStudying,
-    sessionQueue,
-    sessionMode,
-    dailyGoalReached,
-    onGrade: handleGrade,
-    onCloseSession: closeSession,
-    recognitionCards: recognitionSessionCards,
-    studyReady,
-    onListeningGrade: handleListeningGrade,
-    onScenarioGrade: handleScenarioGrade,
-    onShadowingGrade: handleShadowingGrade,
-    grammarProgress: state.grammar,
-    onGrammarComplete: recordGrammarResult,
-    vocabulary,
+    settings: { updateSettings, replaceState },
+    grammar: { progress: state.grammar, onComplete: recordGrammarResult },
+    recognition: {
+      cards: recognitionSessionCards,
+      onListeningGrade: handleListeningGrade,
+      onScenarioGrade: handleScenarioGrade,
+    },
+    shadowing: { cards: studyReady, onGrade: handleShadowingGrade },
+    browse: { vocabulary },
     stats: {
       level: state.stats.level,
       totalXp: state.stats.totalXp,
@@ -176,6 +170,15 @@ export default function Home() {
       total: forecastTotal,
       peak: forecastPeak,
     },
+  };
+
+  const studyDeps: StudySessionDeps = {
+    isStudying,
+    queue: sessionQueue,
+    mode: sessionMode,
+    dailyGoalReached,
+    onGrade: handleGrade,
+    onClose: closeSession,
   };
 
   return (
@@ -264,7 +267,12 @@ export default function Home() {
         )}
       </main>
 
-      <HomeDialogHost dialog={activeDialog} onClose={close} deps={dialogDeps} />
+      <HomeDialogHost
+        dialog={activeDialog}
+        onClose={close}
+        deps={dialogDeps}
+        study={studyDeps}
+      />
     </div>
   );
 }

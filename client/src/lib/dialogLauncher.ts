@@ -5,32 +5,12 @@
  * the current one; close returns to no request.
  */
 
-export type DialogRequest =
-  | { kind: "browse"; category: string | null }
-  | { kind: "stats" }
-  | { kind: "settings" }
-  | { kind: "alphabet" }
-  | { kind: "grammar" }
-  | { kind: "listening" }
-  | { kind: "scenario" }
-  | { kind: "shadowing" };
-
-export type DialogKind = DialogRequest["kind"];
-
 /**
- * A request as an entry point supplies it. Browse defaults to the unfiltered
- * library; every other mode has no payload.
+ * The one enumerable list of dialog kinds. The request union, the launcher, and
+ * the host registry are all derived from this list, so a new dialog cannot be
+ * added to one without failing compilation in the others.
  */
-export type DialogRequestInput =
-  | { kind: "browse"; category?: string | null }
-  | { kind: Exclude<DialogKind, "browse"> };
-
-export type ActiveDialog = DialogRequest | null;
-
-/** The launcher's resting state: no dialog requested. */
-export const NO_DIALOG: ActiveDialog = null;
-
-const DIALOG_KINDS: readonly DialogKind[] = [
+export const DIALOG_KINDS = [
   "browse",
   "stats",
   "settings",
@@ -39,7 +19,26 @@ const DIALOG_KINDS: readonly DialogKind[] = [
   "listening",
   "scenario",
   "shadowing",
-];
+] as const;
+
+export type DialogKind = (typeof DIALOG_KINDS)[number];
+
+export type DialogRequest =
+  | { kind: Extract<DialogKind, "browse">; category: string | null }
+  | { kind: Exclude<DialogKind, "browse"> };
+
+/**
+ * A request as an entry point supplies it. Browse defaults to the unfiltered
+ * library; every other mode has no payload.
+ */
+export type DialogRequestInput =
+  | { kind: Extract<DialogKind, "browse">; category?: string | null }
+  | { kind: Exclude<DialogKind, "browse"> };
+
+export type ActiveDialog = DialogRequest | null;
+
+/** The launcher's resting state: no dialog requested. */
+export const NO_DIALOG: ActiveDialog = null;
 
 export type DialogAction =
   | { type: "open"; request: DialogRequestInput }
@@ -66,13 +65,4 @@ export function reduceDialog(
     case "close":
       return NO_DIALOG;
   }
-}
-
-/**
- * The kind the host may mount, or null when no known dialog is requested.
- * A request from an older or edited caller renders nothing.
- */
-export function knownDialogKind(dialog: ActiveDialog): DialogKind | null {
-  if (!dialog || !DIALOG_KINDS.includes(dialog.kind)) return null;
-  return dialog.kind;
 }
