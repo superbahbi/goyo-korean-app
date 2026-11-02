@@ -9,6 +9,7 @@ import {
 } from "@/lib/reviewLog";
 import { getLocalDateKey } from "@/lib/day";
 import { PROGRESS_STORAGE_KEY } from "@/lib/progressStorage";
+import { FEMALE_VOICE_ENABLED } from "@/lib/voiceAvailability";
 import {
   deriveStreak,
   migrateLegacyDay,
@@ -233,7 +234,10 @@ export function parseSavedState(
           ? savedSettings.autoPlayAudio
           : defaults.settings.autoPlayAudio,
       // Older saved progress may contain a removed system-voice preference.
+      // The female voice is paused for now, so a save that selected it falls
+      // back to the male voice instead of keeping an unusable preference.
       audioSpeaker:
+        FEMALE_VOICE_ENABLED &&
         savedSettings.audioSpeaker === "elevenlabs-female"
           ? "elevenlabs-female"
           : "elevenlabs",

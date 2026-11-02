@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { FEMALE_VOICE_ENABLED } from "./voiceAvailability";
 
 /**
  * The study card treats the audio-first front as unusable when a clip cannot
@@ -193,7 +194,7 @@ describe("playSentenceAudio", () => {
     await expect(playSentenceAudio("surv_002")).resolves.toBe(false);
   });
 
-  it("reports ids that have a clip in either voice", async () => {
+  it("reports ids that have a clip in an enabled voice", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(async () =>
@@ -210,7 +211,7 @@ describe("playSentenceAudio", () => {
     const { getAvailableSentenceIds } = await import("./audioPlayer");
 
     await expect(getAvailableSentenceIds()).resolves.toEqual(
-      new Set(["surv_001", "surv_002"])
+      new Set(FEMALE_VOICE_ENABLED ? ["surv_001", "surv_002"] : ["surv_001"])
     );
   });
 });

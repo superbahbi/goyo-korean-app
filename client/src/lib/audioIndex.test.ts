@@ -9,6 +9,7 @@ import {
   sentenceIdsWithClips,
   type AudioCacheStorage,
 } from "./audioIndex";
+import { FEMALE_VOICE_ENABLED } from "./voiceAvailability";
 
 /**
  * The manifest seam is shared by playback and the offline download, so these
@@ -211,15 +212,15 @@ describe("clip resolution", () => {
     ).toBeUndefined();
   });
 
-  it("reports sentence ids from either voice", () => {
+  it("reports sentence ids from the enabled voices", () => {
     expect(sentenceIdsWithClips(manifest)).toEqual(
-      new Set(["surv_001", "surv_002"])
+      new Set(FEMALE_VOICE_ENABLED ? ["surv_001", "surv_002"] : ["surv_001"])
     );
   });
 });
 
 describe("planAudioDownload", () => {
-  it("lists vocabulary clips from both voices once, as full URLs", () => {
+  it("lists vocabulary clips from the enabled voices once, as full URLs", () => {
     const manifest = parseAudioManifest({
       vocabulary: {
         surv_001: "male_surv_001.mp3",
@@ -236,7 +237,7 @@ describe("planAudioDownload", () => {
     expect(planAudioDownload(manifest)).toEqual([
       "/audio/male_surv_001.mp3",
       "/audio/shared.mp3",
-      "/audio/female_surv_001.mp3",
+      ...(FEMALE_VOICE_ENABLED ? ["/audio/female_surv_001.mp3"] : []),
     ]);
   });
 });

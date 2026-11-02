@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import type { UserState } from "@/hooks/useStudyState";
 import { setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
+import { FEMALE_VOICE_ENABLED } from "@/lib/voiceAvailability";
 
 interface AudioSpeakerSettingProps {
   settings: UserState["settings"];
@@ -23,6 +24,10 @@ export function AudioSpeakerSetting({
     setAudioSpeaker(speaker);
     toast.success("Speaker preference saved");
   };
+
+  // The female voice is paused while audio spend is reviewed; with one voice
+  // left there is no preference to choose, so the row disappears.
+  if (!FEMALE_VOICE_ENABLED) return null;
 
   return (
     <div className="border-t pt-4 space-y-2">
