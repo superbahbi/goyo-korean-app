@@ -25,6 +25,7 @@ import {
   describeTodayProgress,
   isFirstRunState,
 } from "@/lib/dashboardProgress";
+import { goalProgress } from "@/lib/gradeIntent";
 
 interface UseHomeDashboardOptions {
   vocabulary: VocabularyCard[];
@@ -235,8 +236,10 @@ export function useHomeDashboard({
     [extendedReviewForecast, dailyGoal]
   );
 
-  const cardsRemaining = Math.max(0, dailyGoal - cardsStudiedToday);
-  const dailyGoalReached = cardsStudiedToday >= dailyGoal;
+  const { reached: dailyGoalReached, remaining: cardsRemaining } = goalProgress(
+    dailyGoal,
+    cardsStudiedToday
+  );
   const overdueCount = countOverdue(studyReady, cardStates, today);
   const nextScheduledReview = getNextScheduledReview(
     cardStates,

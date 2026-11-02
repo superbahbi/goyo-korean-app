@@ -124,3 +124,28 @@ test("brings a failed card back once before the summary", async ({ page }) => {
 
   expect(Object.keys(saved!.cardStates)).toHaveLength(3);
 });
+
+test("celebrates the grade that crosses the daily goal", async ({ page }) => {
+  // A three-card goal makes the third grade the crossing one. Only the goal is
+  // seeded; every other setting keeps its default.
+  await page.addInitScript(key => {
+    window.localStorage.setItem(
+      key,
+      JSON.stringify({ settings: { dailyGoal: 3 } })
+    );
+  }, PROGRESS_KEY);
+  await page.reload();
+
+  await startFreshSession(page);
+  for (let graded = 1; graded <= 3; graded += 1) {
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("Space");
+    await page.keyboard.press("2");
+  }
+
+  // The toast names the XP the crossing grade actually awarded.
+  await expect(page.getByText("Daily goal reached! 🎉")).toBeVisible();
+  await expect(
+    page.getByText("You've earned 10 XP and maintained your streak!")
+  ).toBeVisible();
+});
