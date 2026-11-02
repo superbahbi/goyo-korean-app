@@ -34,6 +34,17 @@ The seam that turns a dashboard entry point into one dialog request and back to
 none; the dialog host maps that request to a lazily mounted dialog.
 _Avoid_: modal manager, dialog store, show-state bundle
 
+**Audio manifest**:
+The parsed map from domain IDs — vocabulary cards, example sentences, and
+Hangul characters — to content-hashed clip filenames; one fetch per page load
+serves both playback and the offline download.
+_Avoid_: audio config, clip registry, audio index shape
+
+**Warm**:
+To fetch one clip with `?warm=1` and store it in the offline audio cache under
+its real URL, but only when the response is a 200 with an audio content type.
+_Avoid_: preload, download, cache fill
+
 **Study session**:
 One run through a planned queue of cards, ending in a summary.
 _Avoid_: study flow, review run, deck run

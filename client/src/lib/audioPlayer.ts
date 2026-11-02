@@ -1,37 +1,29 @@
-import { AUDIO_CACHE_NAME } from "./audioCache";
+import type { AudioVoice } from "./audioIndex";
+import {
+  forgetAudioClip,
+  getAudioIndex,
+  peekAudioIndex,
+  resolveAlphabetClip,
+  resolveSentenceClip,
+  resolveVocabularyClip,
+  resetAudioIndex as resetAudioManifest,
+  sentenceIdsWithClips,
+  warmAudioClip,
+} from "./audioIndex";
 /**
  * Plays pre-generated Korean audio from /public/audio.
  *
  * The app's domain IDs (for example, surv_001 and cons_001) are intentionally
  * mapped to the generated filename keys so UI components never need to know
- * how audio files are named.
+ * how audio files are named. The manifest, filename resolution, and offline
+ * cache policy live in `audioIndex.ts`; this module owns the audio element.
  */
 
-interface AudioIndex {
-  vocabulary: Record<string, string>;
-  /** Example-sentence clips, keyed by the card or grammar example id. */
-  sentences?: Record<string, string>;
-  female?: {
-    vocabulary: Record<string, string>;
-    sentences?: Record<string, string>;
-    alphabet: {
-      consonants: Record<string, string>;
-      vowels: Record<string, string>;
-    };
-  };
-  alphabet: {
-    consonants: Record<string, string>;
-    vowels: Record<string, string>;
-  };
-}
-
-let audioIndex: AudioIndex | null = null;
-let audioIndexPromise: Promise<AudioIndex> | null = null;
 let currentAudio: HTMLAudioElement | null = null;
 // Settles the in-flight playback promise when it is stopped from outside, so
 // callers awaiting playAudioFile never hang.
 let settleStoppedPlayback: (() => void) | null = null;
-export type AudioSpeaker = "elevenlabs" | "elevenlabs-female";
+export type AudioSpeaker = AudioVoice;
 let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
 /**
@@ -46,135 +38,6 @@ export class PlaybackStoppedError extends Error {
   }
 }
 
-const consonantAudioAliases: Record<string, string> = {
-  cons_001: "ga",
-  cons_002: "na",
-  cons_003: "da",
-  cons_004: "ra",
-  cons_005: "ma",
-  cons_006: "ba",
-  cons_007: "sa",
-  cons_008: "a_consonant",
-  cons_009: "ja",
-  cons_010: "cha2",
-  cons_011: "cha",
-  cons_012: "kha",
-  cons_013: "ta",
-  cons_014: "pha",
-  cons_015: "ha",
-};
-
-const vowelAudioAliases: Record<string, string> = {
-  vowel_001: "a",
-  vowel_002: "ya",
-  vowel_003: "eo",
-  vowel_004: "yeo",
-  vowel_005: "o",
-  vowel_006: "yo",
-  vowel_007: "u",
-  vowel_008: "yu",
-  vowel_009: "eu",
-  vowel_010: "i",
-  vowel_011: "ae",
-  vowel_012: "e",
-};
-
-function fetchAudioIndex(): Promise<AudioIndex> {
-  if (typeof window === "undefined" || typeof fetch === "undefined") {
-    return Promise.reject(
-      new Error("Audio index fetch called outside browser")
-    );
-  }
-
-  // No cache-busting query and no `no-store`: the service worker precaches this
-  // exact URL, and a query string would miss that entry and fail offline. A
-  // regenerated index gets a new precache revision on the next deploy.
-  return fetch("/audio/index.json")
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Audio index request failed (${response.status})`);
-      }
-      return response.json() as Promise<AudioIndex>;
-    })
-    .then(data => {
-      audioIndex = data;
-      return data;
-    });
-}
-
-// Module-level prefetch: begin loading immediately so the index is typically resolved by first tap
-if (typeof window !== "undefined") {
-  audioIndexPromise = fetchAudioIndex().catch(err => {
-    audioIndexPromise = null;
-    throw err;
-  });
-  audioIndexPromise.catch(() => {
-    /* swallow background preload rejection to avoid unhandled rejection warning */
-  });
-}
-
-async function loadAudioIndex(): Promise<AudioIndex> {
-  if (audioIndex) return audioIndex;
-  if (!audioIndexPromise) {
-    audioIndexPromise = fetchAudioIndex().catch(err => {
-      audioIndexPromise = null;
-      throw err;
-    });
-  }
-  return audioIndexPromise;
-}
-
-function resolveVocabularyAudioFile(
-  index: AudioIndex,
-  wordId: string
-): string | undefined {
-  const vocabularyIndex =
-    selectedSpeaker === "elevenlabs-female"
-      ? index.female?.vocabulary
-      : index.vocabulary;
-  // Filenames carry a content hash, so the index is the only way to resolve a
-  // clip; there is no filename to guess when an entry is missing.
-  return vocabularyIndex?.[wordId];
-}
-
-function resolveSentenceAudioFile(
-  index: AudioIndex,
-  sentenceId: string
-): string | undefined {
-  const preferred =
-    selectedSpeaker === "elevenlabs-female"
-      ? index.female?.sentences
-      : index.sentences;
-  const fallback =
-    selectedSpeaker === "elevenlabs-female"
-      ? index.sentences
-      : index.female?.sentences;
-  // Sentence clips can lag behind the word library while a batch is generated.
-  // A missing clip in the chosen voice falls back to the other one rather than
-  // failing the tap.
-  return preferred?.[sentenceId] ?? fallback?.[sentenceId];
-}
-
-function resolveAlphabetAudioFile(
-  index: AudioIndex,
-  characterId: string,
-  type: "consonant" | "vowel"
-): string | undefined {
-  const aliases =
-    type === "consonant" ? consonantAudioAliases : vowelAudioAliases;
-  const alphabetIndex =
-    selectedSpeaker === "elevenlabs-female"
-      ? index.female?.alphabet
-      : index.alphabet;
-  const files =
-    type === "consonant" ? alphabetIndex?.consonants : alphabetIndex?.vowels;
-  if (!files) throw new Error("Premium audio index is unavailable");
-  // The male index keys alphabet clips by mnemonic, the female index by ID.
-  // Try the ID first (both indexes include it), then the mnemonic alias.
-  const alias = aliases[characterId];
-  return files[characterId] ?? (alias ? files[alias] : undefined);
-}
-
 /**
  * Resolves true when the clip played to the end or was intentionally stopped,
  * false when it could not start or failed midway. Callers that can show a
@@ -183,10 +46,12 @@ function resolveAlphabetAudioFile(
  */
 export async function playVocabularyAudio(wordId: string): Promise<boolean> {
   try {
-    // When the index is already loaded, resolve and trigger playback synchronously
-    // without awaiting first, so mobile Safari retains user gesture activation.
-    if (audioIndex) {
-      const audioFile = resolveVocabularyAudioFile(audioIndex, wordId);
+    // When the manifest is already loaded, resolve and trigger playback
+    // synchronously without awaiting first, so mobile Safari retains user
+    // gesture activation.
+    const loaded = peekAudioIndex();
+    if (loaded) {
+      const audioFile = resolveVocabularyClip(loaded, wordId, selectedSpeaker);
       if (!audioFile) {
         throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
       }
@@ -194,8 +59,8 @@ export async function playVocabularyAudio(wordId: string): Promise<boolean> {
       return true;
     }
 
-    const index = await loadAudioIndex();
-    const audioFile = resolveVocabularyAudioFile(index, wordId);
+    const index = await getAudioIndex();
+    const audioFile = resolveVocabularyClip(index, wordId, selectedSpeaker);
     if (!audioFile) {
       throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
     }
@@ -216,9 +81,15 @@ export async function playAlphabetAudio(
   type: "consonant" | "vowel"
 ): Promise<void> {
   try {
-    // Synchronous resolution when index is cached to preserve user gesture
-    if (audioIndex) {
-      const audioFile = resolveAlphabetAudioFile(audioIndex, characterId, type);
+    // Synchronous resolution when the manifest is cached preserves the gesture.
+    const loaded = peekAudioIndex();
+    if (loaded) {
+      const audioFile = resolveAlphabetClip(
+        loaded,
+        characterId,
+        type,
+        selectedSpeaker
+      );
       if (!audioFile) {
         throw new Error(`No generated audio mapped for ${type} ${characterId}`);
       }
@@ -226,8 +97,13 @@ export async function playAlphabetAudio(
       return;
     }
 
-    const index = await loadAudioIndex();
-    const audioFile = resolveAlphabetAudioFile(index, characterId, type);
+    const index = await getAudioIndex();
+    const audioFile = resolveAlphabetClip(
+      index,
+      characterId,
+      type,
+      selectedSpeaker
+    );
     if (!audioFile) {
       throw new Error(`No generated audio mapped for ${type} ${characterId}`);
     }
@@ -246,8 +122,8 @@ export async function playAlphabetAudio(
  */
 export async function playSentenceAudio(sentenceId: string): Promise<boolean> {
   try {
-    const index = audioIndex ?? (await loadAudioIndex());
-    const audioFile = resolveSentenceAudioFile(index, sentenceId);
+    const index = peekAudioIndex() ?? (await getAudioIndex());
+    const audioFile = resolveSentenceClip(index, sentenceId, selectedSpeaker);
     if (!audioFile) {
       throw new Error(`No sentence audio mapped for ${sentenceId}`);
     }
@@ -267,55 +143,22 @@ export async function playSentenceAudio(sentenceId: string): Promise<boolean> {
  */
 export async function getAvailableSentenceIds(): Promise<Set<string>> {
   try {
-    const index = await loadAudioIndex();
-    return new Set([
-      ...Object.keys(index.sentences ?? {}),
-      ...Object.keys(index.female?.sentences ?? {}),
-    ]);
+    return sentenceIdsWithClips(await getAudioIndex());
   } catch {
     return new Set();
   }
 }
 
-/**
- * Playback requests use range requests, which the service worker does not cache,
- * so warm the offline cache with a plain fetch the first time a clip plays.
- */
-async function warmAudioCache(audioPath: string): Promise<void> {
-  if (typeof window === "undefined" || !("caches" in window)) return;
-  try {
-    const cache = await caches.open(AUDIO_CACHE_NAME);
-    if (await cache.match(audioPath)) return;
-    // The ?warm=1 suffix keeps this out of the service worker's mp3 rule, so the
-    // response is a complete 200 the Cache API can store under the real URL.
-    const response = await fetch(`${audioPath}?warm=1`);
-    // A missing clip falls back to index.html with a 200, which must never be
-    // stored as audio or the service worker will serve it forever.
-    if (
-      response.status === 200 &&
-      (response.headers.get("content-type") ?? "").startsWith("audio/")
-    ) {
-      await cache.put(audioPath, response);
-    }
-  } catch {
-    /* offline caching is best effort */
-  }
-}
-
-async function forgetCachedAudio(audioPath: string): Promise<void> {
-  if (typeof window === "undefined" || !("caches" in window)) return;
-  try {
-    const cache = await caches.open(AUDIO_CACHE_NAME);
-    await cache.delete(audioPath);
-  } catch {
-    /* best effort */
-  }
+function warmAudioCache(audioPath: string): void {
+  // Playback warming is best effort: a failed prefetch must not affect the
+  // element. Batch download awaits the same policy and reports failures.
+  void warmAudioClip(audioPath).catch(() => {});
 }
 
 function playAudioFile(audioPath: string): Promise<void> {
   return new Promise((resolve, reject) => {
     stopAudio();
-    void warmAudioCache(audioPath);
+    warmAudioCache(audioPath);
 
     const audio = new Audio();
     currentAudio = audio;
@@ -360,7 +203,7 @@ function playAudioFile(audioPath: string): Promise<void> {
     const recover = async (id: number, message: string) => {
       if (id !== attemptId || stopped) return;
       // Delete first: the retry must not race the service worker and re-read the bad entry.
-      await forgetCachedAudio(audioPath);
+      await forgetAudioClip(audioPath);
       if (id !== attemptId || stopped) return;
       if (retried) {
         finish(new Error(message));
@@ -368,7 +211,7 @@ function playAudioFile(audioPath: string): Promise<void> {
       }
       retried = true;
       // Repopulate the cache with the real clip once the poisoned entry is gone.
-      void warmAudioCache(audioPath);
+      warmAudioCache(audioPath);
       attach(`${audioPath}?retry=1`);
     };
 
@@ -429,8 +272,7 @@ export function isAudioPlaying(): boolean {
 }
 
 export function resetAudioIndex(): void {
-  audioIndex = null;
-  audioIndexPromise = null;
+  resetAudioManifest();
 }
 
 export function setAudioSpeaker(speaker: AudioSpeaker): void {
