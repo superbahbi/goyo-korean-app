@@ -19,19 +19,34 @@ Every stage is done only when its gate passes.
 
 ## Current state
 
-Verified on 2026-11-01 on `main` after the Phase 6 practice-shell merge (`#58`):
+Verified on 2026-11-02 on `main` after the architecture round 2 merge (`#76`):
 
-| Check              | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `vitest run`       | 272 tests pass in 27 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3 follow-up, phase 7 follow-up, phase 7 sweep, imported taxonomy, grammar, grammar progress, backup status)                                                                                                                                              |
-| `playwright test`  | 25 checks pass against the production build: seven flow smokes (study loop, failed-card retry, Browse search and audio, progress export/import, offline reload, Settings scroll, grammar lesson), six axe scans (dashboard, study, dialogs, Hangul, recognition overlays, grammar), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker) |
-| `vite build`       | Passes. Main chunk 127.6 kB (36.8 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 226 kB chunk                                                                                                                                                                                                                                                                                               |
-| CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                                                                  |
+| Check              | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `vitest run`       | 403 tests pass in 37 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio player, audio index, grade intent, grade outcome, session machine, study keys, question loop, distractors, practice verdict, dialog launcher, dialog registry, dashboard view, progress storage, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3/7 guards, grammar, grammar progress, backup status, generator) |
+| `playwright test`  | 27 checks pass against the production build across 9 specs: nine flow smokes (four study-loop paths, Browse search and audio, grammar lesson, offline reload, progress export/import, Settings), six axe scans (dashboard, study, dialogs, Hangul, recognition overlays, grammar), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker)          |
+| `vite build`       | Passes. Main chunk 139.5 kB (40.9 kB gzipped), with React (194.3 kB), vendor (130.6 kB), motion (115.7 kB) and Radix (55.9 kB) in separate vendor chunks; Essential 600 lazy-loaded as its own 226.1 kB chunk (55.1 kB gzipped). Precache: 129 entries, 1,307 KiB                                                                                                                                                                                                      |
+| CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                                                                          |
 
 All gates pass.
+
+Architecture rounds 1–2 (2026-11-02, `#70`–`#76`): thirteen shallow spots were deepened across
+two reviews. A grade's intent and its write path now live together in `lib/gradeIntent.ts` +
+`lib/gradeOutcome.ts`, so the toast and the save cannot disagree. A study session is a
+framework-free machine (`lib/studySession.ts`) behind a thin React adapter, with its grade lock
+and phase owned by the machine. Practice modes share `lib/practiceQuestion.ts`,
+`lib/practiceDistractors.ts` and `lib/practiceVerdict.ts`; per-mode distractor rules survive as
+explicit options. The dashboard uses one dialog request (`lib/dialogLauncher.ts`) mapped through an
+exhaustive registry (`components/dialogs/registry.tsx`), and one view model
+(`lib/dashboardView.ts`) for today's plan, availability and stats. The audio manifest is parsed and
+cached once (`lib/audioIndex.ts`); playback state is owned by the player
+(`hooks/useAudioPlayback.ts`) and auto-play-once is one hook (`hooks/useAutoPlayOnce.ts`). Card
+selection, including recognition practice, lives in `lib/queue.ts`. Domain terms are recorded in
+`GLOSSARY.md` and the decisions in `docs/adr/`. Behaviour is unchanged except that offline download
+progress now counts only clips actually stored.
 
 Phase 6 shell merge (2026-11-01, `#58`): the seven practice modes now share one `PracticeShell`
 (prompt, verdict, feedback, complete states) instead of six near-duplicate layouts, and the study
@@ -67,12 +82,12 @@ iPhone-class WebKit engine plus the keyboard and screen-reader semantics that ax
 
 What is open: the Korean wording still has room for a later naturalness polish (see Phase 3 — content
 trust). Audio is 27 MB of the roughly 53 MB clean clone (26 MB of tracked files plus a 27 MB pack).
-The 300-line target holds for almost all UI
-code; `components/FlashCard.tsx` is 314 after the sentence-audio control moved in, and the data and
-shared modules remain larger: `essentialVocabulary.ts` (7.7k lines) and `vocabulary.ts` (1.7k) are
-deck data, and `grammar.ts` (594), `useStudyState.ts` (586), `essentialTaxonomy.ts` (566),
-`essentialFrequency.ts` (523), `alphabet.ts` (493), `audioPlayer.ts` (443) and `romanize.ts` (314)
-are over 300.
+The 300-line target holds for almost all UI code (`components/FlashCard.tsx` is 309). The data
+modules stay larger by design: `essentialVocabulary.ts` (7.7k lines) and `vocabulary.ts` (1.7k) are
+deck data. Modules still over 300 after the refactors: `grammar.ts` (594), `essentialTaxonomy.ts`
+(566), `alphabet.ts` (533), `essentialFrequency.ts` (523), `useStudyState.ts` (499),
+`dashboardView.ts` (486), `audioPlayer.ts` (342), `studySession.ts` (325) and `audioIndex.ts` (319).
+`dashboardView` and `audioPlayer` are the next split candidates if they keep growing.
 
 ## How we work
 
@@ -99,7 +114,7 @@ are over 300.
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                                                      |
 | 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                                                            |
-| 2 Structure                         | Done; main chunk 127.6 kB raw / 36.8 kB gzipped with vendor chunks; one component over 300 lines (`FlashCard` 314)                                                                                               |
+| 2 Structure                         | Done; main chunk 139.5 kB raw / 40.9 kB gzipped with vendor chunks; largest UI file is 309 lines (`FlashCard`)                                                                                                   |
 | 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                                                      |
 | 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done                                     |
 | 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                                                            |
