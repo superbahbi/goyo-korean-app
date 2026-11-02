@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { emptyGrammarProgress } from "@/lib/grammarProgress";
+import { FEMALE_VOICE_ENABLED } from "@/lib/voiceAvailability";
 import {
   applyGrade,
   buildExportPayload,
@@ -102,6 +103,23 @@ describe("saved progress schemaVersion", () => {
 
   it("starts from the current version when nothing is saved", () => {
     expect(parseSavedState(null).schemaVersion).toBe(SCHEMA_VERSION);
+  });
+
+  it("loads a saved speaker that matches the enabled voices", () => {
+    const state = parseSavedState(
+      JSON.stringify({
+        cardStates: {},
+        stats,
+        settings: { ...settings, audioSpeaker: "elevenlabs-female" },
+        studyDays,
+      }),
+      today
+    );
+
+    // The female voice is paused, so a save that selected it loads as male.
+    expect(state.settings.audioSpeaker).toBe(
+      FEMALE_VOICE_ENABLED ? "elevenlabs-female" : "elevenlabs"
+    );
   });
 
   it("defaults and clamps the new-card pace", () => {

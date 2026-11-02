@@ -3,6 +3,7 @@ import {
   ALPHABET_VOWEL_AUDIO_ALIASES,
 } from "./alphabet";
 import { AUDIO_CACHE_NAME } from "./audioCache";
+import { FEMALE_VOICE_ENABLED } from "./voiceAvailability";
 
 /**
  * Audio manifest: the map from domain IDs to content-hashed clip filenames,
@@ -149,21 +150,25 @@ export function resolveAlphabetClip(
 
 /** Sentence ids that have a clip in at least one voice. */
 export function sentenceIdsWithClips(manifest: AudioManifest): Set<string> {
-  return new Set([
-    ...Object.keys(manifest.sentences),
-    ...Object.keys(manifest.female?.sentences ?? {}),
-  ]);
+  const ids = Object.keys(manifest.sentences);
+  if (FEMALE_VOICE_ENABLED) {
+    ids.push(...Object.keys(manifest.female?.sentences ?? {}));
+  }
+  return new Set(ids);
 }
 
 /**
  * Every vocabulary clip URL the offline download should store, de-duplicated
- * across both voices and ordered as the manifest lists them.
+ * across the enabled voices and ordered as the manifest lists them. The paused
+ * female library is skipped so a download does not store audio nobody can
+ * select.
  */
 export function planAudioDownload(manifest: AudioManifest): string[] {
-  const files = new Set<string>();
-  for (const file of Object.values(manifest.vocabulary)) files.add(file);
-  for (const file of Object.values(manifest.female?.vocabulary ?? {}))
-    files.add(file);
+  const files = new Set<string>(Object.values(manifest.vocabulary));
+  if (FEMALE_VOICE_ENABLED) {
+    for (const file of Object.values(manifest.female?.vocabulary ?? {}))
+      files.add(file);
+  }
   return Array.from(files, file => `/audio/${file}`);
 }
 
