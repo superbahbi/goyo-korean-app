@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronDown, Mic2 } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
@@ -12,6 +12,7 @@ import { useStudySession } from "./study/useStudySession";
 import { PracticeShell } from "./practice/PracticeShell";
 import { VocabularyCard } from "@/lib/vocabulary";
 import { previewIntervals } from "@/lib/srs";
+import { STUDY_KEY_HINT } from "@/lib/studyKeys";
 import { cn } from "@/lib/utils";
 import type { CardState } from "@/lib/mastery";
 
@@ -50,24 +51,18 @@ export function StudySession({
     completed,
     results,
     retryCount,
+    productionOpen,
     productionAttempt,
-    setProductionAttempt,
     productionDone,
-    setProductionDone,
     dismissIntro,
     handleFlip,
     handleGrade,
     restartSession,
     closeSession,
+    toggleProduction,
+    setProductionAttempt,
+    markProductionDone,
   } = study;
-
-  // The optional production box is collapsed by default: on a phone it used to
-  // take more space than the card itself. Tracking the card the panel was
-  // opened for collapses it again on the next card without an effect.
-  const [productionOpenFor, setProductionOpenFor] = useState<number | null>(
-    null
-  );
-  const showProduction = productionOpenFor === index;
 
   // Preview against the card's saved schedule. Renders after a grade use the
   // state the parent just persisted, so the labels match what was saved.
@@ -148,13 +143,9 @@ export function StudySession({
             <GradeActions intervals={intervals} onGrade={handleGrade} />
             <button
               type="button"
-              aria-expanded={showProduction}
+              aria-expanded={productionOpen}
               aria-controls="production-attempt"
-              onClick={() =>
-                setProductionOpenFor(current =>
-                  current === index ? null : index
-                )
-              }
+              onClick={toggleProduction}
               className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-1"
             >
               <Mic2 size={14} aria-hidden="true" />
@@ -170,16 +161,16 @@ export function StudySession({
                 aria-hidden="true"
                 className={cn(
                   "transition-transform",
-                  showProduction && "rotate-180"
+                  productionOpen && "rotate-180"
                 )}
               />
             </button>
-            <div id="production-attempt" hidden={!showProduction}>
+            <div id="production-attempt" hidden={!productionOpen}>
               <ProductionAttempt
                 value={productionAttempt}
                 onChange={setProductionAttempt}
                 done={productionDone}
-                onDone={() => setProductionDone(true)}
+                onDone={markProductionDone}
               />
             </div>
           </div>
@@ -218,7 +209,7 @@ export function StudySession({
       </div>
 
       <p className="mt-3 hidden text-center text-xs text-muted-foreground sm:block">
-        Space reveals · 1 Again · 2 Good · 3 Easy · Esc closes
+        {STUDY_KEY_HINT}
       </p>
     </PracticeShell>
   );

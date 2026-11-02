@@ -17,10 +17,11 @@ interface FlashCardProps {
   romanization?: string;
   /** True when the example sentence has a generated clip to play. */
   sentenceAudioReady?: boolean;
-  onFlip?: (flipped: boolean) => void;
+  onFlip: (flipped: boolean) => void;
   autoSpeak?: boolean;
   audioFirst?: boolean;
-  revealed?: boolean;
+  /** The card is fully controlled: the session owns the reveal state. */
+  revealed: boolean;
 }
 
 function cleanKoreanText(text: string): string {
@@ -43,14 +44,13 @@ function FlashCardBase({
   revealed,
   sentenceAudioReady = false,
 }: FlashCardProps) {
-  const [flipped, setFlipped] = useState(false);
   const [showRoman, setShowRoman] = useState(false);
   // A card that only shows audio is unusable when the clip cannot play (muted
   // device, blocked /audio/, offline miss). Track that so the front can offer a
   // way forward instead of trapping the learner.
   const [audioFailed, setAudioFailed] = useState(false);
   const audioFailureAnnounced = useRef(false);
-  const isRevealed = revealed ?? flipped;
+  const isRevealed = revealed;
   // Auto-play at most once per word per mount: flipping back to the front must
   // not replay the pronunciation.
   const lastAutoPlayedId = useRef<string | null>(null);
@@ -82,9 +82,7 @@ function FlashCardBase({
   }, [isRevealed, front, wordId, autoSpeak, markAudioFailed]);
 
   const handleFlip = () => {
-    const nextValue = !isRevealed;
-    setFlipped(nextValue);
-    onFlip?.(nextValue);
+    onFlip(!isRevealed);
   };
 
   const getRomanization = () => {
