@@ -62,3 +62,62 @@ describe("Phase 7 sweep batch 1 fixes", () => {
     expect(die.usageNote).toContain("세상을 떠나다");
   });
 });
+
+// Defects found by the second Phase 7 sweep batch, recorded in
+// docs/audits/essential-sample-6.json.
+describe("Phase 7 sweep batch 2 fixes", () => {
+  it("describes both the animal and food senses of fish", () => {
+    const fish = card("essential_003");
+    expect(fish.usageNote).toContain("생선");
+    expect(fish.usageNote).not.toMatch(/cooked fish/);
+  });
+
+  it("uses the possessive particle for the car's tire pressure", () => {
+    const tire = card("essential_018");
+    expect(tire.example).toBe("차의 타이어 공기압을 확인했어요.");
+    expect(tire.exampleEnglish).toBe("I checked the car's tire pressure.");
+  });
+
+  it("assimilates ㄹ to n after ㄴ/ㅁ/ㅇ", () => {
+    expect(romanize("대통령")).toBe("daetongnyeong");
+    expect(romanize("음료수")).toBe("eumnyosu");
+    expect(romanize("정력")).toBe("jeongnyeok");
+    expect(romanize("종로")).toBe("jongno");
+    expect(romanize("심리")).toBe("simni");
+
+    expect(card("essential_096").romanization).toBe("daetongnyeong");
+    expect(card("essential_142").romanization).toBe("jeongnyeok");
+    expect(card("essential_174").romanization).toBe("eumnyosu");
+  });
+
+  it("keeps ㄹ as l after another ㄹ", () => {
+    expect(romanize("빨리")).toBe("ppalli");
+    expect(romanize("설날")).toBe("seolnal");
+  });
+
+  it("wipes what actually got on the lips", () => {
+    const lips = card("essential_257");
+    expect(lips.example).toBe(
+      "그는 초콜릿을 먹다가 입술에 묻은 것을 닦았어요."
+    );
+    expect(lips.example).not.toContain("묻었는지");
+    expect(lips.exampleEnglish).toBe(
+      "He wiped off the chocolate that got on his lips while eating."
+    );
+  });
+
+  it("separates everyday 피 from medical 혈액", () => {
+    const blood = card("essential_272");
+    expect(blood.usageNote).toContain("혈액");
+    expect(blood.usageNote).not.toMatch(/compounds \(혈액\)/);
+  });
+
+  it("uses 년 as a year counter, not for age", () => {
+    const year = card("essential_395");
+    expect(year.example).toBe("한국에 온 지 삼 년이 되었어요.");
+    expect(year.example).not.toContain("스물다섯");
+    expect(year.exampleEnglish).toBe(
+      "It has been three years since I came to Korea."
+    );
+  });
+});

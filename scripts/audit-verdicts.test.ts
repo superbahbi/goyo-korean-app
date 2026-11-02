@@ -83,6 +83,7 @@ const AUDIT_FILES = [
   "essential-sample-3.json",
   "essential-sample-4.json",
   "essential-sample-5.json",
+  "essential-sample-6.json",
 ];
 
 const audits = AUDIT_FILES.map(file => {
