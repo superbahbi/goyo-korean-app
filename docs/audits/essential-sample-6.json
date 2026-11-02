@@ -1,0 +1,431 @@
+{
+  "sample": 6,
+  "sheet": "docs/audits/essential-sample-6.md",
+  "deck": "Essential 600 imported deck",
+  "deckSize": 504,
+  "seed": 11,
+  "limit": 50,
+  "auditedAt": "2026-11-02",
+  "auditor": "DeepSeek V4.1 Flash model pass; native-speaker spot check pending.",
+  "rubric": [
+    "translation accuracy",
+    "Korean naturalness",
+    "politeness consistency",
+    "part of speech",
+    "romanization/batchim"
+  ],
+  "issueCategories": [
+    "translation",
+    "naturalness",
+    "politeness",
+    "part-of-speech",
+    "romanization",
+    "usage-note",
+    "spelling"
+  ],
+  "summary": {
+    "cards": 50,
+    "pass": 43,
+    "fix": 7,
+    "errorRate": 0.14,
+    "decision": "7 of 50 fail (14%), inside the 5-15% band, so the sweep continues in 50-card batches until every imported card has a verdict.",
+    "resolved": 7,
+    "openFix": 0
+  },
+  "sweep": {
+    "batch": 2,
+    "batchSize": 50,
+    "cardsAuditedBefore": 235,
+    "cardsAuditedAfter": 285,
+    "deckCoverage": 0.5654761904761905,
+    "remaining": 219
+  },
+  "reaudit": {
+    "reauditedAt": "2026-11-02",
+    "openFixes": 0,
+    "method": "Re-read all 50 seed-11 rows against the five-point rubric after the fixes, then re-rendered the same sheet with --from and re-ran the deck, romanization and content guard tests.",
+    "result": "All 7 fixed cards read clean and no new defect was found; the sheet now shows the corrected rows."
+  },
+  "systemicIssues": [
+    {
+      "issue": "Romanization drops ㄴ/ㅁ/ㅇ + ㄹ assimilation",
+      "category": "romanization",
+      "cards": 2,
+      "ids": ["essential_096", "essential_174"],
+      "detail": "The transliterator left ㄹ as l after ㄴ/ㅁ/ㅇ, so 대통령 and 음료수 were romanized daetonglyeong and eumlyosu instead of daetongnyeong and eumnyosu. The same rule also corrected 정력 (essential_142), which this sheet did not sample."
+    },
+    {
+      "issue": "Examples that do not say what they mean",
+      "category": "naturalness",
+      "cards": 3,
+      "ids": ["essential_018", "essential_257", "essential_395"],
+      "detail": "One used the wrong particle for the car's tire pressure, one used 묻었는지 so the sentence never said what was wiped, and one used the year counter 년 for age, which takes 살."
+    },
+    {
+      "issue": "Usage notes with inaccurate sense claims",
+      "category": "usage-note",
+      "cards": 2,
+      "ids": ["essential_003", "essential_272"],
+      "detail": "The 물고기 note limited 생선 to cooked fish, and the 피 note called 혈액 a compound of 피; both claims misdescribe the words."
+    }
+  ],
+  "notes": [
+    "Each of the 50 seed-11 rows was read against the five-point rubric (translation, naturalness, politeness, part of speech, romanization/batchim), with usage-note claims checked separately; no deck data was edited during the audit.",
+    "This is a model screen, not the pending Korean-speaker spot check.",
+    "The sheet was sampled with --unaudited, so none of the 235 cards audited in samples 1-5 was re-read and every row is new evidence.",
+    "Seven of 50 fail (14%), inside the 5-15% band; the sweep continues in 50-card batches, with 219 imported cards left.",
+    "The romanization fix also corrects essential_142 (정력), which was not in this sheet, because data.test.ts keeps every stored romanization equal to the transliterator.",
+    "Three rewritten examples (essential_018, essential_257, essential_395) already had male sentence clips, so those three clips were regenerated and the index updated; no other audio changed."
+  ],
+  "verdicts": [
+    {
+      "id": "essential_003",
+      "source": "600 essential words · row 9",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "The note said 생선 is for cooked fish; 생선 is the word for fish as food, raw or cooked, while 물고기 names the animal."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Rewrote the note to contrast the animal word 물고기 with the food word 생선."
+    },
+    {
+      "id": "essential_006",
+      "source": "600 essential words · row 12",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_018",
+      "source": "600 essential words · row 24",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "차에 타이어 공기압을 확인했어요 uses the location particle 에 where the car owns the tire pressure; the sentence needs 차의 (or no 차)."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Changed the example to 차의 타이어 공기압을 확인했어요 and the translation to 'I checked the car's tire pressure.'"
+    },
+    {
+      "id": "essential_029",
+      "source": "600 essential words · row 35",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_052",
+      "source": "600 essential words · row 58",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_054",
+      "source": "600 essential words · row 60",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_059",
+      "source": "600 essential words · row 65",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_064",
+      "source": "600 essential words · row 70",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_066",
+      "source": "600 essential words · row 72",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_070",
+      "source": "600 essential words · row 76",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_082",
+      "source": "600 essential words · row 88",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_096",
+      "source": "600 essential words · row 102",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "romanization",
+          "detail": "daetonglyeong leaves ㄹ as l; after ㅇ the ㄹ assimilates to n, so the Revised Romanization is daetongnyeong."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Taught the transliterator the ㄴ/ㅁ/ㅇ + ㄹ → n rule and set the stored romanization to daetongnyeong."
+    },
+    {
+      "id": "essential_107",
+      "source": "600 essential words · row 113",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_119",
+      "source": "600 essential words · row 125",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_124",
+      "source": "600 essential words · row 130",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_149",
+      "source": "600 essential words · row 155",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_164",
+      "source": "600 essential words · row 170",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_165",
+      "source": "600 essential words · row 171",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_174",
+      "source": "600 essential words · row 180",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "romanization",
+          "detail": "eumlyosu leaves ㄹ as l; after ㅁ it assimilates to n, so the Revised Romanization is eumnyosu."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "The same transliterator fix sets the stored romanization to eumnyosu."
+    },
+    {
+      "id": "essential_175",
+      "source": "600 essential words · row 181",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_180",
+      "source": "600 essential words · row 186",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_199",
+      "source": "600 essential words · row 205",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_223",
+      "source": "600 essential words · row 229",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_239",
+      "source": "600 essential words · row 245",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_257",
+      "source": "600 essential words · row 263",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "그는 초콜릿을 먹다가 입술에 묻었는지 닦았어요 links 묻었는지 ('whether it got on') to 닦다, so the sentence never says what he wiped and the English guessed 'maybe because'."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Replaced it with 입술에 묻은 것을 닦았어요 and updated the English to 'He wiped off the chocolate that got on his lips while eating.'"
+    },
+    {
+      "id": "essential_272",
+      "source": "600 essential words · row 278",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "usage-note",
+          "detail": "The note called 혈액 a compound of 피; 혈액 is a separate Sino-Korean word, not a compound containing 피."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Rewrote the note to contrast everyday 피 with medical 혈액 and to keep the idiom mention."
+    },
+    {
+      "id": "essential_275",
+      "source": "600 essential words · row 281",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_279",
+      "source": "600 essential words · row 285",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_289",
+      "source": "600 essential words · row 295",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_290",
+      "source": "600 essential words · row 296",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_294",
+      "source": "600 essential words · row 300",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_302",
+      "source": "600 essential words · row 308",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_319",
+      "source": "600 essential words · row 325",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_327",
+      "source": "600 essential words · row 333",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_346",
+      "source": "600 essential words · row 352",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_383",
+      "source": "600 essential words · row 442",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_389",
+      "source": "600 essential words · row 448",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_393",
+      "source": "600 essential words · row 452",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_395",
+      "source": "600 essential words · row 454",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "스물다섯 년이 되었어요 uses the year counter 년 for age, which takes 살; the example does not show how 년 is actually used."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Replaced it with 한국에 온 지 삼 년이 되었어요 ('It has been three years since I came to Korea') and updated the English."
+    },
+    {
+      "id": "essential_401",
+      "source": "600 essential words · row 461",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_405",
+      "source": "600 essential words · row 465",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_420",
+      "source": "600 essential words · row 480",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_422",
+      "source": "600 essential words · row 482",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_425",
+      "source": "600 essential words · row 485",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_437",
+      "source": "600 essential words · row 497",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_460",
+      "source": "600 essential words · row 520",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_497",
+      "source": "600 essential words · row 557",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_509",
+      "source": "600 essential words · row 569",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_530",
+      "source": "600 essential words · row 590",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_534",
+      "source": "600 essential words · row 594",
+      "verdict": "pass",
+      "issues": []
+    }
+  ]
+}

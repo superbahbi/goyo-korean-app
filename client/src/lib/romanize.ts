@@ -1,7 +1,7 @@
 // Revised Romanization for Hangul headwords (practical subset).
 // Implemented: syllable decomposition, initial/vowel/final tables, liaison (연음),
 // final-consonant neutralization, nasal assimilation before ㄴ/ㅁ, ㅎ aspiration,
-// ㄷ/ㅌ + 이 palatalization (ji/chi), and ㄹ as r or l.
+// ㄷ/ㅌ + 이 palatalization (ji/chi), and ㄹ as r or l (n after ㄴ/ㅁ/ㅇ).
 // Not implemented: ㄹ-ㄴ assimilation (설날 gives seolnal, not seollal), ㅅ-ㅎ
 // tensing, and cross-word liaison. Spaces in the input are kept and words are
 // romanized separately.
@@ -285,7 +285,15 @@ function romanizeWord(word: string): string {
             : "ch"
           : LIAISON_ONSET[moved];
     } else if (cho === "ㄹ") {
-      onset = i > 0 && syls[i - 1].jong ? "l" : "r";
+      const previousJong = i > 0 ? syls[i - 1].jong : "";
+      // ㄹ after ㄴ/ㅁ/ㅇ is pronounced (and romanized) as n: 대통령 →
+      // daetongnyeong, 음료수 → eumnyosu. After another ㄹ it stays l.
+      onset =
+        previousJong === "ㄴ" || previousJong === "ㅁ" || previousJong === "ㅇ"
+          ? "n"
+          : previousJong
+            ? "l"
+            : "r";
     } else {
       onset = INITIAL[cho];
     }

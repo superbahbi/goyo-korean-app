@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-02T19:55:56.631Z",
+  "generatedAt": "2026-11-02T20:48:46.403Z",
   "voiceId": "h5eZa8VFAq0EQ8E81dfL",
   "modelId": "eleven_v4",
   "counts": {
     "total": 675,
-    "generated": 619,
-    "skipped": 56,
+    "generated": 3,
+    "skipped": 672,
     "failed": 0
   },
   "vocabulary": [],
@@ -16,7 +16,7 @@
       "text": "머리가 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_001.25ed7b36.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -24,7 +24,7 @@
       "text": "눈이 크다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_002.5784df56.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 20105
     },
     {
@@ -32,7 +32,7 @@
       "text": "코가 길다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_003.55d7326a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -40,7 +40,7 @@
       "text": "입이 크다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_004.72030048.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 20105
     },
     {
@@ -48,7 +48,7 @@
       "text": "귀가 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_005.d248c419.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -56,7 +56,7 @@
       "text": "손이 차가워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_006.d73db6f2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -64,7 +64,7 @@
       "text": "발이 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_007.cb83ecea.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -72,7 +72,7 @@
       "text": "다리가 길다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_008.464a8e4e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -80,7 +80,7 @@
       "text": "팔이 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_009.21c618c7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -88,7 +88,7 @@
       "text": "배가 고파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_010.d2aa8165.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -96,7 +96,7 @@
       "text": "가슴이 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_011.d5480172.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -104,7 +104,7 @@
       "text": "등이 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_body_012.2814e40d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -112,7 +112,7 @@
       "text": "빨간 사과를 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_001.420bee6f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -120,7 +120,7 @@
       "text": "파란 하늘이 아름다워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_002.aa003db1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -128,7 +128,7 @@
       "text": "노란 꽃이 예뻐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_003.98c00dbd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -136,7 +136,7 @@
       "text": "초록 나무가 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_004.078b3e09.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -144,7 +144,7 @@
       "text": "검은 고양이를 봤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_005.f11bb852.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 26792
     },
     {
@@ -152,7 +152,7 @@
       "text": "하얀 눈이 내려요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_006.2753c3ee.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 26792
     },
     {
@@ -160,7 +160,7 @@
       "text": "회색 옷을 입어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_007.66faf529.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -168,7 +168,7 @@
       "text": "주황 오렌지를 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_008.dd541aa5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 26792
     },
     {
@@ -176,7 +176,7 @@
       "text": "보라 포도를 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_009.8e6d2cab.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -184,7 +184,7 @@
       "text": "분홍 꽃이 예뻐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_color_010.356ddf31.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -272,7 +272,7 @@
       "text": "지금 뭐 하고 있어요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_daily_011.714efe2f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -280,7 +280,7 @@
       "text": "점심에 뭘 먹고 싶어요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_daily_012.85a0ef30.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -288,7 +288,7 @@
       "text": "주말에 어디 가고 싶어요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_daily_013.58b765b2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -296,7 +296,7 @@
       "text": "죄송하지만 뭐라고 했어요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_daily_014.54a4b182.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -304,7 +304,7 @@
       "text": "천천히 다시 말씀해 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_daily_015.3a64218d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -312,7 +312,7 @@
       "text": "나는 너를 사랑해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_001.34b8f810.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -320,7 +320,7 @@
       "text": "우리는 거짓말을 미워해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_002.c71b9359.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -328,7 +328,7 @@
       "text": "제 동생은 높은 곳을 두려워해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_003.e5bb4f9e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -336,7 +336,7 @@
       "text": "그 소식에 놀라워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_004.5317689f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -344,7 +344,7 @@
       "text": "처음 만난 사람 앞에서는 부끄러워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_005.8e45020e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -352,7 +352,7 @@
       "text": "우리 딸이 자랑스러워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_006.d55a879f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -360,7 +360,7 @@
       "text": "그 일을 생각하면 화가 나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_007.5a70516b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -368,7 +368,7 @@
       "text": "합격해서 정말 기쁜데요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_008.2edee231.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -376,7 +376,7 @@
       "text": "저는 조금 슬픈데요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_009.53f2b950.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -384,7 +384,7 @@
       "text": "여행을 앞두고 정말 신나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_010.6e0edcc3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -392,7 +392,7 @@
       "text": "연락이 없어서 답답해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_011.b6bebfbd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -400,7 +400,7 @@
       "text": "혼자 지내면 가끔 외로워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_012.3cf76124.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -408,7 +408,7 @@
       "text": "이 의자는 정말 편해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_013.0ff256a5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -416,7 +416,7 @@
       "text": "이 신발은 조금 불편해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_014.d53caa58.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -424,7 +424,7 @@
       "text": "그 영화를 보고 많이 감동했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_emot_015.ffb08e9e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -432,7 +432,7 @@
       "text": "저는 매일 아침에 개를 산책시켜요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_001.5b444700.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -440,7 +440,7 @@
       "text": "우리 집에는 작은 고양이 한 마리가 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_002.2f9207b3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -448,7 +448,7 @@
       "text": "어제 시장에서 신선한 물고기를 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_003.7bda4e56.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -456,7 +456,7 @@
       "text": "창밖에 새가 한 마리 날고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_004.333414c8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -464,7 +464,7 @@
       "text": "저는 시골에서 소를 많이 봤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_005.2cd8e4c8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -472,7 +472,7 @@
       "text": "밤에 부엌에서 쥐를 한 마리 봤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_006.5b2e9351.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -480,7 +480,7 @@
       "text": "말이 놀이터에서 친구들과 함께 뛰고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_007.c0e38501.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -488,7 +488,7 @@
       "text": "그 새는 부상 때문에 한쪽 날개를 못 펴요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_008.57dd1b23.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -496,7 +496,7 @@
       "text": "동물을 키우면 책임감이 생겨요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_009.21954e16.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -504,7 +504,7 @@
       "text": "저는 서울까지 기차로 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_010.afa0e220.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -512,7 +512,7 @@
       "text": "다음 주에 비행기로 부산에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_011.59eb97e5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -520,7 +520,7 @@
       "text": "오늘은 새 차를 처음으로 운전해 봤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_012.6c73a60b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -528,7 +528,7 @@
       "text": "저는 매일 아침 공장 앞에 큰 트럭이 오는 것을 봐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_013.ffccbe7e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
@@ -536,7 +536,7 @@
       "text": "저는 주말마다 자전거를 타요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_014.54caa7bd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -544,7 +544,7 @@
       "text": "내일은 버스를 타고 학교에 갈게요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_015.5f0830db.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -552,7 +552,7 @@
       "text": "저는 주말에 작은 배를 타고 강을 건넜어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_016.66f6850e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -560,14 +560,14 @@
       "text": "그 회사는 새로운 선박을 제조해서 해외에 수출했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_017.279e8fa4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
       "id": "essential_018",
-      "text": "차에 타이어 공기압을 확인했어요.",
+      "text": "차의 타이어 공기압을 확인했어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_essential_018.164638ea.mp3",
+      "filename": "elevenlabs_sent_essential_018.3fb8080a.mp3",
       "status": "generated",
       "bytes": 38077
     },
@@ -576,7 +576,7 @@
       "text": "차에 기름을 넣어야 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_019.cf632e7e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -584,7 +584,7 @@
       "text": "차 엔진에서 이상한 소리가 나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_020.9deb046d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -592,7 +592,7 @@
       "text": "기차표 두 장 예약해 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_021.96e57951.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -600,7 +600,7 @@
       "text": "도시의 교통이 출근 시간에 많이 복잡해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_022.b6a44b10.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -608,7 +608,7 @@
       "text": "서울은 한국에서 가장 큰 도시예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_023.d736e1ca.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -616,7 +616,7 @@
       "text": "이 길로 가면 역까지 금방 도착해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_025.f7857bad.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -624,7 +624,7 @@
       "text": "이 도로는 출근 시간에 항상 많이 막혀요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_026.06561d03.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -632,7 +632,7 @@
       "text": "새벽에 공항에 도착해서 비행기를 기다렸어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_027.93907e50.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -640,7 +640,7 @@
       "text": "기차역에서 친구를 기다리고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_028.da1db421.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -648,7 +648,7 @@
       "text": "이 다리는 강을 가로지르고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_029.c86bb1e7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -656,7 +656,7 @@
       "text": "우리는 다음 주에 서울에 있는 호텔에 묵을 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_030.9a417ecf.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -664,7 +664,7 @@
       "text": "이번 주말에 가족과 함께 농장에 가서 신선한 채소를 구경했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_032.de9c7936.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 75275
     },
     {
@@ -672,7 +672,7 @@
       "text": "재판소 앞에서 서류를 제출해야 해서 아침 일찍 갈 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_033.caf4c18f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -680,7 +680,7 @@
       "text": "오늘 오후에 사무실에서 중요한 회의가 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_035.278ee5c4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -688,7 +688,7 @@
       "text": "이 방은 창문이 두 개 있어서 환해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_036.32999ebd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -696,7 +696,7 @@
       "text": "우리 마을에는 작은 도서관이 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_037.038ddda4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -704,7 +704,7 @@
       "text": "저는 내년에 대학교에 입학해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_038.08346fc1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -712,7 +712,7 @@
       "text": "오늘 친구들이랑 새로 생긴 클럽에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_039.bacbbe22.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -720,7 +720,7 @@
       "text": "저녁에 친구들과 술집에 가서 간단히 술을 마셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_040.7175b8f6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
@@ -728,7 +728,7 @@
       "text": "이번 여름에 아이들이 자연 캠프에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_042.5897d8f1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -736,7 +736,7 @@
       "text": "오늘 저녁에 친구들과 극장에 가서 영화를 볼 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_044.677ed7a2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -744,7 +744,7 @@
       "text": "우리 가족은 일요일마다 교회에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_047.7a3c0b4b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -752,7 +752,7 @@
       "text": "저는 주말마다 전통 시장에 가서 신선한 채소를 사요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_048.55facec6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -760,7 +760,7 @@
       "text": "한국은 아름다운 나라예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_049.292d585a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -768,7 +768,7 @@
       "text": "그 도시에 오래된 건물이 많이 남아 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_050.e12b8a4a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -776,7 +776,7 @@
       "text": "컵을 깨끗이 닦아서 바닥에 물이 튀지 않게 놓았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_051.1cd44cbf.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -784,7 +784,7 @@
       "text": "이 방은 가구를 놓을 만큼 넉넉한 공간이 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_052.f5bb1323.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -792,7 +792,7 @@
       "text": "지도를 보면서 위치를 정확히 확인했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_054.9e5857cc.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -800,7 +800,7 @@
       "text": "오늘 비가 와서 모자를 쓰고 나왔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_055.0571b586.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -808,7 +808,7 @@
       "text": "그녀는 결혼식에 새 드레스를 입고 왔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_056.bc92cf71.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -816,7 +816,7 @@
       "text": "회의에 가서 새 양복을 입었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_057.bc1e29f9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -824,7 +824,7 @@
       "text": "오늘은 새 치마를 입고 친구를 만나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_058.90e76b6d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -832,7 +832,7 @@
       "text": "오늘은 편한 티셔츠를 입고 산책할 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_059.827f41a6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -840,7 +840,7 @@
       "text": "오늘은 새 바지를 신고 출근했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_060.2c31f066.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -848,7 +848,7 @@
       "text": "새 신발을 신어 보니까 아주 편해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_061.e7d0f5f3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -856,7 +856,7 @@
       "text": "지갑을 주머니에 넣어 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_062.690a2c04.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -864,7 +864,7 @@
       "text": "오늘은 추우니까 코트를 입고 가세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_063.74b5d84a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -872,7 +872,7 @@
       "text": "셔츠에 커피 얼룩이 생겼어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_064.7caa03ce.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -880,7 +880,7 @@
       "text": "새 옷을 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_065.08f3a4b5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -888,7 +888,7 @@
       "text": "그 꽃은 밝은 빨간색이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_066.4d6f1b43.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -896,7 +896,7 @@
       "text": "저는 초록색 셔츠를 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_067.ad270ede.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -904,7 +904,7 @@
       "text": "저는 파랑색 셔츠를 입었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_068.472c861f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -912,7 +912,7 @@
       "text": "제 방 벽은 노란색이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_069.fa700f1d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -920,7 +920,7 @@
       "text": "오늘 구두는 곤색으로 신고 왔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_070.322b3a99.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -928,7 +928,7 @@
       "text": "그 꽃은 분홍색이라서 봄 분위기가 나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_071.919a2942.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -936,7 +936,7 @@
       "text": "그 강아지는 밝은 갈색 털을 가지고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_072.c02adcc7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -944,7 +944,7 @@
       "text": "저는 오렌지색 스웨터를 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_073.e51dbf67.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -952,7 +952,7 @@
       "text": "그 가방은 검은색이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_074.00c05b9d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -960,7 +960,7 @@
       "text": "그 산의 눈은 하얀색이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_075.30c381ca.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -968,7 +968,7 @@
       "text": "이 방은 색깔이 밝아서 기분이 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_077.c22c7ae0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -976,7 +976,7 @@
       "text": "제 아들은 이번에 학교에서 과학상을 받았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_078.aadc7c00.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -984,7 +984,7 @@
       "text": "제 딸이 내일 학교에서 발표를 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_079.39aa5ed7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -992,7 +992,7 @@
       "text": "주말에 부모님을 뵈러 집에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_082.9e3c1368.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1000,7 +1000,7 @@
       "text": "애기가 어제 처음으로 웃었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_083.fa829045.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -1008,7 +1008,7 @@
       "text": "저 사람은 남자예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_084.d87ce051.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -1016,7 +1016,7 @@
       "text": "저기 있는 여자가 제 친구예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_085.4308fbea.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1024,7 +1024,7 @@
       "text": "옛날에는 마을에 한 명의 왕이 모든 결정을 내렸어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_094.7ed468d9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -1032,7 +1032,7 @@
       "text": "그 나라는 현명한 여왕이 다스려요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_095.94a5cbe6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -1040,7 +1040,7 @@
       "text": "대통령이 오늘 국회를 방문해서 연설을 했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_096.1c643c63.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -1048,7 +1048,7 @@
       "text": "옆집 사람이 매일 아침에 우유를 받아 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_097.51c4c41d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -1056,7 +1056,7 @@
       "text": "공원에서 여자아이가 강아지와 놀고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_098.e7772d35.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -1064,7 +1064,7 @@
       "text": "공원에서 남자아이가 뛰어놀고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_099.7149d9e0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1072,7 +1072,7 @@
       "text": "이 영화는 성인만 관람할 수 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_100.f65da887.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -1080,7 +1080,7 @@
       "text": "인간은 실수할 때도 배울 수 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_101.7b103447.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1088,7 +1088,7 @@
       "text": "저는 어제 학교에서 새 친구를 만났어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_102.922a657f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -1096,7 +1096,7 @@
       "text": "그 사고의 피해자는 병원에서 치료를 받고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_103.24c9e922.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1104,7 +1104,7 @@
       "text": "그는 축구 선수예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_104.cae69cc8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -1112,7 +1112,7 @@
       "text": "저는 그 가수의 열렬한 팬이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_105.214d7064.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1120,7 +1120,7 @@
       "text": "공연장 앞에 큰 군중이 모여 있었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_106.a9a6696e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1128,7 +1128,7 @@
       "text": "저는 한국에서 온 사람이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_107.2cd43cd4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1136,7 +1136,7 @@
       "text": "저는 초등학교에서 선생님으로 일해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_108.7d42b9c3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1144,7 +1144,7 @@
       "text": "학생들은 도서관에서 숙제를 하고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_109.27c7c70f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1152,7 +1152,7 @@
       "text": "제 친구는 형사 사건을 전문으로 하는 변호사예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_110.8f13bb11.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -1160,7 +1160,7 @@
       "text": "아파서 병원에 가니 의사가 친절하게 진찰해 주셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_111.284f63b9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 62318
     },
     {
@@ -1168,7 +1168,7 @@
       "text": "병원에서 많은 환자를 만났어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_112.76d8ab0d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -1176,7 +1176,7 @@
       "text": "웨이터에게 메뉴 추천을 물어봤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_113.351cfb41.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1184,7 +1184,7 @@
       "text": "우리 회사 비서는 회의 일정을 모두 관리해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_114.fbee8168.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1192,7 +1192,7 @@
       "text": "저는 결혼식에서 신부님께 축복을 받았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_115.26da9ae9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -1200,7 +1200,7 @@
       "text": "어제 길에서 경찰에게 지갑을 주웠다고 신고했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_116.30cea7bd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -1208,7 +1208,7 @@
       "text": "그는 군대에 입대해서 올해 여름에 제대할 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_117.c89abf9c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -1216,7 +1216,7 @@
       "text": "저는 제 친구가 군인이어서 자랑스러워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_118.89f73795.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -1224,7 +1224,7 @@
       "text": "그림을 많이 그려서 예술가가 되고 싶어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_119.63163709.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1232,7 +1232,7 @@
       "text": "이 책의 저자는 서울에서 활동하는 소설가예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_120.ad90ba23.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1240,7 +1240,7 @@
       "text": "우리 매니저가 회의 준비를 도와주셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_121.5b2c0c77.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1248,7 +1248,7 @@
       "text": "그녀는 유명한 신문사의 기자로 일해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_122.1a765a85.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1256,7 +1256,7 @@
       "text": "그 배우는 새로운 영화에서 주인공을 맡았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_123.97952e95.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1264,7 +1264,7 @@
       "text": "저는 직업 때문에 서울로 이사했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_124.71affd4f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -1272,7 +1272,7 @@
       "text": "저는 다양한 종교에 대해 배우는 것을 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_125.0e939ade.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1280,7 +1280,7 @@
       "text": "그곳은 정말 천국처럼 평화로웠어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_126.c9ea9d57.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -1288,7 +1288,7 @@
       "text": "그 영화는 정말 지옥 같은 장면이 많아서 보기 힘들었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_127.553bf3b8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 67752
     },
     {
@@ -1296,7 +1296,7 @@
       "text": "그는 사고로 죽음을 맞이했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_128.f924e102.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1304,7 +1304,7 @@
       "text": "감기에 걸렸을 때는 약을 제때 먹어야 빨리 낫습니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_129.0268aa10.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -1312,7 +1312,7 @@
       "text": "오늘은 친구에게 돈을 빌려 줬어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_130.4d6d90ec.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -1320,7 +1320,7 @@
       "text": "이 치킨은 18,000원이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_131.efbd1c3e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1328,7 +1328,7 @@
       "text": "자동판매기에서는 동전만 받고 지폐는 안 받아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_132.8845550b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -1336,7 +1336,7 @@
       "text": "저는 다음 달에 결혼해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_133.161157cd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -1344,7 +1344,7 @@
       "text": "다음 달에 친구 결혼식에 같이 갈래요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_134.b5600108.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1352,7 +1352,7 @@
       "text": "우리 팀은 이번 대회에서 열심히 준비했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_135.753635a2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -1360,7 +1360,7 @@
       "text": "우리 회사는 다양한 인종의 사람들이 함께 일해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_136.ce6e79a7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1368,7 +1368,7 @@
       "text": "그 둘은 개인적인 관계에서 섹스를 하지 않기로 합의했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_137.65453b0d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 66498
     },
     {
@@ -1376,7 +1376,7 @@
       "text": "지원서에 성별을 선택해 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_138.3bb46646.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -1384,7 +1384,7 @@
       "text": "그 사건은 결국 살인으로 판결났습니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_139.18ecd088.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1392,7 +1392,7 @@
       "text": "그는 오래전 범죄로 교도소에 갔다 왔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_140.65e719ca.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -1400,7 +1400,7 @@
       "text": "새로운 기술은 우리 생활을 빠르게 바꿔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_141.11c384fe.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1408,7 +1408,7 @@
       "text": "마라톤을 완주하려면 꾸준한 훈련으로 정력이 필요해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_142.dcf194ba.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 65244
     },
     {
@@ -1416,7 +1416,7 @@
       "text": "그 영화는 전쟁의 참상을 사실적으로 보여 줍니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_143.36de5961.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
@@ -1424,7 +1424,7 @@
       "text": "우리는 모두 평화를 원해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_144.89c158dd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1432,7 +1432,7 @@
       "text": "그는 적의 기지를 밤에 공격했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_145.b3bb8632.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -1440,7 +1440,7 @@
       "text": "이번 주에 지방선거에 꼭 투표하세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_146.16eb9f13.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1448,7 +1448,7 @@
       "text": "주말마다 새 잡지를 한 권씩 사서 읽어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_147.0cc433e5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -1456,7 +1456,7 @@
       "text": "아침에 신문을 읽으면서 커피를 마셔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_148.b5297ec0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1464,7 +1464,7 @@
       "text": "이 열매에는 독이 있어서 함부로 먹으면 안 돼요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_149.ed8f0654.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -1472,7 +1472,7 @@
       "text": "그는 총을 차에 숨겨 두었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_150.a86d5ec2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -1480,7 +1480,7 @@
       "text": "저는 주말마다 여러 스포츠를 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_151.c16f0593.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1488,7 +1488,7 @@
       "text": "오늘 친구들과 달리기 경주를 했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_152.e2c8e60a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1496,7 +1496,7 @@
       "text": "일주일에 세 번 운동해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_153.b3ac1ef3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -1504,7 +1504,7 @@
       "text": "아이들이 공으로 축구를 하고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_154.0802246c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -1512,7 +1512,7 @@
       "text": "저녁에 가족들과 보드게임을 했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_155.a52a7645.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -1520,7 +1520,7 @@
       "text": "이 제품은 가격이 조금 비싸요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_156.17110320.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -1528,7 +1528,7 @@
       "text": "계약서를 꼼꼼히 읽고 서명하세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_157.05a8b237.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1536,7 +1536,7 @@
       "text": "그 사람은 마약을 복용해서 경찰에 체포되었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_158.e9c5322c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -1544,7 +1544,7 @@
       "text": "가게 앞에 새로 만든 간판이 밝게 빛나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_159.baca8d25.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1552,7 +1552,7 @@
       "text": "저희 학교는 과학 수업이 아주 흥미로워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_160.3f00bb2f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -1560,7 +1560,7 @@
       "text": "교회에 가서 하느님께 기도해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_161.107da190.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -1568,7 +1568,7 @@
       "text": "주말에 친구들과 라이브 밴드 공연을 보러 갈 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_162.ea6f3141.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -1576,7 +1576,7 @@
       "text": "저는 어제 친구들과 함께 노래를 불렀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_163.73d01431.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1584,7 +1584,7 @@
       "text": "어떤 악기를 배우고 싶어요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_164.b24dac15.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -1592,7 +1592,7 @@
       "text": "저는 요즘 다양한 장르의 음악을 자주 들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_165.8d42fda5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -1600,7 +1600,7 @@
       "text": "오늘 저녁에 새 영화 보러 갈래요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_166.79985590.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1608,7 +1608,7 @@
       "text": "저는 주말에 미술관에 가서 현대 미술을 관람했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_167.2c6f7735.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -1616,7 +1616,7 @@
       "text": "더운 날에는 시원한 음료수를 마시고 싶어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_174.0f166425.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -1624,7 +1624,7 @@
       "text": "아침마다 계란을 두 개씩 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_175.81e77ad6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -1632,7 +1632,7 @@
       "text": "저는 피자에 치즈를 많이 올려 먹는 것을 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_176.2b2a2354.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -1640,7 +1640,7 @@
       "text": "감기 걸렸을 때는 뜨거운 국물이 속을 편하게 해줘요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_177.2b87c959.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -1648,7 +1648,7 @@
       "text": "생일에 친구들이 케이크를 사 왔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_178.a43a0342.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -1656,7 +1656,7 @@
       "text": "오늘 저녁에 닭 요리를 해 줄게요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_179.3eb1c113.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1664,7 +1664,7 @@
       "text": "저는 오늘 시장에서 신선한 돼지고기를 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_180.3b1c7ba9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -1672,7 +1672,7 @@
       "text": "저녁에 가족과 함께 소고기 구이를 먹었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_181.74387c9d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1680,7 +1680,7 @@
       "text": "저는 아침에 사과를 한 개 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_182.0c3f6885.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1688,7 +1688,7 @@
       "text": "저는 아침에 바나나를 하나 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_183.c633355b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1696,7 +1696,7 @@
       "text": "아침에 오렌지 주스를 마셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_184.479830d5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1704,7 +1704,7 @@
       "text": "레몬즙을 차에 몇 방울 넣으면 향이 좋아져요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_185.550d5656.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1712,7 +1712,7 @@
       "text": "여름마다 시장에서 신선한 옥수수를 사서 바로 삶아 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_186.24c2cad2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 69006
     },
     {
@@ -1720,7 +1720,7 @@
       "text": "저는 아침에 쌀을 씻어서 밥을 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_187.8e5bd61d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1728,7 +1728,7 @@
       "text": "이 요리는 식용유로 살짝만 볶아야 더 맛있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_189.d1d33e40.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -1736,7 +1736,7 @@
       "text": "봄에 꽃씨를 심으면 여름에 예쁜 꽃이 피어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_190.1f1f0cb3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -1744,7 +1744,7 @@
       "text": "주방에서 칼을 조심해서 사용하세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_191.3ca155b0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -1752,7 +1752,7 @@
       "text": "숟가락 하나 더 드릴까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_192.f3557160.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -1760,7 +1760,7 @@
       "text": "포크로 샐러드를 조금 더 섞어 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_193.95c26676.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1768,7 +1768,7 @@
       "text": "접시에 김치와 밥을 올려서 식탁에 놓았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_194.60874950.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -1776,7 +1776,7 @@
       "text": "컵에 물을 따라 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_195.f0b8c28f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -1784,7 +1784,7 @@
       "text": "커피에 설탕 조금만 넣어 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_199.1144b543.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -1792,7 +1792,7 @@
       "text": "요리에 소금을 조금만 넣어 보세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_200.d909da69.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -1800,7 +1800,7 @@
       "text": "탁자 위에 물병 하나 놓아도 될까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_201.028a2d40.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -1808,7 +1808,7 @@
       "text": "이 식당은 음식이 정말 맛있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_202.062f1dc2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1816,7 +1816,7 @@
       "text": "제 책상 위에 노트북이 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_203.901d265f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -1824,7 +1824,7 @@
       "text": "커피를 마시면서 탁자에 책을 올려놓았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_204.a0eacd41.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -1832,7 +1832,7 @@
       "text": "저녁에 가족과 함께 식탁에서 식사해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_205.97efe2b1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -1840,7 +1840,7 @@
       "text": "의자에 앉아도 될까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_206.5faa3569.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -1848,7 +1848,7 @@
       "text": "밤마다 침대에서 책을 읽어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_207.e48caf24.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -1856,7 +1856,7 @@
       "text": "어젯밤에 계속 같은 꿈을 꿨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_208.ce36285b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1864,7 +1864,7 @@
       "text": "창문을 열고 바람을 들여보냈어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_209.16cea66f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -1872,7 +1872,7 @@
       "text": "문을 열어 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_210.e1f916e3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -1880,7 +1880,7 @@
       "text": "저는 침실에서 책을 읽고 잠들었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_211.f0103cc7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -1888,7 +1888,7 @@
       "text": "부엌에서 저녁을 준비하고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_212.8c075e46.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -1896,7 +1896,7 @@
       "text": "화장실 어디에 있어요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_213.0df40f0e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -1904,7 +1904,7 @@
       "text": "학생들이 모두 연필로 시험지를 작성했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_214.d48ac3d6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -1912,7 +1912,7 @@
       "text": "볼펜으로 편지에 서명을 했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_215.13890ff0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -1920,7 +1920,7 @@
       "text": "오늘 여행에서 사진을 많이 찍었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_216.59b6911f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -1928,7 +1928,7 @@
       "text": "손을 씻을 때 비누를 충분히 사용하세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_217.e6398e9e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -1936,7 +1936,7 @@
       "text": "저는 새로운 소설 책을 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_218.c5a060c7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -1944,7 +1944,7 @@
       "text": "이 책은 페이지가 300쪽이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_219.789d62e7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -1952,7 +1952,7 @@
       "text": "집에 들어가려면 열쇠가 필요해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_220.2610c586.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -1960,7 +1960,7 @@
       "text": "벽에 페인트를 새로 칠했더니 집이 훨씬 밝아졌어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_221.3b71c1fe.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
@@ -1968,7 +1968,7 @@
       "text": "어제 친구에게 편지를 보냈어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_222.ebbf6a07.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -1976,7 +1976,7 @@
       "text": "중요한 내용은 메모해 두세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_223.43496152.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -1984,7 +1984,7 @@
       "text": "그는 집 안의 벽에 사진을 걸었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_224.c33a419e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -1992,7 +1992,7 @@
       "text": "책상 위에 종이가 한 장 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_225.0e39b2a2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -2000,7 +2000,7 @@
       "text": "방을 새로 칠해서 천장이 더 밝아졌어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_226.51f122f1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2008,7 +2008,7 @@
       "text": "비가 와서 지붕에 물이 새요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_227.e9ced006.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -2016,7 +2016,7 @@
       "text": "오늘 친구들과 수영장에 가서 같이 수영할 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_228.d65f540a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -2024,7 +2024,7 @@
       "text": "문에 자물쇠를 잠가 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_229.d0b224e3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -2032,7 +2032,7 @@
       "text": "저는 집에 전화기가 없어서 휴대폰만 사용해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_230.2c470dec.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -2040,7 +2040,7 @@
       "text": "우리 집에는 작은 정원이 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_231.9f51b0df.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -2048,7 +2048,7 @@
       "text": "아이들이 마당에서 공을 가지고 놀아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_232.a86bc8e5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -2056,7 +2056,7 @@
       "text": "바늘로 옷의 찢어진 부분을 꿰매서 고쳤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_233.2e2bc42d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -2064,7 +2064,7 @@
       "text": "제 가방은 파란색이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_234.90bd6127.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -2072,7 +2072,7 @@
       "text": "큰 상자에 옷을 정리해서 넣었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_235.52a115a0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2080,7 +2080,7 @@
       "text": "생일에 친구에게 작은 선물을 보냈어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_236.7c98e853.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -2088,7 +2088,7 @@
       "text": "저는 계산할 때 신용카드를 사용해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_237.9a5524ee.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2096,7 +2096,7 @@
       "text": "그녀는 약혼 반지를 손가락에 끼고 기뻐했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_238.9458f32f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -2104,7 +2104,7 @@
       "text": "이 상자에는 다양한 도구가 들어 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_239.27c531ed.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -2112,7 +2112,7 @@
       "text": "제가 새 시계를 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_240.35c38ab3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -2120,7 +2120,7 @@
       "text": "책상 위에 작은 램프를 켜 두었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_241.a06351f1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -2128,7 +2128,7 @@
       "text": "저는 새 휴대폰을 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_242.d7b4b3d5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -2136,7 +2136,7 @@
       "text": "회사에서 새로운 네트워크 장비를 설치했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_243.1cae38c2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -2144,7 +2144,7 @@
       "text": "집에서 컴퓨터로 숙제를 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_244.b83dcdeb.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -2152,7 +2152,7 @@
       "text": "오늘은 노트북을 가져와서 카페에서 일할 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_245.6c573eb2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -2160,7 +2160,7 @@
       "text": "컴퓨터 화면이 너무 밝아서 눈이 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_246.9e3f9f8c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -2168,7 +2168,7 @@
       "text": "새로운 카메라로 사진을 찍어 보고 싶어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_247.06de0c7c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2176,7 +2176,7 @@
       "text": "저녁마다 가족들과 텔레비전을 같이 봐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_248.49b72ad8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2184,7 +2184,7 @@
       "text": "저녁에는 늘 라디오를 켜고 뉴스와 음악을 들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_249.b221cf80.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
@@ -2192,7 +2192,7 @@
       "text": "목이 좀 아파서 병원에 갔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_251.fd41d095.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -2200,7 +2200,7 @@
       "text": "그 사람은 웃을 때 얼굴이 밝아 보여요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_252.dbf26134.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -2208,7 +2208,7 @@
       "text": "그는 최근에 턱수염을 기르기 시작했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_253.10bafdff.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -2216,14 +2216,14 @@
       "text": "머리카락을 자르러 미용실에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_254.e2254292.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
       "id": "essential_257",
-      "text": "그는 초콜릿을 먹다가 입술에 묻었는지 닦았어요.",
+      "text": "그는 초콜릿을 먹다가 입술에 묻은 것을 닦았어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_essential_257.87a49dfc.mp3",
+      "filename": "elevenlabs_sent_essential_257.d814ee37.mp3",
       "status": "generated",
       "bytes": 59811
     },
@@ -2232,7 +2232,7 @@
       "text": "강아지가 이빨로 장난감을 깨물고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_259.a86d864b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -2240,7 +2240,7 @@
       "text": "그 영화에서 너무 감동해서 눈물이 났어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_261.e560ca0e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -2248,7 +2248,7 @@
       "text": "의사가 제 혀를 살펴보셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_262.ecefe909.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -2256,7 +2256,7 @@
       "text": "허리가 아파서 오래 못 앉아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_264.893d9298.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -2264,7 +2264,7 @@
       "text": "맨발로 걷다가 발가락을 다쳤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_265.b7cb692b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2272,7 +2272,7 @@
       "text": "손가락으로 버튼을 눌러 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_266.c2b1397b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -2280,7 +2280,7 @@
       "text": "무거운 가방 때문에 어깨가 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_270.efc73342.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2288,7 +2288,7 @@
       "text": "의사가 제 심장을 검사했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_271.0d86b456.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -2296,7 +2296,7 @@
       "text": "그 상처에서 피가 조금 나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_272.920b807c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -2304,7 +2304,7 @@
       "text": "의사는 환자의 뇌를 정밀하게 검사했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_273.bee947ce.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -2312,7 +2312,7 @@
       "text": "무릎이 아파서 계단을 천천히 내려가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_274.c28f735f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2320,7 +2320,7 @@
       "text": "운동을 해서 땀이 많이 났어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_275.4ec02f41.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -2328,7 +2328,7 @@
       "text": "아버지께서 병 때문에 병원에 입원하셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_276.c4836e8f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -2336,7 +2336,7 @@
       "text": "의사가 엑스레이로 뼈 상태를 확인했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_277.6a96b147.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2344,7 +2344,7 @@
       "text": "그 사람의 목소리가 정말 따뜻해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_278.aa84dcdc.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -2352,7 +2352,7 @@
       "text": "이 크림은 건조한 피부에 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_279.77ab9f56.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -2360,7 +2360,7 @@
       "text": "운동을 하면 몸이 더 건강해져요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_280.01c669e4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -2368,7 +2368,7 @@
       "text": "여름에 우리는 바다에서 수영했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_281.f62388d4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2376,7 +2376,7 @@
       "text": "우리는 주말에 강가를 따라 산책했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_282.3cd2ba17.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -2384,7 +2384,7 @@
       "text": "이번 주말에 친구들과 산에 올라갈 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_283.58e60d10.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2392,7 +2392,7 @@
       "text": "오늘 비가 많이 와서 우산을 꼭 챙기세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_284.14655726.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2400,7 +2400,7 @@
       "text": "오늘 밤에 눈이 올 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_285.55168c15.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -2408,7 +2408,7 @@
       "text": "이번 달에는 책을 세 권 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_286.fa812776.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -2416,7 +2416,7 @@
       "text": "그는 여행을 통해 세계의 다양한 문화를 배웠어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_287.14961dc0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -2424,7 +2424,7 @@
       "text": "우리는 지구를 보호하기 위해 재활용을 더 많이 해야 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_288.4d4e4ff4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 66498
     },
     {
@@ -2432,7 +2432,7 @@
       "text": "주말에 가족과 함께 숲 속을 걸었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_289.fa1e7db5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2440,7 +2440,7 @@
       "text": "오늘 하늘이 아주 맑아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_290.e45b0161.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -2448,7 +2448,7 @@
       "text": "집에서 작은 식물을 키워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_291.1a870cd3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -2456,7 +2456,7 @@
       "text": "오늘 바람이 많이 불어서 창문을 조금 닫았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_292.c9d636d2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -2464,7 +2464,7 @@
       "text": "이 밭의 토양은 배수가 잘 돼서 채소 키우기에 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_293.ffcefe03.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 62318
     },
     {
@@ -2472,7 +2472,7 @@
       "text": "생일에 친구가 예쁜 꽃을 선물해 주었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_294.3aa78d48.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -2480,7 +2480,7 @@
       "text": "여름에 가족과 함께 계곡에 가서 시원한 물에 발을 담갔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_295.a5109110.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 72767
     },
     {
@@ -2488,7 +2488,7 @@
       "text": "나무의 뿌리가 땅속에서 물을 빨아들여요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_296.cdaf2421.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2496,7 +2496,7 @@
       "text": "우리는 주말에 호수에서 자전거를 타고 산책했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_297.0a2cc60e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -2504,7 +2504,7 @@
       "text": "밤하늘에 별이 반짝여요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_298.13fd3c6e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -2512,7 +2512,7 @@
       "text": "아이들이 잔디 위에서 공을 차고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_299.1ef13752.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2520,7 +2520,7 @@
       "text": "가을이 되면 나뭇잎이 노랗게 물들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_300.0def9c2a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2528,7 +2528,7 @@
       "text": "창문을 열어서 신선한 공기를 마셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_301.c5619cfd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2536,7 +2536,7 @@
       "text": "해변에 모래가 부드럽게 느껴져요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_302.1e4adecf.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -2544,7 +2544,7 @@
       "text": "주말에 가족과 함께 해변에 갔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_303.95baf086.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2552,7 +2552,7 @@
       "text": "해변에 가니 큰 파도가 계속 쳐서 신발이 젖었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_304.a10cb5b5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 65244
     },
     {
@@ -2560,7 +2560,7 @@
       "text": "밤에는 캠프파이어 불이 꺼지지 않게 조심해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_305.9445f4d5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -2568,7 +2568,7 @@
       "text": "가게 앞 웅덩이에는 얼음이 얇게 얼어 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_306.bcc28ca3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -2576,7 +2576,7 @@
       "text": "다음 주에 가족들과 작은 섬으로 여행을 갈 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_307.23bd3fe1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -2584,7 +2584,7 @@
       "text": "공원 뒤에 작은 언덕이 있어서 아이들이 자주 놀아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_308.fa6b1ac5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -2592,7 +2592,7 @@
       "text": "어제 밤부터 열이 나서 오늘 병원에 갔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_309.8348f001.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -2600,7 +2600,7 @@
       "text": "도심에서 벗어나 자연 속에서 휴식을 취하고 싶어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_310.85164525.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -2608,7 +2608,7 @@
       "text": "창문 유리가 깨져서 고쳐야 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_311.c3dad00b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -2616,7 +2616,7 @@
       "text": "이 도구는 가벼운 금속으로 만들어져서 들기 편해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_312.2faf10d3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -2624,7 +2624,7 @@
       "text": "이 컵은 플라스틱으로 만들어져서 가볍고 깨지지 않아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_313.3bbe20a3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 65244
     },
     {
@@ -2632,7 +2632,7 @@
       "text": "공원에는 큰 나무들이 많아서 그늘에서 쉬기 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_314.f7e4b840.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -2640,7 +2640,7 @@
       "text": "마당에 작은 돌이 많아서 걸을 때 조심해야 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_315.63b340aa.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -2648,7 +2648,7 @@
       "text": "그 반지는 다이아몬드로 장식되어 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_316.76355d69.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2656,7 +2656,7 @@
       "text": "아이들이 찰흙으로 작은 동물을 만들고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_317.654676d6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -2664,7 +2664,7 @@
       "text": "창문을 오래 열지 않아서 방에 먼지가 많이 쌓였어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_318.481a8997.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -2672,7 +2672,7 @@
       "text": "그 목걸이는 순금으로 만들어서 아주 비싸요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_319.a886050b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -2680,7 +2680,7 @@
       "text": "이 냄비는 구리로 만들어져서 열전도율이 아주 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_320.92199ba6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 62318
     },
     {
@@ -2688,7 +2688,7 @@
       "text": "그 반지는 순은으로 만든 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_321.7bca8051.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -2696,7 +2696,7 @@
       "text": "이 요리는 신선한 재료만 사용해서 만들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_322.5d054d09.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2704,7 +2704,7 @@
       "text": "이 방은 길이가 5미터예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_323.c7526278.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -2712,7 +2712,7 @@
       "text": "이 책의 두께는 약 2 센티미터예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_324.5a75296f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2720,7 +2720,7 @@
       "text": "집에서 역까지는 약 두 킬로미터예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_325.0cfc9ae5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -2728,7 +2728,7 @@
       "text": "시간이 반밖에 남지 않았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_326.d615fa82.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -2736,7 +2736,7 @@
       "text": "우리 학교에는 다양한 취미 서클이 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_327.6c0e376a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2744,7 +2744,7 @@
       "text": "그 방은 정사각형 창문 하나가 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_328.5b48fcd8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2752,7 +2752,7 @@
       "text": "오늘 온도가 많이 올라서 에어컨을 켰어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_329.cd8c7cf2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -2760,7 +2760,7 @@
       "text": "회의 날짜를 다음 주 월요일로 정했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_330.9580d845.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -2768,7 +2768,7 @@
       "text": "이 가방의 무게가 생각보다 무거워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_331.d5a24e1a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -2776,7 +2776,7 @@
       "text": "컵의 가장자리로 물이 흘렀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_332.65e3cb7f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -2784,7 +2784,7 @@
       "text": "여행하기 전에 지도를 확인해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_333.53bfd7d4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -2792,7 +2792,7 @@
       "text": "이 지도에서 산의 위치는 이 점으로 표시되어 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_334.c5a01e14.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -2800,7 +2800,7 @@
       "text": "한국어에는 14개의 기본 자음이 있습니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_335.91e9307a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -2808,7 +2808,7 @@
       "text": "한글의 모음은 ㅏ, ㅑ, ㅓ, ㅕ 같은 글자입니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_336.4510656d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 82798
     },
     {
@@ -2816,7 +2816,7 @@
       "text": "밤에 창밖에서 이상한 소리가 들렸어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_338.1f41dfa4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -2824,7 +2824,7 @@
       "text": "케이크를 조각으로 잘라서 친구들에게 나눠줬어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_341.49f64216.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -2832,7 +2832,7 @@
       "text": "어제 넘어져서 다리에 아픔이 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_342.d7162eab.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2840,7 +2840,7 @@
       "text": "그 사람의 말이 제 마음에 깊은 상처를 남겼어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_343.fc8e3855.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -2848,7 +2848,7 @@
       "text": "옷에 작은 구멍이 났어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_344.c5f6ca69.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -2856,7 +2856,7 @@
       "text": "이 웹사이트에 사용할 이미지를 고르고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_345.9d74dc53.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -2864,7 +2864,7 @@
       "text": "이 커튼은 반복되는 패턴 때문에 방이 더 생기 있어 보여요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_346.f57ab7c7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 69006
     },
     {
@@ -2872,7 +2872,7 @@
       "text": "이 문장에서 '명사'는 사람, 장소, 사물의 이름을 나타내요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_347.09949255.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 80291
     },
     {
@@ -2880,7 +2880,7 @@
       "text": "이 문장에서 동사를 찾아보세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_348.06054bea.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -2888,7 +2888,7 @@
       "text": "이 문장에서 '아름답다'는 형용사로 쓰였어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_349.aae1a615.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -2896,7 +2896,7 @@
       "text": "책상 위에 컵을 두었습니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_350.3c236af3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -2904,7 +2904,7 @@
       "text": "고양이가 탁자 아래에 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_351.81c29e37.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -2912,7 +2912,7 @@
       "text": "상자의 옆면에 바코드가 붙어 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_352.92e889d4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2920,7 +2920,7 @@
       "text": "우표의 뒷면에 작은 글씨가 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_353.41d91466.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2928,7 +2928,7 @@
       "text": "가방 안에 책이 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_354.4411f911.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -2936,7 +2936,7 @@
       "text": "날씨가 좋아서 밖에 잠깐 나가도 될까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_355.420f1e09.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -2944,7 +2944,7 @@
       "text": "책상 왼쪽에 가방이 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_356.f08a3e80.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -2952,7 +2952,7 @@
       "text": "가게는 교차로에서 오른쪽에 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_357.59b066b8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -2960,7 +2960,7 @@
       "text": "지하철에서 내리면 출구로 곧장 가세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_358.7264df02.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -2968,7 +2968,7 @@
       "text": "우리 집은 시내에서 북쪽으로 조금 떨어져 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_359.5af797cc.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -2976,7 +2976,7 @@
       "text": "우리는 남쪽으로 여행을 갈 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_360.ffe1de21.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -2984,7 +2984,7 @@
       "text": "우리 집은 산에서 해가 떠오르는 동쪽에 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_361.434023de.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -2992,7 +2992,7 @@
       "text": "우리 집은 공원에서 서쪽으로 두 블록 떨어져 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_362.d326cf14.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -3000,7 +3000,7 @@
       "text": "지도를 보고 방향을 확인했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_363.38b7cc29.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -3008,7 +3008,7 @@
       "text": "여름에는 해가 길어서 바닷가에 가기 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_364.a829a256.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -3016,7 +3016,7 @@
       "text": "봄에는 꽃들이 많이 피어서 공원이 아름다워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_365.0947e79c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -3024,7 +3024,7 @@
       "text": "겨울에는 눈이 많이 와서 집에서 따뜻하게 쉬어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_366.cda6bd1e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -3032,7 +3032,7 @@
       "text": "가을에는 날씨가 선선해서 산책하기 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_367.4f36b784.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -3040,7 +3040,7 @@
       "text": "한국에는 사계절이 뚜렷해서 계절마다 풍경이 달라요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_368.e770671f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -3048,7 +3048,7 @@
       "text": "오늘 시험에서 저는 공점을 받았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_369.5837d280.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -3056,7 +3056,7 @@
       "text": "첫 번째 선물은 아주 특별해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_370.ba84972b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -3064,7 +3064,7 @@
       "text": "둘째 딸이 올해 대학에 입학했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_371.2d487238.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -3072,7 +3072,7 @@
       "text": "그는 세번째로 도착해서 자리를 잡았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_372.1ff764e7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -3080,7 +3080,7 @@
       "text": "그는 학급에서 네 번째로 발표를 했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_373.1c42b845.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -3088,7 +3088,7 @@
       "text": "그는 다섯 번째로 발표를 했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_374.d39aa6df.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -3096,7 +3096,7 @@
       "text": "제 전화번호를 알려 드릴까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_375.9b791e65.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -3104,7 +3104,7 @@
       "text": "일월에는 가족들과 새해 파티를 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_376.db7d9153.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -3112,7 +3112,7 @@
       "text": "이월에는 보름달이 가장 밝게 보여요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_377.578ab8a7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -3120,7 +3120,7 @@
       "text": "삼월에는 꽃이 많이 피어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_378.46f02158.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -3128,7 +3128,7 @@
       "text": "저는 사월에 한국으로 여행을 갈 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_379.abbe753a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -3136,7 +3136,7 @@
       "text": "오월에는 꽃이 많이 피어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_380.45e839e8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -3144,7 +3144,7 @@
       "text": "우리 결혼식은 유월에 할 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_381.7c7ca2e6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -3152,7 +3152,7 @@
       "text": "우리 가족은 칠월에 바다로 여행을 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_382.9e3cbb57.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -3160,7 +3160,7 @@
       "text": "저는 팔월에 한국으로 여행을 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_383.d443b1cd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -3168,7 +3168,7 @@
       "text": "제 생일은 구월에 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_384.876e3791.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -3176,7 +3176,7 @@
       "text": "시월에는 단풍이 아름답게 물들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_385.210e40b9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -3184,7 +3184,7 @@
       "text": "십일월에는 날씨가 점점 더 추워져요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_386.e7c06ee3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -3192,7 +3192,7 @@
       "text": "우리 가족은 십이월에 크리스마스 파티를 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_387.9be7d41d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -3200,7 +3200,7 @@
       "text": "우리는 다음 월요일에 회의를 할게요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_388.34da1557.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -3208,7 +3208,7 @@
       "text": "다음 화요일에 회의가 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_389.cfe9e82c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -3216,7 +3216,7 @@
       "text": "수요일에 친구랑 영화 보러 갈까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_390.799ba2d0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -3224,7 +3224,7 @@
       "text": "회의는 목요일 오후에 열려요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_391.71f27f46.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -3232,7 +3232,7 @@
       "text": "금요일에 친구랑 저녁을 먹을 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_392.5e13f60a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -3240,7 +3240,7 @@
       "text": "이번 주 토요일에 친구들과 영화를 볼 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_393.047dae89.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -3248,23 +3248,23 @@
       "text": "일요일에 친구들과 영화를 봐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_394.c50c5a3c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
       "id": "essential_395",
-      "text": "저는 올해 스물다섯 년이 되었어요.",
+      "text": "한국에 온 지 삼 년이 되었어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_essential_395.d6237d92.mp3",
+      "filename": "elevenlabs_sent_essential_395.fc557ae8.mp3",
       "status": "generated",
-      "bytes": 44764
+      "bytes": 36823
     },
     {
       "id": "essential_397",
       "text": "저분은 우리 학교 선생님이세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_397.ce8f5702.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -3272,7 +3272,7 @@
       "text": "저는 병원에서 간호사로 일해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_399.8d0bf253.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -3280,7 +3280,7 @@
       "text": "주말에 친구들과 공원에서 같이 놀아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_400.2381d20e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -3288,7 +3288,7 @@
       "text": "저는 공원에서 매일 한 시간씩 걷습니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_401.c7bc1b3c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -3296,7 +3296,7 @@
       "text": "공원에서 아침마다 뛰어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_402.a9fb9f08.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -3304,7 +3304,7 @@
       "text": "오늘 아버지께서 저를 태우고 시내까지 운전해 주셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_403.4e723f34.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
@@ -3312,7 +3312,7 @@
       "text": "새들이 봄을 맞아 하늘을 날아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_404.10400042.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -3320,7 +3320,7 @@
       "text": "여름에는 친구들과 바다에서 수영해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_405.645eb7ff.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -3328,7 +3328,7 @@
       "text": "저는 내일 서울에 갑니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_406.9732f087.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -3336,7 +3336,7 @@
       "text": "버스가 갑자기 멈췄어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_407.b8b38332.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -3344,7 +3344,7 @@
       "text": "지도에 나오는 길을 따라 걸어가세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_408.0f77b3d1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -3352,7 +3352,7 @@
       "text": "저는 그 문제를 어떻게 해결할지 오랫동안 생각했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_409.069e4ca5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 65244
     },
     {
@@ -3360,7 +3360,7 @@
       "text": "그가 무슨 말을 하는지 잘 못 들었어요, 다시 말해 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_410.18c80f5f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -3368,7 +3368,7 @@
       "text": "저녁을 같이 먹을래요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_411.4d05a333.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -3376,7 +3376,7 @@
       "text": "물을 마실래요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_412.421f4cc8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 20105
     },
     {
@@ -3384,7 +3384,7 @@
       "text": "그 범죄자는 결국 체포되어 법정에서 사형을 선고받아 처형되었지만, 우리는 누구도 죽이는 것을 정당화할 수 없습니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_413.813ae14c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 134207
     },
     {
@@ -3392,7 +3392,7 @@
       "text": "우리 집 강아지가 어제 죽었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_414.14d35d6b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -3400,7 +3400,7 @@
       "text": "그 농담을 듣고 모두가 함께 웃었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_415.4bd12624.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -3408,7 +3408,7 @@
       "text": "아이가 밤새 울어서 잠을 제대로 못 잤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_416.7fba2f47.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -3416,7 +3416,7 @@
       "text": "저는 마트에서 과일을 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_417.ddc800d1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -3424,7 +3424,7 @@
       "text": "카드로 영수증 금액을 지불했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_418.f94be117.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -3432,7 +3432,7 @@
       "text": "저는 주말마다 중고책을 온라인으로 팝니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_419.c738f114.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -3440,7 +3440,7 @@
       "text": "그가 표적을 향해 총을 쏘았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_420.be4bdb62.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -3448,7 +3448,7 @@
       "text": "저는 한국어를 배우고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_421.ac8dd93a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -3456,7 +3456,7 @@
       "text": "아이들이 놀이터에서 높이 점프해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_422.bec37e13.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -3464,7 +3464,7 @@
       "text": "강아지의 목줄에서 냄새를 맡아 봤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_423.71de363c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -3472,7 +3472,7 @@
       "text": "음악을 잘 들으면 기분이 좋아져요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_424.2907950e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -3480,7 +3480,7 @@
       "text": "수프를 먼저 한 입 맛봐도 될까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_425.5a40d54a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -3488,7 +3488,7 @@
       "text": "저는 영화를 보러 극장에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_426.8be5d7f5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -3496,7 +3496,7 @@
       "text": "그는 작품을 만지지 말라고 안내문을 읽었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_427.12912ccf.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -3504,7 +3504,7 @@
       "text": "아기가 엄마에게 뽀뽀를 하려고 손을 내밀었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_428.94002389.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -3512,7 +3512,7 @@
       "text": "집에서 작은 쓰레기통이 불타고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_429.af2a9ca8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -3520,7 +3520,7 @@
       "text": "눈이 따뜻한 햇빛에 녹아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_430.4816ed20.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -3528,7 +3528,7 @@
       "text": "정원에서 감자들을 파고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_431.b9a26c4f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -3536,7 +3536,7 @@
       "text": "공장에서 오래된 기계가 폭발했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_432.7d2445cc.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -3544,7 +3544,7 @@
       "text": "의자에 앉아 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_433.80c21564.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -3552,7 +3552,7 @@
       "text": "버스가 멈추자마자 모두 일어서서 줄을 섰어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_434.1e9e3e02.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -3560,7 +3560,7 @@
       "text": "저는 그 사람을 정말 사랑해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_435.640a6181.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -3568,7 +3568,7 @@
       "text": "지나가던 사람이 문을 열어 주었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_436.9998bb48.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 41838
     },
     {
@@ -3576,7 +3576,7 @@
       "text": "머리를 자르러 미용실에 갈 거예요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_437.ac8f6c18.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -3584,7 +3584,7 @@
       "text": "형제들이 어제 밤에 작은 일로 싸웠어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_438.8838b2b6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -3592,7 +3592,7 @@
       "text": "피곤해서 소파에 누울게요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_439.06c84032.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -3600,7 +3600,7 @@
       "text": "우리는 파티에서 밤새 춤췄어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_440.fad1075a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -3608,7 +3608,7 @@
       "text": "어제 밤에 일찍 자서 오늘 기분이 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_441.3f064360.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -3616,7 +3616,7 @@
       "text": "아침에 너무 일찍 깨서 다시 잠들기 어려워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_442.d6e55c9c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -3624,7 +3624,7 @@
       "text": "저는 주말마다 친구들과 함께 노래해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_443.aed43430.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -3632,7 +3632,7 @@
       "text": "사람 수를 세어 볼까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_444.73a2b1e0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -3640,7 +3640,7 @@
       "text": "저는 다음 달에 결혼해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_445.d27bb52a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -3648,7 +3648,7 @@
       "text": "어려운 일이 있을 때마다 저는 조용히 기도해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_446.48bbd626.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -3656,7 +3656,7 @@
       "text": "우리 팀이 경기에서 이겨서 더 기뻐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_447.1f7fa698.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -3664,7 +3664,7 @@
       "text": "우리 팀이 지난 경기에서 져서 많이 아쉬워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_448.21513153.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -3672,7 +3672,7 @@
       "text": "빵 반죽에 설탕을 잘 섞어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_449.df4ead36.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -3680,7 +3680,7 @@
       "text": "허리를 구부리면 등이 아플 수 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_450.8875d4ab.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -3688,7 +3688,7 @@
       "text": "손을 씻고 식사하세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_451.968b8fbd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -3696,7 +3696,7 @@
       "text": "오늘 저녁에 가족을 위해 한식을 요리해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_452.948e6a2b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -3704,7 +3704,7 @@
       "text": "창문을 열어도 될까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_453.bc65f132.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -3712,7 +3712,7 @@
       "text": "창문을 닫아 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_454.694f6b1d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 26792
     },
     {
@@ -3720,7 +3720,7 @@
       "text": "저는 오늘 일기장을 써요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_455.f3e70f23.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -3728,7 +3728,7 @@
       "text": "친구를 집으로 부를게요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_456.6751532f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -3736,7 +3736,7 @@
       "text": "지구는 태양 주위를 돌아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_457.a382a3bd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -3744,7 +3744,7 @@
       "text": "회사는 새로운 공장을 이번 해에 건설합니다.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_458.af54af7c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -3752,7 +3752,7 @@
       "text": "선생님이 새로운 문법을 학생들에게 친절하게 가르쳐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_459.0b1ec64c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 65244
     },
     {
@@ -3760,7 +3760,7 @@
       "text": "아이들이 빨리 자라요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_460.f5fba82c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -3768,7 +3768,7 @@
       "text": "아이들이 벽에 그림을 그려서 밝아졌어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_461.e61f5d24.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -3776,7 +3776,7 @@
       "text": "아기가 우유를 잘 먹어서 엄마가 직접 먹여요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_462.0f8a2570.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -3784,7 +3784,7 @@
       "text": "고양이가 생선을 잡았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_463.fb784c91.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -3792,7 +3792,7 @@
       "text": "그는 공을 멀리 던졌어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_464.ca9cdf3e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -3800,7 +3800,7 @@
       "text": "저는 매주 토요일에 집을 청소해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_465.b8e3ca99.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -3808,7 +3808,7 @@
       "text": "열쇠를 못 찾겠어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_466.b1781f1e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -3816,7 +3816,7 @@
       "text": "길에서 자전거를 타다가 넘어졌어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_467.11925282.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -3824,7 +3824,7 @@
       "text": "문을 살짝 밀어 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_468.89e3d010.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -3832,7 +3832,7 @@
       "text": "문이 잘 안 열려서 손잡이를 당겼어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_469.4c1729eb.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -3840,7 +3840,7 @@
       "text": "이 가방은 무거워서 들기가 힘들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_470.cb5d84bb.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -3848,7 +3848,7 @@
       "text": "어제 비 때문에 자전거가 망가져서 오늘 못 타요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_471.72d9aaf9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -3856,7 +3856,7 @@
       "text": "창문이 바람 때문에 깨졌어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_472.a468c9ea.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -3864,7 +3864,7 @@
       "text": "오늘은 새 코트를 입었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_473.d732e161.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -3872,7 +3872,7 @@
       "text": "그는 손으로 나무를 흔들어서 잎을 떨어뜨렸어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_474.644d8bcb.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 56049
     },
     {
@@ -3880,7 +3880,7 @@
       "text": "계약서에 서명해 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_475.5d10f7bb.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -3888,7 +3888,7 @@
       "text": "그는 화가 나서 나무로 그 상자를 세게 팼어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_476.b3f63b9a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -3896,7 +3896,7 @@
       "text": "무거운 상자를 두 사람이 함께 들어올려서 창고에 넣었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_477.26548470.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 65244
     },
     {
@@ -3904,7 +3904,7 @@
       "text": "이 도로는 길어서 운전하는 데 시간이 오래 걸려요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_478.7393705e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -3912,7 +3912,7 @@
       "text": "이 치마는 제 키에 비해 너무 짧아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_479.ac06c2af.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -3920,7 +3920,7 @@
       "text": "우리 아들은 키가 커서 농구를 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_480.b86b29e9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -3928,7 +3928,7 @@
       "text": "제 동생은 키가 작아서 어린이용 옷이 잘 맞아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_481.1aaa1d8d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -3936,7 +3936,7 @@
       "text": "이 도로는 차가 여러 대 지나갈 수 있을 만큼 넓어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_482.a6703ec4.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -3944,7 +3944,7 @@
       "text": "이 방은 창문이 많아서 아주 커요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_483.c5539405.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -3952,7 +3952,7 @@
       "text": "이 방은 창문이 작아서 햇빛이 잘 들어오지 않아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_484.c3553b4c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -3960,7 +3960,7 @@
       "text": "컴퓨터가 너무 느려서 파일을 열 때 시간이 많이 걸려요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_485.6cf37943.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -3968,7 +3968,7 @@
       "text": "이 차는 속도가 빨라서 고속도로에서 편해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_486.dbcecf08.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -3976,7 +3976,7 @@
       "text": "수프가 너무 뜨거워서 바로 먹을 수 없어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_487.434de7ad.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -3984,7 +3984,7 @@
       "text": "손이 차갑네요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_488.5221c4ca.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -3992,7 +3992,7 @@
       "text": "오늘 날씨가 따뜻해서 공원에 가고 싶어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_489.3adecf4a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -4000,7 +4000,7 @@
       "text": "가을 아침은 공기가 선선해서 산책하기 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_490.872bcca2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 54795
     },
     {
@@ -4008,7 +4008,7 @@
       "text": "이 가게에는 항상 새롭고 흥미로운 물건들이 많아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_491.589b6238.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 62318
     },
     {
@@ -4016,7 +4016,7 @@
       "text": "이 책은 오래돼서 표지가 낡았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_492.65ea35e2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -4024,7 +4024,7 @@
       "text": "그 배우는 실제로도 젊지만, 연기력도 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_493.2ac14a4f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -4032,7 +4032,7 @@
       "text": "할아버지는 요즘 건강 때문에 많이 늙으셨어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_494.e0c056a9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
@@ -4040,7 +4040,7 @@
       "text": "이 식당 음식이 정말 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_495.4a0ea853.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -4048,7 +4048,7 @@
       "text": "이 음식은 조금 짜서 제 입맛에는 나쁘네요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_496.bff4cb20.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -4056,7 +4056,7 @@
       "text": "비가 와서 옷이 젖었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_497.1678d04f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -4064,7 +4064,7 @@
       "text": "오늘 날씨가 건조해서 목이 자주 아파요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_498.0f17ee29.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -4072,7 +4072,7 @@
       "text": "머리가 계속 아파서 일찍 잤어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_499.507fa4f0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 44764
     },
     {
@@ -4080,7 +4080,7 @@
       "text": "요즘은 매일 운동해서 몸이 건강해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_500.6505aa3e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -4088,7 +4088,7 @@
       "text": "도서관이 너무 시끄러워서 공부하기 어려워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_501.f93345ef.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -4096,7 +4096,7 @@
       "text": "도서관이 지금 조용해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_502.02ed2a51.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -4104,7 +4104,7 @@
       "text": "오늘 가족과 함께 있어서 정말 행복해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_503.9b878621.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -4112,7 +4112,7 @@
       "text": "그 소식을 듣고 저는 정말 슬펐어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_504.264ff200.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -4120,7 +4120,7 @@
       "text": "그 꽃은 정말 아름다워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_505.0017c529.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -4128,7 +4128,7 @@
       "text": "그 그림 속 괴물은 정말 못생겼어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_506.c66ced11.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -4136,7 +4136,7 @@
       "text": "그 가게 주인은 귀머거리 손님에게 천천히 글로 설명해 드렸어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_507.c14e7eee.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 76529
     },
     {
@@ -4144,7 +4144,7 @@
       "text": "그는 어릴 때부터 시력을 잃어서 지금은 맹인으로 생활해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_508.55d9ab96.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 66498
     },
     {
@@ -4152,7 +4152,7 @@
       "text": "그 사람은 항상 착해서 친구들이 많아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_509.f28b9b4a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -4160,7 +4160,7 @@
       "text": "그 가족은 오랫동안 가난해서 작은 집에서 살았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_510.0262aa08.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -4168,7 +4168,7 @@
       "text": "그 가족은 대대로 부유해서 자식들에게 좋은 교육을 시켰어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_511.a4901f65.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 72767
     },
     {
@@ -4176,7 +4176,7 @@
       "text": "이 책은 종이가 너무 두꺼워서 접기 힘들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_512.fcd80403.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -4184,7 +4184,7 @@
       "text": "이 책은 종이가 얇아서 쉽게 찢어져요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_513.a51041ad.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -4192,7 +4192,7 @@
       "text": "이 가게에서는 가격이 좀 비싸요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_514.00c0920a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -4200,7 +4200,7 @@
       "text": "이 가게는 과일이 싸고 신선해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_515.46247114.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 46018
     },
     {
@@ -4208,7 +4208,7 @@
       "text": "이 길은 공사 후에 아주 평탄해졌어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_516.190c2d18.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 48526
     },
     {
@@ -4216,7 +4216,7 @@
       "text": "이 철봉은 오래되어서 가운데가 구부러져 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_517.fc2c9cc0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -4224,7 +4224,7 @@
       "text": "반지를 오른손 네 번째 손가락에 끼었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_518.f8d8f16a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -4232,7 +4232,7 @@
       "text": "이 바지는 허리가 너무 헐렁해서 떨어질 것 같아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_519.5cfb8d0a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -4240,7 +4240,7 @@
       "text": "이 건물은 주변 건물보다 훨씬 높아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_520.d9837de9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -4248,7 +4248,7 @@
       "text": "이 방은 천장이 낮아서 키 큰 사람이 불편할 수 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_521.7e9e5b85.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -4256,7 +4256,7 @@
       "text": "이 빵은 오래돼서 딱딱해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_522.ca23d5e3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -4264,7 +4264,7 @@
       "text": "이 베개는 정말 부드러워서 잠이 잘 와요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_523.74e3f1a1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -4272,7 +4272,7 @@
       "text": "호수 물이 생각보다 깊어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_524.a5e22cbe.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -4280,7 +4280,7 @@
       "text": "이 호수는 물이 얕아서 아이들이 안전하게 놀 수 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_525.72b8531d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 61065
     },
     {
@@ -4288,7 +4288,7 @@
       "text": "이 방은 창문을 열어서 공기를 바꾸면 더 깨끗해져요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_526.15d12e1c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 63990
     },
     {
@@ -4296,7 +4296,7 @@
       "text": "바닥이 아주 더러워서 신발을 벗고 들어가세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_527.a3636dbe.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -4304,7 +4304,7 @@
       "text": "그 남자는 힘이 세서 무거운 가구도 혼자 옮겨요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_528.a85db806.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 58557
     },
     {
@@ -4312,7 +4312,7 @@
       "text": "그 약은 제 증상에 비해 효과가 약해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_529.4968297d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 53541
     },
     {
@@ -4320,7 +4320,7 @@
       "text": "저는 서울에서 10년째 살고 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_530.44bcfca1.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 43510
     },
     {
@@ -4328,7 +4328,7 @@
       "text": "가방이 무거워서 들고 다니기 힘들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_531.2fd84426.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -4336,7 +4336,7 @@
       "text": "이 가방은 내용물이 거의 없어서 아주 가벼워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_532.07fd3eb8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 57303
     },
     {
@@ -4344,7 +4344,7 @@
       "text": "밤이라서 방이 어두워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_533.0eafdd52.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -4352,7 +4352,7 @@
       "text": "이 방은 창문이 커서 항상 밝아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_534.db7df4f6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 47272
     },
     {
@@ -4360,7 +4360,7 @@
       "text": "그 가수는 젊은이들 사이에서 인기가 많아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_535.ac764c23.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 51034
     },
     {
@@ -4368,7 +4368,7 @@
       "text": "저는 학생이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_536.fa67bda0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -4376,7 +4376,7 @@
       "text": "나 오늘 친구랑 영화 봐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_537.6d0cce17.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -4384,7 +4384,7 @@
       "text": "그 사람은 오늘 못 와요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_538.05ab08ae.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -4392,7 +4392,7 @@
       "text": "우리 가족은 매주 일요일에 함께 식사해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_539.52a60954.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
@@ -4400,7 +4400,7 @@
       "text": "회의에서 상대방의 의견을 먼저 들어 보세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_540.214b21a7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 52287
     },
     {
@@ -4408,7 +4408,7 @@
       "text": "저의 책을 가져다 드릴까요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_541.22f2e93a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -4416,7 +4416,7 @@
       "text": "이건 내 책이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_542.419fac2e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -4424,7 +4424,7 @@
       "text": "당신은 오늘 휴식이 필요해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_543.76ee915d.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -4432,7 +4432,7 @@
       "text": "내가 내일 회의에 참석해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_544.7be70b3a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -4440,7 +4440,7 @@
       "text": "네가 지금 하는 말이 맞아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_545.2a039475.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -4448,7 +4448,7 @@
       "text": "너희들 다 모였어요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_546.ffd7d842.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 26792
     },
     {
@@ -4456,7 +4456,7 @@
       "text": "엄마를 사랑해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_001.22687133.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -4464,7 +4464,7 @@
       "text": "아빠는 회사에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_002.f8cca17e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -4472,7 +4472,7 @@
       "text": "오빠가 도와줘요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_003.95402b8a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -4480,7 +4480,7 @@
       "text": "언니와 함께 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_004.5677cdb6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -4488,7 +4488,7 @@
       "text": "형이 학교에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_005.7d01e77a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -4496,7 +4496,7 @@
       "text": "누나를 만났어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_006.154d4e20.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -4504,7 +4504,7 @@
       "text": "남동생이 학교에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_007.0dc0e634.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -4512,7 +4512,7 @@
       "text": "여동생과 놀아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_008.e5ac20dd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -4520,7 +4520,7 @@
       "text": "할머니는 착해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_009.f8851d6f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -4528,7 +4528,7 @@
       "text": "할아버지와 함께 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_010.13a2be43.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -4536,7 +4536,7 @@
       "text": "남편이 일을 해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_011.d28b7d06.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -4544,7 +4544,7 @@
       "text": "아내를 사랑해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_fam_012.7f24ef2b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -4552,7 +4552,7 @@
       "text": "밥을 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_001.19ea6691.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 17597
     },
     {
@@ -4560,7 +4560,7 @@
       "text": "물을 마셔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_002.4d559bc0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 17597
     },
     {
@@ -4568,7 +4568,7 @@
       "text": "아침에 커피를 마셔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_003.f21a7945.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -4576,7 +4576,7 @@
       "text": "녹차를 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_004.325637cd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -4584,7 +4584,7 @@
       "text": "우유를 마셔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_005.e54057b7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -4592,7 +4592,7 @@
       "text": "오렌지 주스를 마셔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_006.85d1e18a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -4600,7 +4600,7 @@
       "text": "저는 맥주를 안 마셔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_007.f61679aa.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -4608,7 +4608,7 @@
       "text": "빨간 포도주를 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_008.5f5f6513.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -4616,7 +4616,7 @@
       "text": "김밥은 맛있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_009.409c9f93.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -4624,7 +4624,7 @@
       "text": "비빔밥을 먹고 싶어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_010.8563ac92.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -4632,7 +4632,7 @@
       "text": "미역국을 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_011.f55d23c3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -4640,7 +4640,7 @@
       "text": "떡볶이는 매워요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_012.4c5378e6.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -4648,7 +4648,7 @@
       "text": "만두를 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_013.5a4000b5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 20105
     },
     {
@@ -4656,7 +4656,7 @@
       "text": "소고기를 좋아해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_014.e35a0632.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -4664,7 +4664,7 @@
       "text": "생선이 건강해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_food_015.adca7792.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -4960,7 +4960,7 @@
       "text": "하나, 둘, 셋",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_001.6f58a63b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -4968,7 +4968,7 @@
       "text": "둘이 함께 갔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_002.6224acaa.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 26792
     },
     {
@@ -4976,7 +4976,7 @@
       "text": "셋이 모였어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_003.c6a8cc87.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -4984,7 +4984,7 @@
       "text": "우리 가족은 넷이에요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_004.9fb100b2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -4992,7 +4992,7 @@
       "text": "다섯 명이 왔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_005.c21cf9a2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -5000,7 +5000,7 @@
       "text": "여섯 시간이 걸렸어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_006.d01e1bb8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -5008,7 +5008,7 @@
       "text": "일곱 살이 되었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_007.085ba08f.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 26792
     },
     {
@@ -5016,7 +5016,7 @@
       "text": "여덟 개를 샀어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_008.23462b37.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 25538
     },
     {
@@ -5024,7 +5024,7 @@
       "text": "아홉 번 했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_009.edfe946b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -5032,7 +5032,7 @@
       "text": "열 개를 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_010.4ae4c3da.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 18851
     },
     {
@@ -5040,7 +5040,7 @@
       "text": "한 시간이 걸렸어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_011.e8851fb9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 26792
     },
     {
@@ -5048,7 +5048,7 @@
       "text": "10분 기다려 주세요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_012.8a547016.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -5056,7 +5056,7 @@
       "text": "5초 기다려요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_013.e8da0ef3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 24284
     },
     {
@@ -5064,7 +5064,7 @@
       "text": "어제 뭐 했어요?",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_014.2e6266c9.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 21358
     },
     {
@@ -5072,7 +5072,7 @@
       "text": "오늘 날씨가 좋아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_015.b09090f8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -5080,7 +5080,7 @@
       "text": "내일 만나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_016.bdb6d33b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 18851
     },
     {
@@ -5088,7 +5088,7 @@
       "text": "아침 7시에 일어나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_017.2d57aff3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -5096,7 +5096,7 @@
       "text": "점심 12시에 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_018.f84dbab5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -5104,7 +5104,7 @@
       "text": "저녁 6시에 만나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_019.5f3e3d37.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -5112,7 +5112,7 @@
       "text": "밤 10시에 자요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_num_020.288afb72.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -5120,7 +5120,7 @@
       "text": "우리 아이는 학교에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_001.6c201bb0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -5128,7 +5128,7 @@
       "text": "아버지는 회사에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_002.3280af3a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -5136,7 +5136,7 @@
       "text": "오늘은 하루 종일 집에 있어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_003.9f067005.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -5144,7 +5144,7 @@
       "text": "어머니는 병원에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_004.f84c1ce7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -5152,7 +5152,7 @@
       "text": "은행에 가서 돈을 찾아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_005.f89981ab.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -5160,7 +5160,7 @@
       "text": "저녁에 가게에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_006.9ce096cd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     },
     {
@@ -5168,7 +5168,7 @@
       "text": "아이들은 공원에서 놀아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_007.8f61d57b.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -5176,7 +5176,7 @@
       "text": "주말에는 도서관에서 책을 읽어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_008.09b6744c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 40585
     },
     {
@@ -5184,7 +5184,7 @@
       "text": "우리는 영화관에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_009.cde0ade2.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -5192,7 +5192,7 @@
       "text": "우리는 식당에서 밥을 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_010.d2d4ea0e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -5200,7 +5200,7 @@
       "text": "친구와 카페에서 커피를 마셔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_011.90607761.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 39331
     },
     {
@@ -5208,7 +5208,7 @@
       "text": "아버지는 역에서 기차를 타요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_place_012.9a5ad09c.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -5296,7 +5296,7 @@
       "text": "아침마다 학교에 가요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_001.edca3d77.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -5304,7 +5304,7 @@
       "text": "친구가 와요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_002.3e3271b3.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 21358
     },
     {
@@ -5312,7 +5312,7 @@
       "text": "가족과 함께 밥을 먹어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_003.40f29449.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -5320,7 +5320,7 @@
       "text": "아침에 물을 마셔요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_004.1c9675d0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 29300
     },
     {
@@ -5328,7 +5328,7 @@
       "text": "아이는 밤에 일찍 자요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_005.126fdd4a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -5336,7 +5336,7 @@
       "text": "나는 아침 7시에 일어나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_006.7738ee95.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -5344,7 +5344,7 @@
       "text": "요즘 한국어를 공부해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_007.1de7b7dc.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 33061
     },
     {
@@ -5352,7 +5352,7 @@
       "text": "형은 회사에서 일해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_008.ec7273e0.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 30554
     },
     {
@@ -5360,7 +5360,7 @@
       "text": "아이들이 놀아요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_009.1b348eec.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 23030
     },
     {
@@ -5368,7 +5368,7 @@
       "text": "잠들기 전에 책을 읽어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_010.c79fe9bf.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 34315
     },
     {
@@ -5376,7 +5376,7 @@
       "text": "할머니께 편지를 써요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_011.6eeaed11.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -5384,7 +5384,7 @@
       "text": "우리는 집에서 한국어를 말해요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_012.6781b19e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -5392,7 +5392,7 @@
       "text": "운동할 때 음악을 들어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_013.31507541.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 31807
     },
     {
@@ -5400,7 +5400,7 @@
       "text": "주말에 친구와 영화를 봐요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_014.f561e88e.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 35569
     },
     {
@@ -5408,7 +5408,7 @@
       "text": "오후에 친구를 만나요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_verb_015.00f059c5.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 28046
     }
   ]

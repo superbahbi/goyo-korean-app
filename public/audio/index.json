@@ -1536,7 +1536,6 @@
     "essential_015": "elevenlabs_sent_essential_015.5f0830db.mp3",
     "essential_016": "elevenlabs_sent_essential_016.66f6850e.mp3",
     "essential_017": "elevenlabs_sent_essential_017.279e8fa4.mp3",
-    "essential_018": "elevenlabs_sent_essential_018.164638ea.mp3",
     "essential_019": "elevenlabs_sent_essential_019.cf632e7e.mp3",
     "essential_020": "elevenlabs_sent_essential_020.9deb046d.mp3",
     "essential_021": "elevenlabs_sent_essential_021.96e57951.mp3",
@@ -1743,7 +1742,6 @@
     "essential_252": "elevenlabs_sent_essential_252.dbf26134.mp3",
     "essential_253": "elevenlabs_sent_essential_253.10bafdff.mp3",
     "essential_254": "elevenlabs_sent_essential_254.e2254292.mp3",
-    "essential_257": "elevenlabs_sent_essential_257.87a49dfc.mp3",
     "essential_259": "elevenlabs_sent_essential_259.a86d864b.mp3",
     "essential_261": "elevenlabs_sent_essential_261.e560ca0e.mp3",
     "essential_262": "elevenlabs_sent_essential_262.ecefe909.mp3",
@@ -1872,7 +1870,6 @@
     "essential_392": "elevenlabs_sent_essential_392.5e13f60a.mp3",
     "essential_393": "elevenlabs_sent_essential_393.047dae89.mp3",
     "essential_394": "elevenlabs_sent_essential_394.c50c5a3c.mp3",
-    "essential_395": "elevenlabs_sent_essential_395.d6237d92.mp3",
     "essential_397": "elevenlabs_sent_essential_397.ce8f5702.mp3",
     "essential_399": "elevenlabs_sent_essential_399.8d0bf253.mp3",
     "essential_400": "elevenlabs_sent_essential_400.2381d20e.mp3",
@@ -2095,6 +2092,9 @@
     "verb_012": "elevenlabs_sent_verb_012.6781b19e.mp3",
     "verb_013": "elevenlabs_sent_verb_013.31507541.mp3",
     "verb_014": "elevenlabs_sent_verb_014.f561e88e.mp3",
-    "verb_015": "elevenlabs_sent_verb_015.00f059c5.mp3"
+    "verb_015": "elevenlabs_sent_verb_015.00f059c5.mp3",
+    "essential_018": "elevenlabs_sent_essential_018.3fb8080a.mp3",
+    "essential_257": "elevenlabs_sent_essential_257.d814ee37.mp3",
+    "essential_395": "elevenlabs_sent_essential_395.fc557ae8.mp3"
   }
 }
