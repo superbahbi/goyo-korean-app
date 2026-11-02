@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useStudyState } from "@/hooks/useStudyState";
 import { useLocalDayKey } from "@/hooks/useLocalDay";
 import { useHomeDashboard } from "@/hooks/useHomeDashboard";
 import { useHomeSessions } from "@/hooks/useHomeSessions";
+import { useDialogLauncher } from "@/hooks/useDialogLauncher";
 import { useVocabularyDeck } from "@/hooks/useVocabularyDeck";
 import { HomeHeader } from "@/components/HomeHeader";
 import { SaveAlerts } from "@/components/SaveAlerts";
@@ -13,7 +14,10 @@ import { ReviewPlanCard } from "@/components/ReviewPlanCard";
 import { PracticeMenu } from "@/components/PracticeMenu";
 import { QuickLinks } from "@/components/QuickLinks";
 import { CategoryGrid } from "@/components/CategoryGrid";
-import { HomeDialogs } from "@/components/HomeDialogs";
+import {
+  HomeDialogHost,
+  type HomeDialogDeps,
+} from "@/components/HomeDialogHost";
 import {
   markIosInstallHintShown,
   shouldSuggestIosInstall,
@@ -33,15 +37,10 @@ export default function Home() {
   // Recomputes at local midnight so an app left open overnight rolls over too.
   const today = useLocalDayKey();
   const { vocabulary, studyReady } = useVocabularyDeck();
-  const [showBrowse, setShowBrowse] = useState(false);
-  const [showStats, setShowStats] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showAlphabet, setShowAlphabet] = useState(false);
-  const [showGrammar, setShowGrammar] = useState(false);
-  const [showListening, setShowListening] = useState(false);
-  const [showScenarios, setShowScenarios] = useState(false);
-  const [showShadowing, setShowShadowing] = useState(false);
-  const [browseCategory, setBrowseCategory] = useState<string | null>(null);
+  const { activeDialog, open, close } = useDialogLauncher();
+  // Browse remembers the last category, so "Browse Deck" returns to where the
+  // learner left off while a theme tile still preselects its own category.
+  const lastBrowseCategory = useRef<string | null>(null);
   // Baseline for "did the user just grade a card", so loading an existing save
   // never triggers the one-time iPhone install hint.
   const cardsStudiedTodayRef = useRef<number | null>(null);
@@ -135,12 +134,61 @@ export default function Home() {
 
   const { totalReviews, overallAccuracy, medianResponseTime } = reviewStats;
 
+  const openBrowse = (category: string | null = lastBrowseCategory.current) => {
+    lastBrowseCategory.current = category;
+    open({ kind: "browse", category });
+  };
+
+  const dialogDeps: HomeDialogDeps = {
+    today,
+    state,
+    updateSettings,
+    replaceState,
+    isStudying,
+    sessionQueue,
+    sessionMode,
+    dailyGoalReached,
+    onGrade: handleGrade,
+    onCloseSession: closeSession,
+    recognitionCards: recognitionSessionCards,
+    studyReady,
+    onListeningGrade: handleListeningGrade,
+    onScenarioGrade: handleScenarioGrade,
+    onShadowingGrade: handleShadowingGrade,
+    grammarProgress: state.grammar,
+    onGrammarComplete: recordGrammarResult,
+    vocabulary,
+    stats: {
+      level: state.stats.level,
+      totalXp: state.stats.totalXp,
+      nextLevelXp,
+      streak: state.stats.streak,
+      levelTitle,
+      levelProgress,
+      totalReviews,
+      overallAccuracy,
+      masteredCount: masteryCounts.known,
+      medianResponseTime,
+      overdueCount,
+      daysStudied7,
+      daysStudied30,
+      reviews7,
+      masteryCounts,
+      categories: categoryMastery,
+    },
+    forecast: {
+      days: extendedReviewForecast,
+      total: forecastTotal,
+      peak: forecastPeak,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-emerald-50 dark:via-emerald-950/40 to-muted">
       <HomeHeader
         streak={state.stats.streak}
         totalXp={state.stats.totalXp}
-        onOpenSettings={() => setShowSettings(true)}
+        onOpenSettings={() => open({ kind: "settings" })}
       />
 
       {/* Main Content */}
@@ -170,7 +218,7 @@ export default function Home() {
           totalCardsLearned={state.stats.totalCardsLearned}
           studyReadyCount={studyReady.length}
           onStartSession={startSession}
-          onOpenAlphabet={() => setShowAlphabet(true)}
+          onOpenAlphabet={() => open({ kind: "alphabet" })}
         />
 
         {!firstRun && (
@@ -189,22 +237,22 @@ export default function Home() {
           weakCardCount={weakCards.length}
           learningCardCount={learningCards.length}
           grammarCompleted={state.grammar.completedLessonIds.length}
-          onOpenAlphabet={() => setShowAlphabet(true)}
-          onOpenGrammar={() => setShowGrammar(true)}
+          onOpenAlphabet={() => open({ kind: "alphabet" })}
+          onOpenGrammar={() => open({ kind: "grammar" })}
           onOpenListening={() =>
-            openRecognitionPractice(() => setShowListening(true))
+            openRecognitionPractice(() => open({ kind: "listening" }))
           }
           onOpenScenarios={() =>
-            openRecognitionPractice(() => setShowScenarios(true))
+            openRecognitionPractice(() => open({ kind: "scenario" }))
           }
-          onOpenShadowing={() => setShowShadowing(true)}
+          onOpenShadowing={() => open({ kind: "shadowing" })}
           onStartWeakSession={startWeakSession}
           onStartLearningSession={startLearningSession}
         />
 
         <QuickLinks
-          onOpenBrowse={() => setShowBrowse(true)}
-          onOpenStats={() => setShowStats(true)}
+          onOpenBrowse={() => openBrowse()}
+          onOpenStats={() => open({ kind: "stats" })}
         />
 
         {!firstRun && (
@@ -212,77 +260,16 @@ export default function Home() {
             categories={categoryMastery}
             vocabularyCount={vocabulary.length}
             onViewAll={() => {
-              setBrowseCategory(null);
-              setShowBrowse(true);
+              openBrowse(null);
             }}
             onSelectCategory={categoryId => {
-              setBrowseCategory(categoryId);
-              setShowBrowse(true);
+              openBrowse(categoryId);
             }}
           />
         )}
       </main>
 
-      <HomeDialogs
-        today={today}
-        state={state}
-        updateSettings={updateSettings}
-        replaceState={replaceState}
-        isStudying={isStudying}
-        sessionQueue={sessionQueue}
-        sessionMode={sessionMode}
-        dailyGoalReached={dailyGoalReached}
-        onGrade={handleGrade}
-        onCloseSession={closeSession}
-        recognitionCards={recognitionSessionCards}
-        studyReady={studyReady}
-        onListeningGrade={handleListeningGrade}
-        onScenarioGrade={handleScenarioGrade}
-        onShadowingGrade={handleShadowingGrade}
-        showAlphabet={showAlphabet}
-        showGrammar={showGrammar}
-        grammarProgress={state.grammar}
-        onGrammarComplete={recordGrammarResult}
-        showListening={showListening}
-        showScenarios={showScenarios}
-        showShadowing={showShadowing}
-        onCloseAlphabet={() => setShowAlphabet(false)}
-        onCloseGrammar={() => setShowGrammar(false)}
-        onCloseListening={() => setShowListening(false)}
-        onCloseScenarios={() => setShowScenarios(false)}
-        onCloseShadowing={() => setShowShadowing(false)}
-        showBrowse={showBrowse}
-        browseCategory={browseCategory}
-        vocabulary={vocabulary}
-        onBrowseOpenChange={setShowBrowse}
-        showStats={showStats}
-        stats={{
-          level: state.stats.level,
-          totalXp: state.stats.totalXp,
-          nextLevelXp,
-          streak: state.stats.streak,
-          levelTitle,
-          levelProgress,
-          totalReviews,
-          overallAccuracy,
-          masteredCount: masteryCounts.known,
-          medianResponseTime,
-          overdueCount,
-          daysStudied7,
-          daysStudied30,
-          reviews7,
-          masteryCounts,
-          categories: categoryMastery,
-        }}
-        forecast={{
-          days: extendedReviewForecast,
-          total: forecastTotal,
-          peak: forecastPeak,
-        }}
-        onStatsOpenChange={setShowStats}
-        showSettings={showSettings}
-        onSettingsOpenChange={setShowSettings}
-      />
+      <HomeDialogHost dialog={activeDialog} onClose={close} deps={dialogDeps} />
     </div>
   );
 }
