@@ -48,6 +48,21 @@ Listening and scenario practice; it confirms familiarity but never stretches a
 card's schedule.
 _Avoid_: passive practice, review mode
 
+**Practice question**:
+One prompt and its answer choices inside a practice mode.
+_Avoid_: quiz item, exercise, card test
+
+**Question loop**:
+The framework-free implementation that owns a practice mode's prompt index,
+selected choice, verdict, score, completion, and restart behind a small command
+interface.
+_Avoid_: question state, quiz store, practice reducer
+
+**Distractor**:
+A wrong answer choice drawn from another card; each practice mode decides its
+own count, dedupe key, and tag preference.
+_Avoid_: wrong answer, red herring, filler option
+
 **Practice-only**:
 Self-reported practice that is logged but never moves the schedule or progress.
 _Avoid_: shadowing-only, no-count, unscored

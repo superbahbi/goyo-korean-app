@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChoiceButton } from "@/components/practice/ChoiceButton";
-import type { GrammarLesson } from "@/lib/grammar";
+import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
+import type { GrammarLesson, GrammarQuizQuestion } from "@/lib/grammar";
 
 interface GrammarQuizProps {
   lesson: GrammarLesson;
@@ -10,47 +11,51 @@ interface GrammarQuizProps {
   onComplete: (correct: number, total: number) => void;
 }
 
+interface GrammarQuestion {
+  question: GrammarQuizQuestion;
+  answerId: string;
+}
+
 const LETTERS = ["A", "B", "C", "D"];
 
 export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
-  const [index, setIndex] = useState(0);
-  const [chosen, setChosen] = useState<number | null>(null);
-  const [correctCount, setCorrectCount] = useState(0);
-  const [finished, setFinished] = useState(false);
+  const reportedComplete = useRef(false);
 
-  const question = lesson.quiz[index];
-  const answered = chosen !== null;
-  const isLast = index === lesson.quiz.length - 1;
-  const isCorrect = chosen === question?.answerIndex;
+  const { state, current, answer, next, restart } =
+    useQuestionLoop<GrammarQuestion>(() =>
+      lesson.quiz.map(question => ({
+        question,
+        answerId: String(question.answerIndex),
+      }))
+    );
+
+  const answered = state.verdict !== "unanswered";
+  const isCorrect = state.verdict === "correct";
+  const isLast = state.index === state.questions.length - 1;
 
   const choose = (optionIndex: number) => {
     if (answered) return;
-    setChosen(optionIndex);
-    if (optionIndex === question.answerIndex) {
-      setCorrectCount(count => count + 1);
-    }
+    answer(String(optionIndex));
   };
 
-  const next = () => {
+  const advance = () => {
     if (!answered) return;
-    if (isLast) {
-      setFinished(true);
-      onComplete(correctCount, lesson.quiz.length);
-      return;
+    const result = next();
+    // The summary replaces the check immediately; report it once even if a
+    // second click lands before the result renders.
+    if (result.completed && !reportedComplete.current) {
+      reportedComplete.current = true;
+      onComplete(result.correctCount, result.questions.length);
     }
-    setIndex(value => value + 1);
-    setChosen(null);
   };
 
   const retake = () => {
-    setIndex(0);
-    setChosen(null);
-    setCorrectCount(0);
-    setFinished(false);
+    reportedComplete.current = false;
+    restart();
   };
 
-  if (finished) {
-    const perfect = correctCount === lesson.quiz.length;
+  if (state.completed || !current) {
+    const perfect = state.correctCount === state.questions.length;
     return (
       <section
         aria-labelledby="grammar-quiz-result"
@@ -63,7 +68,7 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
           id="grammar-quiz-result"
           className="mt-2 font-serif text-2xl text-foreground"
         >
-          {correctCount} of {lesson.quiz.length} correct
+          {state.correctCount} of {state.questions.length} correct
         </h3>
         <p className="mt-2 text-sm text-foreground/70">
           {perfect
@@ -83,6 +88,8 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
     );
   }
 
+  const question = current.question;
+
   return (
     <section aria-labelledby="grammar-quiz-heading">
       <div className="flex items-baseline justify-between gap-3">
@@ -93,7 +100,7 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
           Check yourself
         </h3>
         <span className="text-xs font-medium text-foreground/70">
-          {index + 1} / {lesson.quiz.length}
+          {state.index + 1} / {state.questions.length}
           {best ? ` · best ${best.correct}/${best.total}` : ""}
         </span>
       </div>
@@ -113,7 +120,7 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
             label={option}
             labelLang={/[가-힣]/.test(option) ? "ko" : undefined}
             answered={answered}
-            chosen={chosen === optionIndex}
+            chosen={state.selectedId === String(optionIndex)}
             correct={optionIndex === question.answerIndex}
             onChoose={() => choose(optionIndex)}
           />
@@ -134,7 +141,7 @@ export function GrammarQuiz({ lesson, best, onComplete }: GrammarQuizProps) {
             <Button
               type="button"
               className="mt-3 min-h-11 w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
-              onClick={next}
+              onClick={advance}
             >
               {isLast ? "See result" : "Next question"}
             </Button>

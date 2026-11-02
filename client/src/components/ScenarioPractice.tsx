@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Check, RotateCcw } from "lucide-react";
 import { type VocabularyCard } from "@/lib/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
 import { shuffle } from "@/lib/shuffle";
+import { pickDistractors } from "@/lib/practiceDistractors";
 import { ChoiceButton } from "@/components/practice/ChoiceButton";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
 import { PracticeFeedback } from "@/components/practice/PracticeFeedback";
@@ -13,6 +13,7 @@ import {
 } from "@/components/practice/PracticeShell";
 import { SCENARIOS } from "@/components/practice/scenarios";
 import { ScenarioPrompt } from "@/components/practice/ScenarioPrompt";
+import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
 
 interface ScenarioPracticeProps {
   cards: VocabularyCard[];
@@ -20,60 +21,60 @@ interface ScenarioPracticeProps {
   onClose: () => void;
 }
 
+interface ScenarioQuestion {
+  scenario: (typeof SCENARIOS)[number];
+  card: VocabularyCard;
+  choices: VocabularyCard[];
+  answerId: string;
+}
+
+const DISTRACTOR_COUNT = 2;
+
 export function ScenarioPractice({
   cards,
   onGrade,
   onClose,
 }: ScenarioPracticeProps) {
-  const [index, setIndex] = useState(0);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [score, setScore] = useState(0);
-  const [complete, setComplete] = useState(false);
-  const [round, setRound] = useState(0);
+  const { state, current, answer, next, restart } =
+    useQuestionLoop<ScenarioQuestion>(() => {
+      const cardMap = new Map(cards.map(card => [card.id, card]));
+      // Scenarios only use cards the learner has already met, so this mode
+      // never introduces a brand-new phrase.
+      const availableScenarios = shuffle(
+        SCENARIOS.flatMap(scenario => {
+          const card = cardMap.get(scenario.cardId);
+          return card ? [{ scenario, card }] : [];
+        })
+      );
 
-  const cardMap = useMemo(
-    () => new Map(cards.map(card => [card.id, card])),
-    [cards]
-  );
-  // Scenarios only use cards the learner has already met, so this mode never
-  // introduces a brand-new phrase.
-  const availableScenarios = useMemo(
-    () => SCENARIOS.filter(scenario => cardMap.has(scenario.cardId)),
-    [cardMap]
-  );
-  const scenarios = useMemo(() => {
-    // Reading the round counter is what forces a fresh order after restart.
-    void round;
-    return shuffle(availableScenarios);
-  }, [availableScenarios, round]);
-  const current = scenarios[index];
-  const currentCard = current ? cardMap.get(current.cardId) : undefined;
+      return availableScenarios.map(({ scenario, card }) => {
+        const distractors = pickDistractors(cards, {
+          count: DISTRACTOR_COUNT,
+          correctCardId: card.id,
+          // Prefer survival phrases, then any reviewed card, and never repeat
+          // a phrase.
+          dedupeKey: candidate => candidate.front,
+          preferTag: "survival",
+        });
+        return {
+          scenario,
+          card,
+          answerId: card.id,
+          choices: shuffle([card, ...distractors]),
+        };
+      });
+    });
 
-  const choices = useMemo(() => {
-    if (!currentCard) return [];
-    const pool = shuffle(cards.filter(card => card.id !== currentCard.id));
-    // Prefer survival phrases, then any reviewed card, and never repeat a phrase.
-    const ordered = [
-      ...pool.filter(card => card.tag === "survival"),
-      ...pool.filter(card => card.tag !== "survival"),
-    ];
-    const seen = new Set([currentCard.front]);
-    const distractors: VocabularyCard[] = [];
-    for (const card of ordered) {
-      if (seen.has(card.front)) continue;
-      seen.add(card.front);
-      distractors.push(card);
-      if (distractors.length === 2) break;
-    }
-    return shuffle([currentCard, ...distractors]);
-  }, [cards, currentCard]);
+  const answered = state.verdict !== "unanswered";
+  const isCorrect = state.verdict === "correct";
+  const isLast = state.index === state.questions.length - 1;
 
   const closePractice = () => {
     stopAudio();
     onClose();
   };
 
-  if (scenarios.length === 0) {
+  if (state.questions.length === 0) {
     return (
       <PracticeShell
         title="Nothing to practice yet"
@@ -95,7 +96,7 @@ export function ScenarioPractice({
     );
   }
 
-  if (complete) {
+  if (state.completed || !current) {
     return (
       <PracticeComplete
         title="Scenario practice complete"
@@ -111,40 +112,24 @@ export function ScenarioPractice({
         }
         restartClassName="bg-emerald-700 hover:bg-emerald-800"
         onClose={closePractice}
-        onRestart={() => {
-          setIndex(0);
-          setSelectedId(null);
-          setScore(0);
-          setComplete(false);
-          setRound(value => value + 1);
-        }}
+        onRestart={restart}
       >
-        You chose the useful phrase in <strong>{score}</strong> of{" "}
-        {scenarios.length} situations.
+        You chose the useful phrase in <strong>{state.correctCount}</strong> of{" "}
+        {state.questions.length} situations.
       </PracticeComplete>
     );
   }
 
-  if (!current || !currentCard) return null;
-  const answered = selectedId !== null;
-  const isCorrect = selectedId === currentCard.id;
-
   const choose = (card: VocabularyCard) => {
     if (answered) return;
-    setSelectedId(card.id);
-    const correct = card.id === currentCard.id;
-    if (correct) setScore(value => value + 1);
-    onGrade(currentCard.id, correct ? "good" : "again");
+    const result = answer(card.id);
+    onGrade(current.card.id, result.verdict === "correct" ? "good" : "again");
   };
 
-  const next = () => {
-    if (index === scenarios.length - 1) {
-      stopAudio();
-      setComplete(true);
-    } else {
-      setIndex(value => value + 1);
-      setSelectedId(null);
-    }
+  const nextScenario = () => {
+    if (!answered) return;
+    if (isLast) stopAudio();
+    next();
   };
 
   return (
@@ -152,38 +137,40 @@ export function ScenarioPractice({
       title="What would you say?"
       badge={
         <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100 dark:bg-amber-900/50 dark:text-amber-300 dark:hover:bg-amber-900/50">
-          {current.place}
+          {current.scenario.place}
         </Badge>
       }
-      description={current.prompt}
+      description={current.scenario.prompt}
       tone="rose"
       closeLabel="Close scenario practice"
       onClose={closePractice}
-      progress={(index / scenarios.length) * 100}
+      progress={(state.index / state.questions.length) * 100}
       progressLabel="Scenario progress"
-      counter={`${index + 1} / ${scenarios.length}`}
+      counter={`${state.index + 1} / ${state.questions.length}`}
       status="Survival Korean"
       center
       footer={
         answered ? (
-          <PracticePrimaryButton onClick={next}>
-            {index === scenarios.length - 1 ? "See results" : "Next situation"}
+          <PracticePrimaryButton onClick={nextScenario}>
+            {isLast ? "See results" : "Next situation"}
           </PracticePrimaryButton>
         ) : undefined
       }
     >
-      <ScenarioPrompt onHear={() => void playVocabularyAudio(currentCard.id)} />
+      <ScenarioPrompt
+        onHear={() => void playVocabularyAudio(current.card.id)}
+      />
 
       <div className="mt-5 grid gap-3">
-        {choices.map((choice, choiceIndex) => (
+        {current.choices.map((choice, choiceIndex) => (
           <ChoiceButton
             key={choice.id}
             letter={String.fromCharCode(65 + choiceIndex)}
             label={choice.front}
             labelLang="ko"
             answered={answered}
-            chosen={selectedId === choice.id}
-            correct={choice.id === currentCard.id}
+            chosen={state.selectedId === choice.id}
+            correct={choice.id === current.card.id}
             onChoose={() => choose(choice)}
           />
         ))}
@@ -195,12 +182,12 @@ export function ScenarioPractice({
         correctText="That fits the situation."
         wrongText={
           <>
-            A useful answer is “<span lang="ko">{currentCard.front}</span>”.
+            A useful answer is “<span lang="ko">{current.card.front}</span>”.
           </>
         }
         detail={
           <>
-            {currentCard.back} · <span lang="ko">{currentCard.example}</span>
+            {current.card.back} · <span lang="ko">{current.card.example}</span>
           </>
         }
       />
