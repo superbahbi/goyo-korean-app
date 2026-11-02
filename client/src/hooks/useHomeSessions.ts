@@ -2,11 +2,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 import type { GradeOptions } from "@/hooks/useStudyState";
 import type { GradeOutcome } from "@/lib/gradeOutcome";
+import type { ModeAvailability, PracticeModeId } from "@/lib/dashboardView";
 import type { VocabularyCard } from "@/lib/vocabulary";
 
 export type SessionMode = "daily" | "weak" | "learning";
 
 interface UseHomeSessionsOptions {
+  modes: Record<PracticeModeId, ModeAvailability>;
   queue: VocabularyCard[];
   weakCards: VocabularyCard[];
   learningCards: VocabularyCard[];
@@ -23,6 +25,7 @@ interface UseHomeSessionsOptions {
  * dashboard only wires callbacks to the section components.
  */
 export function useHomeSessions({
+  modes,
   queue,
   weakCards,
   learningCards,
@@ -38,8 +41,13 @@ export function useHomeSessions({
   const [sessionMode, setSessionMode] = useState<SessionMode>("daily");
   const [isStudying, setIsStudying] = useState(false);
 
-  const openRecognitionPractice = (open: () => void) => {
-    if (recognitionCards.length < 4) {
+  const openRecognitionPractice = (
+    mode: "listening" | "scenario",
+    open: () => void
+  ) => {
+    // Scenario practice without a surviving scenario keeps its in-dialog empty
+    // state; only the shared "not enough reviewed cards" gate stops opening.
+    if (modes[mode].reason === "too-few-reviewed-cards") {
       toast.info("Study a few cards first", {
         description:
           "Listening and scenarios use cards you have already reviewed, so nothing new is introduced.",
@@ -72,7 +80,7 @@ export function useHomeSessions({
   };
 
   const startSession = () => {
-    if (queue.length === 0) {
+    if (!modes.daily.available) {
       toast.info("Your planned reviews are complete", {
         description: "Come back tomorrow for the next new-word batch.",
       });
@@ -84,7 +92,7 @@ export function useHomeSessions({
   };
 
   const startWeakSession = () => {
-    if (weakCards.length === 0) {
+    if (!modes.weak.available) {
       toast.info("Review a few cards first to unlock Weak Words");
       return;
     }
@@ -94,7 +102,7 @@ export function useHomeSessions({
   };
 
   const startLearningSession = () => {
-    if (learningCards.length === 0) {
+    if (!modes.learning.available) {
       toast.info("No Learning or Shaky cards yet", {
         description: "Start a Daily Session to build your review path.",
       });

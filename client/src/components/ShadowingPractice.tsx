@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { selectShadowingCards } from "@/lib/queue";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -32,13 +33,7 @@ export function ShadowingPractice({
   onGrade,
   onClose,
 }: ShadowingPracticeProps) {
-  const queue = useMemo(
-    () =>
-      cards
-        .filter(card => card.tag === "survival" || card.tag === "daily")
-        .slice(0, 8),
-    [cards]
-  );
+  const queue = useMemo(() => selectShadowingCards(cards), [cards]);
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [shadowed, setShadowed] = useState(false);

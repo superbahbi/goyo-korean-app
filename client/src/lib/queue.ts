@@ -123,6 +123,16 @@ export function selectWeakCards(
     .slice(0, limit);
 }
 
+/** Shadowing: a short run of survival and daily phrases, practice only. */
+export function selectShadowingCards(
+  cards: VocabularyCard[],
+  limit = 8
+): VocabularyCard[] {
+  return cards
+    .filter(card => card.tag === "survival" || card.tag === "daily")
+    .slice(0, limit);
+}
+
 /** Learning and Shaky cards that need another pass, earliest due first. */
 export function selectLearningCards(
   cards: VocabularyCard[],

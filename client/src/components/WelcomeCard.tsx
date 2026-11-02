@@ -1,31 +1,16 @@
 import { Card } from "@/components/ui/card";
 import { Play, Sparkles, Trophy } from "lucide-react";
 import { motion } from "framer-motion";
+import type { TodayPlan } from "@/lib/dashboardView";
 
 interface WelcomeCardProps {
-  cardsRemaining: number;
-  plannedCards: number;
-  newCards: number;
-  overdueCount: number;
-  dailyGoalReached: boolean;
+  plan: TodayPlan;
   onStartSession: () => void;
 }
 
 /** Hero card that explains today's plan and starts the daily session. */
-export function WelcomeCard({
-  cardsRemaining,
-  plannedCards,
-  newCards,
-  overdueCount,
-  dailyGoalReached,
-  onStartSession,
-}: WelcomeCardProps) {
-  const summary =
-    cardsRemaining > 0
-      ? plannedCards > 0
-        ? `${overdueCount > 0 ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · ` : ""}${plannedCards} card${plannedCards === 1 ? "" : "s"} planned for today`
-        : "Today's scheduled reviews are complete. New words resume tomorrow."
-      : "You've hit today's goal. Extra practice is optional from here.";
+export function WelcomeCard({ plan, onStartSession }: WelcomeCardProps) {
+  const { newCards, overdueCount, dailyGoalReached, summary } = plan;
 
   return (
     <motion.div
