@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import type { GradeOptions } from "@/hooks/useStudyState";
+import { evaluateGrade } from "@/lib/gradeIntent";
 import type { CardState } from "@/lib/mastery";
 import type { VocabularyCard } from "@/lib/vocabulary";
 
@@ -11,7 +12,6 @@ interface UseHomeSessionsOptions {
   today: string;
   dailyGoal: number;
   cardsStudiedToday: number;
-  dailyGoalReached: boolean;
   queue: VocabularyCard[];
   weakCards: VocabularyCard[];
   learningCards: VocabularyCard[];
@@ -32,7 +32,6 @@ export function useHomeSessions({
   today,
   dailyGoal,
   cardsStudiedToday,
-  dailyGoalReached,
   queue,
   weakCards,
   learningCards,
@@ -65,24 +64,29 @@ export function useHomeSessions({
     rating: "again" | "good" | "easy",
     options?: { responseTimeMs?: number }
   ) => {
-    const isRepeatPractice = sessionMode === "daily" && dailyGoalReached;
-    const wasBelowGoal = !isRepeatPractice && cardsStudiedToday < dailyGoal;
+    // Same decision the save applies, computed from the same pre-grade state,
+    // so the toast can only report XP that was actually awarded.
+    const decision = evaluateGrade(
+      {
+        mode: sessionMode,
+        existing: cardStates[cardId],
+        today,
+        dailyGoal,
+        studiedToday: cardsStudiedToday,
+      },
+      rating,
+      options?.responseTimeMs
+    );
+
     gradeCard(cardId, rating, {
-      countProgress: !isRepeatPractice,
       responseTimeMs: options?.responseTimeMs,
       mode: sessionMode,
     });
 
-    const xpGain = rating === "easy" ? 15 : rating === "good" ? 10 : 5;
-    const isSameDayRepeat = cardStates[cardId]?.lastReviewDate === today;
-    if (
-      wasBelowGoal &&
-      !isSameDayRepeat &&
-      cardsStudiedToday + 1 >= dailyGoal
-    ) {
+    if (decision.goalJustReached) {
       setTimeout(() => {
         toast.success("Daily goal reached! 🎉", {
-          description: `You've earned ${xpGain} XP and maintained your streak!`,
+          description: `You've earned ${decision.xp} XP and maintained your streak!`,
         });
       }, 300);
     }
@@ -131,7 +135,7 @@ export function useHomeSessions({
   };
 
   const handleShadowingGrade = (cardId: string, rating: "again" | "good") => {
-    gradeCard(cardId, rating, { mode: "shadowing", practiceOnly: true });
+    gradeCard(cardId, rating, { mode: "shadowing" });
   };
 
   const closeSession = () => {

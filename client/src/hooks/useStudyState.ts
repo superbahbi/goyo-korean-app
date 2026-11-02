@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { scheduleReview } from "@/lib/srs";
+import { evaluateGrade } from "@/lib/gradeIntent";
 import { requestPersistentStorage } from "@/lib/storageProtection";
 import {
   appendReviewEntry,
@@ -61,11 +61,9 @@ export interface UserState {
 }
 
 export interface GradeOptions {
-  countProgress?: boolean;
   responseTimeMs?: number;
+  /** The practice mode decides whether this grade counts for progress. */
   mode?: StudyMode;
-  /** Shadowing is self-reported, so it is logged but never touches the schedule. */
-  practiceOnly?: boolean;
 }
 
 const STORAGE_KEY = "goyo-progress-v2";
@@ -390,7 +388,6 @@ export function applyGrade(
   options: GradeOptions = {},
   now = new Date()
 ): UserState {
-  const requestedProgress = options.countProgress !== false;
   const today = getLocalDateKey(now);
   const logEntry = {
     cardId,
@@ -403,9 +400,21 @@ export function applyGrade(
     mode: options.mode ?? "daily",
   } as const;
 
-  // Self-reported practice still belongs in the log, but it must not move the
+  const decision = evaluateGrade(
+    {
+      mode: options.mode ?? "daily",
+      existing: state.cardStates[cardId],
+      today,
+      dailyGoal: state.settings.dailyGoal,
+      studiedToday: state.studyDays[today]?.cards ?? 0,
+    },
+    rating,
+    options.responseTimeMs
+  );
+
+  // Practice-only grades still belong in the log, but they must not move the
   // schedule, earn XP, or count toward the daily goal.
-  if (options.practiceOnly) {
+  if (!decision.schedule) {
     return {
       ...state,
       reviewLog: appendReviewEntry(state.reviewLog, logEntry),
@@ -413,29 +422,11 @@ export function applyGrade(
   }
 
   const existingCard = state.cardStates[cardId];
-  const recognition =
-    options.mode === "listening" || options.mode === "scenario";
-  const { schedule, advanced } = scheduleReview(
-    existingCard,
-    rating,
-    today,
-    options.responseTimeMs,
-    {
-      recognition,
-    }
-  );
-  // Re-grading a card already reviewed today earns no progress or XP.
-  const countProgress = requestedProgress && advanced;
-  const xpGain = countProgress
-    ? rating === "easy"
-      ? 15
-      : rating === "good"
-        ? 10
-        : 5
-    : 0;
+  const { schedule, advanced } = decision;
+  const xpGain = decision.xp;
 
   const studyDays = recordStudyDay(state.studyDays, today, {
-    cardFirstSeenToday: existingCard?.lastReviewDate !== today,
+    cardFirstSeenToday: decision.countsAsNewCard,
     scheduleAdvanced: advanced,
   });
   const newStreak = deriveStreak(studyDays, today);

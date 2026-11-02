@@ -1,4 +1,5 @@
 import { addDays } from "@/lib/day";
+import { goalProgress } from "@/lib/gradeIntent";
 import { getMasteryState, type CardState } from "@/lib/mastery";
 import { CATEGORIES, type VocabularyCard } from "@/lib/vocabulary";
 
@@ -55,7 +56,7 @@ export function buildDailyQueue(
   cardsStudiedToday: number,
   newCardsPerDay = DEFAULT_NEW_CARDS_PER_DAY
 ): VocabularyCard[] {
-  const sessionSize = Math.max(0, dailyGoal - cardsStudiedToday);
+  const progress = goalProgress(dailyGoal, cardsStudiedToday);
   const dueCards = cards
     .filter(card => {
       const due = states[card.id]?.due;
@@ -76,19 +77,18 @@ export function buildDailyQueue(
   // Theme order first; the deck keeps its curated order inside a theme, so a
   // beginner meets survival and daily phrases before broad vocabulary. A repeat
   // queue reviews what the learner knows and never introduces unseen words.
-  const newCards =
-    sessionSize <= 0
-      ? []
-      : orderNewCardsByTheme(cards.filter(card => !states[card.id])).slice(
-          0,
-          newCardBudget
-        );
+  const newCards = progress.reached
+    ? []
+    : orderNewCardsByTheme(cards.filter(card => !states[card.id])).slice(
+        0,
+        newCardBudget
+      );
 
   const planned = [...dueCards, ...newCards].filter(
     (card, position, all) =>
       all.findIndex(item => item.id === card.id) === position
   );
-  return planned.slice(0, sessionSize || dailyGoal);
+  return planned.slice(0, progress.repeatQueueSize);
 }
 
 /** Weak Words: all reviewed cards, lowest accuracy first. */

@@ -106,7 +106,6 @@ export default function Home() {
     today,
     dailyGoal: state.settings.dailyGoal,
     cardsStudiedToday,
-    dailyGoalReached,
     queue,
     weakCards,
     learningCards,

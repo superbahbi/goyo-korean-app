@@ -547,7 +547,7 @@ describe("applyGrade", () => {
       state,
       "surv_001",
       "good",
-      { mode: "shadowing", practiceOnly: true },
+      { mode: "shadowing" },
       at
     );
 
@@ -633,7 +633,7 @@ describe("applyGrade", () => {
       state,
       "surv_002",
       "good",
-      { mode: "shadowing", practiceOnly: true },
+      { mode: "shadowing" },
       new Date("2026-10-31T09:30:00.000Z")
     );
 

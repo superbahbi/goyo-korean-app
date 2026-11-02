@@ -7,6 +7,7 @@ import type {
 } from "@/components/StatsDialog";
 import type { UserState } from "@/hooks/useStudyState";
 import type { SessionMode } from "@/hooks/useHomeSessions";
+import { repeatableSession } from "@/lib/gradeIntent";
 import type { VocabularyCard } from "@/lib/vocabulary";
 import type { GrammarProgress } from "@/lib/grammarProgress";
 
@@ -164,11 +165,7 @@ export function HomeDialogs({
           cardStates={state.cardStates}
           onGrade={onGrade}
           onClose={onCloseSession}
-          allowRepeat={
-            dailyGoalReached ||
-            sessionMode === "weak" ||
-            sessionMode === "learning"
-          }
+          allowRepeat={repeatableSession(sessionMode, dailyGoalReached)}
           autoPlayAudio={state.settings.autoPlayAudio}
           title={
             sessionMode === "weak"
