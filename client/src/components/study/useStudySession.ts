@@ -1,32 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import { VocabularyCard } from "@/lib/vocabulary";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { stopAudio } from "@/lib/audioPlayer";
 import type { CardState } from "@/lib/mastery";
+import {
+  createStudySession,
+  shouldShowNewCardIntro,
+  type StudyRating,
+} from "@/lib/studySession";
+import { studyKeyCommand, type StudyPhase } from "@/lib/studyKeys";
+import type { VocabularyCard } from "@/lib/vocabulary";
 
-export type StudyRating = "again" | "good" | "easy";
-export type StudyResults = Record<StudyRating, number>;
-
-/**
- * A first meeting is presented before it is tested. Only a card with no saved
- * state is new; once the intro is acknowledged the same card shows its recall
- * card for the rest of the session, including an `again` retry.
- */
-export function shouldShowNewCardIntro(
-  cardId: string,
-  cardStates: Record<string, CardState> | undefined,
-  introducedIds: ReadonlySet<string>
-): boolean {
-  return !cardStates?.[cardId] && !introducedIds.has(cardId);
-}
-
-/** Acknowledge the introduction without touching card state or the schedule. */
-export function acknowledgeNewCardIntro(
-  introducedIds: ReadonlySet<string>,
-  cardId: string
-): ReadonlySet<string> {
-  if (introducedIds.has(cardId)) return introducedIds;
-  return new Set<string>(Array.from(introducedIds).concat(cardId));
-}
+export type { StudyRating, StudyResults } from "@/lib/studySession";
 
 interface UseStudySessionOptions {
   queue: VocabularyCard[];
@@ -40,129 +23,63 @@ interface UseStudySessionOptions {
   onClose: () => void;
 }
 
+/**
+ * The React adapter for the study session machine. It owns subscription, the
+ * clock, audio stop, keyboard wiring, and nothing that decides session flow.
+ */
 export function useStudySession({
   queue,
   cardStates,
   onGrade,
   onClose,
 }: UseStudySessionOptions) {
-  const [index, setIndex] = useState(0);
-  // A failed card re-enters the session once, so the queue can grow while the
-  // session runs. Keep it local to avoid replaying the parent's original plan.
-  const [sessionQueue, setSessionQueue] = useState<VocabularyCard[]>(() => [
-    ...queue,
-  ]);
-  const retriedIds = useRef(new Set<string>());
-  const [flipped, setFlipped] = useState(false);
-  const [completed, setCompleted] = useState(false);
-  const [results, setResults] = useState<StudyResults>({
-    again: 0,
-    good: 0,
-    easy: 0,
-  });
-  const [productionAttempt, setProductionAttempt] = useState("");
-  const [productionDone, setProductionDone] = useState(false);
-  const [introducedIds, setIntroducedIds] = useState<ReadonlySet<string>>(
-    () => new Set()
+  // The parent may re-create these callbacks every render; the machine is
+  // created once, so it reads the latest ones through refs.
+  const onGradeRef = useRef(onGrade);
+  const onCloseRef = useRef(onClose);
+  onGradeRef.current = onGrade;
+  onCloseRef.current = onClose;
+
+  const [session] = useState(() =>
+    createStudySession({
+      queue,
+      clock: () => Date.now(),
+      onGrade: (cardId, rating, options) =>
+        onGradeRef.current(cardId, rating, options),
+      stopAudio,
+      onClose: () => onCloseRef.current(),
+    })
   );
-  const cardStartedAt = useRef(Date.now());
-  // Recall latency: card display to first reveal, excluding time spent on the back.
-  const recallTimeMs = useRef<number | null>(null);
-  // Guards against a double click grading the same card twice. The lock is
-  // released only once the next card is on screen (or the session restarts).
-  const gradingLocked = useRef(false);
 
-  // Stop any lingering pronunciation when the session unmounts.
-  useEffect(() => () => stopAudio(), []);
-
-  // A new card unlocks grading; releasing it inside the click handler would let
-  // the second click of a double click through before React re-renders.
-  useEffect(() => {
-    gradingLocked.current = false;
-  }, [index]);
-
-  const closeSession = () => {
-    stopAudio();
-    onClose();
-  };
-
-  const currentCard = sessionQueue[index];
+  const state = useSyncExternalStore(session.subscribe, session.getState);
+  const currentCard = state.queue[state.index];
   const showIntro = Boolean(
     currentCard &&
-      shouldShowNewCardIntro(currentCard.id, cardStates, introducedIds)
+      shouldShowNewCardIntro(currentCard.id, cardStates, state.introducedIds)
   );
 
-  // The intro is presentation only: acknowledging it starts the recall timer,
-  // but leaves the queue, schedule, results and saved state untouched.
-  const dismissIntro = () => {
-    if (!currentCard) return;
-    setIntroducedIds(current =>
-      acknowledgeNewCardIntro(current, currentCard.id)
-    );
-    cardStartedAt.current = Date.now();
-    recallTimeMs.current = null;
-  };
+  // A new card unlocks grading. Doing this in an effect rather than inside the
+  // grade handler keeps the second click of a double click locked out until the
+  // next card has actually rendered.
+  useEffect(() => {
+    session.releaseGradeLock();
+  }, [session, state.index]);
 
-  const handleFlip = (nextFlipped: boolean) => {
-    if (nextFlipped && recallTimeMs.current === null) {
-      recallTimeMs.current = Date.now() - cardStartedAt.current;
-    }
-    setFlipped(nextFlipped);
-  };
+  // Stop any lingering pronunciation when the session unmounts.
+  useEffect(() => () => session.dispose(), [session]);
 
-  const handleGrade = (rating: StudyRating) => {
-    if (gradingLocked.current) return;
-    gradingLocked.current = true;
+  const phase: StudyPhase = state.completed
+    ? "completed"
+    : showIntro
+      ? "intro"
+      : state.revealed
+        ? "revealed"
+        : "recall";
+  const phaseRef = useRef(phase);
+  phaseRef.current = phase;
 
-    const responseTimeMs = Math.min(
-      120000,
-      Math.max(250, recallTimeMs.current ?? Date.now() - cardStartedAt.current)
-    );
-    onGrade(currentCard.id, rating, { responseTimeMs });
-    setResults(current => ({ ...current, [rating]: current[rating] + 1 }));
-
-    // A lapse comes back once, at the end, before the summary. The scheduler
-    // already recorded the failure, so the re-grade changes no schedule.
-    const shouldRetry =
-      rating === "again" && !retriedIds.current.has(currentCard.id);
-    if (shouldRetry) {
-      retriedIds.current.add(currentCard.id);
-      setSessionQueue(current => [...current, currentCard]);
-    }
-
-    const nextLength = sessionQueue.length + (shouldRetry ? 1 : 0);
-    if (index + 1 < nextLength) {
-      setIndex(index + 1);
-      setFlipped(false);
-      setProductionAttempt("");
-      setProductionDone(false);
-      cardStartedAt.current = Date.now();
-      recallTimeMs.current = null;
-    } else {
-      // The summary replaces the card immediately, so the last pronunciation
-      // must not keep playing behind it.
-      stopAudio();
-      setCompleted(true);
-    }
-  };
-
-  const restartSession = () => {
-    gradingLocked.current = false;
-    retriedIds.current.clear();
-    setSessionQueue([...queue]);
-    setIntroducedIds(new Set());
-    setIndex(0);
-    setFlipped(false);
-    setCompleted(false);
-    setResults({ again: 0, good: 0, easy: 0 });
-    setProductionAttempt("");
-    setProductionDone(false);
-    cardStartedAt.current = Date.now();
-    recallTimeMs.current = null;
-  };
-
-  // Keyboard study: Space reveals, 1/2/3 grade, Escape closes. The listener is
-  // refreshed every render so it always sees the current card and reveal state.
+  // One listener for the session's life. The phase ref keeps it seeing the
+  // current card without re-registering on every render.
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (
@@ -182,67 +99,63 @@ export function useStudySession({
       )
         return;
 
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeSession();
-        return;
-      }
-      if (completed) return;
+      const command = studyKeyCommand(event, phaseRef.current);
+      if (!command) return;
 
-      // New word intro: Enter or Space starts the recall card. The replay
-      // speaker keeps its native keyboard activation.
-      if (showIntro) {
-        const onAudioControl = target?.closest("[data-intro-audio]");
-        if (
-          !onAudioControl &&
-          (event.key === "Enter" || event.code === "Space" || event.key === " ")
-        ) {
-          event.preventDefault();
-          dismissIntro();
-        }
+      // New word intro: the replay speaker keeps its native keyboard
+      // activation, so Space or Enter on it must not also start the card.
+      if (command === "start-intro" && target?.closest("[data-intro-audio]")) {
         return;
       }
 
-      if (event.code === "Space" || event.key === " ") {
-        event.preventDefault();
-        if (!flipped) handleFlip(true);
-        return;
-      }
-      if (!flipped) return;
-
-      if (event.key === "1") {
-        event.preventDefault();
-        handleGrade("again");
-      } else if (event.key === "2") {
-        event.preventDefault();
-        handleGrade("good");
-      } else if (event.key === "3") {
-        event.preventDefault();
-        handleGrade("easy");
+      event.preventDefault();
+      switch (command) {
+        case "close":
+          session.close();
+          break;
+        case "start-intro":
+          session.dismissIntro();
+          break;
+        case "reveal":
+          session.setRevealed(true);
+          break;
+        case "grade-again":
+          session.grade("again");
+          break;
+        case "grade-good":
+          session.grade("good");
+          break;
+        case "grade-easy":
+          session.grade("easy");
+          break;
+        case "consume":
+          break;
       }
     };
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  });
+  }, [session]);
 
   return {
-    index,
-    sessionQueue,
+    index: state.index,
+    sessionQueue: state.queue,
     currentCard,
     showIntro,
-    flipped,
-    completed,
-    results,
-    retryCount: retriedIds.current.size,
-    productionAttempt,
-    setProductionAttempt,
-    productionDone,
-    setProductionDone,
-    dismissIntro,
-    handleFlip,
-    handleGrade,
-    restartSession,
-    closeSession,
+    flipped: state.revealed,
+    completed: state.completed,
+    results: state.results,
+    retryCount: state.retryCount,
+    productionOpen: state.production.open,
+    productionAttempt: state.production.attempt,
+    productionDone: state.production.done,
+    dismissIntro: session.dismissIntro,
+    handleFlip: session.setRevealed,
+    handleGrade: session.grade,
+    restartSession: session.restart,
+    closeSession: session.close,
+    toggleProduction: session.toggleProduction,
+    setProductionAttempt: session.setProductionAttempt,
+    markProductionDone: session.markProductionDone,
   };
 }

@@ -24,6 +24,25 @@ _Avoid_: grade options, grade flags, grade config
 The context a grade is given in, which determines the grade's intent.
 _Avoid_: session type, exercise
 
+**Study session**:
+One run through a planned queue of cards, ending in a summary.
+_Avoid_: study flow, review run, deck run
+
+**Session queue**:
+The ordered cards a study session works through; a failed card is appended once
+and never reorders the rest.
+_Avoid_: card list, plan, deck
+
+**Grade lock**:
+The guard that ignores a second grade between one card's grade and the next
+card appearing.
+_Avoid_: debounce, cooldown, click guard
+
+**Session machine**:
+The framework-free implementation that owns a study session's queue, card
+index, locks, results, and restart, behind a small command interface.
+_Avoid_: session store, session controller, session reducer
+
 **Recognition practice**:
 Listening and scenario practice; it confirms familiarity but never stretches a
 card's schedule.
