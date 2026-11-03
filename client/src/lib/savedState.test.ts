@@ -2,14 +2,14 @@ import { describe, it, expect } from "vitest";
 import { emptyGrammarProgress } from "@/lib/grammarProgress";
 import { FEMALE_VOICE_ENABLED } from "@/lib/voiceAvailability";
 import {
-  applyGrade,
   buildExportPayload,
   getSavedSchemaVersion,
   isNewerSave,
   parseSavedState,
   SCHEMA_VERSION,
   validateImportPayload,
-} from "./useStudyState";
+} from "./savedState";
+import { applyGradeOutcome } from "./gradeOutcome";
 
 const card = {
   id: "surv_001",
@@ -52,6 +52,13 @@ const reviewLog = {
   ],
 };
 const today = "2026-10-31";
+
+/** The state half of a grade, the value every applyGrade test asserts on. */
+function applyGrade(
+  ...args: Parameters<typeof applyGradeOutcome>
+): ReturnType<typeof applyGradeOutcome>["state"] {
+  return applyGradeOutcome(...args).state;
+}
 
 describe("saved progress schemaVersion", () => {
   it("loads a save without schemaVersion as the current version", () => {

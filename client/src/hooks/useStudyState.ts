@@ -1,401 +1,39 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { applyGradeOutcome, type GradeOutcome } from "@/lib/gradeOutcome";
+import {
+  applyGradeOutcome,
+  type GradeOptions,
+  type GradeOutcome,
+} from "@/lib/gradeOutcome";
 import { requestPersistentStorage } from "@/lib/storageProtection";
-import {
-  createReviewLog,
-  sanitizeReviewLog,
-  type ReviewLog,
-  type StudyMode,
-} from "@/lib/reviewLog";
-import { getLocalDateKey } from "@/lib/day";
 import { PROGRESS_STORAGE_KEY } from "@/lib/progressStorage";
-import { FEMALE_VOICE_ENABLED } from "@/lib/voiceAvailability";
 import {
-  deriveStreak,
-  migrateLegacyDay,
-  sanitizeStudyDays,
-  type StudyDays,
-} from "@/lib/studyDays";
-import {
-  getMasteryState,
-  type CardState,
-  type MasteryState,
-} from "@/lib/mastery";
-import { levelFromXp } from "@/lib/xp";
-import {
-  emptyGrammarProgress,
-  recordGrammarAttempt,
-  sanitizeGrammarProgress,
-  type GrammarProgress,
-} from "@/lib/grammarProgress";
+  isNewerSave,
+  loadSavedState,
+  parseSavedState,
+  type LoadedSave,
+  type UserSettings,
+  type UserState,
+} from "@/lib/savedState";
+import { recordGrammarAttempt } from "@/lib/grammarProgress";
 
-export { getLocalDateKey, getMasteryState };
-export type { CardState, MasteryState };
-
-export const SCHEMA_VERSION = 5;
-
-export interface UserStats {
-  totalXp: number;
-  level: number;
-  streak: number;
-  lastStudyDate: string;
-  highestStreak: number;
-  totalCardsLearned: number;
-}
-
-export interface UserState {
-  schemaVersion: number;
-  cardStates: Record<string, CardState>;
-  stats: UserStats;
-  settings: {
-    dailyGoal: number;
-    newCardsPerDay: number;
-    autoPlayAudio: boolean;
-    audioSpeaker: "elevenlabs" | "elevenlabs-female";
-  };
-  reviewLog: ReviewLog;
-  /** One entry per studied day, keyed by local `YYYY-MM-DD`. */
-  studyDays: StudyDays;
-  /** Lesson completion and best quiz scores. Travels with the export. */
-  grammar: GrammarProgress;
-}
-
-export interface GradeOptions {
-  responseTimeMs?: number;
-  /** The practice mode decides whether this grade counts for progress. */
-  mode?: StudyMode;
-}
-
-function createDefaultState(): UserState {
-  return {
-    schemaVersion: SCHEMA_VERSION,
-    cardStates: {},
-    stats: {
-      totalXp: 0,
-      level: 1,
-      streak: 0,
-      lastStudyDate: "",
-      highestStreak: 0,
-      totalCardsLearned: 0,
-    },
-    settings: {
-      dailyGoal: 10,
-      newCardsPerDay: 3,
-      autoPlayAudio: true,
-      audioSpeaker: "elevenlabs",
-    },
-    reviewLog: createReviewLog(),
-    studyDays: {},
-    grammar: emptyGrammarProgress(),
-  };
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function nonNegativeNumber(value: unknown, fallback: number): number {
-  return typeof value === "number" && Number.isFinite(value) && value >= 0
-    ? value
-    : fallback;
-}
-
-function optionalNonNegativeNumber(value: unknown): number | undefined {
-  return typeof value === "number" && Number.isFinite(value) && value >= 0
-    ? value
-    : undefined;
-}
-
-function sanitizeCardState(id: string, value: unknown): CardState | null {
-  if (!isRecord(value)) return null;
-  if (typeof value.due !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.due))
-    return null;
-
-  const timesReviewed = nonNegativeNumber(value.timesReviewed, 0);
-  const card: CardState = {
-    id,
-    due: value.due,
-    interval: nonNegativeNumber(value.interval, 0),
-    timesReviewed,
-    timesCorrect: Math.min(
-      timesReviewed,
-      nonNegativeNumber(value.timesCorrect, 0)
-    ),
-    lastReviewDate:
-      typeof value.lastReviewDate === "string" ? value.lastReviewDate : "",
-  };
-
-  const easeFactor = optionalNonNegativeNumber(value.easeFactor);
-  const consecutiveCorrect = optionalNonNegativeNumber(
-    value.consecutiveCorrect
-  );
-  const lapseCount = optionalNonNegativeNumber(value.lapseCount);
-  const lastResponseTimeMs = optionalNonNegativeNumber(
-    value.lastResponseTimeMs
-  );
-  if (easeFactor !== undefined) card.easeFactor = easeFactor;
-  if (consecutiveCorrect !== undefined)
-    card.consecutiveCorrect = consecutiveCorrect;
-  if (lapseCount !== undefined) card.lapseCount = lapseCount;
-  if (lastResponseTimeMs !== undefined)
-    card.lastResponseTimeMs = lastResponseTimeMs;
-  return card;
+function readStoredSave(): LoadedSave {
+  try {
+    return loadSavedState(localStorage.getItem(PROGRESS_STORAGE_KEY));
+  } catch (error) {
+    console.error("Failed to load saved progress, starting fresh:", error);
+    return loadSavedState(null);
+  }
 }
 
 /**
- * Reads only the save format version from a raw localStorage value. Anything
- * unreadable or malformed reports null, so callers can treat it like an
- * unversioned save instead of trusting it.
+ * The React adapter over `lib/savedState`: it owns the localStorage read/write,
+ * cross-tab storage events, and the setter callbacks. The save format itself
+ * lives in the lib module, so it is tested without a browser.
  */
-export function getSavedSchemaVersion(raw: string | null): number | null {
-  if (!raw) return null;
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (!isRecord(parsed)) return null;
-    const version = parsed.schemaVersion;
-    return typeof version === "number" &&
-      Number.isInteger(version) &&
-      version >= 1
-      ? version
-      : null;
-  } catch {
-    return null;
-  }
-}
-
-/** True when a raw save was written by a newer app build than this one. */
-export function isNewerSave(raw: string | null): boolean {
-  const version = getSavedSchemaVersion(raw);
-  return version !== null && version > SCHEMA_VERSION;
-}
-
-// A missing or older schemaVersion is treated as current. Pre-v2 saves are not migrated.
-export function parseSavedState(
-  raw: string | null,
-  today = getLocalDateKey()
-): UserState {
-  const defaults = createDefaultState();
-
-  try {
-    if (!raw) return defaults;
-
-    const parsed: unknown = JSON.parse(raw);
-    if (!isRecord(parsed)) return defaults;
-
-    const cardStates: Record<string, CardState> = {};
-    if (isRecord(parsed.cardStates)) {
-      for (const [id, value] of Object.entries(parsed.cardStates)) {
-        const card = sanitizeCardState(id, value);
-        if (card) cardStates[id] = card;
-      }
-    }
-
-    const savedStats = isRecord(parsed.stats) ? parsed.stats : {};
-    const totalXp = nonNegativeNumber(savedStats.totalXp, 0);
-    const lastStudyDate =
-      typeof savedStats.lastStudyDate === "string"
-        ? savedStats.lastStudyDate
-        : "";
-    // v3 and older kept only today's counter. Fold it into the first day entry.
-    const studyDays = migrateLegacyDay(
-      sanitizeStudyDays(parsed.studyDays),
-      lastStudyDate,
-      nonNegativeNumber(savedStats.cardsStudiedToday, 0)
-    );
-    const streak = deriveStreak(studyDays, today);
-    const stats: UserStats = {
-      totalXp,
-      // Derived exactly like applyGrade so an edited save cannot inflate a level.
-      level: levelFromXp(totalXp),
-      streak,
-      lastStudyDate,
-      highestStreak: Math.max(
-        streak,
-        nonNegativeNumber(savedStats.highestStreak, 0)
-      ),
-      totalCardsLearned: nonNegativeNumber(savedStats.totalCardsLearned, 0),
-    };
-
-    const savedSettings = isRecord(parsed.settings) ? parsed.settings : {};
-    const dailyGoal = nonNegativeNumber(
-      savedSettings.dailyGoal,
-      defaults.settings.dailyGoal
-    );
-    const newCardsPerDay = nonNegativeNumber(
-      savedSettings.newCardsPerDay,
-      defaults.settings.newCardsPerDay
-    );
-    const settings: UserState["settings"] = {
-      dailyGoal: Math.min(100, Math.max(1, Math.round(dailyGoal))),
-      newCardsPerDay: Math.min(10, Math.max(1, Math.round(newCardsPerDay))),
-      // `ttsEnabled` was a dead system-voice toggle; unknown keys in old saves are ignored.
-      autoPlayAudio:
-        typeof savedSettings.autoPlayAudio === "boolean"
-          ? savedSettings.autoPlayAudio
-          : defaults.settings.autoPlayAudio,
-      // Older saved progress may contain a removed system-voice preference.
-      // The female voice is paused for now, so a save that selected it falls
-      // back to the male voice instead of keeping an unusable preference.
-      audioSpeaker:
-        FEMALE_VOICE_ENABLED &&
-        savedSettings.audioSpeaker === "elevenlabs-female"
-          ? "elevenlabs-female"
-          : "elevenlabs",
-    };
-
-    return {
-      schemaVersion: SCHEMA_VERSION,
-      cardStates,
-      stats,
-      settings,
-      reviewLog: sanitizeReviewLog(parsed.reviewLog),
-      studyDays,
-      grammar: sanitizeGrammarProgress(parsed.grammar),
-    };
-  } catch (error) {
-    console.error("Failed to load saved progress, starting fresh:", error);
-    return defaults;
-  }
-}
-
-interface LoadedState {
-  state: UserState;
-  blockedByNewerVersion: boolean;
-}
-
-function loadState(): LoadedState {
-  try {
-    const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
-    // A newer build may still have this tab open or a shared device may have
-    // upgraded. Start fresh in memory and leave their save untouched.
-    if (isNewerSave(raw)) {
-      return { state: createDefaultState(), blockedByNewerVersion: true };
-    }
-    return {
-      state: parseSavedState(raw),
-      blockedByNewerVersion: false,
-    };
-  } catch (error) {
-    console.error("Failed to load saved progress, starting fresh:", error);
-    return { state: createDefaultState(), blockedByNewerVersion: false };
-  }
-}
-
-export function buildExportPayload(
-  state: UserState,
-  exportedAt = new Date(),
-  options: { includeReviewLog?: boolean } = {}
-) {
-  const payload = {
-    schemaVersion: state.schemaVersion,
-    exportedAt: exportedAt.toISOString(),
-    cardStates: state.cardStates,
-    stats: state.stats,
-    settings: state.settings,
-    studyDays: state.studyDays,
-    grammar: state.grammar,
-  };
-  // The review log is for local analysis: it is large and not needed to restore
-  // progress, so it only travels when the learner asks for it.
-  return options.includeReviewLog
-    ? { ...payload, reviewLog: state.reviewLog }
-    : payload;
-}
-
-export type ImportValidation =
-  | {
-      ok: true;
-      state: UserState;
-      exportedAt: string | null;
-      hasReviewLog: boolean;
-    }
-  | { ok: false; reason: string };
-
-// Rejects anything that is not a complete progress save. Missing or unknown
-// top-level keys beyond the required ones are ignored, and parseSavedState
-// decides how each saved field is sanitized. `today` is injectable so the
-// derived streak can be tested without depending on the wall clock.
-export function validateImportPayload(
-  raw: string,
-  today = getLocalDateKey()
-): ImportValidation {
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    return { ok: false, reason: "The file is not valid JSON." };
-  }
-
-  if (!isRecord(parsed)) {
-    return {
-      ok: false,
-      reason: "The file does not contain a progress object.",
-    };
-  }
-
-  if (parsed.schemaVersion !== undefined) {
-    if (
-      typeof parsed.schemaVersion !== "number" ||
-      !Number.isInteger(parsed.schemaVersion) ||
-      parsed.schemaVersion < 1
-    ) {
-      return {
-        ok: false,
-        reason: "The schemaVersion field is not a valid version number.",
-      };
-    }
-    if (parsed.schemaVersion > SCHEMA_VERSION) {
-      return {
-        ok: false,
-        reason: `This file came from a newer version of Goyo (save format ${parsed.schemaVersion}; this app supports up to ${SCHEMA_VERSION}). Update the app before importing it.`,
-      };
-    }
-  }
-
-  const missing = (["cardStates", "stats", "settings"] as const).filter(
-    key => !isRecord(parsed[key])
-  );
-  if (missing.length > 0) {
-    return {
-      ok: false,
-      reason: `The file is missing ${missing.join(", ")} (each must be an object).`,
-    };
-  }
-
-  const exportedAt =
-    typeof parsed.exportedAt === "string" &&
-    !Number.isNaN(Date.parse(parsed.exportedAt))
-      ? parsed.exportedAt
-      : null;
-  const hasReviewLog =
-    isRecord(parsed.reviewLog) && Array.isArray(parsed.reviewLog.entries);
-
-  return {
-    ok: true,
-    state: parseSavedState(raw, today),
-    exportedAt,
-    hasReviewLog,
-  };
-}
-
-/**
- * Apply one grade to saved progress. Pure, so the review log and the schedule
- * can be tested without React or localStorage; `now` is injectable for tests.
- */
-export function applyGrade(
-  state: UserState,
-  cardId: string,
-  rating: "again" | "good" | "easy",
-  options: GradeOptions = {},
-  now = new Date()
-): UserState {
-  return applyGradeOutcome(state, cardId, rating, options, now).state;
-}
-
 export function useStudyState() {
   // Read the save during the first render so the dashboard never flashes blank
   // while an effect catches up.
-  const [initialLoad] = useState(loadState);
+  const [initialLoad] = useState(readStoredSave);
   const [state, setState] = useState<UserState>(initialLoad.state);
   // A newer save is never rewritten, so this tab's changes stay in memory only.
   const [saveBlocked, setSaveBlocked] = useState(
@@ -418,9 +56,7 @@ export function useStudyState() {
         return;
       }
       setSaveBlocked(false);
-      setState(
-        event.newValue ? parseSavedState(event.newValue) : createDefaultState()
-      );
+      setState(parseSavedState(event.newValue));
     };
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
@@ -462,15 +98,12 @@ export function useStudyState() {
     []
   );
 
-  const updateSettings = useCallback(
-    (settings: Partial<UserState["settings"]>) => {
-      setState(current => ({
-        ...current,
-        settings: { ...current.settings, ...settings },
-      }));
-    },
-    []
-  );
+  const updateSettings = useCallback((settings: Partial<UserSettings>) => {
+    setState(current => ({
+      ...current,
+      settings: { ...current.settings, ...settings },
+    }));
+  }, []);
 
   const recordGrammarResult = useCallback(
     (lessonId: string, correct: number, total: number) => {

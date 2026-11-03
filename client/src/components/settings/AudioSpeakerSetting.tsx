@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { UserState } from "@/hooks/useStudyState";
+import type { UserState } from "@/lib/savedState";
 import { setAudioSpeaker, type AudioSpeaker } from "@/lib/audioPlayer";
 import { FEMALE_VOICE_ENABLED } from "@/lib/voiceAvailability";
 

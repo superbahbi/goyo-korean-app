@@ -26,9 +26,9 @@ Verified on 2026-11-02 on `main` after the architecture round 2 merge (`#76`):
 | `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `vitest run`       | 417 tests pass in 37 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio player, audio index, voice availability, grade intent, grade outcome, session machine, study keys, question loop, distractors, practice verdict, dialog launcher, dialog registry, dashboard view, progress storage, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3/7 guards, grammar, grammar progress, backup status, generator) |
+| `vitest run`       | 467 tests pass in 39 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio player, audio index, voice availability, grade intent, grade outcome, session machine, study keys, question loop, distractors, practice verdict, dialog launcher, dialog registry, dashboard view, progress storage, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3/7 guards, grammar, grammar progress, backup status, generator) |
 | `playwright test`  | 27 checks pass against the production build across 9 specs: nine flow smokes (four study-loop paths, Browse search and audio, grammar lesson, offline reload, progress export/import, Settings), six axe scans (dashboard, study, dialogs, Hangul, recognition overlays, grammar), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker)                              |
-| `vite build`       | Passes. Main chunk 139.4 kB (40.9 kB gzipped), with React (194.3 kB), vendor (130.6 kB), motion (115.7 kB) and Radix (55.9 kB) in separate vendor chunks; Essential 600 lazy-loaded as its own 226.1 kB chunk (55.1 kB gzipped). Precache: 129 entries, 1,346 KiB                                                                                                                                                                                                                          |
+| `vite build`       | Passes. Main chunk 140.4 kB (41.1 kB gzipped), with React (194.3 kB), vendor (130.6 kB), motion (115.7 kB) and Radix (55.9 kB) in separate vendor chunks; Essential 600 lazy-loaded as its own 226.1 kB chunk (55.1 kB gzipped). Precache: 129 entries, 1,348 KiB                                                                                                                                                                                                                          |
 | CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                                                                                              |
 
 All gates pass.
@@ -56,6 +56,12 @@ statistics, today's plan and mode availability, and review forecast moved into
 `lib/dashboardStats.ts`, `lib/dashboardPlan.ts` and `lib/dashboardForecast.ts`; the view now only
 composes them and keeps its public types. Behaviour is unchanged and the existing view tests still
 cover the whole path.
+
+Architecture round 3 (2026-11-02, `#89`): the save format moved out of the React hook into
+`lib/savedState.ts` (parse, sanitize, newer-save guard, export and import validation), so
+`lib/gradeOutcome.ts` no longer imports types from `hooks/`. `useStudyState.ts` is now a 136-line
+adapter over localStorage. The export-only `applyGrade` wrapper was deleted and its tests cross
+`applyGradeOutcome` directly. No behaviour changed.
 
 Phase 6 shell merge (2026-11-01, `#58`): the seven practice modes now share one `PracticeShell`
 (prompt, verdict, feedback, complete states) instead of six near-duplicate layouts, and the study
@@ -93,12 +99,16 @@ What is open: the Korean wording still has room for a later naturalness polish (
 trust). The on-demand audio library is now 54 MB in `public/audio` after the male sentence batch;
 audio remains the largest tracked asset and the reason the Phase 4 keep-audio-in-git decision gets
 re-checked.
-The 300-line target holds for almost all UI code (`components/FlashCard.tsx` is 309). The data
-modules stay larger by design: `essentialVocabulary.ts` (7.7k lines) and `vocabulary.ts` (1.7k) are
-deck data. Modules still over 300 after the refactors: `grammar.ts` (594), `essentialTaxonomy.ts`
-(566), `alphabet.ts` (533), `essentialFrequency.ts` (523), `useStudyState.ts` (499),
-`audioPlayer.ts` (342), `studySession.ts` (325) and `audioIndex.ts` (319).
-`audioPlayer` is the next split candidate if it keeps growing.
+The 300-line target holds for UI code (`components/FlashCard.tsx` is 309 lines, almost all JSX). Deck
+data stays larger by design: `essentialVocabulary.ts` (7.7k lines), `vocabulary.ts` (1.7k),
+`grammar.ts` (594), `essentialTaxonomy.ts` (566), `alphabet.ts` (533) and `essentialFrequency.ts`
+(523) are content. The code modules left over 300 are deep, not shallow: `studySession.ts` (325) is
+the framework-free session machine plus its intro and response-time helpers, `audioIndex.ts` (324)
+owns the manifest and the cache policy behind five calls, and `romanize.ts` (314) is tables plus one
+algorithm.
+`audioPlayer` was split into `audioElement.ts` and `audioPlaybackState.ts` (#88), and round 3 moved
+the save format out of `useStudyState.ts` (503 → 136 lines). No non-data module has a measured split
+candidate left; the next one needs evidence, not a line count.
 
 ## How we work
 
@@ -132,6 +142,7 @@ deck data. Modules still over 300 after the refactors: `grammar.ts` (594), `esse
 | 6 Sentence audio and grammar        | Done (2026-11-02); male sentence library complete (675 clips), twelve lessons reviewed and signed off; female voice paused pending spend approval                                                                      |
 | 7 Content trust completion          | Done (2026-11-02); re-measured at 10.4% of 96, fixed the 10 defects, and swept the remaining deck in seven batches; all 504 imported cards now carry a verdict; Korean-speaker spot check of samples 3–4 still pending |
 | 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                                       |
+| 9 Architecture round 3              | Done (#89); save format moved to `lib/savedState.ts` (503 → 136 lines), module-size audit closed                                                                                                                       |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -611,8 +622,8 @@ Out of scope: new cards, FSRS, more grammar lessons, and any UI change. Phase 5 
 phase because it is a read-only tuning exercise.
 
 Sequencing: the male sentence batch is done, the grammar review is signed off, and the female voice is
-paused → Phase 7 fixes and sweep (complete, 504 of 504 audited) → Phase 5 read when the window closes
-around 2026-12-01.
+paused → Phase 7 fixes and sweep (complete, 504 of 504 audited) → Phase 9 architecture round 3 →
+Phase 5 read when the window closes around 2026-12-01.
 
 ## Phase 8: First session and card experience
 
@@ -646,6 +657,31 @@ each surface stays small and reviewable.
 
 Acceptance: the revealed card fits at 390×844 and stays usable at 320px, the grade labels match the
 scheduler, the session offers one reveal path, and the local gate plus the e2e suite are green.
+
+## Phase 9: Architecture round 3
+
+Rounds 1–2 (#70–#76) and the follow-up splits (#86, #88) left one measured shallow spot: the save
+format lived inside a React hook, and `lib/gradeOutcome` imported its types from that hook, so the
+dependency ran backwards from `lib/` into `hooks/`. Round 3 fixes that seam, then re-measures
+instead of chasing line counts.
+
+1. **Saved-state module.** Done (#89). `lib/savedState.ts` owns the save shape, defaults, sanitizing
+   parse, the newer-save guard, the export payload and import validation. `hooks/useStudyState.ts`
+   is now only the adapter: localStorage read/write, cross-tab storage events and the setter
+   callbacks (503 → 136 lines). `GradeOptions` moved to `lib/gradeOutcome.ts`, which imports
+   `UserState` from the lib instead of the hook. The export-only `applyGrade` wrapper was deleted —
+   production never called it — and its tests now cross `applyGradeOutcome` directly.
+   `lib/savedState.test.ts` (moved from `hooks/`) covers the format with no browser.
+   - Acceptance: the gate and the Playwright suite pass, and no module under `lib/` imports from
+     `hooks/`.
+2. **Module-size audit.** Done (#89). Every non-data module is now at or under 325 lines. The rest of
+   the list is content or deep modules: `grammar.ts`, `essentialTaxonomy.ts`, `alphabet.ts` and
+   `essentialFrequency.ts` are deck data; `studySession.ts`, `audioIndex.ts` and `romanize.ts` each
+   hide a lot behind a small interface; `FlashCard.tsx` is almost all JSX. None is a split candidate
+   without new evidence, and "What is open" now says so.
+
+Out of scope: behaviour changes, a new storage backend and any UI change. Round 3 is a pure
+refactor; the e2e suite is the behavioural net.
 
 ## Deferred, not decided
 
