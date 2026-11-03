@@ -5,11 +5,12 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
-  Hash,
   Languages,
+  Layers,
   Music2,
   Sparkles,
   Timer,
+  Waves,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { AlphabetCard } from "@/components/AlphabetCard";
@@ -18,27 +19,22 @@ import {
   PracticeShell,
 } from "@/components/practice/PracticeShell";
 import {
-  ALPHABET_DATA,
   ALPHABET_CATEGORIES,
-  NUMBER_DATA,
+  getAlphabetCategoryCards,
+  type AlphabetCategoryId,
 } from "@/lib/alphabet";
-import { playAlphabetAudio, playVocabularyAudio } from "@/lib/audioPlayer";
+import { playAlphabetAudio } from "@/lib/audioPlayer";
 import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 
 interface AlphabetPracticeProps {
   onClose: () => void;
 }
 
-const CATEGORY_DETAILS: Record<string, string> = {
-  consonants: "19 letter names",
-  vowels: "21 vowel sounds",
-  numbers: "1–10 in native Korean",
-};
-
 const CATEGORY_ICONS = {
-  consonants: Languages,
-  vowels: Music2,
-  numbers: Hash,
+  "basic-consonants": Languages,
+  "double-consonants": Layers,
+  "basic-vowels": Music2,
+  "compound-vowels": Waves,
 } as const;
 
 const TIPS = [
@@ -60,31 +56,23 @@ const TIPS = [
 ];
 
 export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
-  const [selectedType, setSelectedType] = useState<
-    "consonants" | "vowels" | "numbers" | null
-  >(null);
+  const [selectedCategory, setSelectedCategory] =
+    useState<AlphabetCategoryId | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { playing } = useAudioPlayback();
 
-  const handleSpeak = (
-    characterId: string,
-    type: "consonant" | "vowel" | "number"
-  ) => {
+  const handleSpeak = (characterId: string, type: "consonant" | "vowel") => {
     void speakHangul(characterId, type);
   };
 
   const speakHangul = async (
     characterId: string,
-    type: "consonant" | "vowel" | "number"
+    type: "consonant" | "vowel"
   ) => {
-    if (type === "number") {
-      await playVocabularyAudio(characterId);
-      return;
-    }
     await playAlphabetAudio(characterId, type);
   };
 
-  if (!selectedType) {
+  if (!selectedCategory) {
     return (
       <PracticeShell
         key="categories"
@@ -99,10 +87,9 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
         closeLabel="Close Hangul practice"
         onClose={onClose}
       >
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           {ALPHABET_CATEGORIES.map(category => {
-            const Icon =
-              CATEGORY_ICONS[category.id as keyof typeof CATEGORY_ICONS];
+            const Icon = CATEGORY_ICONS[category.id];
             return (
               <motion.button
                 key={category.id}
@@ -111,9 +98,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => {
                   setCurrentIndex(0);
-                  setSelectedType(
-                    category.id as "consonants" | "vowels" | "numbers"
-                  );
+                  setSelectedCategory(category.id);
                 }}
                 className={`flex min-h-36 flex-col items-center justify-center rounded-2xl p-6 text-center transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${category.color}`}
               >
@@ -121,9 +106,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
                   <Icon size={24} aria-hidden="true" />
                 </span>
                 <span className="mt-3 text-xl font-bold">{category.name}</span>
-                <span className="mt-1 text-sm">
-                  {CATEGORY_DETAILS[category.id]}
-                </span>
+                <span className="mt-1 text-sm">{category.detail}</span>
               </motion.button>
             );
           })}
@@ -161,15 +144,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
     );
   }
 
-  const cards =
-    selectedType === "numbers"
-      ? NUMBER_DATA
-      : ALPHABET_DATA.filter(c =>
-          selectedType === "consonants"
-            ? c.type === "consonant"
-            : c.type === "vowel"
-        );
-
+  const cards = getAlphabetCategoryCards(selectedCategory);
   const currentCard = cards[currentIndex] ?? cards[0];
 
   const handleNext = () => {
@@ -185,15 +160,12 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
   };
 
   const sectionTitle =
-    selectedType === "consonants"
-      ? "Consonants"
-      : selectedType === "vowels"
-        ? "Vowels"
-        : "Numbers";
+    ALPHABET_CATEGORIES.find(category => category.id === selectedCategory)
+      ?.name ?? "Hangul";
 
   return (
     <PracticeShell
-      key={selectedType}
+      key={selectedCategory}
       title={sectionTitle}
       titleLang="en"
       badge={
@@ -205,7 +177,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
       tone="indigo"
       closeLabel="Close Hangul practice"
       onClose={onClose}
-      onBack={() => setSelectedType(null)}
+      onBack={() => setSelectedCategory(null)}
       backLabel="Back to categories"
       progress={((currentIndex + 1) / cards.length) * 100}
       progressLabel={`${sectionTitle} progress`}
