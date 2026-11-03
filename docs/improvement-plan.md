@@ -60,8 +60,8 @@ cover the whole path.
 Architecture round 3 (2026-11-02, `#89`): the save format moved out of the React hook into
 `lib/savedState.ts` (parse, sanitize, newer-save guard, export and import validation), so
 `lib/gradeOutcome.ts` no longer imports types from `hooks/`. `useStudyState.ts` is now a 136-line
-adapter over localStorage. The export-only `applyGrade` wrapper was deleted and its tests cross
-`applyGradeOutcome` directly. No behaviour changed.
+adapter over localStorage. The export-only `applyGrade` wrapper was deleted and its tests drive
+`applyGradeOutcome` through a small `gradeState` helper. No behaviour changed.
 
 Phase 6 shell merge (2026-11-01, `#58`): the seven practice modes now share one `PracticeShell`
 (prompt, verdict, feedback, complete states) instead of six near-duplicate layouts, and the study
@@ -102,10 +102,10 @@ re-checked.
 The 300-line target holds for UI code (`components/FlashCard.tsx` is 309 lines, almost all JSX). Deck
 data stays larger by design: `essentialVocabulary.ts` (7.7k lines), `vocabulary.ts` (1.7k),
 `grammar.ts` (594), `essentialTaxonomy.ts` (566), `alphabet.ts` (533) and `essentialFrequency.ts`
-(523) are content. The code modules left over 300 are deep, not shallow: `studySession.ts` (325) is
-the framework-free session machine plus its intro and response-time helpers, `audioIndex.ts` (324)
-owns the manifest and the cache policy behind five calls, and `romanize.ts` (314) is tables plus one
-algorithm.
+(523) are content. The code modules left over 300 are deep, not shallow: `savedState.ts` (362) is the
+save format behind one seam, `studySession.ts` (325) is the framework-free session machine plus its
+intro and response-time helpers, `audioIndex.ts` (324) owns the manifest and the cache policy behind
+five calls, and `romanize.ts` (314) is tables plus one algorithm.
 `audioPlayer` was split into `audioElement.ts` and `audioPlaybackState.ts` (#88), and round 3 moved
 the save format out of `useStudyState.ts` (503 → 136 lines). No non-data module has a measured split
 candidate left; the next one needs evidence, not a line count.
@@ -670,15 +670,18 @@ instead of chasing line counts.
    is now only the adapter: localStorage read/write, cross-tab storage events and the setter
    callbacks (503 → 136 lines). `GradeOptions` moved to `lib/gradeOutcome.ts`, which imports
    `UserState` from the lib instead of the hook. The export-only `applyGrade` wrapper was deleted —
-   production never called it — and its tests now cross `applyGradeOutcome` directly.
+   production never called it — and its tests now drive `applyGradeOutcome` through a small
+   `gradeState` helper.
    `lib/savedState.test.ts` (moved from `hooks/`) covers the format with no browser.
    - Acceptance: the gate and the Playwright suite pass, and no module under `lib/` imports from
      `hooks/`.
-2. **Module-size audit.** Done (#89). Every non-data module is now at or under 325 lines. The rest of
-   the list is content or deep modules: `grammar.ts`, `essentialTaxonomy.ts`, `alphabet.ts` and
-   `essentialFrequency.ts` are deck data; `studySession.ts`, `audioIndex.ts` and `romanize.ts` each
-   hide a lot behind a small interface; `FlashCard.tsx` is almost all JSX. None is a split candidate
-   without new evidence, and "What is open" now says so.
+2. **Module-size audit.** Done (#89). Every non-data module is now at or under 325 lines except
+   `lib/savedState.ts` (362): the save format this round extracted, deep rather than shallow — parse,
+   sanitize, the newer-save guard, export and import validation behind one seam. The remaining
+   modules over 300 are content or deep modules: `grammar.ts`, `essentialTaxonomy.ts`, `alphabet.ts`
+   and `essentialFrequency.ts` are deck data; `studySession.ts`, `audioIndex.ts` and `romanize.ts`
+   each hide a lot behind a small interface; `FlashCard.tsx` is almost all JSX. None is a split
+   candidate without new evidence, and "What is open" now says so.
 
 Out of scope: behaviour changes, a new storage backend and any UI change. Round 3 is a pure
 refactor; the e2e suite is the behavioural net.

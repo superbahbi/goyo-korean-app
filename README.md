@@ -52,8 +52,8 @@ client/src/components/    Dashboard sections (header, progress, plan, alerts), t
                           shell, seven practice modes, grammar course, Browse/Stats/Settings dialogs,
                           study session, theme toggle
 client/src/components/ui/ shadcn primitives (only the imported ones are kept)
-client/src/lib/           Deck data, scheduler, queue, XP, audio player, persistence helpers
-client/src/hooks/         Dashboard state, study sessions, deck loading and saved state
+client/src/lib/           Deck data, scheduler, queue, XP, audio player, saved-state format and persistence helpers
+client/src/hooks/         Dashboard state, study sessions, deck loading, and the saved-state adapter
 public/audio/             Pronunciation library plus index.json and manifests
 scripts/                  Audio generation and maintenance scripts
 docs/                     Improvement plan and generated content-audit sheets

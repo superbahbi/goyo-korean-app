@@ -53,8 +53,8 @@ const reviewLog = {
 };
 const today = "2026-10-31";
 
-/** The state half of a grade, the value every applyGrade test asserts on. */
-function applyGrade(
+/** The state half of a grade result; the outcome itself belongs to `gradeOutcome.test.ts`. */
+function gradeState(
   ...args: Parameters<typeof applyGradeOutcome>
 ): ReturnType<typeof applyGradeOutcome>["state"] {
   return applyGradeOutcome(...args).state;
@@ -485,7 +485,7 @@ describe("progress export and import", () => {
   });
 });
 
-describe("applyGrade", () => {
+describe("applyGradeOutcome", () => {
   it("logs one entry per grade with the mode and response time", () => {
     const state = parseSavedState(
       JSON.stringify({
@@ -497,14 +497,14 @@ describe("applyGrade", () => {
       today
     );
     const at = new Date("2026-10-31T09:30:00.000Z");
-    const first = applyGrade(
+    const first = gradeState(
       state,
       "surv_001",
       "good",
       { mode: "daily", responseTimeMs: 2500 },
       at
     );
-    const second = applyGrade(first, "surv_001", "again", { mode: "weak" }, at);
+    const second = gradeState(first, "surv_001", "again", { mode: "weak" }, at);
 
     expect(second.reviewLog.entries).toHaveLength(2);
     expect(second.reviewLog.entries[0]).toMatchObject({
@@ -532,8 +532,8 @@ describe("applyGrade", () => {
       today
     );
     const at = new Date("2026-10-31T09:30:00.000Z");
-    const first = applyGrade(state, "surv_001", "good", {}, at);
-    const second = applyGrade(first, "surv_002", "good", {}, at);
+    const first = gradeState(state, "surv_001", "good", {}, at);
+    const second = gradeState(first, "surv_002", "good", {}, at);
 
     expect(second.studyDays["2026-10-31"]).toEqual({ cards: 2, reviews: 2 });
     expect(second.stats.streak).toBe(2);
@@ -544,7 +544,7 @@ describe("applyGrade", () => {
       JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
       today
     );
-    const graded = applyGrade(
+    const graded = gradeState(
       state,
       "surv_001",
       "easy",
@@ -568,7 +568,7 @@ describe("applyGrade", () => {
       today
     );
     const at = new Date("2026-10-31T09:30:00.000Z");
-    const practiced = applyGrade(
+    const practiced = gradeState(
       state,
       "surv_001",
       "good",
@@ -591,7 +591,7 @@ describe("applyGrade", () => {
       JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
       today
     );
-    const graded = applyGrade(
+    const graded = gradeState(
       state,
       "surv_002",
       "good",
@@ -607,7 +607,7 @@ describe("applyGrade", () => {
       JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
       today
     );
-    const first = applyGrade(
+    const first = gradeState(
       state,
       "surv_002",
       "again",
@@ -616,7 +616,7 @@ describe("applyGrade", () => {
     );
     expect(first.stats.totalCardsLearned).toBe(stats.totalCardsLearned);
 
-    const later = applyGrade(
+    const later = gradeState(
       first,
       "surv_002",
       "good",
@@ -631,14 +631,14 @@ describe("applyGrade", () => {
       JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
       today
     );
-    const first = applyGrade(
+    const first = gradeState(
       state,
       "surv_002",
       "good",
       {},
       new Date("2026-10-31T09:30:00.000Z")
     );
-    const second = applyGrade(
+    const second = gradeState(
       first,
       "surv_002",
       "good",
@@ -654,7 +654,7 @@ describe("applyGrade", () => {
       JSON.stringify({ cardStates: {}, stats, settings, studyDays }),
       today
     );
-    const practiced = applyGrade(
+    const practiced = gradeState(
       state,
       "surv_002",
       "good",
@@ -676,8 +676,8 @@ describe("applyGrade", () => {
       today
     );
     const at = new Date("2026-10-31T09:30:00.000Z");
-    const first = applyGrade(state, "surv_001", "again", {}, at);
-    const retry = applyGrade(first, "surv_001", "good", {}, at);
+    const first = gradeState(state, "surv_001", "again", {}, at);
+    const retry = gradeState(first, "surv_001", "good", {}, at);
 
     expect(retry.studyDays["2026-10-31"]).toEqual({ cards: 1, reviews: 1 });
     expect(retry.reviewLog.entries).toHaveLength(2);

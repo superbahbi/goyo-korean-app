@@ -86,6 +86,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function isSchemaVersion(value: unknown): value is number {
+  return typeof value === "number" && Number.isInteger(value) && value >= 1;
+}
+
 function nonNegativeNumber(value: unknown, fallback: number): number {
   return typeof value === "number" && Number.isFinite(value) && value >= 0
     ? value
@@ -145,11 +149,7 @@ export function getSavedSchemaVersion(raw: string | null): number | null {
     const parsed: unknown = JSON.parse(raw);
     if (!isRecord(parsed)) return null;
     const version = parsed.schemaVersion;
-    return typeof version === "number" &&
-      Number.isInteger(version) &&
-      version >= 1
-      ? version
-      : null;
+    return isSchemaVersion(version) ? version : null;
   } catch {
     return null;
   }
@@ -197,7 +197,7 @@ export function parseSavedState(
     const streak = deriveStreak(studyDays, today);
     const stats: UserStats = {
       totalXp,
-      // Derived exactly like applyGrade so an edited save cannot inflate a level.
+      // Derived exactly like applyGradeOutcome so an edited save cannot inflate a level.
       level: levelFromXp(totalXp),
       streak,
       lastStudyDate,
@@ -321,11 +321,7 @@ export function validateImportPayload(
   }
 
   if (parsed.schemaVersion !== undefined) {
-    if (
-      typeof parsed.schemaVersion !== "number" ||
-      !Number.isInteger(parsed.schemaVersion) ||
-      parsed.schemaVersion < 1
-    ) {
+    if (!isSchemaVersion(parsed.schemaVersion)) {
       return {
         ok: false,
         reason: "The schemaVersion field is not a valid version number.",
