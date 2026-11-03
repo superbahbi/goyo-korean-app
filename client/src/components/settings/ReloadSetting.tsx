@@ -1,22 +1,26 @@
+import { useState } from "react";
 import { RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { reloadToLatestApp } from "@/lib/appReload";
 
 /**
  * The installed PWA can sit on an old build when the update toast is missed.
- * A waiting service worker only activates after skip-waiting, so ask for that
- * before reloading; without a waiting worker this is a plain reload.
+ * The policy lives in `lib/appReload.ts`: ask a waiting worker to activate and
+ * wait for it before reloading, so the new precache is actually served.
  */
-async function reloadApp(): Promise<void> {
-  try {
-    const registration = await navigator.serviceWorker?.getRegistration();
-    registration?.waiting?.postMessage({ type: "SKIP_WAITING" });
-  } catch {
-    /* no service worker: reload is still safe */
-  }
-  window.location.reload();
-}
-
 export function ReloadSetting() {
+  const [reloading, setReloading] = useState(false);
+
+  const reload = () => {
+    setReloading(true);
+    void reloadToLatestApp({
+      serviceWorker: navigator.serviceWorker,
+      reload: () => window.location.reload(),
+      setTimeout: (handler, ms) => window.setTimeout(handler, ms),
+      clearTimeout: id => window.clearTimeout(id),
+    });
+  };
+
   return (
     <div className="space-y-2 border-t pt-4">
       <div className="text-sm font-medium text-foreground/80">App version</div>
@@ -27,10 +31,11 @@ export function ReloadSetting() {
         type="button"
         variant="outline"
         size="sm"
-        onClick={() => void reloadApp()}
+        onClick={reload}
+        disabled={reloading}
       >
         <RotateCw aria-hidden="true" />
-        Reload app
+        {reloading ? "Reloading…" : "Reload app"}
       </Button>
     </div>
   );
