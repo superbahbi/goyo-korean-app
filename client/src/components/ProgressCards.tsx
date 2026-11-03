@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import type { TodayPlan } from "@/lib/dashboardView";
+import type { TodayPlan } from "@/lib/dashboardPlan";
 import { BookOpen, Languages, Play, TrendingUp, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 

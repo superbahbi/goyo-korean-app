@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import type { GradeOptions } from "@/hooks/useStudyState";
 import type { GradeOutcome } from "@/lib/gradeOutcome";
-import type { ModeAvailability, PracticeModeId } from "@/lib/dashboardView";
+import type { ModeAvailability, PracticeModeId } from "@/lib/dashboardPlan";
 import type { VocabularyCard } from "@/lib/vocabulary";
 
 export type SessionMode = "daily" | "weak" | "learning";
