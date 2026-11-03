@@ -173,7 +173,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
           Hangul
         </Badge>
       }
-      description="Tap the speaker to hear the name, then move through the set."
+      description="Watch each letter draw itself, hear its name, then move through the set."
       tone="indigo"
       closeLabel="Close Hangul practice"
       onClose={onClose}

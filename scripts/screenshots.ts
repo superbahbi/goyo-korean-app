@@ -87,6 +87,15 @@ const SCREENS: Screen[] = [
     },
   },
   {
+    name: "hangul-card",
+    open: async page => {
+      await revealPracticeTiles(page);
+      await page.getByRole("button", { name: /learn hangul/i }).click();
+      await page.getByRole("button", { name: /basic consonants/i }).click();
+      await page.getByRole("img", { name: /stroke order for/i }).waitFor();
+    },
+  },
+  {
     name: "study",
     open: async page => {
       await page
