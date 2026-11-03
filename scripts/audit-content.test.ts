@@ -54,14 +54,17 @@ describe("audit sampler", () => {
     const audited = loadAuditedIds();
     expect(audited.size).toBeGreaterThan(0);
 
-    const sample = sampleCards(
-      ESSENTIAL_WORDS,
-      DEFAULT_LIMIT,
-      DEFAULT_SEED,
-      audited
-    );
+    // Once the sweep is complete there is nothing left to sample; until then
+    // sample at most the unaudited pool so this test tracks the real deck.
+    const remaining = ESSENTIAL_WORDS.filter(
+      card => !audited.has(card.id)
+    ).length;
+    const limit = Math.min(DEFAULT_LIMIT, remaining);
+    if (limit === 0) return;
 
-    expect(sample).toHaveLength(DEFAULT_LIMIT);
+    const sample = sampleCards(ESSENTIAL_WORDS, limit, DEFAULT_SEED, audited);
+
+    expect(sample).toHaveLength(limit);
     for (const card of sample)
       expect(audited.has(card.id), card.id).toBe(false);
   });

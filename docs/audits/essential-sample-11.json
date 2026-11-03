@@ -1,0 +1,177 @@
+{
+  "sample": 11,
+  "sheet": "docs/audits/essential-sample-11.md",
+  "seed": 23,
+  "limit": 19,
+  "issueCategories": [
+    "translation",
+    "naturalness",
+    "politeness",
+    "part-of-speech",
+    "romanization",
+    "usage-note",
+    "spelling"
+  ],
+  "summary": {
+    "cards": 19,
+    "pass": 19,
+    "fix": 0,
+    "errorRate": 0,
+    "decision": "0 of 19 fail (0%). The imported deck now has a verdict on every card, so the sweep is complete.",
+    "resolved": 0,
+    "openFix": 0
+  },
+  "reaudit": {
+    "reauditedAt": "2026-11-02",
+    "openFixes": 0,
+    "method": "Read all 19 seed-23 rows against the five-point rubric and re-ran the deck, romanization and content guard tests.",
+    "result": "No defect was found; the final batch passes clean."
+  },
+  "sweep": {
+    "batch": 7,
+    "batchSize": 19,
+    "cardsAuditedBefore": 485,
+    "cardsAuditedAfter": 504,
+    "deckCoverage": 1,
+    "remaining": 0
+  },
+  "systemicIssues": [
+    {
+      "issue": "No systemic issue",
+      "category": "naturalness",
+      "cards": 0,
+      "ids": [],
+      "detail": "No defect found in the final batch."
+    },
+    {
+      "issue": "No systemic issue",
+      "category": "translation",
+      "cards": 0,
+      "ids": [],
+      "detail": "No defect found in the final batch."
+    },
+    {
+      "issue": "No systemic issue",
+      "category": "romanization",
+      "cards": 0,
+      "ids": [],
+      "detail": "No defect found in the final batch."
+    }
+  ],
+  "verdicts": [
+    {
+      "id": "essential_049",
+      "source": "600 essential words · row 55",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_072",
+      "source": "600 essential words · row 78",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_074",
+      "source": "600 essential words · row 80",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_078",
+      "source": "600 essential words · row 84",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_099",
+      "source": "600 essential words · row 105",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_109",
+      "source": "600 essential words · row 115",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_142",
+      "source": "600 essential words · row 148",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_227",
+      "source": "600 essential words · row 233",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_228",
+      "source": "600 essential words · row 234",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_244",
+      "source": "600 essential words · row 250",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_318",
+      "source": "600 essential words · row 324",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_322",
+      "source": "600 essential words · row 328",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_371",
+      "source": "600 essential words · row 430",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_390",
+      "source": "600 essential words · row 449",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_474",
+      "source": "600 essential words · row 534",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_488",
+      "source": "600 essential words · row 548",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_513",
+      "source": "600 essential words · row 573",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_529",
+      "source": "600 essential words · row 589",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_541",
+      "source": "600 essential words · row 601",
+      "verdict": "pass",
+      "issues": []
+    }
+  ]
+}
