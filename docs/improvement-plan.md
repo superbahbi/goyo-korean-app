@@ -118,7 +118,9 @@ candidate left; the next one needs evidence, not a line count.
 - **Gate for every PR:** `pnpm check`, `pnpm lint`, `pnpm format:check`, `pnpm test` and
   `pnpm build` all pass, run locally and in CI. CI also runs `pnpm test:e2e` (Playwright) against
   the production build.
-  Behaviour tests cannot cover (UI, audio, PWA, iOS) is checked in a browser before merge.
+  Behaviour tests cannot cover (UI, audio, PWA, iOS) is checked in a browser before merge. For a
+  screen change, `pnpm shots` captures the main screens (light and dark, desktop and iPhone) into
+  `.tmp/shots/current/`; inspect those before merge.
 - **Authors and reviewers:** the coder is a cheap model (Haiku 5.5; escalate to Gemini 3.8 Flash if a
   task fails its gate twice). The reviewer is a different model (DeepSeek V4.1 Flash). Never the same
   model as the author. Stronger models only for a specific task the maintainer approves.

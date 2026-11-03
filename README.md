@@ -38,6 +38,7 @@ pnpm dev        # http://localhost:3000
 | `pnpm lint`          | ESLint                                                                                                                                        |
 | `pnpm test`          | Vitest unit and data tests                                                                                                                    |
 | `pnpm test:e2e`      | Playwright smokes against the production build, Chromium plus the WebKit iPhone project (`pnpm exec playwright install chromium webkit` once) |
+| `pnpm shots`         | Build and capture the main screens in light and dark at desktop and iPhone sizes into `.tmp/shots/current/`                                   |
 | `pnpm format`        | Prettier write                                                                                                                                |
 | `pnpm format:check`  | Prettier check                                                                                                                                |
 
