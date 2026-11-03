@@ -38,6 +38,7 @@ export function BrowseResultRow({
 
   return (
     <div
+      data-testid="browse-result-row"
       aria-busy={isCardPlaying}
       className={`rounded-2xl border p-4 transition-all ${
         isCardPlaying

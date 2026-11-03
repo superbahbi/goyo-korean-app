@@ -14,6 +14,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "shots": "tsx scripts/screenshots.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
