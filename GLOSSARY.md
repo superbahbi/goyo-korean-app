@@ -90,7 +90,8 @@ _Avoid_: shadowing-only, no-count, unscored
 
 **Repeat practice**:
 Voluntary daily practice offered once the daily goal is met; its grades are
-logged but earn no XP.
+logged and earn half the rating's XP, so extra study still moves the level
+while the daily goal stays the meaningful target.
 _Avoid_: bonus round, extra practice
 
 **Daily goal**:

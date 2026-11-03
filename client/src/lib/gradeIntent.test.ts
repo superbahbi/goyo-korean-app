@@ -56,12 +56,12 @@ describe("evaluateGrade", () => {
     });
   });
 
-  it("stops awarding daily XP once the goal is reached", () => {
+  it("awards half XP for daily repeat practice after the goal", () => {
     const decision = decide({ studiedToday: 10 });
     expect(decision).toMatchObject({
       advanced: true,
       countsAsNewCard: true,
-      xp: 0,
+      xp: 5,
       goalJustReached: false,
       repeatable: true,
     });

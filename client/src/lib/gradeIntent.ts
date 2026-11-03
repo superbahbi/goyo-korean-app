@@ -19,6 +19,11 @@ interface ModePolicy {
   updatesSchedule: boolean;
   xpEligibility: XpEligibility;
   repeatability: Repeatability;
+  /** Multiplier applied to the rating's XP once the daily goal is reached and
+   *  the mode is in repeat practice. 0 keeps repeat practice worthless; 1
+   *  makes it as rewarding as a first-pass grade. Daily repeat practice earns
+   *  half, so the goal stays the meaningful target. */
+  repeatXpMultiplier: number;
 }
 
 const MODE_POLICY: Record<StudyMode, ModePolicy> = {
@@ -27,36 +32,42 @@ const MODE_POLICY: Record<StudyMode, ModePolicy> = {
     updatesSchedule: true,
     xpEligibility: "until-goal",
     repeatability: "after-goal",
+    repeatXpMultiplier: 0.5,
   },
   weak: {
     recognition: false,
     updatesSchedule: true,
     xpEligibility: "always",
     repeatability: "always",
+    repeatXpMultiplier: 0,
   },
   learning: {
     recognition: false,
     updatesSchedule: true,
     xpEligibility: "always",
     repeatability: "always",
+    repeatXpMultiplier: 0,
   },
   listening: {
     recognition: true,
     updatesSchedule: true,
     xpEligibility: "always",
     repeatability: "never",
+    repeatXpMultiplier: 0,
   },
   scenario: {
     recognition: true,
     updatesSchedule: true,
     xpEligibility: "always",
     repeatability: "never",
+    repeatXpMultiplier: 0,
   },
   shadowing: {
     recognition: false,
     updatesSchedule: false,
     xpEligibility: "never",
     repeatability: "never",
+    repeatXpMultiplier: 0,
   },
 };
 
@@ -137,9 +148,15 @@ export function evaluateGrade(
     { recognition: policy.recognition }
   );
   const countsAsNewCard = context.existing?.lastReviewDate !== context.today;
-  const earnsXp =
+  const earnsFullXp =
     policy.xpEligibility === "always" ||
     (policy.xpEligibility === "until-goal" && !progress.reached);
+  // Repeat practice (daily mode after the goal) earns a reduced share of the
+  // rating's XP instead of none, so extra study still moves the level.
+  const repeatXp =
+    progress.reached && policy.repeatXpMultiplier > 0
+      ? Math.round(policy.repeatXpMultiplier * XP_BY_RATING[rating])
+      : 0;
   // The day counter keys off distinct cards, not XP: a same-day lapse can award
   // XP without crossing the goal.
   const goalJustReached =
@@ -151,7 +168,7 @@ export function evaluateGrade(
     schedule,
     advanced,
     countsAsNewCard,
-    xp: earnsXp && advanced ? XP_BY_RATING[rating] : 0,
+    xp: advanced ? (earnsFullXp ? XP_BY_RATING[rating] : repeatXp) : 0,
     goalJustReached,
     repeatable: repeatableSession(
       context.mode,

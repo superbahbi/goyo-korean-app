@@ -66,6 +66,11 @@ export function StudySessionSummary({
       <p>
         You remembered <strong>{remembered}</strong> of {total} reviews.
       </p>
+      {allowRepeat && (
+        <p className="text-sm text-muted-foreground">
+          Extra practice earns half XP toward your level.
+        </p>
+      )}
       {failedCards > 0 && (
         <p className="text-sm text-muted-foreground">
           {failedCards} {failedCards === 1 ? "card came" : "cards came"} back
