@@ -51,6 +51,12 @@ selection, including recognition practice, lives in `lib/queue.ts`. Domain terms
 `GLOSSARY.md` and the decisions in `docs/adr/`. Behaviour is unchanged except that offline download
 progress now counts only clips actually stored.
 
+Dashboard view split (2026-11-02): `lib/dashboardView.ts` dropped from 486 to 276 lines. Its
+statistics, today's plan and mode availability, and review forecast moved into
+`lib/dashboardStats.ts`, `lib/dashboardPlan.ts` and `lib/dashboardForecast.ts`; the view now only
+composes them and keeps its public types. Behaviour is unchanged and the existing view tests still
+cover the whole path.
+
 Phase 6 shell merge (2026-11-01, `#58`): the seven practice modes now share one `PracticeShell`
 (prompt, verdict, feedback, complete states) instead of six near-duplicate layouts, and the study
 loop was moved onto the same primitives. Dark mode followed in the same window: system, light and
@@ -91,8 +97,8 @@ The 300-line target holds for almost all UI code (`components/FlashCard.tsx` is 
 modules stay larger by design: `essentialVocabulary.ts` (7.7k lines) and `vocabulary.ts` (1.7k) are
 deck data. Modules still over 300 after the refactors: `grammar.ts` (594), `essentialTaxonomy.ts`
 (566), `alphabet.ts` (533), `essentialFrequency.ts` (523), `useStudyState.ts` (499),
-`dashboardView.ts` (486), `audioPlayer.ts` (342), `studySession.ts` (325) and `audioIndex.ts` (319).
-`dashboardView` and `audioPlayer` are the next split candidates if they keep growing.
+`audioPlayer.ts` (342), `studySession.ts` (325) and `audioIndex.ts` (319).
+`audioPlayer` is the next split candidate if it keeps growing.
 
 ## How we work
 
