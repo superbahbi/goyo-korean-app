@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T00:17:38.363Z",
+  "generatedAt": "2026-11-03T02:31:20.163Z",
   "voiceId": "h5eZa8VFAq0EQ8E81dfL",
   "modelId": "eleven_v4",
   "counts": {
@@ -816,7 +816,7 @@
       "text": "회의에 새 양복을 입고 갔어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_057.d1fffcc7.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {
@@ -837,10 +837,10 @@
     },
     {
       "id": "essential_060",
-      "text": "오늘은 새 바지를 신고 출근했어요.",
+      "text": "오늘은 새 바지를 입고 출근했어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_essential_060.2c31f066.mp3",
-      "status": "skipped",
+      "filename": "elevenlabs_sent_essential_060.e9b4102d.mp3",
+      "status": "generated",
       "bytes": 40585
     },
     {
@@ -1381,11 +1381,11 @@
     },
     {
       "id": "essential_139",
-      "text": "그 사건은 결국 살인으로 판결났습니다.",
+      "text": "그 사건은 결국 살인으로 판결이 났어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_essential_139.18ecd088.mp3",
-      "status": "skipped",
-      "bytes": 47272
+      "filename": "elevenlabs_sent_essential_139.8206f264.mp3",
+      "status": "generated",
+      "bytes": 49780
     },
     {
       "id": "essential_140",
@@ -2832,7 +2832,7 @@
       "text": "어제 넘어져서 다리에 아픔을 느꼈어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_342.2f0310cd.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 49780
     },
     {
