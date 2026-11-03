@@ -1,0 +1,391 @@
+{
+  "sample": 10,
+  "sheet": "docs/audits/essential-sample-10.md",
+  "seed": 17,
+  "limit": 50,
+  "issueCategories": [
+    "translation",
+    "naturalness",
+    "politeness",
+    "part-of-speech",
+    "romanization",
+    "usage-note",
+    "spelling"
+  ],
+  "summary": {
+    "cards": 50,
+    "pass": 46,
+    "fix": 4,
+    "errorRate": 0.08,
+    "decision": "4 of 50 fail (8%), inside the 5-15% band, so the sweep continues with the final batch.",
+    "resolved": 4,
+    "openFix": 0
+  },
+  "reaudit": {
+    "reauditedAt": "2026-11-02",
+    "openFixes": 0,
+    "method": "Re-read all 50 seed-17 rows against the five-point rubric after the fixes and re-ran the deck, romanization and content guard tests.",
+    "result": "All four fixed cards read clean and no new defect was found."
+  },
+  "sweep": {
+    "batch": 6,
+    "batchSize": 50,
+    "cardsAuditedBefore": 435,
+    "cardsAuditedAfter": 485,
+    "deckCoverage": 0.9623015873015873,
+    "remaining": 19
+  },
+  "systemicIssues": [
+    {
+      "issue": "Naturalness slips in examples",
+      "category": "naturalness",
+      "cards": 2,
+      "ids": ["essential_060", "essential_139"],
+      "detail": "One wrong clothing verb and one nonstandard legal form."
+    },
+    {
+      "issue": "Awkward English translation",
+      "category": "translation",
+      "cards": 1,
+      "ids": ["essential_019"],
+      "detail": "A parenthetical gloss instead of a sentence."
+    },
+    {
+      "issue": "Place adverb mistagged as a noun",
+      "category": "part-of-speech",
+      "cards": 1,
+      "ids": ["essential_354"],
+      "detail": "안에 should match 밖에 as an adverb."
+    }
+  ],
+  "verdicts": [
+    {
+      "id": "essential_005",
+      "source": "600 essential words · row 11",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_007",
+      "source": "600 essential words · row 13",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_017",
+      "source": "600 essential words · row 23",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_019",
+      "source": "600 essential words · row 25",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "translation",
+          "detail": "The example English was a redundant parenthetical rather than a sentence."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Rewrote the translation to I need to fill the car with gas."
+    },
+    {
+      "id": "essential_022",
+      "source": "600 essential words · row 28",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_050",
+      "source": "600 essential words · row 56",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_056",
+      "source": "600 essential words · row 62",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_060",
+      "source": "600 essential words · row 66",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "바지를 신다 is wrong; pants are worn (입다), not put on the feet (신다)."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Changed the example to 오늘은 새 바지를 입고 출근했어요."
+    },
+    {
+      "id": "essential_071",
+      "source": "600 essential words · row 77",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_075",
+      "source": "600 essential words · row 81",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_094",
+      "source": "600 essential words · row 100",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_105",
+      "source": "600 essential words · row 111",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_115",
+      "source": "600 essential words · row 121",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_116",
+      "source": "600 essential words · row 122",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_118",
+      "source": "600 essential words · row 124",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_126",
+      "source": "600 essential words · row 132",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_127",
+      "source": "600 essential words · row 133",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_139",
+      "source": "600 essential words · row 145",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "naturalness",
+          "detail": "판결났습니다 is not a standard form; the example should read 판결이 났어요."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Rewrote the example to 그 사건은 결국 살인으로 판결이 났어요."
+    },
+    {
+      "id": "essential_140",
+      "source": "600 essential words · row 146",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_145",
+      "source": "600 essential words · row 151",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_161",
+      "source": "600 essential words · row 167",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_167",
+      "source": "600 essential words · row 173",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_171",
+      "source": "600 essential words · row 177",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_189",
+      "source": "600 essential words · row 195",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_209",
+      "source": "600 essential words · row 215",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_211",
+      "source": "600 essential words · row 217",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_252",
+      "source": "600 essential words · row 258",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_254",
+      "source": "600 essential words · row 260",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_278",
+      "source": "600 essential words · row 284",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_321",
+      "source": "600 essential words · row 327",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_345",
+      "source": "600 essential words · row 351",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_352",
+      "source": "600 essential words · row 358",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_354",
+      "source": "600 essential words · row 360",
+      "verdict": "fix",
+      "issues": [
+        {
+          "category": "part-of-speech",
+          "detail": "안에 functions as a place adverb, not a noun."
+        }
+      ],
+      "resolvedAt": "2026-11-02",
+      "resolution": "Changed partOfSpeech from noun to adverb, matching 밖에."
+    },
+    {
+      "id": "essential_363",
+      "source": "600 essential words · row 369",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_378",
+      "source": "600 essential words · row 437",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_400",
+      "source": "600 essential words · row 460",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_404",
+      "source": "600 essential words · row 464",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_419",
+      "source": "600 essential words · row 479",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_424",
+      "source": "600 essential words · row 484",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_431",
+      "source": "600 essential words · row 491",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_436",
+      "source": "600 essential words · row 496",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_439",
+      "source": "600 essential words · row 499",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_441",
+      "source": "600 essential words · row 501",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_445",
+      "source": "600 essential words · row 505",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_449",
+      "source": "600 essential words · row 509",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_469",
+      "source": "600 essential words · row 529",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_485",
+      "source": "600 essential words · row 545",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_489",
+      "source": "600 essential words · row 549",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_495",
+      "source": "600 essential words · row 555",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "essential_511",
+      "source": "600 essential words · row 571",
+      "verdict": "pass",
+      "issues": []
+    }
+  ]
+}

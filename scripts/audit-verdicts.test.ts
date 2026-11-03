@@ -87,6 +87,8 @@ const AUDIT_FILES = [
   "essential-sample-7.json",
   "essential-sample-8.json",
   "essential-sample-9.json",
+  "essential-sample-10.json",
+  "essential-sample-11.json",
 ];
 
 const audits = AUDIT_FILES.map(file => {
@@ -335,7 +337,8 @@ describe("phase 7 sweep", () => {
     expect(sweep.length).toBeGreaterThan(0);
 
     for (const { audit } of sweep) {
-      expect(audit.limit, `sample ${audit.sample}`).toBe(50);
+      expect(audit.limit, `sample ${audit.sample}`).toBeLessThanOrEqual(50);
+      expect(audit.limit, `sample ${audit.sample}`).toBeGreaterThan(0);
       for (const verdict of audit.verdicts)
         expect(priorIds.has(verdict.id), verdict.id).toBe(false);
     }
