@@ -4,10 +4,10 @@ export interface AlphabetCard {
   romanization: string;
   sound: string;
   example: string;
-  type: "consonant" | "vowel" | "number";
+  type: "consonant" | "vowel";
 }
 
-export const ALPHABET_DATA: AlphabetCard[] = [
+const BASIC_CONSONANTS: AlphabetCard[] = [
   {
     id: "cons_001",
     hangul: "ㄱ",
@@ -120,6 +120,9 @@ export const ALPHABET_DATA: AlphabetCard[] = [
     example: "하 (ha - do)",
     type: "consonant",
   },
+];
+
+const DOUBLE_CONSONANTS: AlphabetCard[] = [
   {
     id: "cons_015",
     hangul: "ㄲ",
@@ -160,6 +163,9 @@ export const ALPHABET_DATA: AlphabetCard[] = [
     example: "짜 (jja - salty)",
     type: "consonant",
   },
+];
+
+const BASIC_VOWELS: AlphabetCard[] = [
   {
     id: "vowel_001",
     hangul: "ㅏ",
@@ -240,6 +246,9 @@ export const ALPHABET_DATA: AlphabetCard[] = [
     example: "이 (i - this)",
     type: "vowel",
   },
+];
+
+const COMPOUND_VOWELS: AlphabetCard[] = [
   {
     id: "vowel_011",
     hangul: "ㅐ",
@@ -330,111 +339,75 @@ export const ALPHABET_DATA: AlphabetCard[] = [
   },
 ];
 
-export const ALPHABET_CATEGORIES = [
+export const ALPHABET_DATA: AlphabetCard[] = [
+  ...BASIC_CONSONANTS,
+  ...DOUBLE_CONSONANTS,
+  ...BASIC_VOWELS,
+  ...COMPOUND_VOWELS,
+];
+
+export type AlphabetCategoryId =
+  | "basic-consonants"
+  | "double-consonants"
+  | "basic-vowels"
+  | "compound-vowels";
+
+export interface AlphabetCategory {
+  id: AlphabetCategoryId;
+  name: string;
+  detail: string;
+  color: string;
+}
+
+export const ALPHABET_CATEGORIES: readonly AlphabetCategory[] = [
   {
-    id: "consonants",
-    name: "Consonants",
-    icon: "🔤",
+    id: "basic-consonants",
+    name: "Basic consonants",
+    detail: "14 letters",
     color: "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300",
   },
   {
-    id: "vowels",
-    name: "Vowels",
-    icon: "🎵",
+    id: "double-consonants",
+    name: "Double consonants",
+    detail: "5 tense letters",
+    color: "bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300",
+  },
+  {
+    id: "basic-vowels",
+    name: "Basic vowels",
+    detail: "10 vowel sounds",
     color:
       "bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300",
   },
   {
-    id: "numbers",
-    name: "Numbers",
-    icon: "123",
+    id: "compound-vowels",
+    name: "Compound vowels",
+    detail: "11 combined sounds",
     color:
-      "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300",
+      "bg-violet-100 dark:bg-violet-900/50 text-violet-700 dark:text-violet-300",
   },
 ];
 
-export const NUMBER_DATA: AlphabetCard[] = [
-  {
-    id: "num_001",
-    hangul: "하나",
-    romanization: "hana",
-    sound: "One",
-    example: "하나, 둘, 셋",
-    type: "number",
-  },
-  {
-    id: "num_002",
-    hangul: "둘",
-    romanization: "dul",
-    sound: "Two",
-    example: "둘이 함께 갔어요.",
-    type: "number",
-  },
-  {
-    id: "num_003",
-    hangul: "셋",
-    romanization: "set",
-    sound: "Three",
-    example: "셋이 모였어요.",
-    type: "number",
-  },
-  {
-    id: "num_004",
-    hangul: "넷",
-    romanization: "net",
-    sound: "Four",
-    example: "우리 가족은 넷이에요.",
-    type: "number",
-  },
-  {
-    id: "num_005",
-    hangul: "다섯",
-    romanization: "daseot",
-    sound: "Five",
-    example: "다섯 명이 왔어요.",
-    type: "number",
-  },
-  {
-    id: "num_006",
-    hangul: "여섯",
-    romanization: "yeoseot",
-    sound: "Six",
-    example: "여섯 시간이 걸렸어요.",
-    type: "number",
-  },
-  {
-    id: "num_007",
-    hangul: "일곱",
-    romanization: "ilgop",
-    sound: "Seven",
-    example: "일곱 살이 되었어요.",
-    type: "number",
-  },
-  {
-    id: "num_008",
-    hangul: "여덟",
-    romanization: "yeodeol",
-    sound: "Eight",
-    example: "여덟 개를 샀어요.",
-    type: "number",
-  },
-  {
-    id: "num_009",
-    hangul: "아홉",
-    romanization: "ahop",
-    sound: "Nine",
-    example: "아홉 번 했어요.",
-    type: "number",
-  },
-  {
-    id: "num_010",
-    hangul: "열",
-    romanization: "yeol",
-    sound: "Ten",
-    example: "열 개를 주세요.",
-    type: "number",
-  },
+export function getAlphabetCategoryCards(
+  categoryId: AlphabetCategoryId
+): AlphabetCard[] {
+  switch (categoryId) {
+    case "basic-consonants":
+      return BASIC_CONSONANTS;
+    case "double-consonants":
+      return DOUBLE_CONSONANTS;
+    case "basic-vowels":
+      return BASIC_VOWELS;
+    case "compound-vowels":
+      return COMPOUND_VOWELS;
+  }
+}
+
+export const ALPHABET_CONSONANT_CARDS = [
+  ...BASIC_CONSONANTS,
+  ...DOUBLE_CONSONANTS,
 ];
+export const ALPHABET_VOWEL_CARDS = [...BASIC_VOWELS, ...COMPOUND_VOWELS];
 
 export const ALPHABET_COUNTS = {
   consonants: 19,
@@ -452,10 +425,7 @@ export const ALPHABET_AUDIO_VOICE_ID = "h5eZa8VFAq0EQ8E81dfL";
 export const ALPHABET_AUDIO_MODEL = "eleven_v4";
 export const ALPHABET_TTS_MODE = "letter-name" as const;
 export const ALPHABET_AUDIO_TEXT: Record<string, string> = Object.fromEntries(
-  ALPHABET_DATA.map(card => [
-    card.id,
-    card.type === "number" ? card.hangul : card.sound,
-  ])
+  ALPHABET_DATA.map(card => [card.id, card.sound])
 );
 /**
  * Clip keys used by the male alphabet index for basic characters, keyed by
@@ -497,12 +467,6 @@ export const ALPHABET_VOWEL_AUDIO_ALIASES: Record<string, string> = {
   vowel_012: "e",
 };
 
-export const ALPHABET_CONSONANT_CARDS = ALPHABET_DATA.filter(
-  card => card.type === "consonant"
-);
-export const ALPHABET_VOWEL_CARDS = ALPHABET_DATA.filter(
-  card => card.type === "vowel"
-);
 export const ALPHABET_CARD_LOOKUP = Object.fromEntries(
   ALPHABET_DATA.map(card => [card.id, card])
 );

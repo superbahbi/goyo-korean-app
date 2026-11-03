@@ -165,7 +165,7 @@ test("Hangul practice has no WCAG A/AA violations", async ({ page }) => {
     []
   );
 
-  await page.getByRole("button", { name: /consonants/i }).click();
+  await page.getByRole("button", { name: /basic consonants/i }).click();
   expect(await audit(page, "alphabet cards", '[role="dialog"]')).toEqual([]);
 });
 
