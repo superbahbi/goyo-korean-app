@@ -33,6 +33,9 @@ Verified on 2026-11-02 on `main` after the architecture round 2 merge (`#76`):
 
 All gates pass.
 
+Repeat practice XP (2026-11-02, `#81`): daily repeat grades now earn half the rating's XP
+(again 3, good 5, easy 8); the daily goal stays a distinct-card count. ADR 0010 records it.
+
 Architecture rounds 1–2 (2026-11-02, `#70`–`#76`): thirteen shallow spots were deepened across
 two reviews. A grade's intent and its write path now live together in `lib/gradeIntent.ts` +
 `lib/gradeOutcome.ts`, so the toast and the save cannot disagree. A study session is a
@@ -121,7 +124,7 @@ deck data. Modules still over 300 after the refactors: `grammar.ts` (594), `esse
 | 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done                                                       |
 | 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                                                                              |
 | 6 Sentence audio and grammar        | Done (2026-11-02); male sentence library complete (675 clips), twelve lessons reviewed and signed off; female voice paused pending spend approval                                                                                  |
-| 7 Content trust completion          | In progress; re-measured 2026-11-01 at 10.4% of 96 (down from 25%), fixed the 10 defects, and swept 200 more cards in four batches (14 fail, 14%); 385 of 504 cards carry a verdict, 119 remain, Korean-speaker spot check pending |
+| 7 Content trust completion          | In progress; re-measured 2026-11-01 at 10.4% of 96 (down from 25%), fixed the 10 defects, and swept 250 more cards in five batches (19 fail, 7.6%); 435 of 504 cards carry a verdict, 69 remain, Korean-speaker spot check pending |
 | 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                                                   |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
@@ -578,13 +581,23 @@ Order matters: measure first, rewrite second.
      more cards with no prior verdict. All 50 pass the five-point rubric; no defects found. Romanization
      was re-checked against the transliterator and agreed on every card. 335 of 504 imported cards
      (66.5%) now carry a verdict; 169 remain.
+   - Done (2026-11-02), batch 4: `pnpm audit:content --limit 50 --seed 13 --unaudited` sampled the
+     next 50 cards. All 50 pass; no defects found. 385 of 504 imported cards (76.4%) now carry a
+     verdict; 119 remain.
+   - Done (2026-11-02), batch 5: `pnpm audit:content --limit 50 --seed 14 --unaudited` sampled 50
+     more cards. 5 of 50 fail (10%): one example's word order disagreed with its English (양복), the
+     awkward 아픔이 있다 collocation, one non-idiomatic English line (일기장), a 파랑색 note that
+     contradicted its own spelling and omitted the standard 파란색, and 그 tagged as a noun instead of a
+     pronoun. All five are fixed, `phase7Sweep.test.ts` guards them, the same sheet was re-rendered,
+     and the two rewritten examples had their male sentence clips regenerated (2 clips, 673 skipped).
+     435 of 504 imported cards (86.3%) now carry a verdict; 69 remain.
 
 Out of scope: new cards, FSRS, more grammar lessons, and any UI change. Phase 5 runs alongside this
 phase because it is a read-only tuning exercise.
 
 Sequencing: the male sentence batch is done, the grammar review is signed off, and the female voice is
-paused → Phase 7 fixes and sweep (ongoing, 285 of 504 audited) → Phase 5 read when the window closes
-around 2026-12-01. Two sweep batches have run; 219 imported cards still have no verdict.
+paused → Phase 7 fixes and sweep (ongoing, 435 of 504 audited) → Phase 5 read when the window closes
+around 2026-12-01. Five sweep batches have run; 69 imported cards still have no verdict.
 
 ## Phase 8: First session and card experience
 
