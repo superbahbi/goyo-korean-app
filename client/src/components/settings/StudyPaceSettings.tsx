@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import type { UserState } from "@/hooks/useStudyState";
+import type { UserState } from "@/lib/savedState";
 import { stopAudio } from "@/lib/audioPlayer";
 
 interface StudyPaceSettingsProps {

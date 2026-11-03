@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { CardState } from "@/hooks/useStudyState";
+import type { CardState } from "@/lib/mastery";
 import type { StudyDays } from "@/lib/studyDays";
 import { buildDashboardView, type DashboardView } from "@/lib/dashboardView";
 import type { ForecastLabelStyle } from "@/lib/dashboardForecast";

@@ -16,7 +16,7 @@ import {
   NewCardsPerDaySetting,
 } from "@/components/settings/StudyPaceSettings";
 import { useProgressFile } from "@/components/settings/useProgressFile";
-import type { UserState } from "@/hooks/useStudyState";
+import type { UserState } from "@/lib/savedState";
 
 interface SettingsDialogProps {
   open: boolean;

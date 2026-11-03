@@ -1,4 +1,4 @@
-import type { GradeOptions, UserState } from "@/hooks/useStudyState";
+import type { UserState } from "@/lib/savedState";
 import { addDays, getLocalDateKey } from "@/lib/day";
 import { evaluateGrade } from "@/lib/gradeIntent";
 import type { CardState } from "@/lib/mastery";
@@ -14,6 +14,12 @@ import { deriveStreak, recordStudyDay } from "@/lib/studyDays";
  * caller needs (XP, goal crossing, repeatability). The toast and the save can
  * therefore never disagree, and no caller has to re-run the intent.
  */
+export interface GradeOptions {
+  responseTimeMs?: number;
+  /** The practice mode decides whether this grade counts for progress. */
+  mode?: StudyMode;
+}
+
 export interface GradeOutcome {
   /** XP this grade actually awards. */
   xp: number;

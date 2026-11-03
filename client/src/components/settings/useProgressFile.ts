@@ -4,7 +4,7 @@ import {
   buildExportPayload,
   validateImportPayload,
   type UserState,
-} from "@/hooks/useStudyState";
+} from "@/lib/savedState";
 import { getLastBackupAt, recordBackup } from "@/lib/backupStatus";
 
 export interface PendingImport {

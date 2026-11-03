@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { emptyGrammarProgress } from "@/lib/grammarProgress";
-import { parseSavedState, type UserState } from "@/hooks/useStudyState";
+import { parseSavedState, type UserState } from "@/lib/savedState";
 import { applyGradeOutcome } from "./gradeOutcome";
 
 const at = new Date("2026-11-01T09:30:00.000Z");
