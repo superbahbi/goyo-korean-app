@@ -1,11 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { CardState } from "@/lib/mastery";
 import type { VocabularyCard } from "@/lib/vocabulary";
-import {
-  buildDashboardView,
-  RECOGNITION_MIN_CARDS,
-  type DashboardViewInput,
-} from "./dashboardView";
+import { buildDashboardView, type DashboardViewInput } from "./dashboardView";
+import { RECOGNITION_MIN_CARDS } from "./dashboardPlan";
 
 const today = "2026-11-01";
 

@@ -1,22 +1,15 @@
-import {
-  getMasteryState,
-  type CardState,
-  type MasteryState,
-} from "@/lib/mastery";
+import type { CardState, MasteryState } from "@/lib/mastery";
 import type { StudyDays } from "@/lib/studyDays";
 import { daysStudiedWithin, reviewsWithin } from "@/lib/studyDays";
-import { CATEGORIES, type VocabularyCard } from "@/lib/vocabulary";
+import type { VocabularyCard } from "@/lib/vocabulary";
 import {
   buildDailyQueue,
-  buildReviewForecast,
   countOverdue,
   nextScheduledReview as findNextScheduledReview,
   selectLearningCards,
   selectRecognitionCards,
   selectShadowingCards,
   selectWeakCards,
-  summarizeForecast,
-  type ForecastDay,
   type WorkloadStatus,
 } from "@/lib/queue";
 import {
@@ -24,38 +17,34 @@ import {
   levelTitle as getLevelTitle,
   xpToReachLevel,
 } from "@/lib/xp";
-import {
-  describeTodayProgress,
-  isFirstRunState,
-  type TodayProgress,
-} from "@/lib/dashboardProgress";
+import { isFirstRunState } from "@/lib/dashboardProgress";
 import { goalProgress } from "@/lib/gradeIntent";
+import {
+  buildDashboardStats,
+  type CategorySummary,
+  type ReviewStats,
+} from "@/lib/dashboardStats";
+import {
+  buildDashboardForecast,
+  type ForecastLabelStyle,
+  type LabeledForecastDay,
+  type StatsForecastDay,
+} from "@/lib/dashboardForecast";
+import {
+  buildModeAvailability,
+  buildTodayPlan,
+  type ModeAvailability,
+  type PracticeModeId,
+  type TodayPlan,
+} from "@/lib/dashboardPlan";
 
 /**
  * Dashboard today-view model: one pure builder for everything the dashboard
- * shows. The React hook supplies saved state and the date formatter; it does not
- * re-derive the plan, availability, categories, or stats payload.
+ * shows. Statistics, today's plan, mode availability and the review forecast
+ * live in their own focused modules; this file composes them. The React hook
+ * supplies saved state and the date formatter; it does not re-derive the plan,
+ * availability, categories, or stats payload.
  */
-
-/** The one category shape shared by the theme grid and the stats dialog. */
-export interface CategorySummary {
-  id: string;
-  name: string;
-  icon: string;
-  color: string;
-  reviewed: number;
-  total: number;
-  accuracy: number | null;
-  known: number;
-  coverage: number;
-}
-
-/** A forecast day with its locale label resolved by the injected formatter. */
-export interface LabeledForecastDay extends ForecastDay {
-  label: string;
-}
-
-export type StatsForecastDay = LabeledForecastDay;
 
 export interface StatsDialogStats {
   level: number;
@@ -80,43 +69,6 @@ export interface StatsDialogForecast {
   days: StatsForecastDay[];
   total: number;
   peak: StatsForecastDay;
-}
-
-export type PracticeModeId =
-  | "daily"
-  | "listening"
-  | "scenario"
-  | "shadowing"
-  | "weak"
-  | "learning";
-
-export type AvailabilityReason =
-  | "empty"
-  | "too-few-reviewed-cards"
-  | "no-scenarios";
-
-export interface ModeAvailability {
-  available: boolean;
-  /** Why the mode cannot start, or null when it can. */
-  reason: AvailabilityReason | null;
-}
-
-export interface ReviewStats {
-  totalReviews: number;
-  overallAccuracy: number;
-  medianResponseTime: number | null;
-}
-
-export interface TodayPlan {
-  firstRun: boolean;
-  plannedCards: number;
-  newCards: number;
-  cardsRemaining: number;
-  overdueCount: number;
-  dailyGoalReached: boolean;
-  progress: TodayProgress;
-  /** The exact hero summary for the current plan. */
-  summary: string;
 }
 
 export interface DashboardView {
@@ -160,8 +112,6 @@ export interface DashboardView {
   };
 }
 
-export type ForecastLabelStyle = "weekday" | "monthDay";
-
 export interface DashboardViewInput {
   vocabulary: VocabularyCard[];
   studyReady: VocabularyCard[];
@@ -178,127 +128,6 @@ export interface DashboardViewInput {
   scenarioCardIds: readonly string[];
   /** Locale policy is injected so the builder stays pure and testable. */
   labelDate: (key: string, style: ForecastLabelStyle) => string;
-}
-
-/** The number of reviewed cards recognition practice needs to be useful. */
-export const RECOGNITION_MIN_CARDS = 4;
-
-function available(): ModeAvailability {
-  return { available: true, reason: null };
-}
-
-function unavailable(reason: AvailabilityReason): ModeAvailability {
-  return { available: false, reason };
-}
-
-function summarizePlan({
-  cardsRemaining,
-  plannedCards,
-  overdueCount,
-}: Omit<
-  TodayPlan,
-  "firstRun" | "progress" | "summary" | "newCards" | "dailyGoalReached"
->): string {
-  if (cardsRemaining > 0) {
-    if (plannedCards === 0) {
-      return "Today's scheduled reviews are complete. New words resume tomorrow.";
-    }
-    const duePart =
-      overdueCount > 0
-        ? `${overdueCount} review${overdueCount === 1 ? "" : "s"} due · `
-        : "";
-    return `${duePart}${plannedCards} card${plannedCards === 1 ? "" : "s"} planned for today`;
-  }
-  return "You've hit today's goal. Extra practice is optional from here.";
-}
-
-function buildCategories(
-  vocabulary: VocabularyCard[],
-  cardStates: Record<string, CardState>
-): CategorySummary[] {
-  return CATEGORIES.map(category => {
-    const cards = vocabulary.filter(card => card.tag === category.id);
-    const reviewed = cards.filter(card =>
-      Boolean(cardStates?.[card.id]?.timesReviewed)
-    );
-    const reviews = reviewed.reduce(
-      (sum, card) => sum + (cardStates?.[card.id]?.timesReviewed ?? 0),
-      0
-    );
-    const correct = reviewed.reduce(
-      (sum, card) => sum + (cardStates?.[card.id]?.timesCorrect ?? 0),
-      0
-    );
-    const known = cards.filter(
-      card => getMasteryState(cardStates?.[card.id]) === "known"
-    ).length;
-    return {
-      ...category,
-      reviewed: reviewed.length,
-      total: cards.length,
-      accuracy: reviews > 0 ? Math.round((correct / reviews) * 100) : null,
-      known,
-      coverage: cards.length > 0 ? Math.round((known / cards.length) * 100) : 0,
-    };
-  });
-}
-
-function buildReviewStats(
-  vocabulary: VocabularyCard[],
-  cardStates: Record<string, CardState>
-): ReviewStats {
-  const reviewedCards = vocabulary.filter(card =>
-    Boolean(cardStates[card.id]?.timesReviewed)
-  );
-  const totalReviews = reviewedCards.reduce(
-    (sum, card) => sum + (cardStates[card.id]?.timesReviewed ?? 0),
-    0
-  );
-  const totalCorrect = reviewedCards.reduce(
-    (sum, card) => sum + (cardStates[card.id]?.timesCorrect ?? 0),
-    0
-  );
-  const responseTimes = reviewedCards
-    .map(card => cardStates[card.id]?.lastResponseTimeMs)
-    .filter((time): time is number => typeof time === "number" && time > 0)
-    .sort((a, b) => a - b);
-  return {
-    totalReviews,
-    overallAccuracy:
-      totalReviews > 0 ? Math.round((totalCorrect / totalReviews) * 100) : 0,
-    medianResponseTime:
-      responseTimes.length > 0
-        ? responseTimes[Math.floor(responseTimes.length / 2)]
-        : null,
-  };
-}
-
-function buildModes(
-  queue: VocabularyCard[],
-  recognitionCards: VocabularyCard[],
-  weakCards: VocabularyCard[],
-  learningCards: VocabularyCard[],
-  shadowingCards: VocabularyCard[],
-  scenarioCardIds: readonly string[]
-): Record<PracticeModeId, ModeAvailability> {
-  const recognitionReady = recognitionCards.length >= RECOGNITION_MIN_CARDS;
-  const recognitionIds = new Set(recognitionCards.map(card => card.id));
-  const hasScenario = scenarioCardIds.some(id => recognitionIds.has(id));
-
-  return {
-    daily: queue.length > 0 ? available() : unavailable("empty"),
-    listening: recognitionReady
-      ? available()
-      : unavailable("too-few-reviewed-cards"),
-    scenario: !recognitionReady
-      ? unavailable("too-few-reviewed-cards")
-      : hasScenario
-        ? available()
-        : unavailable("no-scenarios"),
-    shadowing: shadowingCards.length > 0 ? available() : unavailable("empty"),
-    weak: weakCards.length > 0 ? available() : unavailable("empty"),
-    learning: learningCards.length > 0 ? available() : unavailable("empty"),
-  };
 }
 
 export function buildDashboardView({
@@ -321,15 +150,10 @@ export function buildDashboardView({
   const daysStudied30 = daysStudiedWithin(studyDays, today, 30);
   const reviews7 = reviewsWithin(studyDays, today, 7);
 
-  const masteryCounts = vocabulary.reduce<Record<MasteryState, number>>(
-    (counts, card) => {
-      counts[getMasteryState(cardStates?.[card.id])] += 1;
-      return counts;
-    },
-    { new: 0, learning: 0, shaky: 0, known: 0 }
+  const { masteryCounts, reviewStats, categories } = buildDashboardStats(
+    vocabulary,
+    cardStates
   );
-  const reviewStats = buildReviewStats(vocabulary, cardStates);
-  const categories = buildCategories(vocabulary, cardStates);
 
   const queue = buildDailyQueue(
     studyReady,
@@ -351,32 +175,13 @@ export function buildDashboardView({
   const learningCards = selectLearningCards(studyReady, cardStates, today);
   const shadowingCards = selectShadowingCards(studyReady);
 
-  const reviewForecast = buildReviewForecast(studyReady, cardStates, today, 7, {
-    overdueOnFirstDay: true,
-  }).map((day, offset) => ({
-    ...day,
-    label:
-      offset === 0
-        ? "Today"
-        : offset === 1
-          ? "Tmrw"
-          : labelDate(day.key, "weekday"),
-  }));
-  const extendedReviewForecast = buildReviewForecast(
+  const review = buildDashboardForecast({
     studyReady,
     cardStates,
     today,
-    30
-  ).map(day => ({
-    ...day,
-    label: labelDate(day.key, "monthDay"),
-  }));
-
-  const {
-    total: forecastTotal,
-    peak: forecastPeak,
-    status: workloadStatus,
-  } = summarizeForecast(extendedReviewForecast, dailyGoal);
+    dailyGoal,
+    labelDate,
+  });
 
   const { reached: dailyGoalReached, remaining: cardsRemaining } = goalProgress(
     dailyGoal,
@@ -393,28 +198,17 @@ export function buildDashboardView({
     cardStates: Object.keys(cardStates).length,
     studiedToday: cardsStudiedToday,
   });
-  // Once the daily goal is reached the queue becomes optional repeat practice,
-  // so it is no longer part of the planned work for the day.
-  const progress = describeTodayProgress({
-    studied: cardsStudiedToday,
-    remaining: dailyGoalReached ? 0 : queue.length,
-    dailyGoal,
-  });
 
-  const plan: TodayPlan = {
-    firstRun,
-    plannedCards: queue.length,
+  const plan = buildTodayPlan({
+    queue,
     newCards,
     cardsRemaining,
     overdueCount,
+    firstRun,
     dailyGoalReached,
-    progress,
-    summary: summarizePlan({
-      cardsRemaining,
-      plannedCards: queue.length,
-      overdueCount,
-    }),
-  };
+    studied: cardsStudiedToday,
+    dailyGoal,
+  });
 
   const levelTitle = getLevelTitle(level);
   const nextLevelXp = xpToReachLevel(level + 1);
@@ -428,7 +222,7 @@ export function buildDashboardView({
       cardsRemaining,
       plan,
     },
-    modes: buildModes(
+    modes: buildModeAvailability(
       queue,
       recognitionCards,
       weakCards,
@@ -449,13 +243,9 @@ export function buildDashboardView({
       nextLevelXp,
     },
     review: {
+      ...review,
       overdueCount,
       nextScheduledReview,
-      forecast: reviewForecast,
-      extendedForecast: extendedReviewForecast,
-      total: forecastTotal,
-      peak: forecastPeak,
-      status: workloadStatus,
     },
     dialog: {
       stats: {
@@ -477,9 +267,9 @@ export function buildDashboardView({
         categories,
       },
       forecast: {
-        days: extendedReviewForecast,
-        total: forecastTotal,
-        peak: forecastPeak,
+        days: review.extendedForecast,
+        total: review.total,
+        peak: review.peak,
       },
     },
   };

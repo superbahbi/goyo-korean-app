@@ -2,7 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { CalendarDays } from "lucide-react";
 import { motion } from "framer-motion";
-import type { DashboardView, LabeledForecastDay } from "@/lib/dashboardView";
+import type { DashboardView } from "@/lib/dashboardView";
+import type { LabeledForecastDay } from "@/lib/dashboardForecast";
 
 export type ReviewForecastDay = LabeledForecastDay;
 

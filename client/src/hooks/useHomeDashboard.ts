@@ -1,11 +1,8 @@
 import { useMemo } from "react";
 import type { CardState } from "@/hooks/useStudyState";
 import type { StudyDays } from "@/lib/studyDays";
-import {
-  buildDashboardView,
-  type DashboardView,
-  type ForecastLabelStyle,
-} from "@/lib/dashboardView";
+import { buildDashboardView, type DashboardView } from "@/lib/dashboardView";
+import type { ForecastLabelStyle } from "@/lib/dashboardForecast";
 import { SCENARIOS } from "@/components/practice/scenarios";
 import type { VocabularyCard } from "@/lib/vocabulary";
 

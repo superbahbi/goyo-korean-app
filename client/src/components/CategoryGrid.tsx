@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { SectionHeading } from "@/components/SectionHeading";
-import type { CategorySummary } from "@/lib/dashboardView";
+import type { CategorySummary } from "@/lib/dashboardStats";
 
 interface CategoryGridProps {
   categories: CategorySummary[];
