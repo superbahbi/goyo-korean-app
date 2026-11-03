@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import type { GradeOptions } from "@/lib/gradeOutcome";
-import type { GradeOutcome } from "@/lib/gradeOutcome";
+import type { GradeOptions, GradeOutcome } from "@/lib/gradeOutcome";
 import type { ModeAvailability, PracticeModeId } from "@/lib/dashboardPlan";
 import type { VocabularyCard } from "@/lib/vocabulary";
 
