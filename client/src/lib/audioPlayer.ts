@@ -9,78 +9,40 @@ import {
   sentenceIdsWithClips,
   warmAudioClip,
 } from "./audioIndex";
+import { clearPlayingClip, showPlayingClip } from "./audioPlaybackState";
+import { createAudioElementPlayer, PlaybackStoppedError } from "./audioElement";
 /**
  * Plays pre-generated Korean audio from /public/audio.
  *
  * The app's domain IDs (for example, surv_001 and cons_001) are intentionally
  * mapped to the generated filename keys so UI components never need to know
  * how audio files are named. The manifest, filename resolution, and offline
- * cache policy live in `audioIndex.ts`; this module owns the audio element.
+ * cache policy live in `audioIndex.ts`; the element lifecycle lives in
+ * `audioElement.ts`; the now-playing snapshot lives in `audioPlaybackState.ts`.
  */
 
-let currentAudio: HTMLAudioElement | null = null;
-// Settles the in-flight playback promise when it is stopped from outside, so
-// callers awaiting playAudioFile never hang.
-let settleStoppedPlayback: (() => void) | null = null;
+export { getAudioPlayback, subscribeAudioPlayback } from "./audioPlaybackState";
+export type {
+  AudioClipKind,
+  AudioClipRef,
+  AudioPlaybackState,
+} from "./audioPlaybackState";
+
 export type AudioSpeaker = AudioVoice;
 let selectedSpeaker: AudioSpeaker = "elevenlabs";
 
-/** The kind of audio a clip belongs to, so views can highlight the right row. */
-export type AudioClipKind = "vocabulary" | "sentence" | "alphabet";
-
-export interface AudioClipRef {
-  kind: AudioClipKind;
-  /** The domain id the clip was requested for. */
-  id: string;
+function warmAudioCache(audioPath: string): void {
+  // Playback warming is best effort: a failed prefetch must not affect the
+  // element. Batch download awaits the same policy and reports failures.
+  void warmAudioClip(audioPath).catch(() => {});
 }
 
-export interface AudioPlaybackState {
-  /** The clip currently playing, or null when nothing is. */
-  clip: AudioClipRef | null;
-  playing: boolean;
-}
-
-const STOPPED: AudioPlaybackState = { clip: null, playing: false };
-let playback: AudioPlaybackState = STOPPED;
-const playbackListeners = new Set<() => void>();
-
-function sameClip(a: AudioClipRef | null, b: AudioClipRef | null): boolean {
-  return a?.kind === b?.kind && a?.id === b?.id;
-}
-
-/** Publish one immutable snapshot; listeners only see real transitions. */
-function publishPlayback(next: AudioPlaybackState): void {
-  if (playback.playing === next.playing && sameClip(playback.clip, next.clip)) {
-    return;
-  }
-  playback = next;
-  playbackListeners.forEach(listener => listener());
-}
-
-/** The player's current clip and whether it is actually playing. */
-export function getAudioPlayback(): AudioPlaybackState {
-  return playback;
-}
-
-/** Subscribe to now-playing transitions; returns an unsubscribe function. */
-export function subscribeAudioPlayback(listener: () => void): () => void {
-  playbackListeners.add(listener);
-  return () => {
-    playbackListeners.delete(listener);
-  };
-}
-
-/**
- * Rejection used when playback ends because a caller stopped it or replaced it
- * with a newer clip. It is not a failure: the UI must not offer a fallback or
- * log an error for it.
- */
-class PlaybackStoppedError extends Error {
-  constructor() {
-    super("Audio playback was stopped");
-    this.name = "PlaybackStoppedError";
-  }
-}
+const player = createAudioElementPlayer({
+  warm: warmAudioCache,
+  forget: forgetAudioClip,
+  onPlaying: showPlayingClip,
+  onStopped: clearPlayingClip,
+});
 
 /**
  * Resolves true when the clip played to the end or was intentionally stopped,
@@ -99,7 +61,7 @@ export async function playVocabularyAudio(wordId: string): Promise<boolean> {
       if (!audioFile) {
         throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
       }
-      await playAudioFile(`/audio/${audioFile}`, {
+      await player.play(`/audio/${audioFile}`, {
         kind: "vocabulary",
         id: wordId,
       });
@@ -112,7 +74,7 @@ export async function playVocabularyAudio(wordId: string): Promise<boolean> {
       throw new Error(`No ElevenLabs audio mapped for vocabulary ${wordId}`);
     }
 
-    await playAudioFile(`/audio/${audioFile}`, {
+    await player.play(`/audio/${audioFile}`, {
       kind: "vocabulary",
       id: wordId,
     });
@@ -143,7 +105,7 @@ export async function playAlphabetAudio(
       if (!audioFile) {
         throw new Error(`No generated audio mapped for ${type} ${characterId}`);
       }
-      await playAudioFile(`/audio/${audioFile}`, {
+      await player.play(`/audio/${audioFile}`, {
         kind: "alphabet",
         id: characterId,
       });
@@ -161,7 +123,7 @@ export async function playAlphabetAudio(
       throw new Error(`No generated audio mapped for ${type} ${characterId}`);
     }
 
-    await playAudioFile(`/audio/${audioFile}`, {
+    await player.play(`/audio/${audioFile}`, {
       kind: "alphabet",
       id: characterId,
     });
@@ -183,7 +145,7 @@ export async function playSentenceAudio(sentenceId: string): Promise<boolean> {
     if (!audioFile) {
       throw new Error(`No sentence audio mapped for ${sentenceId}`);
     }
-    await playAudioFile(`/audio/${audioFile}`, {
+    await player.play(`/audio/${audioFile}`, {
       kind: "sentence",
       id: sentenceId,
     });
@@ -208,128 +170,8 @@ export async function getAvailableSentenceIds(): Promise<Set<string>> {
   }
 }
 
-function warmAudioCache(audioPath: string): void {
-  // Playback warming is best effort: a failed prefetch must not affect the
-  // element. Batch download awaits the same policy and reports failures.
-  void warmAudioClip(audioPath).catch(() => {});
-}
-
-function playAudioFile(audioPath: string, clip: AudioClipRef): Promise<void> {
-  return new Promise((resolve, reject) => {
-    stopAudio();
-    warmAudioCache(audioPath);
-
-    const audio = new Audio();
-    currentAudio = audio;
-    publishPlayback({ clip, playing: true });
-    audio.preload = "auto";
-    audio.playbackRate = 0.9;
-    audio.volume = 1;
-    let retried = false;
-    // Set once stopAudio (or a newer clip) takes over, so late events cannot
-    // resurrect the playback or evict the cache.
-    let stopped = false;
-    let settled = false;
-    // Each attach gets an id so a superseded attempt's late errors are ignored.
-    let attemptId = 0;
-
-    const cleanup = () => {
-      audio.onended = null;
-      audio.onerror = null;
-      audio.onabort = null;
-      if (currentAudio === audio) currentAudio = null;
-      if (settleStoppedPlayback === handleStopped) settleStoppedPlayback = null;
-    };
-
-    const finish = (error?: Error) => {
-      if (settled) return;
-      settled = true;
-      // A stopped clip already published its transition; only the element that
-      // still owns the player may clear it.
-      const owned = currentAudio === audio;
-      cleanup();
-      if (owned) publishPlayback(STOPPED);
-      if (error) reject(error);
-      else resolve();
-    };
-
-    const handleStopped = () => {
-      stopped = true;
-      finish(new PlaybackStoppedError());
-    };
-
-    settleStoppedPlayback = handleStopped;
-
-    // A cached response can be stale or corrupt (for example HTML saved from a
-    // fallback route). Drop it and retry once from the network, bypassing the
-    // service worker by adding a query string to the URL. Only real media
-    // errors reach this path; a rejected play() must not discard a good clip.
-    const recover = async (id: number, message: string) => {
-      if (id !== attemptId || stopped) return;
-      // Delete first: the retry must not race the service worker and re-read the bad entry.
-      await forgetAudioClip(audioPath);
-      if (id !== attemptId || stopped) return;
-      if (retried) {
-        finish(new Error(message));
-        return;
-      }
-      retried = true;
-      // Repopulate the cache with the real clip once the poisoned entry is gone.
-      warmAudioCache(audioPath);
-      attach(`${audioPath}?retry=1`);
-    };
-
-    const attach = (src: string) => {
-      const id = ++attemptId;
-      audio.onended = () => {
-        if (id !== attemptId) return;
-        finish();
-      };
-      audio.onerror = () => {
-        if (id !== attemptId) return;
-        void recover(id, audio.error?.message || `Unable to load ${audioPath}`);
-      };
-      audio.onabort = () => {
-        if (id !== attemptId) return;
-        finish(new PlaybackStoppedError());
-      };
-      audio.src = src;
-      audio.play().catch(error => {
-        if (id !== attemptId) return;
-        const name = error instanceof Error ? error.name : "";
-        // stopAudio already settled the promise and paused the element; the
-        // browser's abort rejection is expected and must not evict the clip.
-        if (name === "AbortError" && stopped) return;
-        // Autoplay blocking (iOS) and other start failures leave the cached
-        // clip intact: the user can retry by tapping the speaker.
-        finish(error instanceof Error ? error : new Error(String(error)));
-      });
-    };
-
-    attach(audioPath);
-  });
-}
-
 export function stopAudio(): void {
-  const audio = currentAudio;
-  const settle = settleStoppedPlayback;
-  // Clear the module state before pausing so re-entry and late play() events
-  // are no-ops, then tear the element down before settling the pending promise.
-  currentAudio = null;
-  settleStoppedPlayback = null;
-
-  if (audio) {
-    audio.onended = null;
-    audio.onerror = null;
-    audio.onabort = null;
-    audio.pause();
-    audio.currentTime = 0;
-    audio.removeAttribute("src");
-    audio.load();
-  }
-
-  settle?.();
-  publishPlayback(STOPPED);
+  player.stop();
 }
 
 export function setAudioSpeaker(speaker: AudioSpeaker): void {
