@@ -743,10 +743,10 @@ const ESSENTIAL_WORDS_RAW: VocabularyCard[] = [
     back: "suit",
     romanization: "yangbok",
     tag: "essential",
-    example: "회의에 가서 새 양복을 입었어요.",
+    example: "회의에 새 양복을 입고 갔어요.",
     difficulty: "beginner",
     partOfSpeech: "noun",
-    exampleEnglish: "I went to the meeting wearing a new suit.",
+    exampleEnglish: "I wore a new suit to the meeting.",
     usageNote:
       "양복 is the everyday word for a Western-style suit. 정장 is the more formal word for formal dress.",
     source: "600 essential words · row 63",
@@ -913,7 +913,7 @@ const ESSENTIAL_WORDS_RAW: VocabularyCard[] = [
     partOfSpeech: "noun",
     exampleEnglish: "I wore a blue shirt.",
     usageNote:
-      "파랑색 is a noun meaning the color blue; often used with 색 to specify colors.",
+      "파랑색 is a common colloquial form of 파란색 (blue); 파랑 is the noun form.",
     source: "600 essential words · row 74",
     audioReady: true,
   },
@@ -4580,10 +4580,10 @@ const ESSENTIAL_WORDS_RAW: VocabularyCard[] = [
     back: "pain",
     romanization: "apeum",
     tag: "essential",
-    example: "어제 넘어져서 다리에 아픔이 있어요.",
+    example: "어제 넘어져서 다리에 아픔을 느꼈어요.",
     difficulty: "beginner",
     partOfSpeech: "noun",
-    exampleEnglish: "I fell yesterday, so I have pain in my leg.",
+    exampleEnglish: "I fell yesterday and felt pain in my leg.",
     usageNote:
       "아픔 is a noun for physical or emotional pain; commonly used in everyday speech.",
     source: "600 essential words · row 348",
@@ -6252,7 +6252,7 @@ const ESSENTIAL_WORDS_RAW: VocabularyCard[] = [
     example: "저는 오늘 일기장을 써요.",
     difficulty: "beginner",
     partOfSpeech: "verb",
-    exampleEnglish: "I write in my diary today.",
+    exampleEnglish: "I'm writing in my diary today.",
     usageNote:
       "쓰다 also means 'to use' or 'to wear' in other contexts; here it means 'to write'.",
     source: "600 essential words · row 515",
@@ -7517,7 +7517,7 @@ const ESSENTIAL_WORDS_RAW: VocabularyCard[] = [
     tag: "essential",
     example: "그 사람은 오늘 못 와요.",
     difficulty: "beginner",
-    partOfSpeech: "noun",
+    partOfSpeech: "pronoun",
     exampleEnglish: "That person can't come today.",
     usageNote:
       "'그' can mean 'that' or refer to a previously mentioned person; context determines gender (he/she).",

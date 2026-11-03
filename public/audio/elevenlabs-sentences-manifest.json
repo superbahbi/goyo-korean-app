@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-02T20:48:46.403Z",
+  "generatedAt": "2026-11-03T00:17:38.363Z",
   "voiceId": "h5eZa8VFAq0EQ8E81dfL",
   "modelId": "eleven_v4",
   "counts": {
     "total": 675,
-    "generated": 3,
-    "skipped": 672,
+    "generated": 2,
+    "skipped": 673,
     "failed": 0
   },
   "vocabulary": [],
@@ -568,7 +568,7 @@
       "text": "차의 타이어 공기압을 확인했어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_018.3fb8080a.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 38077
     },
     {
@@ -813,11 +813,11 @@
     },
     {
       "id": "essential_057",
-      "text": "회의에 가서 새 양복을 입었어요.",
+      "text": "회의에 새 양복을 입고 갔어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_essential_057.bc1e29f9.mp3",
-      "status": "skipped",
-      "bytes": 39331
+      "filename": "elevenlabs_sent_essential_057.d1fffcc7.mp3",
+      "status": "generated",
+      "bytes": 36823
     },
     {
       "id": "essential_058",
@@ -2224,7 +2224,7 @@
       "text": "그는 초콜릿을 먹다가 입술에 묻은 것을 닦았어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_257.d814ee37.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 59811
     },
     {
@@ -2829,11 +2829,11 @@
     },
     {
       "id": "essential_342",
-      "text": "어제 넘어져서 다리에 아픔이 있어요.",
+      "text": "어제 넘어져서 다리에 아픔을 느꼈어요.",
       "group": "sentences",
-      "filename": "elevenlabs_sent_essential_342.d7162eab.mp3",
-      "status": "skipped",
-      "bytes": 46018
+      "filename": "elevenlabs_sent_essential_342.2f0310cd.mp3",
+      "status": "generated",
+      "bytes": 49780
     },
     {
       "id": "essential_343",
@@ -3256,7 +3256,7 @@
       "text": "한국에 온 지 삼 년이 되었어요.",
       "group": "sentences",
       "filename": "elevenlabs_sent_essential_395.fc557ae8.mp3",
-      "status": "generated",
+      "status": "skipped",
       "bytes": 36823
     },
     {

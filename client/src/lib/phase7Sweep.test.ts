@@ -121,3 +121,40 @@ describe("Phase 7 sweep batch 2 fixes", () => {
     );
   });
 });
+
+// Defects found by the fifth Phase 7 sweep batch, recorded in
+// docs/audits/essential-sample-9.json.
+describe("Phase 7 sweep batch 5 fixes", () => {
+  it("wears the new suit on the way to the meeting", () => {
+    const suit = card("essential_057");
+    expect(suit.example).toBe("회의에 새 양복을 입고 갔어요.");
+    expect(suit.example).not.toContain("가서 새 양복");
+    expect(suit.exampleEnglish).toBe("I wore a new suit to the meeting.");
+  });
+
+  it("names the standard 파란색 in the 파랑색 note", () => {
+    const blue = card("essential_068");
+    expect(blue.usageNote).toContain("파란색");
+    expect(blue.usageNote).toContain("파랑");
+    expect(blue.usageNote).not.toMatch(/often used with 색/);
+  });
+
+  it("expresses the leg pain with 아픔을 느끼다", () => {
+    const pain = card("essential_342");
+    expect(pain.example).toBe("어제 넘어져서 다리에 아픔을 느꼈어요.");
+    expect(pain.example).not.toContain("아픔이 있어요");
+    expect(pain.exampleEnglish).toBe(
+      "I fell yesterday and felt pain in my leg."
+    );
+  });
+
+  it("keeps the diary line in natural English", () => {
+    const write = card("essential_455");
+    expect(write.exampleEnglish).toBe("I'm writing in my diary today.");
+    expect(write.exampleEnglish).not.toMatch(/I write in my diary today/);
+  });
+
+  it("tags 그 as a pronoun", () => {
+    expect(card("essential_538").partOfSpeech).toBe("pronoun");
+  });
+});
