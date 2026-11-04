@@ -82,7 +82,7 @@ describe("Hangul stroke order", () => {
     for (const [characterId, diagram] of Object.entries(HANGUL_STROKE_ORDER)) {
       for (const path of diagram.strokes) {
         expect(path, characterId).toMatch(/^M[\d\s.,-]/);
-        expect(path, characterId).toMatch(/^[MHVQALZ\d\s.,-]+$/);
+        expect(path, characterId).toMatch(/^[MCQSAHVLTZ\d\s.,-]+$/);
 
         const numbers = path.match(/-?\d+(?:\.\d+)?/g) ?? [];
         expect(numbers.length, characterId).toBeGreaterThan(1);
