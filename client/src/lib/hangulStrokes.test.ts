@@ -8,7 +8,8 @@ import {
 
 /**
  * Standard school-chart stroke counts. ㄱ and ㄴ are one continuous movement,
- * while a box such as ㅁ takes four separate strokes.
+ * ㅁ closes as left, top+right, bottom, and ㅈ is drawn as a bar that turns
+ * into its left leg.
  */
 const EXPECTED_STROKE_COUNTS: Record<string, number> = {
   ㄱ: 1,
@@ -17,15 +18,15 @@ const EXPECTED_STROKE_COUNTS: Record<string, number> = {
   ㄷ: 2,
   ㄸ: 4,
   ㄹ: 3,
-  ㅁ: 4,
+  ㅁ: 3,
   ㅂ: 4,
   ㅃ: 8,
   ㅅ: 2,
   ㅆ: 4,
   ㅇ: 1,
-  ㅈ: 3,
-  ㅉ: 6,
-  ㅊ: 4,
+  ㅈ: 2,
+  ㅉ: 4,
+  ㅊ: 3,
   ㅋ: 2,
   ㅌ: 3,
   ㅍ: 4,
