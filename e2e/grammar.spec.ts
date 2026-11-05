@@ -1,4 +1,5 @@
 import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
+import { GRAMMAR_LESSON_TOTAL } from "../client/src/lib/grammarCourse";
 import { expect, test, type Page } from "@playwright/test";
 
 const PROGRESS_KEY = PROGRESS_STORAGE_KEY;
@@ -30,14 +31,14 @@ test("reads a grammar lesson, plays an example and records the check", async ({
   page,
 }) => {
   const tile = page.getByRole("button", { name: /grammar lessons/i });
-  await expect(tile).toContainText("12 TOPIK I patterns");
+  await expect(tile).toContainText(`${GRAMMAR_LESSON_TOTAL} TOPIK I patterns`);
   await tile.click();
 
   const dialog = page.getByRole("dialog");
   await expect(
     dialog.getByRole("heading", { name: "Grammar Lessons" })
   ).toBeVisible();
-  await expect(dialog.getByText("0 / 12")).toBeVisible();
+  await expect(dialog.getByText(`0 / ${GRAMMAR_LESSON_TOTAL}`)).toBeVisible();
 
   await dialog.getByRole("button", { name: /이에요 \/ 예요/ }).click();
   await expect(
@@ -71,5 +72,7 @@ test("reads a grammar lesson, plays an example and records the check", async ({
   ).toContainText("2/2");
 
   await page.keyboard.press("Escape");
-  await expect(tile).toContainText("1 of 12 lessons complete");
+  await expect(tile).toContainText(
+    `1 of ${GRAMMAR_LESSON_TOTAL} lessons complete`
+  );
 });

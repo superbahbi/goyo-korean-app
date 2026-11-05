@@ -1,9 +1,13 @@
 /**
  * TOPIK I grammar, in the order a beginner meets it in the deck: the copula
- * and particles first, then the polite verb endings, then connected clauses.
+ * and particles first, then the polite verb endings, then connected clauses,
+ * and finally tense, aspect and negation.
  *
- * Every example is a full sentence and gets its own clip (see
- * `GRAMMAR_SENTENCE_LINES` and the `--sentences` pass of the audio generator).
+ * Every example is a full sentence with a stable clip id (see
+ * `GRAMMAR_SENTENCE_LINES` and the `--sentences --grammar` pass of the audio
+ * generator). Lesson audio ships in batches, so the UI only shows playback
+ * where a clip exists.
+ *
  * Content is model-written and must pass a Korean-speaker review before it is
  * treated as trusted, like the imported deck in Phase 3.
  */
@@ -568,6 +572,302 @@ export const GRAMMAR_LESSONS: GrammarLesson[] = [
         options: ["공부했어요", "공부핬어요"],
         answerIndex: 0,
         explanation: "하다 becomes 했어요 in the past.",
+      },
+    ],
+  },
+  {
+    id: "progressive",
+    order: 13,
+    title: "-고 있어요",
+    subtitle: "Right now",
+    summary:
+      "Stem + 고 있어요 says an action is in progress right now. The past form, 고 있었어요, describes what was happening at a past moment.",
+    points: [
+      {
+        heading: "The shape",
+        body: "Drop 다 and add 고 있어요: 먹다 → 먹고 있어요, 공부하다 → 공부하고 있어요.",
+      },
+      {
+        heading: "Habit or right now",
+        body: "-아요/어요 can describe a habit: 저는 매일 한국어를 공부해요. The progressive puts the action in progress: 지금 한국어를 공부하고 있어요.",
+      },
+      {
+        heading: "The past progressive",
+        body: "Replace 있어요 with 있었어요: 어제 밤에는 비가 오고 있었어요 (it was raining last night).",
+      },
+    ],
+    examples: [
+      { ko: "지금 뭐 하고 있어요?", en: "What are you doing now?" },
+      { ko: "저는 책을 읽고 있어요.", en: "I am reading a book." },
+      {
+        ko: "어제 밤에는 비가 오고 있었어요.",
+        en: "It was raining last night.",
+      },
+    ],
+    mistake:
+      "Put the tense on 있어요, not on the first verb: “읽었고 있어요” is wrong. For the past, say 읽고 있었어요.",
+    quiz: [
+      {
+        prompt: "지금 커피를 ___.",
+        options: ["마시고 있어요", "마셨어요"],
+        answerIndex: 0,
+        explanation:
+          "The action is happening now, so the progressive is 마시고 있어요.",
+      },
+      {
+        prompt: "Which means “I was sleeping at ten last night”?",
+        options: ["어제 열 시에 자고 있었어요.", "어제 열 시에 자고 있어요."],
+        answerIndex: 0,
+        explanation: "The past progressive uses 있었어요.",
+      },
+    ],
+  },
+  {
+    id: "reason",
+    order: 14,
+    title: "-아서 / -어서",
+    subtitle: "Because, and so",
+    summary:
+      "Stem + 아서/어서 links a reason to its result, or joins two actions that lead into each other.",
+    points: [
+      {
+        heading: "The shapes",
+        body: "The vowel rule matches -아요/어요: 좋다 → 좋아서, 먹다 → 먹어서, 하다 → 해서.",
+      },
+      {
+        heading: "Reason and result",
+        body: "비가 와서 집에 있었어요 (it rained, so I stayed home). 배가 아서 약을 먹었어요 (my stomach hurt, so I took medicine).",
+      },
+      {
+        heading: "Sequence",
+        body: "먼저 만나서 같이 갔어요 (we met and then went together). Use -고 for a plain “and then,” and -아서/어서 when the first action leads into the second.",
+      },
+    ],
+    examples: [
+      { ko: "비가 와서 집에 있었어요.", en: "It rained, so I stayed home." },
+      {
+        ko: "배가 아서 약을 먹었어요.",
+        en: "My stomach hurt, so I took medicine.",
+      },
+      {
+        ko: "친구를 만나서 같이 갔어요.",
+        en: "I met a friend and we went together.",
+      },
+    ],
+    mistake:
+      "Keep the tense on the final verb: “비가 왔어서” is wrong. Say 비가 와서 집에 있었어요.",
+    quiz: [
+      {
+        prompt: "비가 ___ 집에 있었어요.",
+        options: ["와서", "왔어서"],
+        answerIndex: 0,
+        explanation:
+          "The reason clause stays in its base form; the tense belongs on the final verb.",
+      },
+      {
+        prompt: "배가 ___ 약을 먹었어요.",
+        options: ["아파서", "아프고"],
+        answerIndex: 0,
+        explanation:
+          "The stomachache is the reason for the medicine, so use 아파서.",
+      },
+    ],
+  },
+  {
+    id: "if-when",
+    order: 15,
+    title: "-(으)면",
+    subtitle: "If and when",
+    summary:
+      "Stem + (으)면 sets a condition or occasion: “if” or “when” the first clause happens, the second follows.",
+    points: [
+      {
+        heading: "After a consonant",
+        body: "Add 으면: 먹다 → 먹으면, 시간이 있으면.",
+      },
+      {
+        heading: "After a vowel",
+        body: "Add 면: 가다 → 가면, 비가 오면.",
+      },
+      {
+        heading: "Present form for a future condition",
+        body: "Korean keeps the present before -면 even when the condition is in the future: 내일 비가 오면 안 갈 거예요 (if it rains tomorrow, I won't go).",
+      },
+    ],
+    examples: [
+      {
+        ko: "시간이 있으면 같이 가요.",
+        en: "If you have time, let's go together.",
+      },
+      {
+        ko: "비가 오면 집에 있을 거예요.",
+        en: "If it rains, I'll stay home.",
+      },
+      {
+        ko: "버튼을 누르면 문이 열려요.",
+        en: "When you press the button, the door opens.",
+      },
+    ],
+    mistake:
+      "-면 is for a condition, not a one-time event in the past. For “when I arrived,” use 도착했을 때, not 도착하면.",
+    quiz: [
+      {
+        prompt: "시간이 ___ 같이 가요.",
+        options: ["있으면", "있어면"],
+        answerIndex: 0,
+        explanation: "있 ends in a consonant, so it takes 으면.",
+      },
+      {
+        prompt: "비가 ___ 집에 있을 거예요.",
+        options: ["오면", "왔으면"],
+        answerIndex: 0,
+        explanation:
+          "A future condition uses the present form before -면: 오면.",
+      },
+    ],
+  },
+  {
+    id: "negation",
+    order: 16,
+    title: "안 / -지 않아요",
+    subtitle: "Saying no",
+    summary:
+      "Put 안 before a verb for the short negative, or attach -지 않아요 to the stem for the long negative. Both mean “do not.”",
+    points: [
+      {
+        heading: "Short negative",
+        body: "안 goes right before the verb: 저는 고기를 안 먹어요. With 하다 verbs it goes before 하다: 공부를 안 해요.",
+      },
+      {
+        heading: "Long negative",
+        body: "Stem + 지 않아요: 먹지 않아요, 가지 않아요. It is a little more formal and softer than 안.",
+      },
+      {
+        heading: "못 is different",
+        body: "못 means “cannot,” not “do not”: 매운 것을 못 먹어요 (I can't eat spicy food).",
+      },
+    ],
+    examples: [
+      { ko: "저는 고기를 안 먹어요.", en: "I don't eat meat." },
+      {
+        ko: "오늘은 학교에 가지 않아요.",
+        en: "I'm not going to school today.",
+      },
+      { ko: "저는 매운 것을 못 먹어요.", en: "I can't eat spicy food." },
+    ],
+    mistake:
+      "Do not put 안 before a noun to negate it: “안 학생이에요” is wrong. For “not a student,” say 학생이 아니에요.",
+    quiz: [
+      {
+        prompt: "저는 고기를 ___.",
+        options: ["안 먹어요", "먹지 안아요"],
+        answerIndex: 0,
+        explanation: "The short negative puts 안 before the verb.",
+      },
+      {
+        prompt: "I can't swim.",
+        options: ["수영을 못 해요.", "수영을 안 해요."],
+        answerIndex: 0,
+        explanation: "못 expresses inability; 안 would mean “I don't swim.”",
+      },
+    ],
+  },
+  {
+    id: "future",
+    order: 17,
+    title: "-(으)ㄹ 거예요",
+    subtitle: "Plans and the future",
+    summary:
+      "Stem + (으)ㄹ 거예요 states a plan, an intention, or a prediction about the future.",
+    points: [
+      {
+        heading: "After a consonant",
+        body: "Add 을 거예요: 먹다 → 먹을 거예요, 읽다 → 읽을 거예요.",
+      },
+      {
+        heading: "After a vowel",
+        body: "Add ㄹ 거예요: 가다 → 갈 거예요, 하다 → 할 거예요.",
+      },
+      {
+        heading: "ㄹ-final stems do not double",
+        body: "살다 → 살 거예요, 만들다 → 만들 거예요. The ㄹ already in the stem does the work.",
+      },
+    ],
+    examples: [
+      { ko: "내일 부산에 갈 거예요.", en: "I'm going to Busan tomorrow." },
+      {
+        ko: "저녁에 김치를 만들 거예요.",
+        en: "I'm going to make kimchi tonight.",
+      },
+      {
+        ko: "시험은 어려울 거예요.",
+        en: "The exam will probably be difficult.",
+      },
+    ],
+    mistake:
+      "가다 ends in a vowel, so the future is 갈 거예요. “가을 거예요” splits the ending in the wrong place.",
+    quiz: [
+      {
+        prompt: "먹다 → ___ 거예요",
+        options: ["먹을", "먹ㄹ"],
+        answerIndex: 0,
+        explanation: "먹 ends in a consonant, so it takes 을 거예요.",
+      },
+      {
+        prompt: "내일 학교에 ___.",
+        options: ["갈 거예요", "가을 거예요"],
+        answerIndex: 0,
+        explanation:
+          "가 ends in a vowel, so the ending is ㄹ 거예요: 갈 거예요.",
+      },
+    ],
+  },
+  {
+    id: "before-after",
+    order: 18,
+    title: "-기 전에 / -(으)ㄴ 후에",
+    subtitle: "Before and after",
+    summary:
+      "Stem + 기 전에 means “before doing.” A past-modifier form + 후에 means “after doing.”",
+    points: [
+      {
+        heading: "Before",
+        body: "Attach 기 전에 to the stem: 먹다 → 먹기 전에, 가다 → 가기 전에. The tense stays in the main clause: 자기 전에 책을 읽었어요.",
+      },
+      {
+        heading: "After",
+        body: "Use the past modifier before 후에: 먹다 → 먹은 후에, 가다 → 간 후에, 하다 → 한 후에. It only marks the first action as finished, not the whole sentence as past.",
+      },
+      {
+        heading: "Clause order",
+        body: "The -기 전에 clause comes first in Korean even though English often reverses it: 밥을 먹기 전에 손을 씻어요 (I wash my hands before eating).",
+      },
+    ],
+    examples: [
+      { ko: "자기 전에 책을 읽어요.", en: "I read a book before sleeping." },
+      {
+        ko: "밥을 먹은 후에 약을 먹어요.",
+        en: "I take medicine after eating.",
+      },
+      {
+        ko: "수업이 끝난 후에 친구를 만나요.",
+        en: "I meet a friend after class ends.",
+      },
+    ],
+    mistake:
+      "“먹은 전에” is wrong. Before uses the stem + 기 전에 (먹기 전에); after uses the past modifier + 후에 (먹은 후에).",
+    quiz: [
+      {
+        prompt: "자기 ___ 책을 읽어요.",
+        options: ["전에", "후에"],
+        answerIndex: 0,
+        explanation: "Reading happens before sleeping, so use -기 전에.",
+      },
+      {
+        prompt: "밥을 ___ 약을 먹어요.",
+        options: ["먹은 후에", "먹기 후에"],
+        answerIndex: 0,
+        explanation: "After eating uses the past modifier: 먹은 후에.",
       },
     ],
   },

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { SectionHeading } from "@/components/SectionHeading";
+import { GRAMMAR_LESSON_TOTAL } from "@/lib/grammarCourse";
 import {
   BookMarked,
   BookOpen,
@@ -61,8 +62,8 @@ export function PracticeMenu({
       title: "Grammar Lessons",
       meta:
         grammarCompleted > 0
-          ? `${grammarCompleted} of 12 lessons complete`
-          : "12 TOPIK I patterns",
+          ? `${grammarCompleted} of ${GRAMMAR_LESSON_TOTAL} lessons complete`
+          : `${GRAMMAR_LESSON_TOTAL} TOPIK I patterns`,
       icon: BookMarked,
       tone: "bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300",
       onClick: onOpenGrammar,

@@ -7,7 +7,7 @@ React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the
 - **Deck:** 136 curated cards plus 504 imported Essential 600 cards (640 total), each with a Korean
   example and ElevenLabs pronunciation in two voices.
 - **Practice:** seven modes on one shared shell — daily study, Hangul, grammar, listening, survival
-  scenarios, shadowing, and weak-word review — plus twelve TOPIK I grammar lessons with tracked
+  scenarios, shadowing, and weak-word review — plus eighteen TOPIK I grammar lessons with tracked
   progress.
 - **Scheduling:** a small, tested SM-2 variant. The rules live in `docs/improvement-plan.md`.
 - **Progress:** `localStorage`, moved between devices with JSON export/import.

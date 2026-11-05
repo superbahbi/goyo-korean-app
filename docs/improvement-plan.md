@@ -133,18 +133,18 @@ candidate left; the next one needs evidence, not a line count.
 
 ## Status
 
-| Phase                               | State                                                                                                                                                                                                                  |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                                                            |
-| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                                                                  |
-| 2 Structure                         | Done; main chunk 139.5 kB raw / 40.9 kB gzipped with vendor chunks; largest UI file is 309 lines (`FlashCard`)                                                                                                         |
-| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                                                            |
-| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done                                           |
-| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                                                                  |
-| 6 Sentence audio and grammar        | Done (2026-11-02); male sentence library complete (675 clips), twelve lessons reviewed and signed off; female voice paused pending spend approval                                                                      |
-| 7 Content trust completion          | Done (2026-11-02); re-measured at 10.4% of 96, fixed the 10 defects, and swept the remaining deck in seven batches; all 504 imported cards now carry a verdict; Korean-speaker spot check of samples 3–4 still pending |
-| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                                       |
-| 9 Architecture round 3              | Done (#89); save format moved to `lib/savedState.ts` (503 → 136 lines), module-size audit closed                                                                                                                       |
+| Phase                               | State                                                                                                                                                                                                                                    |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Repairs                           | Done (#2–#7); browser, iPhone and screen-reader checks done                                                                                                                                                                              |
+| 1 Learning loop and measurement     | Done (#9–#15); browser checks signed off; item 5 done                                                                                                                                                                                    |
+| 2 Structure                         | Done; main chunk 139.5 kB raw / 40.9 kB gzipped with vendor chunks; largest UI file is 309 lines (`FlashCard`)                                                                                                                           |
+| 3 Content                           | Done; five tasks, a post-close review and a Korean-speaker spot check complete; naturalness polish deferred                                                                                                                              |
+| 4 Delivery and accessibility        | Done; headers, iOS meta, `lang`, contrast, focus rings, 25 Playwright checks (Chromium plus WebKit iPhone) and hashed audio; human screen-reader and real-iPhone checks done                                                             |
+| 5 Tune from data                    | Blocked on 30 days of use; window opened 2026-11-01, so the earliest honest read is around 2026-12-01                                                                                                                                    |
+| 6 Sentence audio and grammar        | Done (2026-11-02); male sentence library complete (675 clips), twelve lessons reviewed and signed off; extended to eighteen lessons (2026-11-04), the six new ones awaiting review and clips; female voice paused pending spend approval |
+| 7 Content trust completion          | Done (2026-11-02); re-measured at 10.4% of 96, fixed the 10 defects, and swept the remaining deck in seven batches; all 504 imported cards now carry a verdict; Korean-speaker spot check of samples 3–4 still pending                   |
+| 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                                                         |
+| 9 Architecture round 3              | Done (#89); save format moved to `lib/savedState.ts` (503 → 136 lines), module-size audit closed                                                                                                                                         |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -522,7 +522,11 @@ grammar content that reuses it.
      generated; the female voice is paused with the rest of that library.
    - Done (2026-11-02): the maintainer's Korean-speaker review signed off all twelve lessons, following
      the Phase 3 content rule. No wording changes were requested.
-   - Acceptance: the 12 lessons render, the check records a best score, an older save loads, and the
+   - Done (2026-11-04): extended to eighteen lessons with -고 있어요, -아서/어서, -(으)면,
+     안/-지 않아요, -(으)ㄹ 거예요 and -기 전에/-(으)ㄴ 후에. The six new lessons are model-written and
+     still need the same Korean-speaker review. Their 18 example sentences have no clips yet, so the
+     UI hides those players until `--sentences --grammar` runs.
+   - Acceptance: the 18 lessons render, the check records a best score, an older save loads, and the
      lesson surfaces pass the axe scan.
 
 ## Phase 7: Content trust completion (after Phase 6)
