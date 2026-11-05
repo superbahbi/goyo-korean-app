@@ -6,13 +6,18 @@ import {
   findGrammarLesson,
   grammarExampleId,
 } from "./grammar";
+import { GRAMMAR_LESSON_TOTAL } from "./grammarCourse";
 
 describe("grammar lessons", () => {
-  it("has twelve lessons numbered 1 to 12", () => {
-    expect(GRAMMAR_LESSON_COUNT).toBe(12);
+  it("has eighteen lessons numbered in course order", () => {
+    expect(GRAMMAR_LESSON_COUNT).toBe(18);
     expect(GRAMMAR_LESSONS.map(lesson => lesson.order)).toEqual(
-      Array.from({ length: 12 }, (_, index) => index + 1)
+      Array.from({ length: GRAMMAR_LESSON_COUNT }, (_, index) => index + 1)
     );
+  });
+
+  it("keeps the dashboard's lesson total in sync with the course", () => {
+    expect(GRAMMAR_LESSON_TOTAL).toBe(GRAMMAR_LESSON_COUNT);
   });
 
   it("gives every lesson a unique id and complete text", () => {
