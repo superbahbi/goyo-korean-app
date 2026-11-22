@@ -23,7 +23,11 @@ React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the
 
 ```sh
 pnpm install
-pnpm dev        # http://localhost:3000
+pnpm dev          # Web app (Vite) on http://localhost:3000 (and universal RN view at /mobile)
+pnpm mobile       # Expo dev server for iOS, Android, and Web
+pnpm mobile:ios   # Run React Native app on iOS Simulator
+pnpm mobile:android # Run React Native app on Android Emulator
+pnpm mobile:web   # Run React Native app on Web via Expo
 ```
 
 ## Scripts
@@ -55,6 +59,10 @@ client/src/components/    Dashboard sections (header, progress, plan, alerts), t
 client/src/components/ui/ shadcn primitives (only the imported ones are kept)
 client/src/lib/           Deck data, scheduler, queue, XP, audio player, saved-state format and persistence helpers
 client/src/hooks/         Dashboard state, study sessions, deck loading, and the saved-state adapter
+shared/                   Cross-platform domain barrel (core.ts), universal storage (storage.ts),
+                          audio controller (audio.ts), and theme palette (theme.ts)
+mobile/                   Universal React Native + Expo app for iOS, Android, and Web sharing
+                          the domain, SRS, state machines, and deck with client/
 public/audio/             Pronunciation library plus index.json and manifests
 scripts/                  Audio generation and maintenance scripts
 docs/                     Improvement plan and generated content-audit sheets
