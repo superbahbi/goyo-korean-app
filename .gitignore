@@ -6,6 +6,10 @@
 dist/
 build/
 *.dist
+mobile/ios/build/
+mobile/ios/Goyo.xcodeproj/
+mobile/ios/Goyo/www/
+mobile/ios/Goyo/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png
 
 # Environment variables
 .env
