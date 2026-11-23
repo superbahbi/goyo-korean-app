@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
+import { PROGRESS_STORAGE_KEY } from "../../client/src/lib/progressStorage";
 import {
   SCHEMA_VERSION,
   parseSavedState,
   type UserState,
-} from "../client/src/lib/savedState";
+} from "../../client/src/lib/savedState";
 import {
   createCrossPlatformProgressStore,
   createMemoryStorage,

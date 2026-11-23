@@ -26,7 +26,7 @@ import type {
   StatsDialogStats,
   StatsDialogForecast,
 } from "../../../client/src/components/stats/types";
-import type { ThemePreference } from "../../../shared/theme";
+import type { ThemePreference } from "../../../packages/shared/theme";
 
 const theme = (darkMode: boolean) => ({
   bg: darkMode ? "#0f172a" : "#ffffff",

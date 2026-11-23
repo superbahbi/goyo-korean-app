@@ -5,14 +5,14 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
+      "@shared": path.resolve(import.meta.dirname, "packages", "shared"),
     },
   },
   test: {
     include: [
       "scripts/**/*.test.ts",
       "client/src/**/*.test.ts",
-      "shared/**/*.test.ts",
+      "packages/shared/**/*.test.ts",
       "mobile/**/*.test.ts",
     ],
   },

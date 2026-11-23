@@ -1,4 +1,4 @@
-# shared/
+# packages/shared/
 
 ## Responsibility
 
@@ -6,6 +6,10 @@ Framework-free adapters that both delivery surfaces — the web client
 (`client/`) and the mobile UI (`mobile/`, rendered as DOM at `/mobile` inside
 the iOS WKWebView shell) — consume: saved-progress storage and theme tokens.
 `storage.ts` and `theme.ts` carry no React, DOM, or React Native import.
+
+This is a workspace package: it is imported by path alias (`@shared/*`) and by
+relative path from `mobile/`, and it will be imported by the Expo app in
+`apps/native/`.
 
 ## Design
 
@@ -43,7 +47,6 @@ Imports the domain from `client/src/lib/*` — `gradeOutcome`,
 client (`client/src/contexts/ThemeContext` for `THEME_STORAGE_KEY`) and by
 mobile (`mobile/src/context/GoyoMobileContext` for the progress store and
 theme key, `mobile/src/components/DialogScreens` for `ThemePreference`,
-plus `shared/storage.test.ts` and `shared/theme` via
-`mobile/src/App.test.ts`). The web client imports its own `lib` modules
-directly; mobile does the same — nothing here re-exports or renames the
-domain.
+plus `storage.test.ts` and `theme` via `mobile/src/App.test.ts`). The web
+client imports its own `lib` modules directly; mobile does the same — nothing
+here re-exports or renames the domain.
