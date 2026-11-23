@@ -1,23 +1,20 @@
 import { describe, expect, it } from "vitest";
-import {
-  CURATED_CARDS,
-  GRAMMAR_LESSONS,
-  SCENARIOS,
-  buildDashboardView,
-  createStudySession,
-  getLocalDateKey,
-  parseSavedState,
-  reduceDialog,
-  NO_DIALOG,
-} from "../../shared/core";
+import { SCENARIOS } from "../../client/src/components/practice/scenarios";
+import { getLocalDateKey } from "../../client/src/lib/day";
+import { NO_DIALOG, reduceDialog } from "../../client/src/lib/dialogLauncher";
+import { GRAMMAR_LESSONS } from "../../client/src/lib/grammar";
+import { buildDashboardView } from "../../client/src/lib/dashboardView";
+import { parseSavedState } from "../../client/src/lib/savedState";
+import { createStudySession } from "../../client/src/lib/studySession";
+import { CURATED_CARDS } from "../../client/src/lib/vocabulary";
 import {
   createCrossPlatformProgressStore,
   createMemoryStorage,
 } from "../../shared/storage";
 import { DARK_THEME, LIGHT_THEME, getThemeColors } from "../../shared/theme";
-import { Platform, StyleSheet, flattenStyle } from "./primitives/react-native";
+import { Platform, StyleSheet, flattenStyle } from "./primitives/dom";
 
-describe("React Native universal primitives & shared codebase", () => {
+describe("Mobile DOM kit & shared codebase", () => {
   it("flattens nested React Native style arrays cleanly", () => {
     const styles = StyleSheet.create({
       box: { padding: 12, backgroundColor: "#ffffff" },
@@ -49,7 +46,7 @@ describe("React Native universal primitives & shared codebase", () => {
     expect(selected).toBe(`${Platform.OS}-val`);
   });
 
-  it("shares the exact same deck, grammar, SRS session machine, and dashboard view across iOS, Android, and Web", () => {
+  it("grades through the shared store and derives the same dashboard the web app computes", () => {
     const store = createCrossPlatformProgressStore(createMemoryStorage());
     const today = getLocalDateKey();
     const firstCard = CURATED_CARDS[0]!;

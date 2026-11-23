@@ -1,4 +1,4 @@
-import { repeatableSession } from "../shared/core";
+import { repeatableSession } from "../client/src/lib/gradeIntent";
 import { DashboardScreen } from "./src/components/DashboardScreen";
 import {
   BrowseScreen,
@@ -17,12 +17,7 @@ import {
   GoyoMobileProvider,
   useGoyoMobile,
 } from "./src/context/GoyoMobileContext";
-import {
-  Modal,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from "./src/primitives/react-native";
+import { Modal, SafeAreaView, StyleSheet, View } from "./src/primitives/dom";
 
 function GoyoMobileShell() {
   const {
@@ -36,6 +31,7 @@ function GoyoMobileShell() {
     sessionMode,
     recognitionSessionCards,
     theme,
+    themePreference,
     closeStudySession,
     handleStudyGrade,
     closeDialog,
@@ -46,7 +42,7 @@ function GoyoMobileShell() {
     recordGrammarResult,
     replaceState,
     resetProgress,
-    toggleTheme,
+    setThemePreference,
   } = useGoyoMobile();
 
   const darkMode = theme === "dark";
@@ -146,10 +142,11 @@ function GoyoMobileShell() {
             <SettingsScreen
               state={state}
               darkMode={darkMode}
+              themePreference={themePreference}
               onUpdateSettings={updateSettings}
               onReplaceState={replaceState}
               onResetProgress={resetProgress}
-              onToggleTheme={toggleTheme}
+              onSetThemePreference={setThemePreference}
               onClose={closeDialog}
             />
           )}
@@ -160,9 +157,10 @@ function GoyoMobileShell() {
 }
 
 /**
- * Universal React Native app root for iOS, Android, and Web.
- * Shares the same domain data, SRS scheduler, study session state machine,
- * practice question loops, and saved-state format as the Vite web app.
+ * Mobile app root for the `/mobile` route: the DOM screens iOS's WKWebView
+ * shell serves, sharing the same domain data, SRS scheduler, study session
+ * state machine, practice question loops, and saved-state format as the web
+ * app.
  */
 export function GoyoMobileApp() {
   return (

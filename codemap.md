@@ -8,8 +8,9 @@ ships three deliverables from a single domain core:
 - **Web client** (`client/`): React 19 + Vite + Tailwind 4 SPA, installable
   Workbox PWA, progress in `localStorage` with JSON export/import. Free,
   offline-capable, no accounts.
-- **Mobile app** (`mobile/`): Expo/React Native companion reusing the same
-  domain modules through `shared/`.
+- **Mobile app** (`mobile/`): the mobile UI the Vite SPA serves at `/mobile`,
+  rendered as plain DOM, wrapped by the iOS WKWebView shell in `mobile/ios/`
+  that bridges `HTMLAudioElement` playback to `AVAudioPlayer`.
 - **Content pipeline** (`scripts/` + `public/audio/`): ElevenLabs clip
   generation, content-hash audio manifest, deterministic deck audits.
 
@@ -25,7 +26,7 @@ dependency direction:
 ```
 mobile/src/*  ──┐
 client/src/hooks, pages, components ──▶ client/src/lib (pure domain, no React)
-shared/ (re-export layer) ──────────────────┘
+shared/ (progress store + theme tokens) ──┘
 ```
 
 - `client/src/lib/` is framework-free: it turns a Grade into SM-2 scheduling,
@@ -35,8 +36,10 @@ shared/ (re-export layer) ──────────────────
   `DashboardView` and delegate Grades/Dialog requests upward via callbacks;
   the Dialog registry (`client/src/components/dialogs/`) maps one Dialog
   request to one lazily mounted dialog.
-- `shared/` re-exports the canonical domain so `mobile/` consumes exactly the
-  web client's implementation.
+- `shared/` holds the two adapters both surfaces need: the cross-platform
+  progress store (`storage.ts`) and the theme tokens (`theme.ts`). Mobile
+  imports the domain itself from `client/src/lib`, exactly as the web
+  client does — there is no alias barrel and no second naming.
 
 ## Flow
 
@@ -63,27 +66,27 @@ into `public/` and `client/src/lib` datasets; the app never writes content.
 
 ## Repository Directory Map
 
-| Directory | Responsibility | Link |
-|-----------|----------------|------|
-| `client/` | Vite web-client root: SPA document, PWA meta, pre-paint theme | [View Map](client/codemap.md) |
-| `client/src/` | Composition root: React mount, provider stack, routes, SW registration, Tailwind token theme | [View Map](client/src/codemap.md) |
-| `client/src/lib/` | Pure domain layer: Grade→SM-2/XP/goal, datasets, Audio manifest, saved-state format | [View Map](client/src/lib/codemap.md) |
-| `client/src/hooks/` | React adapters over `../lib`: deck, study state, dashboard view, Dialog launcher, audio | [View Map](client/src/hooks/codemap.md) |
-| `client/src/pages/` | Route-level screens: Home dashboard, Hangul practice, 404 | [View Map](client/src/pages/codemap.md) |
-| `client/src/contexts/` | Theme context: persisted light/dark/system choice | [View Map](client/src/contexts/codemap.md) |
-| `client/src/components/` | Presentation layer for dashboard and practice surfaces | [View Map](client/src/components/codemap.md) |
-| `client/src/components/browse/` | Vocabulary library result list (presentational) | [View Map](client/src/components/browse/codemap.md) |
-| `client/src/components/dialogs/` | Dialog registry: Dialog request kind → lazy component + deps contract | [View Map](client/src/components/dialogs/codemap.md) |
-| `client/src/components/grammar/` | Grammar course browser, lesson reader, self-check quiz | [View Map](client/src/components/grammar/codemap.md) |
-| `client/src/components/practice/` | Shared practice-mode shell, choice/feedback/completion, Question loop binding | [View Map](client/src/components/practice/codemap.md) |
-| `client/src/components/settings/` | Settings dialog sections + `useProgressFile` export/import flow | [View Map](client/src/components/settings/codemap.md) |
-| `client/src/components/stats/` | Stats dialog panels: tiles, forecast, mastery breakdowns | [View Map](client/src/components/stats/codemap.md) |
-| `client/src/components/study/` | Study-session card UI: intro, production, grade actions, summary | [View Map](client/src/components/study/codemap.md) |
-| `client/src/components/ui/` | Generated shadcn/Radix primitives, no domain logic | [View Map](client/src/components/ui/codemap.md) |
-| `shared/` | Framework-free cross-platform domain re-exports used by web + mobile | [View Map](shared/codemap.md) |
-| `mobile/` | Expo/RN delivery target: app shell, packaging, iOS WKWebView+audio bridge | [View Map](mobile/codemap.md) |
-| `mobile/src/` | Mobile source root: three-layer architecture definition | [View Map](mobile/src/codemap.md) |
-| `mobile/src/primitives/` | RN platform-abstraction facade + RN→CSS style translator | [View Map](mobile/src/primitives/codemap.md) |
-| `mobile/src/context/` | Single mobile state container: UserState, deck, Dialog request, commands | [View Map](mobile/src/context/codemap.md) |
-| `mobile/src/components/` | Mobile screens: dashboard, practice modes, dialogs, study runner | [View Map](mobile/src/components/codemap.md) |
-| `scripts/` | Content ops: deck audits, ElevenLabs audio pipeline, dev tooling | [View Map](scripts/codemap.md) |
+| Directory                         | Responsibility                                                                               | Link                                                  |
+| --------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `client/`                         | Vite web-client root: SPA document, PWA meta, pre-paint theme                                | [View Map](client/codemap.md)                         |
+| `client/src/`                     | Composition root: React mount, provider stack, routes, SW registration, Tailwind token theme | [View Map](client/src/codemap.md)                     |
+| `client/src/lib/`                 | Pure domain layer: Grade→SM-2/XP/goal, datasets, Audio manifest, saved-state format          | [View Map](client/src/lib/codemap.md)                 |
+| `client/src/hooks/`               | React adapters over `../lib`: deck, study state, dashboard view, Dialog launcher, audio      | [View Map](client/src/hooks/codemap.md)               |
+| `client/src/pages/`               | Route-level screens: Home dashboard, Hangul practice, 404                                    | [View Map](client/src/pages/codemap.md)               |
+| `client/src/contexts/`            | Theme context: persisted light/dark/system choice                                            | [View Map](client/src/contexts/codemap.md)            |
+| `client/src/components/`          | Presentation layer for dashboard and practice surfaces                                       | [View Map](client/src/components/codemap.md)          |
+| `client/src/components/browse/`   | Vocabulary library result list (presentational)                                              | [View Map](client/src/components/browse/codemap.md)   |
+| `client/src/components/dialogs/`  | Dialog registry: Dialog request kind → lazy component + deps contract                        | [View Map](client/src/components/dialogs/codemap.md)  |
+| `client/src/components/grammar/`  | Grammar course browser, lesson reader, self-check quiz                                       | [View Map](client/src/components/grammar/codemap.md)  |
+| `client/src/components/practice/` | Shared practice-mode shell, choice/feedback/completion, Question loop binding                | [View Map](client/src/components/practice/codemap.md) |
+| `client/src/components/settings/` | Settings dialog sections + `useProgressFile` export/import flow                              | [View Map](client/src/components/settings/codemap.md) |
+| `client/src/components/stats/`    | Stats dialog panels: tiles, forecast, mastery breakdowns                                     | [View Map](client/src/components/stats/codemap.md)    |
+| `client/src/components/study/`    | Study-session card UI: intro, production, grade actions, summary                             | [View Map](client/src/components/study/codemap.md)    |
+| `client/src/components/ui/`       | Generated shadcn/Radix primitives, no domain logic                                           | [View Map](client/src/components/ui/codemap.md)       |
+| `shared/`                         | Framework-free adapters used by web + mobile: progress store, theme tokens                   | [View Map](shared/codemap.md)                         |
+| `mobile/`                         | Mobile UI served by the SPA at `/mobile`; iOS WKWebView shell + audio bridge                 | [View Map](mobile/codemap.md)                         |
+| `mobile/src/`                     | Mobile source root: three-layer architecture definition                                      | [View Map](mobile/src/codemap.md)                     |
+| `mobile/src/primitives/`          | DOM component kit + RN-flavoured style translator for the mobile screens                     | [View Map](mobile/src/primitives/codemap.md)          |
+| `mobile/src/context/`             | Single mobile state container: UserState, deck, Dialog request, commands                     | [View Map](mobile/src/context/codemap.md)             |
+| `mobile/src/components/`          | Mobile screens: dashboard, practice modes, dialogs, study runner                             | [View Map](mobile/src/components/codemap.md)          |
+| `scripts/`                        | Content ops: deck audits, ElevenLabs audio pipeline, dev tooling                             | [View Map](scripts/codemap.md)                        |

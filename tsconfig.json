@@ -4,7 +4,6 @@
     "shared/**/*",
     "mobile/src/**/*",
     "mobile/App.tsx",
-    "mobile/index.ts",
     "e2e/**/*",
     "playwright.config.ts"
   ],

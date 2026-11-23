@@ -5,7 +5,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-} from "../primitives/react-native";
+} from "../primitives/dom";
 import {
   playSentenceAudio,
   playVocabularyAudio,

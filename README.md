@@ -23,28 +23,24 @@ React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the
 
 ```sh
 pnpm install
-pnpm dev          # Web app (Vite) on http://localhost:3000 (and universal RN view at /mobile)
-pnpm mobile       # Expo dev server for iOS, Android, and Web
-pnpm mobile:ios   # Run React Native app on iOS Simulator
-pnpm mobile:android # Run React Native app on Android Emulator
-pnpm mobile:web   # Run React Native app on Web via Expo
+pnpm dev          # Web app (Vite) on http://localhost:3000 (mobile view at /mobile)
 ```
 
 ## Scripts
 
-| Command              | What it does                                                                                                                                  |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm audit:content` | Sample imported cards into a Markdown audit sheet                                                                                             |
-| `pnpm dev`           | Dev server on port 3000                                                                                                                       |
-| `pnpm build`         | Production build into `dist/public`                                                                                                           |
-| `pnpm start`         | Preview the production build (`PORT=4175 pnpm start` to change the port)                                                                      |
-| `pnpm check`         | Type check                                                                                                                                    |
-| `pnpm lint`          | ESLint                                                                                                                                        |
-| `pnpm test`          | Vitest unit and data tests                                                                                                                    |
-| `pnpm test:e2e`      | Playwright smokes against the production build, Chromium plus the WebKit iPhone project (`pnpm exec playwright install chromium webkit` once) |
-| `pnpm shots`         | Build and capture the main screens in light and dark at desktop and iPhone sizes into `.tmp/shots/current/`                                   |
-| `pnpm format`        | Prettier write                                                                                                                                |
-| `pnpm format:check`  | Prettier check                                                                                                                                |
+| Command              | What it does                                                                                                                                         |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm audit:content` | Sample imported cards into a Markdown audit sheet                                                                                                    |
+| `pnpm dev`           | Dev server on port 3000                                                                                                                              |
+| `pnpm build`         | Production build into `dist/public`                                                                                                                  |
+| `pnpm start`         | Preview the production build (`PORT=4175 pnpm start` to change the port)                                                                             |
+| `pnpm check`         | Type check                                                                                                                                           |
+| `pnpm lint`          | ESLint                                                                                                                                               |
+| `pnpm test`          | Vitest unit and data tests                                                                                                                           |
+| `pnpm test:e2e`      | Playwright smokes against the production build, Chromium plus the WebKit iPhone project (`pnpm exec playwright install chromium webkit` once)        |
+| `pnpm shots`         | Build and capture the main screens in light and dark at desktop and iPhone sizes (web dashboard plus the `/mobile` route) into `.tmp/shots/current/` |
+| `pnpm format`        | Prettier write                                                                                                                                       |
+| `pnpm format:check`  | Prettier check                                                                                                                                       |
 
 The gate for every change is `pnpm check && pnpm lint && pnpm format:check && pnpm test && pnpm build`.
 CI also runs `pnpm test:e2e`, which builds the app and serves it with `vite preview`.
@@ -59,10 +55,11 @@ client/src/components/    Dashboard sections (header, progress, plan, alerts), t
 client/src/components/ui/ shadcn primitives (only the imported ones are kept)
 client/src/lib/           Deck data, scheduler, queue, XP, audio player, saved-state format and persistence helpers
 client/src/hooks/         Dashboard state, study sessions, deck loading, and the saved-state adapter
-shared/                   Cross-platform domain barrel (core.ts), universal storage (storage.ts),
-                          audio controller (audio.ts), and theme palette (theme.ts)
-mobile/                   Universal React Native + Expo app for iOS, Android, and Web sharing
-                          the domain, SRS, state machines, and deck with client/
+shared/                   Cross-platform adapters shared by web and the iOS shell: progress
+                          storage (storage.ts) and theme palette (theme.ts)
+mobile/                   Mobile UI (rendered as DOM at /mobile) plus the iOS WKWebView
+                          shell that serves it; no React Native — audio plays through the
+                          Swift AVAudioPlayer bridge
 public/audio/             Pronunciation library plus index.json and manifests
 scripts/                  Audio generation and maintenance scripts
 docs/                     Improvement plan and generated content-audit sheets

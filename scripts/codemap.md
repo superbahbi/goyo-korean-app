@@ -33,8 +33,7 @@ A `VOICE_PRESETS` table maps each voice to ElevenLabs `voiceId`, model, filename
 prefix, manifest, and index slot. Items come from `loadVocabularyDeck`,
 `ALPHABET_DATA`, and `GRAMMAR_SENTENCE_LINES`; sentence mode writes
 `elevenlabs*_sent_<id>.mp3` and records them in `audio/index.json` via
-`recordSentenceIndex`. A worker pool (`ELEVENLABS_CONCURRENCY`, default 3, cap
-5) retries four times with exponential backoff on 429/5xx, writes `.part` then
+`recordSentenceIndex`. A worker pool (`ELEVENLABS_CONCURRENCY`, default 3, cap 5) retries four times with exponential backoff on 429/5xx, writes `.part` then
 renames, skips a clip when a same-base file already exceeds 1000 bytes, then
 runs `hashAudioLibrary` and writes a per-voice manifest summary.
 `hash-audio.ts` (`pnpm audio:hash`) exports `audioBaseName`, `contentHash`, and
@@ -51,8 +50,10 @@ mp3s; `update-net-manifest.mjs` repairs the `num_004` entry and
 **Dev tooling** — `screenshots.ts` (`pnpm shots`) runs Vite `build` + `preview`
 unless `SHOTS_BASE_URL` is set, drives Playwright Chromium over desktop
 1280×900 and iPhone 15 viewports in light and dark, clears localStorage and
-seeds `goyo-theme`, opens each `SCREENS` entry, waits 350 ms for Radix/Framer
-Motion, and writes PNGs to `.tmp/shots/<SHOTS_LABEL>/`. `install-ios-zen.sh`
+seeds `goyo-theme`, opens each `SCREENS` entry plus the `MOBILE_SCREENS`
+lane (the `/mobile` route under the iPhone user agent), waits 350 ms for
+Radix/Framer Motion, and writes PNGs to `.tmp/shots/<SHOTS_LABEL>/`.
+`install-ios-zen.sh`
 (`pnpm ios:zen`) builds, copies `dist/public` into `mobile/ios/Goyo/www`,
 renders the AppIcon with `sips`, then runs `xcodegen`, `xcodebuild`, and
 `xcrun devicectl` install/launch.
@@ -73,8 +74,8 @@ xcodegen → xcodebuild → devicectl. Outputs: `docs/audits/*.md`,
 Depends on `client/src/lib/vocabulary`, `essentialVocabulary`, `alphabet`, and
 `grammar` as the content source of truth (imported by TS, regex-parsed by
 Python); `generate-elevenlabs-audio.ts` imports `hash-audio.ts`. The Audio
-manifest written here is parsed at runtime by `client/src/lib/audioIndex` via
-`shared/audio.ts` and is the same map the PWA uses for playback and offline
+manifest written here is parsed at runtime by `client/src/lib/audioIndex`
+and is the same map the PWA uses for playback and offline
 download, so a clip absent from `index.json` is unreachable. External deps:
 ElevenLabs TTS, OpenAI, Playwright, Vite, Xcode. `package.json` exposes
 `audit:content`, `audio:hash`, `shots`, `ios:zen`; other scripts run with

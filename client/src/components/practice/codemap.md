@@ -17,7 +17,7 @@ scheduling and XP live behind `onGrade` callbacks in the mode containers.
   mapped to gradients by `practiceToneBackground`; `PracticePrimaryButton`
   standardises the footer action.
 - **Adapter over a command machine.** `useQuestionLoop<TQuestion extends
-  PracticeQuestion>` lazily constructs `createQuestionLoop` and subscribes with
+PracticeQuestion>` lazily constructs `createQuestionLoop` and subscribes with
   `useSyncExternalStore`; it exposes `state`, `current`, `verdict` (from
   `describeVerdict`), `answer`, `next`, `restart`. The machine owns index,
   selection, verdict, score, completion, and restart.
