@@ -22,8 +22,8 @@ import type { HomeDialogDeps } from "@/components/dialogs/registry";
 import {
   markIosInstallHintShown,
   shouldSuggestIosInstall,
-} from "@/lib/storageProtection";
-import { setAudioSpeaker } from "@/lib/audioPlayer";
+} from "@domain/storageProtection";
+import { setAudioSpeaker } from "@domain/audioPlayer";
 
 export default function Home() {
   const {

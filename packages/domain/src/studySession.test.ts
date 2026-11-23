@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import type { CardState } from "@/lib/mastery";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { CardState } from "@domain/mastery";
+import type { VocabularyCard } from "@domain/vocabulary";
 import {
   MAX_RESPONSE_TIME_MS,
   MIN_RESPONSE_TIME_MS,

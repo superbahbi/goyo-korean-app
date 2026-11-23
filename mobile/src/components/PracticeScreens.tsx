@@ -11,25 +11,25 @@ import {
   ALPHABET_LEARNING_NOTE,
   ALPHABET_CATEGORY_DESCRIPTIONS,
   type AlphabetCard,
-} from "../../../client/src/lib/alphabet";
-import { getHangulStrokes as getStrokeOrder } from "../../../client/src/lib/hangulStrokes";
+} from "../../../packages/domain/src/alphabet";
+import { getHangulStrokes as getStrokeOrder } from "../../../packages/domain/src/hangulStrokes";
 import {
   GRAMMAR_LESSONS,
   grammarExampleId,
   type GrammarLesson,
-} from "../../../client/src/lib/grammar";
-import type { GrammarProgress } from "../../../client/src/lib/grammarProgress";
-import { createQuestionLoop } from "../../../client/src/lib/practiceQuestion";
-import { pickDistractors } from "../../../client/src/lib/practiceDistractors";
-import { shuffle } from "../../../client/src/lib/shuffle";
-import { describeVerdict } from "../../../client/src/lib/practiceVerdict";
+} from "../../../packages/domain/src/grammar";
+import type { GrammarProgress } from "../../../packages/domain/src/grammarProgress";
+import { createQuestionLoop } from "../../../packages/domain/src/practiceQuestion";
+import { pickDistractors } from "../../../packages/domain/src/practiceDistractors";
+import { shuffle } from "../../../packages/domain/src/shuffle";
+import { describeVerdict } from "../../../packages/domain/src/practiceVerdict";
 import { SCENARIOS } from "../../../client/src/components/practice/scenarios";
 import {
   playAlphabetAudio,
   playVocabularyAudio,
   playSentenceAudio,
-} from "../../../client/src/lib/audioPlayer";
-import type { VocabularyCard } from "../../../client/src/lib/vocabulary";
+} from "../../../packages/domain/src/audioPlayer";
+import type { VocabularyCard } from "../../../packages/domain/src/vocabulary";
 const theme = (darkMode: boolean) => ({
   bg: darkMode ? "#0f172a" : "#ffffff",
   card: darkMode ? "#1e293b" : "#f8fafc",

@@ -1,12 +1,12 @@
 // Deterministic audit sampler for the imported Essential 600 deck.
 //
 // The sheet is evidence, not deck data: this script never writes outside
-// docs/audits/ and never touches client/src/lib/essentialVocabulary.ts.
+// docs/audits/ and never touches packages/domain/src/essentialVocabulary.ts.
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { ESSENTIAL_WORDS } from "../client/src/lib/essentialVocabulary";
-import type { VocabularyCard } from "../client/src/lib/vocabulary";
+import { ESSENTIAL_WORDS } from "../packages/domain/src/essentialVocabulary";
+import type { VocabularyCard } from "../packages/domain/src/vocabulary";
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..");
 export const AUDIT_DIR = path.join(REPO_ROOT, "docs", "audits");

@@ -11,7 +11,7 @@ root itself contains no production modules.
 
 - Layering, by dependency direction: `components/` depends on `context/` for
   data/commands and on `primitives/` for rendering; `context/` depends on
-  `client/src/lib` domain modules; `primitives/` depends only on `react`.
+  `packages/domain` modules; `primitives/` depends only on `react`.
 - Feature folders by role, not route: `components/` (screens), `context/` (one
   provider + hook), `primitives/` (DOM component kit). No barrel files and no
   import aliases inside `src/` — consumers use relative paths
@@ -42,9 +42,9 @@ root itself contains no production modules.
 
 - Upward: consumed by `../App.tsx`, which imports `./components/*`,
   `./context/GoyoMobileContext`, and `./primitives/dom`.
-- Downward: `./context` imports `client/src/lib/*` and
+- Downward: `./context` imports `packages/domain/src/*` and
   `client/src/components/practice/scenarios`; `./components` imports
-  `client/src/lib/*`, `client/src/components/practice/scenarios`, and
+  `packages/domain/src/*`, `client/src/components/practice/scenarios`, and
   `client/src/components/stats/types`; `./primitives` imports only `react`.
 - Rendering contract: nothing here imports `react-native` or
   `react-native-web`; the screens render as DOM everywhere the SPA runs —

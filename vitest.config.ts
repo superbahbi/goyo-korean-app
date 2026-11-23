@@ -5,6 +5,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@domain": path.resolve(import.meta.dirname, "packages", "domain", "src"),
       "@shared": path.resolve(import.meta.dirname, "packages", "shared"),
     },
   },
@@ -12,6 +13,7 @@ export default defineConfig({
     include: [
       "scripts/**/*.test.ts",
       "client/src/**/*.test.ts",
+      "packages/domain/**/*.test.ts",
       "packages/shared/**/*.test.ts",
       "mobile/**/*.test.ts",
     ],

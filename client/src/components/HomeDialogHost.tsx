@@ -6,9 +6,9 @@ import {
   type HomeDialogDeps,
 } from "@/components/dialogs/registry";
 import type { SessionMode } from "@/hooks/useHomeSessions";
-import type { VocabularyCard } from "@/lib/vocabulary";
-import type { ActiveDialog } from "@/lib/dialogLauncher";
-import { repeatableSession } from "@/lib/gradeIntent";
+import type { VocabularyCard } from "@domain/vocabulary";
+import type { ActiveDialog } from "@domain/dialogLauncher";
+import { repeatableSession } from "@domain/gradeIntent";
 
 function ModalLoadingFallback() {
   return (

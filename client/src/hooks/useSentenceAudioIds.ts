@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAvailableSentenceIds } from "@/lib/audioPlayer";
+import { getAvailableSentenceIds } from "@domain/audioPlayer";
 
 const EMPTY: ReadonlySet<string> = new Set();
 

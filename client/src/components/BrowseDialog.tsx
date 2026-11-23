@@ -13,13 +13,13 @@ import {
   MASTERY_LABELS,
   type CardState,
   type MasteryState,
-} from "@/lib/mastery";
-import { CATEGORIES, type VocabularyCard } from "@/lib/vocabulary";
+} from "@domain/mastery";
+import { CATEGORIES, type VocabularyCard } from "@domain/vocabulary";
 import {
   playSentenceAudio,
   playVocabularyAudio,
   stopAudio,
-} from "@/lib/audioPlayer";
+} from "@domain/audioPlayer";
 import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
 import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 

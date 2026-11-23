@@ -1,6 +1,6 @@
-import type { CardState } from "@/lib/mastery";
-import type { StudyPhase } from "@/lib/studyKeys";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { CardState } from "@domain/mastery";
+import type { StudyPhase } from "@domain/studyKeys";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 export type StudyRating = "again" | "good" | "easy";
 export type StudyResults = Record<StudyRating, number>;

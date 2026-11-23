@@ -3,7 +3,7 @@ import {
   NO_DIALOG,
   reduceDialog,
   type DialogRequestInput,
-} from "@/lib/dialogLauncher";
+} from "@domain/dialogLauncher";
 
 /**
  * React adapter for the dialog launcher. Home calls `open` from any entry point

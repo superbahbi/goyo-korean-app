@@ -1,4 +1,4 @@
-import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
+import { PROGRESS_STORAGE_KEY } from "../packages/domain/src/progressStorage";
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 

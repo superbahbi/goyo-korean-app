@@ -25,11 +25,11 @@ dependency direction:
 
 ```
 mobile/src/*  ──┐
-client/src/hooks, pages, components ──▶ client/src/lib (pure domain, no React)
+client/src/hooks, pages, components ──▶ packages/domain (pure domain, no React)
 packages/shared/ (progress store + theme tokens) ──┘
 ```
 
-- `client/src/lib/` is framework-free: it turns a Grade into SM-2 scheduling,
+- `packages/domain/` is framework-free: it turns a Grade into SM-2 scheduling,
   XP, and daily-goal progress, and owns the versioned saved-state format.
   React hooks in `client/src/hooks/` are thin adapters over it.
 - Presentation never computes domain state: components render a precomputed
@@ -38,25 +38,26 @@ packages/shared/ (progress store + theme tokens) ──┘
   request to one lazily mounted dialog.
 - `packages/shared/` holds the two adapters both surfaces need: the
   cross-platform progress store (`storage.ts`) and the theme tokens
-  (`theme.ts`). Mobile imports the domain itself from `client/src/lib`,
+  (`theme.ts`). Mobile imports the domain itself from `packages/domain`,
   exactly as the web client does — there is no alias barrel and no second
   naming.
 
 ## Flow
 
-A learner action flows: UI event → hook (`gradeCard`) → `client/src/lib`
+A learner action flows: UI event → hook (`gradeCard`) → `packages/domain`
 (`evaluateGrade` → `applyGradeOutcome` → SM-2 schedule + XP) → persisted
 `UserState` in `localStorage` → recomputed `DashboardView` → re-render.
 Audio: domain ID → Audio manifest (`public/audio/index.json`) → cached clip
 (Workbox precache for Hangul/numbers, on-demand for the 26 MB vocabulary
 library). Content flows one way: `scripts/` generates audio and audits decks
-into `public/` and `client/src/lib` datasets; the app never writes content.
+into `public/` and `packages/domain` datasets; the app never writes content.
 
 ## Integration
 
 - **Build**: `vite.config.ts` (root) — Tailwind 4, `VitePWA` precache config
-  reading the audio manifest, alias `@/*` → `client/src/*` and
-  `@shared/*` → `packages/shared/*` (mirrored in `tsconfig.json`).
+  reading the audio manifest, alias `@/*` → `client/src/*`,
+  `@domain/*` → `packages/domain/src/*` and `@shared/*` →
+  `packages/shared/*` (mirrored in `tsconfig.json`).
 - **Deploy**: `vercel.json` — SPA rewrites, immutable asset/audio caching,
   no-cache for `sw.js`/`index.html`/audio manifest, strict CSP.
 - **Quality gates**: `vitest.config.ts` (unit), `playwright.config.ts`
@@ -71,7 +72,7 @@ into `public/` and `client/src/lib` datasets; the app never writes content.
 | --------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `client/`                         | Vite web-client root: SPA document, PWA meta, pre-paint theme                                | [View Map](client/codemap.md)                         |
 | `client/src/`                     | Composition root: React mount, provider stack, routes, SW registration, Tailwind token theme | [View Map](client/src/codemap.md)                     |
-| `client/src/lib/`                 | Pure domain layer: Grade→SM-2/XP/goal, datasets, Audio manifest, saved-state format          | [View Map](client/src/lib/codemap.md)                 |
+| `packages/domain/`                | Pure domain layer: Grade→SM-2/XP/goal, datasets, Audio manifest, saved-state format          | [View Map](packages/domain/codemap.md)                |
 | `client/src/hooks/`               | React adapters over `../lib`: deck, study state, dashboard view, Dialog launcher, audio      | [View Map](client/src/hooks/codemap.md)               |
 | `client/src/pages/`               | Route-level screens: Home dashboard, Hangul practice, 404                                    | [View Map](client/src/pages/codemap.md)               |
 | `client/src/contexts/`            | Theme context: persisted light/dark/system choice                                            | [View Map](client/src/contexts/codemap.md)            |

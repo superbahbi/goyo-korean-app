@@ -1,8 +1,8 @@
 import { Download, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { UserState } from "@/lib/savedState";
-import { describeBackupAge, isBackupOverdue } from "@/lib/backupStatus";
+import type { UserState } from "@domain/savedState";
+import { describeBackupAge, isBackupOverdue } from "@domain/backupStatus";
 import type { ProgressFile } from "@/components/settings/useProgressFile";
 
 interface ProgressFileSectionProps {

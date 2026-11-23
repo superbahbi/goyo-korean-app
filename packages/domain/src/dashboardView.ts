@@ -1,7 +1,7 @@
-import type { CardState, MasteryState } from "@/lib/mastery";
-import type { StudyDays } from "@/lib/studyDays";
-import { daysStudiedWithin, reviewsWithin } from "@/lib/studyDays";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { CardState, MasteryState } from "@domain/mastery";
+import type { StudyDays } from "@domain/studyDays";
+import { daysStudiedWithin, reviewsWithin } from "@domain/studyDays";
+import type { VocabularyCard } from "@domain/vocabulary";
 import {
   buildDailyQueue,
   countOverdue,
@@ -11,32 +11,32 @@ import {
   selectShadowingCards,
   selectWeakCards,
   type WorkloadStatus,
-} from "@/lib/queue";
+} from "@domain/queue";
 import {
   levelProgress as getLevelProgress,
   levelTitle as getLevelTitle,
   xpToReachLevel,
-} from "@/lib/xp";
-import { isFirstRunState } from "@/lib/dashboardProgress";
-import { goalProgress } from "@/lib/gradeIntent";
+} from "@domain/xp";
+import { isFirstRunState } from "@domain/dashboardProgress";
+import { goalProgress } from "@domain/gradeIntent";
 import {
   buildDashboardStats,
   type CategorySummary,
   type ReviewStats,
-} from "@/lib/dashboardStats";
+} from "@domain/dashboardStats";
 import {
   buildDashboardForecast,
   type ForecastLabelStyle,
   type LabeledForecastDay,
   type StatsForecastDay,
-} from "@/lib/dashboardForecast";
+} from "@domain/dashboardForecast";
 import {
   buildModeAvailability,
   buildTodayPlan,
   type ModeAvailability,
   type PracticeModeId,
   type TodayPlan,
-} from "@/lib/dashboardPlan";
+} from "@domain/dashboardPlan";
 
 /**
  * Dashboard today-view model: one pure builder for everything the dashboard

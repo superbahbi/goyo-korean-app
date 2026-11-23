@@ -1,4 +1,4 @@
-import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
+import { PROGRESS_STORAGE_KEY } from "../packages/domain/src/progressStorage";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 

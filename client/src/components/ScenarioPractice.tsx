@@ -1,9 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Check, RotateCcw } from "lucide-react";
-import { type VocabularyCard } from "@/lib/vocabulary";
-import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
-import { shuffle } from "@/lib/shuffle";
-import { pickDistractors } from "@/lib/practiceDistractors";
+import { type VocabularyCard } from "@domain/vocabulary";
+import { playVocabularyAudio, stopAudio } from "@domain/audioPlayer";
+import { shuffle } from "@domain/shuffle";
+import { pickDistractors } from "@domain/practiceDistractors";
 import { ChoiceButton } from "@/components/practice/ChoiceButton";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
 import { PracticeFeedback } from "@/components/practice/PracticeFeedback";
@@ -14,7 +14,7 @@ import {
 import { SCENARIOS } from "@/components/practice/scenarios";
 import { ScenarioPrompt } from "@/components/practice/ScenarioPrompt";
 import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
-import { ratingForVerdict } from "@/lib/practiceVerdict";
+import { ratingForVerdict } from "@domain/practiceVerdict";
 
 interface ScenarioPracticeProps {
   cards: VocabularyCard[];

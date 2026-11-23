@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { VocabularyCard } from "@domain/vocabulary";
 import { pickDistractors } from "./practiceDistractors";
 
 function card(

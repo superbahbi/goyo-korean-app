@@ -2,8 +2,8 @@ import { useState, useSyncExternalStore } from "react";
 import {
   createQuestionLoop,
   type PracticeQuestion,
-} from "@/lib/practiceQuestion";
-import { describeVerdict } from "@/lib/practiceVerdict";
+} from "@domain/practiceQuestion";
+import { describeVerdict } from "@domain/practiceVerdict";
 
 /**
  * The React adapter for the question loop. It owns the subscription and the

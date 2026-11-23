@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StrokeOrderDiagram } from "@/components/StrokeOrderDiagram";
-import { AlphabetCard as AlphabetCardType } from "@/lib/alphabet";
+import { AlphabetCard as AlphabetCardType } from "@domain/alphabet";
 
 interface AlphabetCardProps {
   card: AlphabetCardType;

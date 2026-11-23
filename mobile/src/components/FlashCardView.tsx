@@ -9,8 +9,8 @@ import {
 import {
   playSentenceAudio,
   playVocabularyAudio,
-} from "../../../client/src/lib/audioPlayer";
-import type { VocabularyCard } from "../../../client/src/lib/vocabulary";
+} from "../../../packages/domain/src/audioPlayer";
+import type { VocabularyCard } from "../../../packages/domain/src/vocabulary";
 
 export interface FlashCardViewProps {
   card: VocabularyCard;

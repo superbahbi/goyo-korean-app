@@ -16,16 +16,16 @@ import {
 import {
   createStudySession,
   type StudyRating,
-} from "../../../client/src/lib/studySession";
-import { previewIntervals } from "../../../client/src/lib/srs";
+} from "../../../packages/domain/src/studySession";
+import { previewIntervals } from "../../../packages/domain/src/srs";
 import {
   getAvailableSentenceIds,
   playSentenceAudio,
   playVocabularyAudio,
   stopAudio,
-} from "../../../client/src/lib/audioPlayer";
-import type { VocabularyCard } from "../../../client/src/lib/vocabulary";
-import type { CardState } from "../../../client/src/lib/mastery";
+} from "../../../packages/domain/src/audioPlayer";
+import type { VocabularyCard } from "../../../packages/domain/src/vocabulary";
+import type { CardState } from "../../../packages/domain/src/mastery";
 import { FlashCardView } from "./FlashCardView";
 
 export interface StudySessionScreenProps {

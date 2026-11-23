@@ -1,4 +1,4 @@
-# client/src/lib/
+# packages/domain/src/
 
 ## Responsibility
 
@@ -6,7 +6,11 @@ The pure domain layer of Goyo: types, content datasets, and framework-free funct
 Grade into scheduling, XP, Daily goal progress, and dashboard state, plus the Audio manifest,
 grammar/alphabet content, and the saved-progress format. No React or JSX; browser APIs are injected
 (`AppReloadEnvironment`, `AudioIndexDependencies`, `AudioElementEnvironment`, `clock`) or confined to
-thin singletons (`audioIndex`, `audioPlayer`, `progressStorage`). Shared with `shared/` and `mobile/`.
+thin singletons (`audioIndex`, `audioPlayer`, `progressStorage`).
+
+This is a workspace package, imported as `@domain/*`. Every surface — the web client
+(`client/`), the mobile UI (`mobile/`) and the Expo app (`apps/native/`) — depends on it, and
+nothing depends on it in the other direction.
 
 ## Design
 
@@ -110,7 +114,7 @@ completed`; `grade` clamps latency to 250–120 000 ms, sets the Grade lock, app
 
 ## Integration
 
-Internal imports use the `@/lib/*` alias (relative paths inside the audio cluster). The only
+Internal imports use the `@domain/*` alias (relative paths inside the audio cluster). The only
 third-party runtime imports are `clsx` and `tailwind-merge` in `utils.ts`. Consumers:
 
 - `../hooks` — `useStudyState`, `useHomeDashboard`, `useHomeSessions`, `useDialogLauncher`,
@@ -120,8 +124,7 @@ third-party runtime imports are `clsx` and `tailwind-merge` in `utils.ts`. Consu
   `ScenarioPractice`, `ShadowingPractice`, `BrowseDialog`, `dialogs/registry.tsx`, `settings/*`,
   `grammar/*`, `stats/*`, `ui/*` (`utils.cn`). `../pages` — `Home`, `AlphabetPractice`.
 - Repo root `vite.config.ts` — `pwaConfig.PRECACHE_GLOBS`, `audioCache.AUDIO_CACHE_NAME`.
-- `../../shared` — `core.ts` re-exports the domain surface; `storage.ts` adapts
-  `savedState`/`gradeOutcome`/`grammarProgress`/`progressStorage`; `audio.ts` builds on the
-  `audioIndex` resolvers.
-- `../../mobile` — `mobile/src/context/GoyoMobileContext.tsx` and mobile components import
-  `../../../client/src/lib/*` directly; `mobile/tsconfig.json` includes `client/src/lib/**/*.ts`.
+- `../../shared` — `packages/shared/storage.ts` adapts `savedState`, `gradeOutcome`,
+  `grammarProgress` and `progressStorage` to a platform storage.
+- `../../mobile` — `mobile/src/context/GoyoMobileContext.tsx` and mobile components import the
+  domain directly by relative path; `mobile/tsconfig.json` includes `../packages/domain/**/*.ts`.

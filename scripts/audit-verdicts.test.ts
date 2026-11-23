@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { ESSENTIAL_WORDS } from "../client/src/lib/essentialVocabulary";
+import { ESSENTIAL_WORDS } from "../packages/domain/src/essentialVocabulary";
 
 interface AuditIssue {
   category: string;

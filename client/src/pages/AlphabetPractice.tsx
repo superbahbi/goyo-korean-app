@@ -22,8 +22,8 @@ import {
   ALPHABET_CATEGORIES,
   getAlphabetCategoryCards,
   type AlphabetCategoryId,
-} from "@/lib/alphabet";
-import { playAlphabetAudio } from "@/lib/audioPlayer";
+} from "@domain/alphabet";
+import { playAlphabetAudio } from "@domain/audioPlayer";
 import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 
 interface AlphabetPracticeProps {

@@ -10,18 +10,18 @@ import {
 import {
   CATEGORIES,
   type VocabularyCard,
-} from "../../../client/src/lib/vocabulary";
+} from "../../../packages/domain/src/vocabulary";
 import {
   getMasteryState as classifyCardMastery,
   type CardState,
-} from "../../../client/src/lib/mastery";
-import { playVocabularyAudio } from "../../../client/src/lib/audioPlayer";
+} from "../../../packages/domain/src/mastery";
+import { playVocabularyAudio } from "../../../packages/domain/src/audioPlayer";
 import {
   buildExportPayload as serializeExport,
   validateImportPayload as validateImport,
   type UserState,
   type UserSettings,
-} from "../../../client/src/lib/savedState";
+} from "../../../packages/domain/src/savedState";
 import type {
   StatsDialogStats,
   StatsDialogForecast,

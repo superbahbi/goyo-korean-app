@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { selectShadowingCards } from "@/lib/queue";
+import { selectShadowingCards } from "@domain/queue";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,10 +12,10 @@ import {
   X,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { type VocabularyCard } from "@/lib/vocabulary";
-import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
+import { type VocabularyCard } from "@domain/vocabulary";
+import { playVocabularyAudio, stopAudio } from "@domain/audioPlayer";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
-import { ratingForVerdict } from "@/lib/practiceVerdict";
+import { ratingForVerdict } from "@domain/practiceVerdict";
 import { useAutoPlayOnce } from "@/hooks/useAutoPlayOnce";
 import {
   PracticePrimaryButton,

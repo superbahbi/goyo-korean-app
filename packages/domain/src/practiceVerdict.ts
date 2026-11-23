@@ -1,7 +1,7 @@
 import type {
   PracticeQuestion,
   QuestionLoopState,
-} from "@/lib/practiceQuestion";
+} from "@domain/practiceQuestion";
 
 /**
  * The verdict a practice renderer needs: which choice was right, whether the

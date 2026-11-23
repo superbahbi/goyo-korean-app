@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import type { GradeOptions, GradeOutcome } from "@/lib/gradeOutcome";
-import type { ModeAvailability, PracticeModeId } from "@/lib/dashboardPlan";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { GradeOptions, GradeOutcome } from "@domain/gradeOutcome";
+import type { ModeAvailability, PracticeModeId } from "@domain/dashboardPlan";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 export type SessionMode = "daily" | "weak" | "learning";
 

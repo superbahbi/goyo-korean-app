@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getLocalDateKey, msUntilNextLocalMidnight } from "@/lib/day";
+import { getLocalDateKey, msUntilNextLocalMidnight } from "@domain/day";
 
 /**
  * The current local day key, refreshed at midnight and whenever the tab wakes.

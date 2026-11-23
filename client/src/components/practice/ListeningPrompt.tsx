@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { type VocabularyCard } from "@/lib/vocabulary";
+import { type VocabularyCard } from "@domain/vocabulary";
 
 interface ListeningPromptProps {
   card: VocabularyCard;
