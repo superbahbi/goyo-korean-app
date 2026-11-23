@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SectionHeading } from "@/components/SectionHeading";
-import { GRAMMAR_LESSON_TOTAL } from "@/lib/grammarCourse";
+import { GRAMMAR_LESSON_TOTAL } from "@domain/grammarCourse";
 import {
   BookMarked,
   BookOpen,

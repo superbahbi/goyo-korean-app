@@ -1,10 +1,10 @@
-import type { UserState } from "@/lib/savedState";
-import { addDays, getLocalDateKey } from "@/lib/day";
-import { evaluateGrade } from "@/lib/gradeIntent";
-import type { CardState } from "@/lib/mastery";
-import { levelFromXp } from "@/lib/xp";
-import { appendReviewEntry, type StudyMode } from "@/lib/reviewLog";
-import { deriveStreak, recordStudyDay } from "@/lib/studyDays";
+import type { UserState } from "@domain/savedState";
+import { addDays, getLocalDateKey } from "@domain/day";
+import { evaluateGrade } from "@domain/gradeIntent";
+import type { CardState } from "@domain/mastery";
+import { levelFromXp } from "@domain/xp";
+import { appendReviewEntry, type StudyMode } from "@domain/reviewLog";
+import { deriveStreak, recordStudyDay } from "@domain/studyDays";
 
 /**
  * Grade outcome: the one place a learner's grade becomes saved progress.

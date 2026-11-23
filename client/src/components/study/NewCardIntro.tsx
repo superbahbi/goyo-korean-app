@@ -1,8 +1,8 @@
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { playSentenceAudio, playVocabularyAudio } from "@/lib/audioPlayer";
+import { playSentenceAudio, playVocabularyAudio } from "@domain/audioPlayer";
 import { useAutoPlayOnce } from "@/hooks/useAutoPlayOnce";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 interface NewCardIntroProps {
   card: VocabularyCard;

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChoiceButton } from "@/components/practice/ChoiceButton";
 import { PracticeFeedback } from "@/components/practice/PracticeFeedback";
 import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
-import type { GrammarLesson, GrammarQuizQuestion } from "@/lib/grammar";
+import type { GrammarLesson, GrammarQuizQuestion } from "@domain/grammar";
 
 interface GrammarQuizProps {
   lesson: GrammarLesson;

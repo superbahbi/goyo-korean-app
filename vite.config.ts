@@ -4,8 +4,8 @@ import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
-import { AUDIO_CACHE_NAME } from "./client/src/lib/audioCache";
-import { PRECACHE_GLOBS } from "./client/src/lib/pwaConfig";
+import { AUDIO_CACHE_NAME } from "./packages/domain/src/audioCache";
+import { PRECACHE_GLOBS } from "./packages/domain/src/pwaConfig";
 
 // =============================================================================
 // Goyo dev server
@@ -116,6 +116,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@domain": path.resolve(import.meta.dirname, "packages", "domain", "src"),
       "@shared": path.resolve(import.meta.dirname, "packages", "shared"),
     },
   },

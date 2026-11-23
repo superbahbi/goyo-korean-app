@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Play, Sparkles, Trophy } from "lucide-react";
 import { motion } from "framer-motion";
-import type { TodayPlan } from "@/lib/dashboardPlan";
+import type { TodayPlan } from "@domain/dashboardPlan";
 
 interface WelcomeCardProps {
   plan: TodayPlan;

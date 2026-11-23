@@ -5,8 +5,8 @@ import {
   MASTERY_LABELS,
   MASTERY_STYLES,
   type MasteryState,
-} from "@/lib/mastery";
-import type { VocabularyCard } from "@/lib/vocabulary";
+} from "@domain/mastery";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 interface BrowseResultRowProps {
   card: VocabularyCard;

@@ -1,6 +1,6 @@
-import type { CardState } from "@/lib/mastery";
-import type { StudyMode } from "@/lib/reviewLog";
-import { scheduleReview, type SrsRating, type SrsSchedule } from "@/lib/srs";
+import type { CardState } from "@domain/mastery";
+import type { StudyMode } from "@domain/reviewLog";
+import { scheduleReview, type SrsRating, type SrsSchedule } from "@domain/srs";
 
 /**
  * Grade intent: what one grade is for in its practice mode. This module owns

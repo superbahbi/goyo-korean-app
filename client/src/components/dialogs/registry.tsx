@@ -1,8 +1,8 @@
 import { lazy, type ReactNode } from "react";
-import type { UserState } from "@/lib/savedState";
-import type { DialogKind, DialogRequest } from "@/lib/dialogLauncher";
-import type { GrammarProgress } from "@/lib/grammarProgress";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { UserState } from "@domain/savedState";
+import type { DialogKind, DialogRequest } from "@domain/dialogLauncher";
+import type { GrammarProgress } from "@domain/grammarProgress";
+import type { VocabularyCard } from "@domain/vocabulary";
 import type {
   StatsDialogForecast,
   StatsDialogStats,

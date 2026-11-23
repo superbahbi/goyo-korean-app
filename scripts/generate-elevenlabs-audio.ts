@@ -5,9 +5,9 @@ import assert from "node:assert";
 import {
   CURATED_CARDS,
   loadVocabularyDeck,
-} from "../client/src/lib/vocabulary";
-import { ALPHABET_DATA } from "../client/src/lib/alphabet";
-import { GRAMMAR_SENTENCE_LINES } from "../client/src/lib/grammar";
+} from "../packages/domain/src/vocabulary";
+import { ALPHABET_DATA } from "../packages/domain/src/alphabet";
+import { GRAMMAR_SENTENCE_LINES } from "../packages/domain/src/grammar";
 import { audioBaseName, hashAudioLibrary } from "./hash-audio.ts";
 
 export interface AudioItem {

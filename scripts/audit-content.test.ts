@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import path from "node:path";
-import { ESSENTIAL_WORDS } from "../client/src/lib/essentialVocabulary";
+import { ESSENTIAL_WORDS } from "../packages/domain/src/essentialVocabulary";
 import {
   AUDIT_DIR,
   DEFAULT_LIMIT,

@@ -1,8 +1,8 @@
 import { Search } from "lucide-react";
 import { BrowseResultRow } from "@/components/browse/BrowseResultRow";
 import { Button } from "@/components/ui/button";
-import { getMasteryState, type CardState } from "@/lib/mastery";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import { getMasteryState, type CardState } from "@domain/mastery";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 interface BrowseResultsListProps {
   visibleCards: VocabularyCard[];

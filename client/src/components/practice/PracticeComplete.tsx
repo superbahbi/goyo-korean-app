@@ -2,7 +2,7 @@ import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
+import { cn } from "@domain/utils";
 import {
   practiceToneBackground,
   type PracticeTone,

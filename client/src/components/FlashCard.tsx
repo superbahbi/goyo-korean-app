@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { playSentenceAudio, playVocabularyAudio } from "@/lib/audioPlayer";
+import { playSentenceAudio, playVocabularyAudio } from "@domain/audioPlayer";
 import { useAutoPlayOnce } from "@/hooks/useAutoPlayOnce";
 
 interface FlashCardProps {

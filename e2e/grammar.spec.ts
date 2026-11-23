@@ -1,5 +1,5 @@
-import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
-import { GRAMMAR_LESSON_TOTAL } from "../client/src/lib/grammarCourse";
+import { PROGRESS_STORAGE_KEY } from "../packages/domain/src/progressStorage";
+import { GRAMMAR_LESSON_TOTAL } from "../packages/domain/src/grammarCourse";
 import { expect, test, type Page } from "@playwright/test";
 
 const PROGRESS_KEY = PROGRESS_STORAGE_KEY;

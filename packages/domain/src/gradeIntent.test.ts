@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { CardState } from "@/lib/mastery";
-import type { SrsRating } from "@/lib/srs";
+import type { CardState } from "@domain/mastery";
+import type { SrsRating } from "@domain/srs";
 import {
   evaluateGrade,
   goalProgress,

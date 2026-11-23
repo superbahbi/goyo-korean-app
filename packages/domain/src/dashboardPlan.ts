@@ -1,8 +1,8 @@
 import {
   describeTodayProgress,
   type TodayProgress,
-} from "@/lib/dashboardProgress";
-import type { VocabularyCard } from "@/lib/vocabulary";
+} from "@domain/dashboardProgress";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 /**
  * Today's plan and practice-mode availability. These are the dashboard rules

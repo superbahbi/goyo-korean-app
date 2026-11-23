@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parent.parent
 AUDIO = ROOT / 'public/audio'
 AUDIO.mkdir(parents=True, exist_ok=True)
 INDEX_PATH = AUDIO / 'index.json'
-SOURCE = ROOT / 'client/src/lib/essentialVocabulary.ts'
+SOURCE = ROOT / 'packages/domain/src/essentialVocabulary.ts'
 API_KEY = os.environ.get('ELEVENLABS_API_KEY', '')
 MODELS = {'male': 'eleven_v4', 'female': 'eleven_v4'}
 VOICES = {'male': ('h5eZa8VFAq0EQ8E81dfL', 'elevenlabs_'), 'female': ('0oqpliV6dVSr9XomngOW', 'elevenlabs_female_')}

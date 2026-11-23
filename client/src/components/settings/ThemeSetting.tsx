@@ -1,5 +1,5 @@
 import { useTheme, type Theme } from "@/contexts/ThemeContext";
-import { cn } from "@/lib/utils";
+import { cn } from "@domain/utils";
 import { Monitor, Moon, Sun } from "lucide-react";
 
 const OPTIONS: Array<{

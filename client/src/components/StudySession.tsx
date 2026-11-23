@@ -10,11 +10,11 @@ import { StudySessionSummary } from "./study/StudySessionSummary";
 import { NewCardIntro } from "./study/NewCardIntro";
 import { useStudySession } from "./study/useStudySession";
 import { PracticeShell } from "./practice/PracticeShell";
-import { VocabularyCard } from "@/lib/vocabulary";
-import { previewIntervals } from "@/lib/srs";
-import { STUDY_KEY_HINT } from "@/lib/studyKeys";
-import { cn } from "@/lib/utils";
-import type { CardState } from "@/lib/mastery";
+import { VocabularyCard } from "@domain/vocabulary";
+import { previewIntervals } from "@domain/srs";
+import { STUDY_KEY_HINT } from "@domain/studyKeys";
+import { cn } from "@domain/utils";
+import type { CardState } from "@domain/mastery";
 
 interface StudySessionProps {
   queue: VocabularyCard[];

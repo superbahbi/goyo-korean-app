@@ -1,23 +1,23 @@
-import { getLocalDateKey } from "@/lib/day";
+import { getLocalDateKey } from "@domain/day";
 import {
   emptyGrammarProgress,
   sanitizeGrammarProgress,
   type GrammarProgress,
-} from "@/lib/grammarProgress";
-import type { CardState } from "@/lib/mastery";
+} from "@domain/grammarProgress";
+import type { CardState } from "@domain/mastery";
 import {
   createReviewLog,
   sanitizeReviewLog,
   type ReviewLog,
-} from "@/lib/reviewLog";
+} from "@domain/reviewLog";
 import {
   deriveStreak,
   migrateLegacyDay,
   sanitizeStudyDays,
   type StudyDays,
-} from "@/lib/studyDays";
-import { FEMALE_VOICE_ENABLED } from "@/lib/voiceAvailability";
-import { levelFromXp } from "@/lib/xp";
+} from "@domain/studyDays";
+import { FEMALE_VOICE_ENABLED } from "@domain/voiceAvailability";
+import { levelFromXp } from "@domain/xp";
 
 /**
  * Saved progress: the one format the app writes to localStorage, exports to a

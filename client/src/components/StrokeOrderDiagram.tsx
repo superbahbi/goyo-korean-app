@@ -2,8 +2,8 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getHangulStrokes } from "@/lib/hangulStrokes";
-import { cn } from "@/lib/utils";
+import { getHangulStrokes } from "@domain/hangulStrokes";
+import { cn } from "@domain/utils";
 
 /** Seconds each pen stroke takes to draw, and the delay between stroke starts. */
 const STROKE_DURATION = 0.38;

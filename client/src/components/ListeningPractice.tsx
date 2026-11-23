@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { CheckCircle2, RotateCcw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { VocabularyCard } from "@/lib/vocabulary";
-import { playVocabularyAudio, stopAudio } from "@/lib/audioPlayer";
-import { shuffle } from "@/lib/shuffle";
-import { pickDistractors } from "@/lib/practiceDistractors";
+import { VocabularyCard } from "@domain/vocabulary";
+import { playVocabularyAudio, stopAudio } from "@domain/audioPlayer";
+import { shuffle } from "@domain/shuffle";
+import { pickDistractors } from "@domain/practiceDistractors";
 import { ChoiceButton } from "@/components/practice/ChoiceButton";
 import { ListeningPrompt } from "@/components/practice/ListeningPrompt";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
@@ -15,7 +15,7 @@ import {
 } from "@/components/practice/PracticeShell";
 import { useQuestionLoop } from "@/components/practice/useQuestionLoop";
 import { useAudioPlayback } from "@/hooks/useAudioPlayback";
-import { ratingForVerdict } from "@/lib/practiceVerdict";
+import { ratingForVerdict } from "@domain/practiceVerdict";
 
 interface ListeningPracticeProps {
   cards: VocabularyCard[];

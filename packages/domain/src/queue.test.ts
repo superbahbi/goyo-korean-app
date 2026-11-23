@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import type { CardState } from "@/lib/mastery";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { CardState } from "@domain/mastery";
+import type { VocabularyCard } from "@domain/vocabulary";
 import {
   accuracy,
   buildDailyQueue,

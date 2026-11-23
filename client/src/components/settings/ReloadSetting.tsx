@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { reloadToLatestApp } from "@/lib/appReload";
+import { reloadToLatestApp } from "@domain/appReload";
 
 /**
  * The installed PWA can sit on an old build when the update toast is missed.

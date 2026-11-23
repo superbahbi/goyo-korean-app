@@ -1,4 +1,4 @@
-import { addDays } from "@/lib/day";
+import { addDays } from "@domain/day";
 
 export interface StudyDay {
   /** Distinct cards graded that day. */

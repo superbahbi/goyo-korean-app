@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Check, Star, X } from "lucide-react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import type { IntervalPreview, SrsRating } from "@/lib/srs";
+import { cn } from "@domain/utils";
+import type { IntervalPreview, SrsRating } from "@domain/srs";
 
 interface GradeActionsProps {
   /** Next interval, in days, for each rating of the current card. */

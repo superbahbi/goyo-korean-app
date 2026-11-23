@@ -7,9 +7,9 @@ import {
   GRAMMAR_LESSONS,
   GRAMMAR_LESSON_COUNT,
   findGrammarLesson,
-} from "@/lib/grammar";
-import type { GrammarProgress } from "@/lib/grammarProgress";
-import { stopAudio } from "@/lib/audioPlayer";
+} from "@domain/grammar";
+import type { GrammarProgress } from "@domain/grammarProgress";
+import { stopAudio } from "@domain/audioPlayer";
 
 interface GrammarDialogProps {
   open: boolean;

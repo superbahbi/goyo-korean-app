@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import type { CardState } from "@/lib/mastery";
-import type { StudyDays } from "@/lib/studyDays";
-import { buildDashboardView, type DashboardView } from "@/lib/dashboardView";
-import type { ForecastLabelStyle } from "@/lib/dashboardForecast";
+import type { CardState } from "@domain/mastery";
+import type { StudyDays } from "@domain/studyDays";
+import { buildDashboardView, type DashboardView } from "@domain/dashboardView";
+import type { ForecastLabelStyle } from "@domain/dashboardForecast";
 import { SCENARIOS } from "@/components/practice/scenarios";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 interface UseHomeDashboardOptions {
   vocabulary: VocabularyCard[];

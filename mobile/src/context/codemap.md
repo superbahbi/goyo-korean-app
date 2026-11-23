@@ -67,7 +67,7 @@ level, totalXp, streak, scenarioCardIds, labelDate})`;
 
 ## Integration
 
-- Imports web/domain modules: `client/src/lib/audioPlayer`
+- Imports domain modules: `packages/domain/src/audioPlayer`
   (`setAudioSpeaker`, `stopAudio`), `dashboardView`, `day`, `dialogLauncher`
   (`reduceDialog`, `ActiveDialog`, `DialogRequestInput`, `NO_DIALOG`),
   `gradeOutcome` (types only), `savedState` (types only), `vocabulary`, and

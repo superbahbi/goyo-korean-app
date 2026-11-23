@@ -1,4 +1,4 @@
-import type { SrsRating } from "@/lib/srs";
+import type { SrsRating } from "@domain/srs";
 
 export const REVIEW_LOG_SCHEMA_VERSION = 1;
 // Five thousand grades is roughly a year of steady daily use. The log is for

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { emptyGrammarProgress } from "@/lib/grammarProgress";
-import { FEMALE_VOICE_ENABLED } from "@/lib/voiceAvailability";
+import { emptyGrammarProgress } from "@domain/grammarProgress";
+import { FEMALE_VOICE_ENABLED } from "@domain/voiceAvailability";
 import {
   buildExportPayload,
   getSavedSchemaVersion,

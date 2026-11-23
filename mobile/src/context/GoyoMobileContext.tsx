@@ -12,33 +12,33 @@ import { SCENARIOS } from "../../../client/src/components/practice/scenarios";
 import {
   setAudioSpeaker,
   stopAudio,
-} from "../../../client/src/lib/audioPlayer";
+} from "../../../packages/domain/src/audioPlayer";
 import {
   buildDashboardView,
   type DashboardView,
-} from "../../../client/src/lib/dashboardView";
-import { getLocalDateKey } from "../../../client/src/lib/day";
+} from "../../../packages/domain/src/dashboardView";
+import { getLocalDateKey } from "../../../packages/domain/src/day";
 import {
   NO_DIALOG,
   reduceDialog,
   type ActiveDialog,
   type DialogRequestInput,
-} from "../../../client/src/lib/dialogLauncher";
+} from "../../../packages/domain/src/dialogLauncher";
 import type {
   GradeOptions,
   GradeOutcome,
-} from "../../../client/src/lib/gradeOutcome";
+} from "../../../packages/domain/src/gradeOutcome";
 import type {
   UserSettings,
   UserState,
-} from "../../../client/src/lib/savedState";
+} from "../../../packages/domain/src/savedState";
 import {
   CURATED_CARDS,
   CURATED_STUDY_READY,
   loadVocabularyDeck,
   type VocabularyCard,
   type VocabularyDeck,
-} from "../../../client/src/lib/vocabulary";
+} from "../../../packages/domain/src/vocabulary";
 import {
   THEME_STORAGE_KEY,
   type ThemePreference,

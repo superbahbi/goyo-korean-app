@@ -65,7 +65,7 @@ stopAudio, onClose})` → phase `intro` → `dismissIntro` → `recall` →
 
 - Imports `../primitives/dom` for all rendering and
   `../context/GoyoMobileContext` (`useGoyoMobile`) from `DashboardScreen`.
-- Imports domain modules directly from the web tree: `client/src/lib`
+- Imports domain modules directly from the domain package: `packages/domain`
   (`studySession`, `srs.previewIntervals`, `practiceQuestion`,
   `practiceDistractors`, `practiceVerdict`, `shuffle`, `alphabet`,
   `hangulStrokes`, `grammar`, `grammarProgress`, `audioPlayer`, `vocabulary`,

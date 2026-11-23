@@ -5,7 +5,7 @@ from pathlib import Path
 from openai import OpenAI
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / 'client/src/lib/essentialVocabulary.ts'
+SOURCE = ROOT / 'packages/domain/src/essentialVocabulary.ts'
 OUTPUT = ROOT / '.tmp/essential-enriched.json'
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 

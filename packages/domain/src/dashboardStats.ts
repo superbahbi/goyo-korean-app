@@ -2,8 +2,8 @@ import {
   getMasteryState,
   type CardState,
   type MasteryState,
-} from "@/lib/mastery";
-import { CATEGORIES, type VocabularyCard } from "@/lib/vocabulary";
+} from "@domain/mastery";
+import { CATEGORIES, type VocabularyCard } from "@domain/vocabulary";
 
 /**
  * Derived statistics for the dashboard and its Stats dialog: per-category

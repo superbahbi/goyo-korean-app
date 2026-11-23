@@ -13,10 +13,10 @@ pattern was not written down.
 
 ## Decision
 
-Framework-free policy belongs in `client/src/lib/` behind a small interface, with the
-clock, storage, network and audio dependencies injected. Hooks adapt that policy to React:
-subscribe, forward events, supply dependencies. Components render. UI wiring is verified by
-Playwright; policy is verified by vitest. Adding a component-test environment is a new
+Framework-free policy belongs in the domain package (`packages/domain/`) behind a small
+interface, with the clock, storage, network and audio dependencies injected. Hooks adapt that
+policy to React: subscribe, forward events, supply dependencies. Components render. UI wiring is
+verified by Playwright; policy is verified by vitest. Adding a component-test environment is a new
 decision, not an incidental change.
 
 ## Consequences

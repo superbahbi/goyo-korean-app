@@ -7,7 +7,7 @@ import {
   getAudioIndex,
   planAudioDownload,
   warmAudioClip,
-} from "@/lib/audioIndex";
+} from "@domain/audioIndex";
 
 const BATCH_SIZE = 6;
 

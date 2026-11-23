@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { stopAudio } from "@/lib/audioPlayer";
-import type { CardState } from "@/lib/mastery";
-import { createStudySession, type StudyRating } from "@/lib/studySession";
-import { studyKeyCommand } from "@/lib/studyKeys";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import { stopAudio } from "@domain/audioPlayer";
+import type { CardState } from "@domain/mastery";
+import { createStudySession, type StudyRating } from "@domain/studySession";
+import { studyKeyCommand } from "@domain/studyKeys";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 interface UseStudySessionOptions {
   queue: VocabularyCard[];

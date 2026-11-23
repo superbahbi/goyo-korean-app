@@ -1,5 +1,5 @@
-import { shuffle } from "@/lib/shuffle";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import { shuffle } from "@domain/shuffle";
+import type { VocabularyCard } from "@domain/vocabulary";
 
 /**
  * Build the wrong choices beside a practice question.

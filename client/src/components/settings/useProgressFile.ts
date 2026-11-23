@@ -4,8 +4,8 @@ import {
   buildExportPayload,
   validateImportPayload,
   type UserState,
-} from "@/lib/savedState";
-import { getLastBackupAt, recordBackup } from "@/lib/backupStatus";
+} from "@domain/savedState";
+import { getLastBackupAt, recordBackup } from "@domain/backupStatus";
 
 export interface PendingImport {
   state: UserState;

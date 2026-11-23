@@ -1,4 +1,4 @@
-import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
+import { PROGRESS_STORAGE_KEY } from "../packages/domain/src/progressStorage";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 // axe checks markup rules. These checks cover what it does not: the keyboard

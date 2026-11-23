@@ -3,7 +3,7 @@ import {
   getAudioPlayback,
   subscribeAudioPlayback,
   type AudioPlaybackState,
-} from "@/lib/audioPlayer";
+} from "@domain/audioPlayer";
 
 /**
  * The player's now-playing clip and playing state. Views derive their highlight

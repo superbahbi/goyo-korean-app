@@ -1,7 +1,7 @@
-import { addDays } from "@/lib/day";
-import { goalProgress } from "@/lib/gradeIntent";
-import { getMasteryState, type CardState } from "@/lib/mastery";
-import { CATEGORIES, type VocabularyCard } from "@/lib/vocabulary";
+import { addDays } from "@domain/day";
+import { goalProgress } from "@domain/gradeIntent";
+import { getMasteryState, type CardState } from "@domain/mastery";
+import { CATEGORIES, type VocabularyCard } from "@domain/vocabulary";
 
 export type CardStates = Record<string, CardState>;
 

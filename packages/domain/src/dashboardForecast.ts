@@ -1,11 +1,11 @@
-import type { CardState } from "@/lib/mastery";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { CardState } from "@domain/mastery";
+import type { VocabularyCard } from "@domain/vocabulary";
 import {
   buildReviewForecast,
   summarizeForecast,
   type ForecastDay,
   type WorkloadStatus,
-} from "@/lib/queue";
+} from "@domain/queue";
 
 /**
  * The dashboard review forecast: the next seven days with weekday labels, the

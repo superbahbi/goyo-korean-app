@@ -1,4 +1,4 @@
-import { repeatableSession } from "../client/src/lib/gradeIntent";
+import { repeatableSession } from "../packages/domain/src/gradeIntent";
 import { DashboardScreen } from "./src/components/DashboardScreen";
 import {
   BrowseScreen,

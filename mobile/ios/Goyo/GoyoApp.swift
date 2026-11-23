@@ -175,7 +175,7 @@ final class GoyoAudioBridge: NSObject, WKScriptMessageHandler, AVAudioPlayerDele
                 token,
                 .OBJC_ASSOCIATION_RETAIN_NONATOMIC
             )
-            // Match the web player's slowed narration rate (client/src/lib/
+            // Match the web player's slowed narration rate (packages/domain/src/
             // audioElement.ts sets playbackRate 0.9).
             audioPlayer.enableRate = true
             audioPlayer.rate = 0.9

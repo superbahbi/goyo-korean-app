@@ -2,7 +2,7 @@ import {
   MASTERY_LABELS,
   MASTERY_STYLES,
   type MasteryState,
-} from "@/lib/mastery";
+} from "@domain/mastery";
 
 interface MasteryBreakdownProps {
   masteryCounts: Record<MasteryState, number>;

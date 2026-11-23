@@ -1,4 +1,4 @@
-import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
+import { PROGRESS_STORAGE_KEY } from "../packages/domain/src/progressStorage";
 import { expect, test, type Page } from "@playwright/test";
 
 const PROGRESS_KEY = PROGRESS_STORAGE_KEY;

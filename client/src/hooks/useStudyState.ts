@@ -3,9 +3,9 @@ import {
   applyGradeOutcome,
   type GradeOptions,
   type GradeOutcome,
-} from "@/lib/gradeOutcome";
-import { requestPersistentStorage } from "@/lib/storageProtection";
-import { PROGRESS_STORAGE_KEY } from "@/lib/progressStorage";
+} from "@domain/gradeOutcome";
+import { requestPersistentStorage } from "@domain/storageProtection";
+import { PROGRESS_STORAGE_KEY } from "@domain/progressStorage";
 import {
   isNewerSave,
   loadSavedState,
@@ -13,8 +13,8 @@ import {
   type LoadedSave,
   type UserSettings,
   type UserState,
-} from "@/lib/savedState";
-import { recordGrammarAttempt } from "@/lib/grammarProgress";
+} from "@domain/savedState";
+import { recordGrammarAttempt } from "@domain/grammarProgress";
 
 function readStoredSave(): LoadedSave {
   try {

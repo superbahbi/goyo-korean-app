@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DIALOG_KINDS } from "@/lib/dialogLauncher";
+import { DIALOG_KINDS } from "@domain/dialogLauncher";
 import { DIALOG_REGISTRY } from "./registry";
 
 describe("dialog registry", () => {

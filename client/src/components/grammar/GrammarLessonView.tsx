@@ -3,9 +3,9 @@ import { Lightbulb, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GrammarQuiz } from "@/components/grammar/GrammarQuiz";
 import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
-import { grammarExampleId, type GrammarLesson } from "@/lib/grammar";
-import type { GrammarProgress } from "@/lib/grammarProgress";
-import { playSentenceAudio } from "@/lib/audioPlayer";
+import { grammarExampleId, type GrammarLesson } from "@domain/grammar";
+import type { GrammarProgress } from "@domain/grammarProgress";
+import { playSentenceAudio } from "@domain/audioPlayer";
 
 interface GrammarLessonViewProps {
   lesson: GrammarLesson;

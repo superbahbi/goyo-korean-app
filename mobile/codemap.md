@@ -20,7 +20,7 @@ from the web/domain modules it imports.
   listening, scenario, shadowing, browse, stats, settings). A Dialog request
   replaces rather than stacks; `onRequestClose`/`onClose` dispatch close.
 - **Config**: `tsconfig.json` extends the root config and includes
-  `../shared/**` and `../client/src/lib/**`. There is no mobile bundler: the
+  `../shared/**` and `../packages/domain/src/**`. There is no mobile bundler: the
   SPA build at the repo root already compiles everything `mobile/` imports.
 - **iOS harness** (`ios/`): `project.yml` (XcodeGen, iOS 17, `net.bahbi.goyo`)
   and `Goyo/GoyoApp.swift`, a SwiftUI shell with a `WKWebView` that serves the
@@ -43,10 +43,10 @@ from the web/domain modules it imports.
 ## Integration
 
 - Imports `./src/components/*`, `./src/context/GoyoMobileContext`,
-  `./src/primitives/dom`, and `client/src/lib/gradeIntent`
+  `./src/primitives/dom`, and `packages/domain/src/gradeIntent`
   (`repeatableSession`).
 - The root tsconfig include list makes `../shared/**` and
-  `../client/src/lib/**` resolvable from mobile code.
+  `../packages/domain/src/**` resolvable from mobile code.
 - Consumed by `client/src/App.tsx`, which lazy-loads `../../mobile/App` at the
   `/mobile` route, and by `scripts/install-ios-zen.sh` (`pnpm ios:zen`), which
   builds the SPA and copies `dist/public` into `mobile/ios/Goyo/www` for the

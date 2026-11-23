@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { CardState } from "@/lib/mastery";
-import type { VocabularyCard } from "@/lib/vocabulary";
+import type { CardState } from "@domain/mastery";
+import type { VocabularyCard } from "@domain/vocabulary";
 import { buildDashboardView, type DashboardViewInput } from "./dashboardView";
 import { RECOGNITION_MIN_CARDS } from "./dashboardPlan";
 

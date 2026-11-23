@@ -5,7 +5,7 @@
 Repo-local content-operations and development tooling, never shipped in the
 app bundle: deterministic audits of the imported Essential deck, ElevenLabs
 audio generation with content-hash naming and manifest maintenance, screenshot
-capture, and a physical-device iOS install. Scripts read `client/src/lib` and
+capture, and a physical-device iOS install. Scripts read `packages/domain` and
 write only to `docs/audits/`, `public/audio/`, `.tmp/`, or build dirs.
 
 ## Design
@@ -60,7 +60,7 @@ renders the AppIcon with `sips`, then runs `xcodegen`, `xcodebuild`, and
 
 ## Flow
 
-Inputs: deck sources under `client/src/lib`, existing `public/audio/index.json`
+Inputs: deck sources under `packages/domain`, existing `public/audio/index.json`
 and mp3s, `docs/audits/` verdicts, env (`ELEVENLABS_API_KEY`, `OPENAI_API_KEY`).
 Audit → seeded sample → id sort → Markdown sheet; generate →
 TTS POST → mp3 → atomic rename → `hashAudioLibrary` → index/manifest rewrite →
@@ -71,10 +71,10 @@ xcodegen → xcodebuild → devicectl. Outputs: `docs/audits/*.md`,
 
 ## Integration
 
-Depends on `client/src/lib/vocabulary`, `essentialVocabulary`, `alphabet`, and
+Depends on `packages/domain/src/vocabulary`, `essentialVocabulary`, `alphabet`, and
 `grammar` as the content source of truth (imported by TS, regex-parsed by
 Python); `generate-elevenlabs-audio.ts` imports `hash-audio.ts`. The Audio
-manifest written here is parsed at runtime by `client/src/lib/audioIndex`
+manifest written here is parsed at runtime by `packages/domain/src/audioIndex`
 and is the same map the PWA uses for playback and offline
 download, so a clip absent from `index.json` is unreachable. External deps:
 ElevenLabs TTS, OpenAI, Playwright, Vite, Xcode. `package.json` exposes

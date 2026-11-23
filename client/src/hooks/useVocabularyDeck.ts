@@ -4,7 +4,7 @@ import {
   CURATED_STUDY_READY,
   loadVocabularyDeck,
   type VocabularyDeck,
-} from "@/lib/vocabulary";
+} from "@domain/vocabulary";
 
 /**
  * Loads the full deck after mount. The curated cards render immediately so the

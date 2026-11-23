@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
-import type { StudyResults } from "@/lib/studySession";
+import type { StudyResults } from "@domain/studySession";
 
 interface StudySessionSummaryProps {
   results: StudyResults;

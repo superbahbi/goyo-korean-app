@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { clearProgress } from "@/lib/progressStorage";
+import { cn } from "@domain/utils";
+import { clearProgress } from "@domain/progressStorage";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Component, ErrorInfo, ReactNode } from "react";
 
