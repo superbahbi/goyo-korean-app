@@ -1,4 +1,5 @@
 import AVFoundation
+import ObjectiveC
 import SwiftUI
 import WebKit
 
@@ -70,7 +71,13 @@ final class GoyoBundleSchemeHandler: NSObject, WKURLSchemeHandler {
         var isDir: ObjCBool = false
 
         if !fm.fileExists(atPath: targetURL.path, isDirectory: &isDir) || isDir.boolValue {
-            // SPA fallback for routes such as /mobile
+            // SPA fallback for routes such as /mobile — never for audio: a
+            // missing clip must not come back as index.html served with an
+            // audio/mpeg content type (the player would try to decode HTML).
+            if relativePath.hasPrefix("audio/") {
+                urlSchemeTask.didFailWithError(URLError(.fileDoesNotExist))
+                return
+            }
             targetURL = root.appendingPathComponent("index.html")
         }
 
@@ -116,11 +123,14 @@ final class GoyoBundleSchemeHandler: NSObject, WKURLSchemeHandler {
     }
 }
 
+// Stable address used as the associated-object key that carries each
+// player's play token (Swift cannot add stored properties to AVAudioPlayer).
+private var goyoPlayTokenKey: UInt8 = 0
+
 final class GoyoAudioBridge: NSObject, WKScriptMessageHandler, AVAudioPlayerDelegate {
     weak var webView: WKWebView?
     var loadedPath: String = ""
     private var player: AVAudioPlayer?
-    private var currentToken: Int = 0
     private let wwwRoot: URL? = Bundle.main.resourceURL?.appendingPathComponent("www")
 
     func userContentController(
@@ -142,7 +152,6 @@ final class GoyoAudioBridge: NSObject, WKScriptMessageHandler, AVAudioPlayerDele
               let root = wwwRoot else { return }
 
         player?.stop()
-        currentToken = token
 
         var cleanPath = rawPath
         if let qIndex = cleanPath.firstIndex(of: "?") {
@@ -157,6 +166,19 @@ final class GoyoAudioBridge: NSObject, WKScriptMessageHandler, AVAudioPlayerDele
             try AVAudioSession.sharedInstance().setActive(true)
             let audioPlayer = try AVAudioPlayer(contentsOf: fileURL)
             audioPlayer.delegate = self
+            // The token rides on the player instance, so a late delegate
+            // callback from a superseded player settles its own promise and
+            // never the newer clip's.
+            objc_setAssociatedObject(
+                audioPlayer,
+                &goyoPlayTokenKey,
+                token,
+                .OBJC_ASSOCIATION_RETAIN_NONATOMIC
+            )
+            // Match the web player's slowed narration rate (client/src/lib/
+            // audioElement.ts sets playbackRate 0.9).
+            audioPlayer.enableRate = true
+            audioPlayer.rate = 0.9
             audioPlayer.prepareToPlay()
             audioPlayer.play()
             self.player = audioPlayer
@@ -166,11 +188,17 @@ final class GoyoAudioBridge: NSObject, WKScriptMessageHandler, AVAudioPlayerDele
     }
 
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        notifyWeb(token: currentToken, ok: flag)
+        guard let token = playToken(for: player) else { return }
+        notifyWeb(token: token, ok: flag)
     }
 
     func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
-        notifyWeb(token: currentToken, ok: false)
+        guard let token = playToken(for: player) else { return }
+        notifyWeb(token: token, ok: false)
+    }
+
+    private func playToken(for player: AVAudioPlayer) -> Int? {
+        objc_getAssociatedObject(player, &goyoPlayTokenKey) as? Int
     }
 
     private func notifyWeb(token: Int, ok: Bool) {
@@ -198,7 +226,7 @@ struct GoyoWebContainer: UIViewRepresentable {
         (function() {
           var seq = 0;
           var pending = {};
-          window.__goyoNativeAudioDone = function(token, ok) {
+          function settle(token, ok) {
             var entry = pending[token];
             if (!entry) return;
             delete pending[token];
@@ -209,6 +237,9 @@ struct GoyoWebContainer: UIViewRepresentable {
               entry.el.dispatchEvent(new Event('error'));
               entry.reject(new Error('Native audio failed'));
             }
+          }
+          window.__goyoNativeAudioDone = function(token, ok) {
+            settle(token, ok);
           };
           var origPlay = HTMLAudioElement.prototype.play;
           var origPause = HTMLAudioElement.prototype.pause;
@@ -220,6 +251,11 @@ struct GoyoWebContainer: UIViewRepresentable {
               var token = ++seq;
               var el = this;
               this.__goyoToken = token;
+              // A new clip replaces any pending one: settle it as ended (the
+              // old clip was replaced, it did not fail) so no promise dangles.
+              Object.keys(pending).forEach(function(oldToken) {
+                settle(Number(oldToken), true);
+              });
               return new Promise(function(resolve, reject) {
                 pending[token] = { el: el, resolve: resolve, reject: reject };
                 window.webkit.messageHandlers.goyoAudio.postMessage({
@@ -233,7 +269,9 @@ struct GoyoWebContainer: UIViewRepresentable {
           };
           HTMLAudioElement.prototype.pause = function() {
             if (this.__goyoToken && pending[this.__goyoToken]) {
-              delete pending[this.__goyoToken];
+              // Settle the pending promise rather than deleting the entry:
+              // the caller awaiting play() must not hang on a pause/stop.
+              settle(this.__goyoToken, true);
               if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.goyoAudio) {
                 window.webkit.messageHandlers.goyoAudio.postMessage({ action: 'stop' });
               }
