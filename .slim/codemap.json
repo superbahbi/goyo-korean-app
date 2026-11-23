@@ -36,8 +36,7 @@
       ".tmp/**",
       "e2e/**",
       "docs/**",
-      "public/**",
-      "mobile/.expo/**"
+      "public/**"
     ],
     "exceptions": []
   },
@@ -173,9 +172,6 @@
     "components.json": "3cd4ec12955c1b7b8651fff5ded96534",
     "eslint.config.js": "031f818aa879582fea93b7ee6b3b53fa",
     "mobile/App.tsx": "f468212e52d9ef9c5903ac785679ba4f",
-    "mobile/app.json": "f67f4edb37ee53f3c3f273d1d91f9dd4",
-    "mobile/index.ts": "ecd733148dccacf5e2b796268a73fe6f",
-    "mobile/package.json": "acb3558b0e55db858fd79afc9c12242e",
     "mobile/src/components/DashboardScreen.tsx": "a2e17a281a4ad4bbcc1f0fc2ff5e16c4",
     "mobile/src/components/DialogScreens.tsx": "47476ef8842622b8bc38c97888306b50",
     "mobile/src/components/FlashCardView.tsx": "fc0eda41f288f67675001a659aacf979",

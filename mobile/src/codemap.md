@@ -24,7 +24,7 @@ root itself contains no production modules.
   and `flattenStyle`/`Platform` from the primitives.
 
 ## Flow
-- Boot: `../index.ts` → `../App.tsx` → `./context/GoyoMobileContext.tsx`
+- Boot: `../App.tsx` → `./context/GoyoMobileContext.tsx`
   (`GoyoMobileProvider`) → `./components/DashboardScreen` or
   `./components/StudySessionScreen`, all rendered through
   `./primitives/react-native`.

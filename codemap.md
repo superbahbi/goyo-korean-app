@@ -8,8 +8,9 @@ ships three deliverables from a single domain core:
 - **Web client** (`client/`): React 19 + Vite + Tailwind 4 SPA, installable
   Workbox PWA, progress in `localStorage` with JSON export/import. Free,
   offline-capable, no accounts.
-- **Mobile app** (`mobile/`): Expo/React Native companion reusing the same
-  domain modules through `shared/`.
+- **Mobile app** (`mobile/`): the mobile UI the Vite SPA serves at `/mobile`,
+  rendered as plain DOM, wrapped by the iOS WKWebView shell in `mobile/ios/`
+  that bridges `HTMLAudioElement` playback to `AVAudioPlayer`.
 - **Content pipeline** (`scripts/` + `public/audio/`): ElevenLabs clip
   generation, content-hash audio manifest, deterministic deck audits.
 
@@ -81,7 +82,7 @@ into `public/` and `client/src/lib` datasets; the app never writes content.
 | `client/src/components/study/` | Study-session card UI: intro, production, grade actions, summary | [View Map](client/src/components/study/codemap.md) |
 | `client/src/components/ui/` | Generated shadcn/Radix primitives, no domain logic | [View Map](client/src/components/ui/codemap.md) |
 | `shared/` | Framework-free cross-platform domain re-exports used by web + mobile | [View Map](shared/codemap.md) |
-| `mobile/` | Expo/RN delivery target: app shell, packaging, iOS WKWebView+audio bridge | [View Map](mobile/codemap.md) |
+| `mobile/` | Mobile UI served by the SPA at `/mobile`; iOS WKWebView shell + audio bridge | [View Map](mobile/codemap.md) |
 | `mobile/src/` | Mobile source root: three-layer architecture definition | [View Map](mobile/src/codemap.md) |
 | `mobile/src/primitives/` | RN platform-abstraction facade + RN→CSS style translator | [View Map](mobile/src/primitives/codemap.md) |
 | `mobile/src/context/` | Single mobile state container: UserState, deck, Dialog request, commands | [View Map](mobile/src/context/codemap.md) |
