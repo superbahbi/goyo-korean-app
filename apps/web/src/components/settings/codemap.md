@@ -1,4 +1,4 @@
-# client/src/components/settings/
+# apps/web/src/components/settings/
 
 ## Responsibility
 
@@ -50,9 +50,9 @@ mounts only while open; closing calls `clearPendingImport`.
 ## Integration
 
 Imports `@/components/ui/{select,switch,checkbox,button}`,
-`@/contexts/ThemeContext`, and domain modules `@/lib/savedState`,
-`@/lib/backupStatus`, `@/lib/appReload`, `@/lib/audioPlayer`,
-`@/lib/voiceAvailability`. Consumed by `../SettingsDialog.tsx`, which instantiates
+`@/contexts/ThemeContext`, and domain modules `@domain/savedState`,
+`@domain/backupStatus`, `@domain/appReload`, `@domain/audioPlayer`,
+`@domain/voiceAvailability`. Consumed by `../SettingsDialog.tsx`, which instantiates
 `useProgressFile` once and passes it to `ProgressFileSection`; that dialog is
 reached through the `settings` Dialog request in `../dialogs/registry.tsx`.
 `../DownloadAllAudio.tsx` lives one level up but is rendered inside the same

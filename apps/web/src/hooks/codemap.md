@@ -1,11 +1,11 @@
-# client/src/hooks/
+# apps/web/src/hooks/
 
 ## Responsibility
 
-React adapters over the framework-free domain modules in `../lib`: deck loading,
+React adapters over the framework-free domain modules in `@domain`: deck loading,
 persisted study state, dashboard view derivation, session/dialog control, and
 audio coordination. Hooks own effects, refs, and React state; the policies they
-apply are implemented and tested in `../lib`.
+apply are implemented and tested in `@domain`.
 
 ## Design
 
@@ -69,7 +69,7 @@ cleanup, listener removal).
 
 ## Integration
 
-- Depends on `@/lib/vocabulary`, `savedState`, `gradeOutcome`, `dashboardView`,
+- Depends on `@domain/vocabulary`, `savedState`, `gradeOutcome`, `dashboardView`,
   `dashboardForecast`, `mastery`, `studyDays`, `day`, `audioPlayer`,
   `audioPlaybackState`, `dialogLauncher`, `grammarProgress`,
   `storageProtection`; and on `../components/practice/scenarios`.

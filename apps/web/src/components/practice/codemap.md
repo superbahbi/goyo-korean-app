@@ -1,4 +1,4 @@
-# client/src/components/practice/
+# apps/web/src/components/practice/
 
 ## Responsibility
 
@@ -51,14 +51,14 @@ PracticeQuestion>` lazily constructs `createQuestionLoop` and subscribes with
 
 ## Integration
 
-Imports `@/components/ui/{button,dialog,progress}`, `@/lib/utils`, and
-`@/lib/vocabulary`. Its adapter binds `@/lib/practiceQuestion` and
-`@/lib/practiceVerdict`; containers add `@/lib/practiceDistractors` and
-`@/lib/shuffle` for choice construction.
+Imports `@/components/ui/{button,dialog,progress}`, `@domain/utils`, and
+`@domain/vocabulary`. Its adapter binds `@domain/practiceQuestion` and
+`@domain/practiceVerdict`; containers add `@domain/practiceDistractors` and
+`@domain/shuffle` for choice construction.
 
 Consumers: sibling mode containers `../ListeningPractice`, `../ScenarioPractice`,
 `../ShadowingPractice`, `@/pages/AlphabetPractice`, `../StudySession` (shell
 only), `../study/StudySessionSummary` (completion screen), and
 `../grammar/GrammarQuiz` plus `../grammar/GrammarDialog` (shell, choice, feedback,
 and question loop). Cross-references: `../study`, `../grammar`,
-`../../lib/practiceQuestion`, `../../lib/practiceVerdict`.
+`@domain/practiceQuestion`, `@domain/practiceVerdict`.

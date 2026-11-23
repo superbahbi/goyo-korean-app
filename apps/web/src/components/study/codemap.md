@@ -1,4 +1,4 @@
-# client/src/components/study/
+# apps/web/src/components/study/
 
 ## Responsibility
 
@@ -19,7 +19,7 @@ onGrade, onClose })` lazily creates `createStudySession` once and subscribes
   `session.cardShown()`; the machine stays `gradingLocked` from a Grade until
   the next card has rendered, so a double click cannot grade twice.
 - **Declarative keyboard binding.** One window `keydown` listener calls
-  `studyKeyCommand(event, phase)` from `@/lib/studyKeys`, ignores modified or
+  `studyKeyCommand(event, phase)` from `@domain/studyKeys`, ignores modified or
   repeated keys and editable targets, honours `defaultPrevented`, and lets
   `[data-intro-audio]` keep native Space/Enter activation. Commands map to
   `close`, `dismissIntro`, `setRevealed`, and `grade`.
@@ -51,10 +51,10 @@ Returned surface: `index`, `sessionQueue`, `currentCard`, `showIntro`, `flipped`
 
 Imports `@/components/practice/{PracticeShell,PracticeComplete}`,
 `@/components/ui/{button,input}`, `@/hooks/useAutoPlayOnce`,
-`@/hooks/useSentenceAudioIds`, and `@/lib/{studySession,studyKeys,srs,mastery,
+`@/hooks/useSentenceAudioIds`, and `@domain/{studySession,studyKeys,srs,mastery,
 vocabulary,audioPlayer}`.
 
 The sole consumer is `../StudySession.tsx`, which also supplies `FlashCard`,
 computes `previewIntervals`, and composes the shell footer. Cross-references:
-`../practice` for the shell and completion screen, `../../lib/studySession`,
-`../../lib/studyKeys`, `../../lib/srs`.
+`../practice` for the shell and completion screen, `@domain/studySession`,
+`@domain/studyKeys`, `@domain/srs`.

@@ -1,4 +1,4 @@
-# client/src/components/stats/
+# apps/web/src/components/stats/
 
 ## Responsibility
 
@@ -12,9 +12,9 @@ lays out values and performs no aggregation, scheduling, or storage access.
 
 - **Alias-only type module.** `types.ts` re-exports view-model shapes without
   redefining them: `CategorySummary as CategoryMastery` from
-  `@/lib/dashboardStats`, `StatsForecastDay` from `@/lib/dashboardForecast`,
+  `@domain/dashboardStats`, `StatsForecastDay` from `@domain/dashboardForecast`,
   and `StatsDialogForecast` plus `StatsDialogStats` from
-  `@/lib/dashboardView`. The dialog can import locally while a single
+  `@domain/dashboardView`. The dialog can import locally while a single
   definition remains authoritative.
 - **Pure presentational components.** Each named export takes a narrow prop and
   holds no state: `StatsSummaryTiles({ stats })`,
@@ -22,7 +22,7 @@ lays out values and performs no aggregation, scheduling, or storage access.
   `MasteryBreakdown({ masteryCounts })`,
   `CategoryMasteryList({ categories })`.
 - **Token-driven visuals.** Tailwind utility classes plus the shared
-  `MASTERY_LABELS`/`MASTERY_STYLES` maps from `@/lib/mastery` keep the four
+  `MASTERY_LABELS`/`MASTERY_STYLES` maps from `@domain/mastery` keep the four
   Ability states consistent; accuracy bars threshold at 80% and 60%.
 - **Accessible derived summaries.** `ForecastOutlook` renders the bar chart as
   `role="img"` with a generated sentence (total reviews, peak count and label).
@@ -43,12 +43,12 @@ over `masteryCounts`. `CategoryMasteryList` renders one bar per category from
 
 ## Integration
 
-Imports types from `@/components/stats/types`, `@/lib/mastery`, and (through
-that seam) `@/lib/dashboardStats`, `@/lib/dashboardForecast`, and
-`@/lib/dashboardView`.
+Imports types from `@/components/stats/types`, `@domain/mastery`, and (through
+that seam) `@domain/dashboardStats`, `@domain/dashboardForecast`, and
+`@domain/dashboardView`.
 
 Consumers: `../StatsDialog.tsx` renders all four and re-exports
 `CategoryMastery`, `StatsDialogForecast`, `StatsDialogStats`, and
 `StatsForecastDay`; `../dialogs/registry.tsx` lazily mounts `StatsDialog` from
-a Dialog request. Cross-references: `../dialogs`, `../../lib/dashboardView`,
-`../../lib/dashboardStats`, `../../lib/dashboardForecast`, `../../lib/mastery`.
+a Dialog request. Cross-references: `../dialogs`, `@domain/dashboardView`,
+`@domain/dashboardStats`, `@domain/dashboardForecast`, `@domain/mastery`.

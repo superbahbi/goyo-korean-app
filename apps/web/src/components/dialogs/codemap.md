@@ -1,4 +1,4 @@
-# client/src/components/dialogs/
+# apps/web/src/components/dialogs/
 
 ## Responsibility
 
@@ -18,7 +18,7 @@ host and not a state store.
   (`cards`, `onGrade`), `browse` (`vocabulary`), `stats`, and `forecast`.
 - `DialogEntry` — `{ render(dialog, deps, onClose): ReactNode }`.
 - `DIALOG_REGISTRY: Record<DialogKind, DialogEntry>` — keyed by the
-  `DIALOG_KINDS` union from `@/lib/dialogLauncher`, so a missing or extra kind is
+  `DIALOG_KINDS` union from `@domain/dialogLauncher`, so a missing or extra kind is
   a compile error and dispatch is a lookup rather than a `switch` with a silent
   default.
 
@@ -49,8 +49,8 @@ itself holds no state, so reopening a dialog starts from fresh internal state.
 
 ## Integration
 
-Depends on `@/lib/dialogLauncher` (`DialogKind`, `DialogRequest`),
-`@/lib/savedState`, `@/lib/grammarProgress`, `@/lib/vocabulary`, and
+Depends on `@domain/dialogLauncher` (`DialogKind`, `DialogRequest`),
+`@domain/savedState`, `@domain/grammarProgress`, `@domain/vocabulary`, and
 `@/components/stats/types`; lazily imports the dialog and practice components
 in `../` and `../grammar/`. Consumed only by `../HomeDialogHost.tsx`, which
 supplies `HomeDialogDeps` from `pages/Home.tsx`. `registry.test.ts` asserts the

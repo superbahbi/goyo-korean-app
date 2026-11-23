@@ -48,21 +48,21 @@ CI also runs `pnpm test:e2e`, which builds the app and serves it with `vite prev
 ## Layout
 
 ```
-client/src/pages/         App shell (Home) and the standalone Hangul practice page
-client/src/components/    Dashboard sections (header, progress, plan, alerts), the shared practice
+apps/web/src/pages/       App shell (Home) and the standalone Hangul practice page
+apps/web/src/components/  Dashboard sections (header, progress, plan, alerts), the shared practice
                           shell, seven practice modes, grammar course, Browse/Stats/Settings dialogs,
                           study session, theme toggle
-client/src/components/ui/ shadcn primitives (only the imported ones are kept)
-client/src/hooks/         Dashboard state, study sessions, deck loading, and the saved-state adapter
-packages/domain/          Deck data, scheduler, queue, XP, audio player, saved-state format and persistence helpers
-packages/shared/          Cross-platform adapters shared by web and the iOS shell: progress
+apps/web/src/components/ui/ shadcn primitives (only the imported ones are kept)
+apps/web/src/hooks/       Dashboard state, study sessions, deck loading, and the saved-state adapter
+packages/domain/         Deck data, scheduler, queue, XP, audio player, saved-state format and persistence helpers
+packages/shared/         Cross-platform adapters shared by web and the iOS shell: progress
                           storage (storage.ts) and theme palette (theme.ts)
-mobile/                   Mobile UI (rendered as DOM at /mobile) plus the iOS WKWebView
+mobile/                  Mobile UI (rendered as DOM at /mobile) plus the iOS WKWebView
                           shell that serves it; no React Native — audio plays through the
                           Swift AVAudioPlayer bridge
-public/audio/             Pronunciation library plus index.json and manifests
-scripts/                  Audio generation and maintenance scripts
-docs/                     Improvement plan and generated content-audit sheets
+public/audio/            Pronunciation library plus index.json and manifests
+scripts/                 Audio generation and maintenance scripts
+docs/                    Improvement plan and generated content-audit sheets
 ```
 
 ## Audio
@@ -99,8 +99,16 @@ becomes a burden, or if regenerated clips start causing merge conflicts on most 
 
 ## Deployment
 
-Vercel builds with `pnpm install --frozen-lockfile` and serves `dist/public`. SPA rewrites and cache
-headers live in `vercel.json`.
+Vercel builds the repo root with `pnpm install --frozen-lockfile` and serves `dist/public`. SPA
+rewrites and cache headers live in `vercel.json`.
+
+The web app lives in `apps/web/`, but the build stays at the repo root: `vercel.json` runs the root
+`pnpm build` (which builds `apps/web/` through the root `vite.config.ts`) and publishes
+`dist/public`. So the Vercel project needs no dashboard change — the repository's build and output
+settings are unchanged.
+
+Every push to `main` deploys the web app automatically. The native app is not on Vercel: iOS and
+Android builds ship through EAS (`eas build`), not through a web host.
 
 ## Contributing
 

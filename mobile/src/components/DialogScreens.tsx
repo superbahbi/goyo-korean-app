@@ -25,7 +25,7 @@ import {
 import type {
   StatsDialogStats,
   StatsDialogForecast,
-} from "../../../client/src/components/stats/types";
+} from "../../../apps/web/src/components/stats/types";
 import type { ThemePreference } from "../../../packages/shared/theme";
 
 const theme = (darkMode: boolean) => ({

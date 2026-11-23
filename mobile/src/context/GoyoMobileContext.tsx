@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { SCENARIOS } from "../../../client/src/components/practice/scenarios";
+import { SCENARIOS } from "../../../apps/web/src/components/practice/scenarios";
 import {
   setAudioSpeaker,
   stopAudio,

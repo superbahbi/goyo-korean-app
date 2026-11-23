@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SCENARIOS } from "../../client/src/components/practice/scenarios";
+import { SCENARIOS } from "../../apps/web/src/components/practice/scenarios";
 import { getLocalDateKey } from "../../packages/domain/src/day";
 import {
   NO_DIALOG,

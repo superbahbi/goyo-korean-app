@@ -115,15 +115,15 @@ export default defineConfig({
   plugins,
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@": path.resolve(import.meta.dirname, "apps", "web", "src"),
       "@domain": path.resolve(import.meta.dirname, "packages", "domain", "src"),
       "@shared": path.resolve(import.meta.dirname, "packages", "shared"),
     },
   },
   envDir: path.resolve(import.meta.dirname),
-  root: path.resolve(import.meta.dirname, "client"),
+  root: path.resolve(import.meta.dirname, "apps", "web"),
   // Goyo keeps its large, GitHub-tracked pronunciation library in the project-level public directory.
-  // Serve that directory explicitly even though the Vite application root is client/.
+  // Serve that directory explicitly even though the Vite application root is apps/web/.
   publicDir: path.resolve(import.meta.dirname, "public"),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),

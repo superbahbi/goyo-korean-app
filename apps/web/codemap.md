@@ -1,10 +1,14 @@
-# client/
+# apps/web/
 
 ## Responsibility
 
 Vite web-client root: the single static HTML document that boots the React 19
 SPA plus the entire client source tree. It holds no build logic — bundling,
 aliasing, and the PWA worker config live in the repo-root `vite.config.ts`.
+
+This is the web app workspace package. Vercel builds it from the repo root
+(`vercel.json` points at the root `pnpm build` and `dist/public`), so moving
+it here needs no Vercel dashboard change.
 
 ## Design
 
@@ -40,7 +44,7 @@ aliasing, and the PWA worker config live in the repo-root `vite.config.ts`.
 
 - Downward: loads `/src/main.tsx`; resolves `/icons/*` and Workbox assets from
   `public/`.
-- Upward: built by the root `vite.config.ts` (`@` → `client/src` alias,
+- Upward: built by the root `vite.config.ts` (`@` → `apps/web/src` alias,
   `registerType: "prompt"`, manifest, audio manifest read from
   `public/audio/index.json`).
 - Sister documentation: `src/codemap.md` for routing/wiring and

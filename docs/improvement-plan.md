@@ -6,6 +6,11 @@ content is folded in below (the SRS model and the deck provenance are reference 
 
 Every stage is done only when its gate passes.
 
+> **Path note.** The stages below are dated records, so they name the paths as
+> they were when that work happened: `client/src/lib/` is now
+> `packages/domain/src/` and `client/src/` is now `apps/web/src/`. The
+> behaviour described is unchanged — only the locations moved.
+
 ## Product
 
 - Free public web app. The maintainer is the first user, so the app is tuned on one real learner first.

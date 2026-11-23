@@ -2,6 +2,13 @@
   "buildCommand": "pnpm build",
   "outputDirectory": "dist/public",
   "installCommand": "pnpm install --frozen-lockfile",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "build": {
+    "env": {
+      "NODE_VERSION": "22"
+    }
+  },
   "headers": [
     {
       "source": "/assets/(.*)",
