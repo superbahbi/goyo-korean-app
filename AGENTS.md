@@ -1,5 +1,10 @@
 ## Agent skills
 
+### Delivery
+
+The gate, the branch, the pull request, the merge and the deploy check are in
+`docs/agents/delivery.md`. Follow that sequence; do not rebuild it per task.
+
 ### Issue tracker
 
 Issues and specs live as GitHub issues in this repo. See `docs/agents/issue-tracker.md`.
