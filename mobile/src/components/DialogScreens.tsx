@@ -26,6 +26,7 @@ import type {
   StatsDialogStats,
   StatsDialogForecast,
 } from "../../../client/src/components/stats/types";
+import type { ThemePreference } from "../../../shared/theme";
 
 const theme = (darkMode: boolean) => ({
   bg: darkMode ? "#0f172a" : "#ffffff",
@@ -315,18 +316,20 @@ export function StatsScreen({
 export function SettingsScreen({
   state,
   darkMode,
+  themePreference,
   onUpdateSettings,
   onReplaceState,
   onResetProgress,
-  onToggleTheme,
+  onSetThemePreference,
   onClose,
 }: {
   state: UserState;
   darkMode: boolean;
+  themePreference: ThemePreference;
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
   onReplaceState: (state: UserState) => void;
   onResetProgress: () => void;
-  onToggleTheme: () => void;
+  onSetThemePreference: (preference: ThemePreference) => void;
   onClose: () => void;
 }) {
   const c = theme(darkMode);
@@ -337,6 +340,11 @@ export function SettingsScreen({
   const [confirming, setConfirming] = useState(false);
   const goals = [5, 10, 15, 20, 30],
     newCards = [1, 3, 5, 10];
+  const themeOptions: Array<{ value: ThemePreference; label: string }> = [
+    { value: "system", label: "System" },
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark" },
+  ];
   const importProgress = () => {
     const result = validateImport(json);
     if (result.ok) {
@@ -412,13 +420,30 @@ export function SettingsScreen({
             {state.settings.autoPlayAudio ? "On" : "Off"}
           </Text>
         </Pressable>
-        <Pressable
-          onPress={onToggleTheme}
-          style={[S.row, { backgroundColor: c.card, borderColor: c.line }]}
-        >
-          <Text style={[S.f1, { color: c.fg }]}>Theme</Text>
-          <Text style={{ color: c.dim }}>{darkMode ? "Dark" : "Light"}</Text>
-        </Pressable>
+        <Section title="Theme" c={c} />
+        <View style={S.chips}>
+          {themeOptions.map(({ value, label }) => (
+            <Pressable
+              key={value}
+              onPress={() => onSetThemePreference(value)}
+              style={[
+                S.chip,
+                {
+                  backgroundColor: themePreference === value ? c.ok : c.card,
+                  borderColor: themePreference === value ? c.ok : c.line,
+                },
+              ]}
+            >
+              <Text
+                style={{
+                  color: themePreference === value ? "#fff" : c.fg,
+                }}
+              >
+                {label}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
         <Section title="Progress export" c={c} />
         <TextInput
           value={json}

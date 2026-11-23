@@ -5,7 +5,6 @@ import {
   useEffect,
   useMemo,
   useReducer,
-  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -25,19 +24,13 @@ import {
   type ActiveDialog,
   type DialogRequestInput,
 } from "../../../client/src/lib/dialogLauncher";
-import {
-  applyGradeOutcome,
-  type GradeOptions,
-  type GradeOutcome,
+import type {
+  GradeOptions,
+  GradeOutcome,
 } from "../../../client/src/lib/gradeOutcome";
-import { recordGrammarAttempt } from "../../../client/src/lib/grammarProgress";
-import { PROGRESS_STORAGE_KEY } from "../../../client/src/lib/progressStorage";
-import { THEME_STORAGE_KEY } from "../../../shared/theme";
-import {
-  loadSavedState,
-  parseSavedState,
-  type UserSettings,
-  type UserState,
+import type {
+  UserSettings,
+  UserState,
 } from "../../../client/src/lib/savedState";
 import {
   CURATED_CARDS,
@@ -46,16 +39,22 @@ import {
   type VocabularyCard,
   type VocabularyDeck,
 } from "../../../client/src/lib/vocabulary";
+import { THEME_STORAGE_KEY, type ThemePreference } from "../../../shared/theme";
+import { createCrossPlatformProgressStore } from "../../../shared/storage";
 
 /**
- * One provider for the React Native app (iOS, Android, Web). It composes the
- * exact domain modules the web app uses, so progress, scheduling, and grading
- * stay identical across platforms.
+ * One provider for the mobile app (the `/mobile` DOM screens served to
+ * browsers and the iOS WKWebView shell). It composes the exact domain
+ * modules the web app uses, so progress, scheduling, and grading stay
+ * identical across surfaces.
  */
 
+/** The theme actually painted: "system" has already been resolved. */
 export type Theme = "light" | "dark";
 export type SessionMode = "daily" | "weak" | "learning";
 type Rating = "again" | "good" | "easy";
+
+const PREFERS_DARK_QUERY = "(prefers-color-scheme: dark)";
 
 export interface GoyoMobileContextValue {
   state: UserState;
@@ -68,7 +67,10 @@ export interface GoyoMobileContextValue {
   sessionQueue: VocabularyCard[];
   sessionMode: SessionMode;
   recognitionSessionCards: VocabularyCard[];
+  /** The resolved theme the screens should paint. */
   theme: Theme;
+  /** The stored choice, including "system"; shared with the web app. */
+  themePreference: ThemePreference;
   notice: string | null;
   startDailySession: () => void;
   startWeakSession: () => void;
@@ -96,6 +98,7 @@ export interface GoyoMobileContextValue {
   ) => void;
   replaceState: (next: UserState) => void;
   resetProgress: () => void;
+  setThemePreference: (preference: ThemePreference) => void;
   toggleTheme: () => void;
   dismissNotice: () => void;
 }
@@ -112,38 +115,34 @@ function labelDate(key: string, style: "weekday" | "monthDay"): string {
   );
 }
 
-function readInitialState(): { state: UserState; blocked: boolean } {
+/**
+ * The stored theme choice, in the same "system" | "light" | "dark" domain
+ * the web app persists: a web-set "system" preference survives a mobile
+ * visit, and anything unreadable falls back to "system".
+ */
+function readStoredTheme(): ThemePreference {
   try {
-    if (typeof localStorage === "undefined") {
-      return { state: parseSavedState(null), blocked: false };
-    }
-    const loaded = loadSavedState(localStorage.getItem(PROGRESS_STORAGE_KEY));
-    return { state: loaded.state, blocked: loaded.blockedByNewerVersion };
+    if (typeof localStorage === "undefined") return "system";
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    if (stored === "system" || stored === "light" || stored === "dark")
+      return stored;
+    return "system";
   } catch {
-    return { state: parseSavedState(null), blocked: false };
+    return "system";
   }
 }
 
-function readStoredTheme(): Theme {
-  try {
-    if (typeof localStorage === "undefined") return "light";
-    // The web app may store "system"; the mobile app models only an explicit
-    // light/dark choice, so anything but "dark" falls back to light.
-    return localStorage.getItem(THEME_STORAGE_KEY) === "dark"
-      ? "dark"
-      : "light";
-  } catch {
-    return "light";
-  }
+function systemPrefersDark(): boolean {
+  if (typeof window === "undefined" || !window.matchMedia) return false;
+  return window.matchMedia(PREFERS_DARK_QUERY).matches;
 }
 
 export function GoyoMobileProvider({ children }: { children: ReactNode }) {
-  const [initial] = useState(readInitialState);
-  const [state, setState] = useState<UserState>(initial.state);
-  const [saveBlocked, setSaveBlocked] = useState(initial.blocked);
-  // Grades in one tick must build on the newest state, not a stale render.
-  const stateRef = useRef(state);
-  stateRef.current = state;
+  // The store owns the saved-progress seam: hydration, the newer-save
+  // guard, and save errors. React only mirrors its state.
+  const [store] = useState(() => createCrossPlatformProgressStore());
+  const [state, setState] = useState<UserState>(() => store.getState());
+  useEffect(() => store.subscribe(() => setState(store.getState())), [store]);
 
   const [today, setToday] = useState(getLocalDateKey);
   const [deck, setDeck] = useState<VocabularyDeck>({
@@ -157,28 +156,30 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
   const [recognitionSessionCards, setRecognitionSessionCards] = useState<
     VocabularyCard[]
   >([]);
-  const [theme, setTheme] = useState<Theme>(readStoredTheme);
+  const [themePreference, setThemePreferenceState] =
+    useState<ThemePreference>(readStoredTheme);
+  const [systemDark, setSystemDark] = useState(systemPrefersDark);
   const [notice, setNotice] = useState<string | null>(null);
 
-  // Native environments may have no localStorage: in-memory state still works.
-  useEffect(() => {
-    if (saveBlocked || typeof localStorage === "undefined") return;
-    try {
-      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(state));
-    } catch (error) {
-      console.error("Failed to save mobile progress:", error);
-    }
-  }, [state, saveBlocked]);
-
-  // Native environments may have no localStorage: in-memory choice still works.
+  // Persist the full preference domain, "system" included, so the web app
+  // reads back exactly what the learner chose.
   useEffect(() => {
     if (typeof localStorage === "undefined") return;
     try {
-      localStorage.setItem(THEME_STORAGE_KEY, theme);
+      localStorage.setItem(THEME_STORAGE_KEY, themePreference);
     } catch {
       // Persisting is best effort; the in-memory choice still applies.
     }
-  }, [theme]);
+  }, [themePreference]);
+
+  // A "system" preference follows the OS, including while the app is open.
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const query = window.matchMedia(PREFERS_DARK_QUERY);
+    const sync = () => setSystemDark(query.matches);
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -219,6 +220,13 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer);
   }, [notice]);
 
+  const theme: Theme =
+    themePreference === "system"
+      ? systemDark
+        ? "dark"
+        : "light"
+      : themePreference;
+
   const view = useMemo(
     () =>
       buildDashboardView({
@@ -239,21 +247,16 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
     [deck, state, today]
   );
 
+  // The store always grades from its own newest state, so several Grades in
+  // one tick compose instead of overwriting each other.
   const gradeCard = useCallback(
     (cardId: string, rating: Rating, options?: GradeOptions): GradeOutcome => {
-      const result = applyGradeOutcome(
-        stateRef.current,
-        cardId,
-        rating,
-        options
-      );
-      stateRef.current = result.state;
-      setState(result.state);
-      if (result.outcome.goalJustReached)
-        setNotice(`Daily goal reached! +${result.outcome.xp} XP 🎉`);
-      return result.outcome;
+      const outcome = store.gradeCard(cardId, rating, options);
+      if (outcome.goalJustReached)
+        setNotice(`Daily goal reached! +${outcome.xp} XP 🎉`);
+      return outcome;
     },
-    []
+    [store]
   );
 
   const startDailySession = useCallback(() => {
@@ -353,59 +356,38 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
     [gradeCard]
   );
 
-  const updateSettings = useCallback((partial: Partial<UserSettings>) => {
-    setState(current => {
-      const next: UserState = {
-        ...current,
-        settings: { ...current.settings, ...partial },
-      };
-      stateRef.current = next;
-      return next;
-    });
-  }, []);
+  const updateSettings = useCallback(
+    (partial: Partial<UserSettings>) => store.updateSettings(partial),
+    [store]
+  );
 
   const recordGrammarResult = useCallback(
-    (lessonId: string, correct: number, total: number) => {
-      setState(current => {
-        const next: UserState = {
-          ...current,
-          grammar: recordGrammarAttempt(
-            current.grammar,
-            lessonId,
-            correct,
-            total
-          ),
-        };
-        stateRef.current = next;
-        return next;
-      });
-    },
-    []
+    (lessonId: string, correct: number, total: number) =>
+      store.recordGrammarResult(lessonId, correct, total),
+    [store]
   );
 
-  const replaceState = useCallback((next: UserState) => {
-    stateRef.current = next;
-    setState(next);
-  }, []);
+  const replaceState = useCallback(
+    (next: UserState) => store.replaceState(next),
+    [store]
+  );
 
   const resetProgress = useCallback(() => {
-    try {
-      if (typeof localStorage !== "undefined")
-        localStorage.removeItem(PROGRESS_STORAGE_KEY);
-    } catch {
-      // Clearing storage is best effort; the reset still applies in memory.
-    }
-    const next = parseSavedState(null, today);
-    stateRef.current = next;
-    setState(next);
-    setSaveBlocked(false);
+    // The store clears the key, resets to a fresh state, and notifies; a
+    // newer-save block lifts with it.
+    void store.resetProgress();
     setNotice("Progress reset. A fresh start!");
-  }, [today]);
+  }, [store]);
 
-  const toggleTheme = useCallback(
-    () => setTheme(current => (current === "dark" ? "light" : "dark")),
-    []
-  );
+  const setThemePreference = useCallback((preference: ThemePreference) => {
+    setThemePreferenceState(preference);
+  }, []);
+
+  // The dashboard's quick toggle flips the resolved theme, which stores an
+  // explicit choice — the same trade the web header toggle makes.
+  const toggleTheme = useCallback(() => {
+    setThemePreferenceState(theme === "dark" ? "light" : "dark");
+  }, [theme]);
   const dismissNotice = useCallback(() => setNotice(null), []);
 
   const value: GoyoMobileContextValue = {
@@ -420,6 +402,7 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
     sessionMode,
     recognitionSessionCards,
     theme,
+    themePreference,
     notice,
     startDailySession,
     startWeakSession,
@@ -439,6 +422,7 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
     recordGrammarResult,
     replaceState,
     resetProgress,
+    setThemePreference,
     toggleTheme,
     dismissNotice,
   };

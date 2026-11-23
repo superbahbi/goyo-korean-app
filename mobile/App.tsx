@@ -17,12 +17,7 @@ import {
   GoyoMobileProvider,
   useGoyoMobile,
 } from "./src/context/GoyoMobileContext";
-import {
-  Modal,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from "./src/primitives/dom";
+import { Modal, SafeAreaView, StyleSheet, View } from "./src/primitives/dom";
 
 function GoyoMobileShell() {
   const {
@@ -36,6 +31,7 @@ function GoyoMobileShell() {
     sessionMode,
     recognitionSessionCards,
     theme,
+    themePreference,
     closeStudySession,
     handleStudyGrade,
     closeDialog,
@@ -46,7 +42,7 @@ function GoyoMobileShell() {
     recordGrammarResult,
     replaceState,
     resetProgress,
-    toggleTheme,
+    setThemePreference,
   } = useGoyoMobile();
 
   const darkMode = theme === "dark";
@@ -146,10 +142,11 @@ function GoyoMobileShell() {
             <SettingsScreen
               state={state}
               darkMode={darkMode}
+              themePreference={themePreference}
               onUpdateSettings={updateSettings}
               onReplaceState={replaceState}
               onResetProgress={resetProgress}
-              onToggleTheme={toggleTheme}
+              onSetThemePreference={setThemePreference}
               onClose={closeDialog}
             />
           )}
