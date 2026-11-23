@@ -99,7 +99,7 @@ and persistent-storage requests. `appReload.reloadToLatestApp` is the waiting-wo
   `buildDashboardView` → `pools` (queue, recognition, weak, learning), `modes`, `today.plan`,
   `stats`, `review`, `dialog` → Home sections, Stats dialog, and practice launchers.
 - **Study session**: queue → `createStudySession` → derived phase `intro | recall | revealed |
-  completed`; `grade` clamps latency to 250–120 000 ms, sets the Grade lock, appends a lapsed card
+completed`; `grade` clamps latency to 250–120 000 ms, sets the Grade lock, appends a lapsed card
   once, calls `onGrade`; `cardShown` releases the lock after the next card paints.
 - **Practice**: `buildRound` → `createQuestionLoop` → `answer` → `next` → `describeVerdict` →
   `applyGradeOutcome(..., { mode })`.

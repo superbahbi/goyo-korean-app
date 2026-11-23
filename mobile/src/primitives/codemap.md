@@ -1,6 +1,7 @@
 # mobile/src/primitives/
 
 ## Responsibility
+
 The mobile screens' DOM component kit: a small, strictly typed React API
 surface (`View`, `Text`, `Pressable`, `ScrollView`, `TextInput`, `SafeAreaView`,
 `Modal`, `StyleSheet`, `Platform`) that renders standards-compliant DOM, plus
@@ -8,6 +9,7 @@ the style translator that turns the RN-flavoured flexbox/shorthand styles the
 screens are authored in into plain CSS.
 
 ## Design
+
 - **Typed kit, one render path**: screens depend on this module's interface,
   never on `react-native` or `react-native-web`. Every component renders
   `div`/`span`/`button`/`input`/`textarea` markup — there is no native host
@@ -44,6 +46,7 @@ screens are authored in into plain CSS.
   `TextInputProps`, `ModalProps`.
 
 ## Flow
+
 - Props in → `flattenStyle(style)` → `rnStyleToCss` merged over a base style →
   `createElement("div"|"span"|"button"|"input"|"textarea")`.
 - Events: `onPress` → `onClick`; `pressed` via `onPointerDown/Up/Leave` and
@@ -53,6 +56,7 @@ screens are authored in into plain CSS.
   `SafeAreaView` keeps the shell's `flex: 1` root filling the viewport.
 
 ## Integration
+
 - Depends only on `react` (`createElement`, `useState`); no domain imports and
   no React Native import of any kind.
 - Consumed by every screen in `../components/` and by `../../App.tsx`; all

@@ -1,6 +1,7 @@
 # mobile/src/components/
 
 ## Responsibility
+
 Presentation and interaction layer: dashboard, five Practice modes, browse/
 stats/settings dialogs, the flashcard, and the Study session runner. Screens own
 only local view state (query, tab, selected choice, JSON draft) and delegate
@@ -8,10 +9,11 @@ every Grade, Dialog request, and settings change to the provider in
 `../context/GoyoMobileContext.tsx`.
 
 ## Design
+
 - Screens are prop-driven; `DashboardScreen` is the only one calling
   `useGoyoMobile()`.
   - `DashboardScreen` — daily-goal hero (`Start Daily Session` / `Repeat
-    Practice`), Level & Mastery, 7-day Review Plan, practice and category grids.
+Practice`), Level & Mastery, 7-day Review Plan, practice and category grids.
   - `DialogScreens` — `BrowseScreen` (tag chips + text filter over
     front/back/romanization, 60-row cap, mastery badge), `StatsScreen` (stat
     tiles, mastery split, forecast bars, category accuracy), `SettingsScreen`
@@ -37,12 +39,13 @@ every Grade, Dialog request, and settings change to the provider in
   study session uses the three-way `StudyRating` (again/good/easy).
 
 ## Flow
+
 - Dashboard in: `state`, `view` (from `buildDashboardView`), `theme`, `notice`;
   out: `openDialog`, `openBrowse`, `openListening`, `openScenario`,
   `openShadowing`, `startDailySession`, `startWeakSession`,
   `startLearningSession`, `toggleTheme`, `dismissNotice`.
 - Study: queue → `createStudySession({queue, clock, isNewCard, onGrade,
-  stopAudio, onClose})` → phase `intro` → `dismissIntro` → `recall` →
+stopAudio, onClose})` → phase `intro` → `dismissIntro` → `recall` →
   `setRevealed(true)` → `grade("again"|"good"|"easy")` → provider applies the
   Grade; failed cards append once; `completed` shows results, `retryCount`, and
   `restart` only when `allowRepeat` (Repeat practice). `cardShown()` fires on
@@ -59,6 +62,7 @@ every Grade, Dialog request, and settings change to the provider in
   `onReplaceState`; reset needs a second confirm tap.
 
 ## Integration
+
 - Imports `../primitives/dom` for all rendering and
   `../context/GoyoMobileContext` (`useGoyoMobile`) from `DashboardScreen`.
 - Imports domain modules directly from the web tree: `client/src/lib`

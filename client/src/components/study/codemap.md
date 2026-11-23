@@ -12,7 +12,7 @@ remain with the parent that supplies `onGrade`.
 ## Design
 
 - **Adapter over a Session machine.** `useStudySession({ queue, cardStates,
-  onGrade, onClose })` lazily creates `createStudySession` once and subscribes
+onGrade, onClose })` lazily creates `createStudySession` once and subscribes
   via `useSyncExternalStore`. Callback and `cardStates` refs keep the machine
   stable while exposing current values.
 - **Grade lock release by effect.** A `useEffect` on `state.index` calls

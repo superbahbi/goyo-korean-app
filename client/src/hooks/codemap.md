@@ -42,7 +42,7 @@ browser/storage/audio side effects at the React edge.
   **Dialog launcher**: `{ activeDialog, open, close }`, one active Dialog
   request at a time.
 - `useAudioPlayback()` — `useSyncExternalStore(subscribeAudioPlayback,
-  getAudioPlayback, getAudioPlayback)` returning `AudioPlaybackState`
+getAudioPlayback, getAudioPlayback)` returning `AudioPlaybackState`
   (`{ clip, playing }`), so highlight state cannot drift from the audio element.
 - `useAutoPlayOnce({ clipId, enabled, play, onFailure, delayMs = 300 })` —
   plays a clip once per identity after paint; latches `clipId` in a `playedId`

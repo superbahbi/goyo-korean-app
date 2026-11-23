@@ -23,7 +23,7 @@ the OS preference, and applies it to the document.
   outside the provider, so a missing provider fails fast instead of rendering
   an unthemed tree.
 - Module-private helpers: `systemPrefersDark()` (SSR-safe), `readStoredTheme(
-  fallback)` (validates stored value, swallows blocked-storage errors), and
+fallback)` (validates stored value, swallows blocked-storage errors), and
   `applyTheme(resolved)` which toggles `html.dark`, sets
   `documentElement.style.colorScheme`, and updates the `theme-color` meta
   (`#111a18` dark / `#f8fafc` light).
@@ -35,7 +35,7 @@ the OS preference, and applies it to the document.
 1. Mount → initial `theme` from localStorage (or `defaultTheme`), initial
    `systemDark` from `matchMedia`.
 2. Derive `resolvedTheme`: `theme === "system" ? (systemDark ? "dark" : "light")
-   : theme`.
+: theme`.
 3. Effect on `resolvedTheme` → `applyTheme(...)` mutates document class,
    `colorScheme`, and meta tag.
 4. `setTheme(next)` updates state and writes `goyo-theme`; `toggleTheme()`

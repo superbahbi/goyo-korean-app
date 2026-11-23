@@ -1,12 +1,14 @@
 # mobile/src/context/
 
 ## Responsibility
+
 The app's single application-state container and command surface. It exposes
 one `GoyoMobileContextValue` to screens: the `UserState` mirror, the
 vocabulary deck, the Dialog request, Study session selection, the theme, and
 transient notices — plus the commands that mutate them.
 
 ## Design
+
 - Provider + hook pair: `GoyoMobileProvider` and `useGoyoMobile()` (throws when
   used outside the provider). Screens see data fields plus commands — never raw
   setters.
@@ -22,8 +24,8 @@ transient notices — plus the commands that mutate them.
   at a time; open replaces, close returns to none); `useMemo` for the derived
   `DashboardView`.
 - Derived, never stored: `view = buildDashboardView({vocabulary, studyReady,
-  cardStates, studyDays, reviewEntries, today, dailyGoal, newCardsPerDay,
-  level, totalXp, streak, scenarioCardIds, labelDate})`;
+cardStates, studyDays, reviewEntries, today, dailyGoal, newCardsPerDay,
+level, totalXp, streak, scenarioCardIds, labelDate})`;
   `SCENARIO_CARD_IDS` is computed once from `SCENARIOS`, and `labelDate` is
   injected for locale policy.
 - Theme follows the web app's full `"system" | "light" | "dark"` domain under
@@ -38,6 +40,7 @@ transient notices — plus the commands that mutate them.
   `settings.audioSpeaker` changes, and a 4 s `notice` auto-dismiss.
 
 ## Flow
+
 - Boot: the store constructor reads `PROGRESS_STORAGE_KEY` synchronously
   (localStorage) and seeds `state`; `deck` seeds from `CURATED_CARDS` /
   `CURATED_STUDY_READY`, then the async deck replaces it; `themePreference`
@@ -63,6 +66,7 @@ transient notices — plus the commands that mutate them.
   block).
 
 ## Integration
+
 - Imports web/domain modules: `client/src/lib/audioPlayer`
   (`setAudioSpeaker`, `stopAudio`), `dashboardView`, `day`, `dialogLauncher`
   (`reduceDialog`, `ActiveDialog`, `DialogRequestInput`, `NO_DIALOG`),

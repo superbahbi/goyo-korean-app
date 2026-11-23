@@ -30,7 +30,7 @@ semantic design-token theme consumed by every component in the tree.
 **`index.css`** — Tailwind 4 token theme:
 
 - `@import "tailwindcss"` + `tw-animate-css`; `@custom-variant dark
-  (&:is(.dark *))` makes dark a class-scoped variant.
+(&:is(.dark *))` makes dark a class-scoped variant.
 - `@theme inline` maps semantic CSS variables (`--background`, `--primary`,
   `--card`, `--muted`, `--ring`, sidebar/chart tokens, radii) onto Tailwind
   utilities such as `bg-card` / `text-muted-foreground`.

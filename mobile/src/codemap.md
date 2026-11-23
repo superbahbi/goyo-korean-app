@@ -1,12 +1,14 @@
 # mobile/src/
 
 ## Responsibility
+
 Source root of the mobile app: it defines the three layers the shell in
 `../App.tsx` composes — DOM primitives, the provider that binds Goyo's
 domain engine, and the screens — and hosts the parity test. The
 root itself contains no production modules.
 
 ## Design
+
 - Layering, by dependency direction: `components/` depends on `context/` for
   data/commands and on `primitives/` for rendering; `context/` depends on
   `client/src/lib` domain modules; `primitives/` depends only on `react`.
@@ -24,6 +26,7 @@ root itself contains no production modules.
   and `flattenStyle`/`Platform` from the primitives.
 
 ## Flow
+
 - Boot: `../App.tsx` → `./context/GoyoMobileContext.tsx`
   (`GoyoMobileProvider`) → `./components/DashboardScreen` or
   `./components/StudySessionScreen`, all rendered through
@@ -36,6 +39,7 @@ root itself contains no production modules.
   `./components/PracticeScreens` entry.
 
 ## Integration
+
 - Upward: consumed by `../App.tsx`, which imports `./components/*`,
   `./context/GoyoMobileContext`, and `./primitives/dom`.
 - Downward: `./context` imports `client/src/lib/*` and
