@@ -1,6 +1,7 @@
 # mobile/
 
 ## Responsibility
+
 The mobile UI Goyo ships on a phone: a React component tree the Vite SPA
 serves at `/mobile`, rendered as plain DOM, plus the iOS harness that wraps it
 (`ios/`): a SwiftUI shell whose `WKWebView` loads the prebuilt web export from
@@ -9,6 +10,7 @@ no domain semantics: Grades, scheduling, XP, and the saved-state format come
 from the web/domain modules it imports.
 
 ## Design
+
 - **Composition root**: `App.tsx` exports `GoyoMobileApp` (named + default) =
   `GoyoMobileProvider` → `GoyoMobileShell`. No navigation library; the shell is
   a state-driven switch — `isStudying && sessionQueue.length > 0` renders
@@ -27,6 +29,7 @@ from the web/domain modules it imports.
   `.spokenAudio` `AVAudioSession`.
 
 ## Flow
+
 1. `GoyoMobileApp` mounts `GoyoMobileProvider` (`src/context/`) around
    `GoyoMobileShell`.
 2. The shell reads `useGoyoMobile()`; dashboard selections call `openDialog`/
@@ -38,8 +41,10 @@ from the web/domain modules it imports.
 4. Session summary's close and every dialog's close land back in the shell.
 
 ## Integration
+
 - Imports `./src/components/*`, `./src/context/GoyoMobileContext`,
-  `./src/primitives/dom`, and `../shared/core`.
+  `./src/primitives/dom`, and `client/src/lib/gradeIntent`
+  (`repeatableSession`).
 - The root tsconfig include list makes `../shared/**` and
   `../client/src/lib/**` resolvable from mobile code.
 - Consumed by `client/src/App.tsx`, which lazy-loads `../../mobile/App` at the

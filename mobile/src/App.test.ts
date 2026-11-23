@@ -1,15 +1,12 @@
 import { describe, expect, it } from "vitest";
-import {
-  CURATED_CARDS,
-  GRAMMAR_LESSONS,
-  SCENARIOS,
-  buildDashboardView,
-  createStudySession,
-  getLocalDateKey,
-  parseSavedState,
-  reduceDialog,
-  NO_DIALOG,
-} from "../../shared/core";
+import { SCENARIOS } from "../../client/src/components/practice/scenarios";
+import { getLocalDateKey } from "../../client/src/lib/day";
+import { NO_DIALOG, reduceDialog } from "../../client/src/lib/dialogLauncher";
+import { GRAMMAR_LESSONS } from "../../client/src/lib/grammar";
+import { buildDashboardView } from "../../client/src/lib/dashboardView";
+import { parseSavedState } from "../../client/src/lib/savedState";
+import { createStudySession } from "../../client/src/lib/studySession";
+import { CURATED_CARDS } from "../../client/src/lib/vocabulary";
 import {
   createCrossPlatformProgressStore,
   createMemoryStorage,

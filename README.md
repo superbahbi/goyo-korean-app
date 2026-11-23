@@ -55,6 +55,8 @@ client/src/components/    Dashboard sections (header, progress, plan, alerts), t
 client/src/components/ui/ shadcn primitives (only the imported ones are kept)
 client/src/lib/           Deck data, scheduler, queue, XP, audio player, saved-state format and persistence helpers
 client/src/hooks/         Dashboard state, study sessions, deck loading, and the saved-state adapter
+shared/                   Cross-platform adapters shared by web and the iOS shell: progress
+                          storage (storage.ts) and theme palette (theme.ts)
 mobile/                   Mobile UI (rendered as DOM at /mobile) plus the iOS WKWebView
                           shell that serves it; no React Native — audio plays through the
                           Swift AVAudioPlayer bridge

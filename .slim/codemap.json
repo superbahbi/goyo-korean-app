@@ -193,8 +193,6 @@
     "scripts/regenerate-number-four.mjs": "85c2baf50aea1913129dad65f3f3d438",
     "scripts/screenshots.ts": "018c5f4428d9c9e05c7edcd2982c9d7c",
     "scripts/update-net-manifest.mjs": "fcdff76ec8cd218d1c06d2357859074e",
-    "shared/audio.ts": "da38d73be1633e31b330620e486d8244",
-    "shared/core.ts": "df6624282d4255a8768c4ed22cdce6f7",
     "shared/storage.ts": "fd9a3f6917088918f08769650baa50cc",
     "shared/theme.ts": "c7005d0191f9d18f18fd4fd2a8bb1d07",
     "tsconfig.json": "8600efcb4efb3f180cecce53c0b515de",
