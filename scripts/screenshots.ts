@@ -1,6 +1,7 @@
-// Captures the app's main screens so a UI change can be inspected without
-// opening a browser. Every capture starts from a fresh learner and resets the
-// theme, so the output is deterministic.
+// Captures the app's main screens — the web dashboard's surfaces plus the
+// SPA's /mobile route under an iPhone user agent — so a UI change can be
+// inspected without opening a browser. Every capture starts from a fresh
+// learner and resets the theme, so the output is deterministic.
 //
 //   pnpm shots                                      # build, serve, capture
 //   SHOTS_LABEL=before pnpm shots                   # keep a baseline
@@ -29,10 +30,14 @@ const VIEWPORTS = [
 
 interface Screen {
   name: string;
+  /** Route to open; defaults to the web dashboard. */
+  path?: string;
   /** Interactions that bring the screen into view. */
   open: (page: Page) => Promise<void>;
   /** Capture only at desktop width. */
   desktopOnly?: boolean;
+  /** Capture only at the iPhone-sized viewport (the /mobile route's target). */
+  iphoneOnly?: boolean;
   /** Capture the whole page, not just the viewport. */
   fullPage?: boolean;
 }
@@ -121,6 +126,33 @@ const SCREENS: Screen[] = [
   },
 ];
 
+// The SPA's /mobile route: the DOM screens the iOS WKWebView shell serves.
+// Captured in the iPhone lane only — that viewport carries the iPhone user
+// agent the shell really runs with.
+const MOBILE_SCREENS: Screen[] = [
+  {
+    name: "mobile-dashboard",
+    path: "/mobile",
+    iphoneOnly: true,
+    fullPage: true,
+    open: async page => {
+      await page.getByTestId("goyo-mobile-root").waitFor();
+      await page.getByText("Your first session").waitFor();
+    },
+  },
+  {
+    name: "mobile-settings",
+    path: "/mobile",
+    iphoneOnly: true,
+    open: async page => {
+      await page.getByTestId("goyo-mobile-root").waitFor();
+      await page.getByRole("button", { name: "Open settings" }).click();
+      await page.getByTestId("goyo-mobile-modal").waitFor();
+      await page.getByRole("button", { name: "System" }).waitFor();
+    },
+  },
+];
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
 
@@ -156,14 +188,16 @@ async function main() {
           { theme }
         );
 
-        for (const screen of SCREENS) {
+        for (const screen of [...SCREENS, ...MOBILE_SCREENS]) {
           if (screen.desktopOnly && viewport.name !== "desktop") continue;
+          if (screen.iphoneOnly && viewport.name !== "iphone") continue;
           const page = await context.newPage();
           try {
-            await page.goto(BASE_URL);
-            await page
-              .getByRole("button", { name: /start (daily|first) session/i })
-              .waitFor();
+            await page.goto(`${BASE_URL}${screen.path ?? ""}`);
+            if (!screen.path)
+              await page
+                .getByRole("button", { name: /start (daily|first) session/i })
+                .waitFor();
             await screen.open(page);
             // Let Radix and Framer Motion finish their enter transition.
             await page.waitForTimeout(350);

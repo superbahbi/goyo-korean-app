@@ -50,8 +50,10 @@ mp3s; `update-net-manifest.mjs` repairs the `num_004` entry and
 **Dev tooling** — `screenshots.ts` (`pnpm shots`) runs Vite `build` + `preview`
 unless `SHOTS_BASE_URL` is set, drives Playwright Chromium over desktop
 1280×900 and iPhone 15 viewports in light and dark, clears localStorage and
-seeds `goyo-theme`, opens each `SCREENS` entry, waits 350 ms for Radix/Framer
-Motion, and writes PNGs to `.tmp/shots/<SHOTS_LABEL>/`. `install-ios-zen.sh`
+seeds `goyo-theme`, opens each `SCREENS` entry plus the `MOBILE_SCREENS`
+lane (the `/mobile` route under the iPhone user agent), waits 350 ms for
+Radix/Framer Motion, and writes PNGs to `.tmp/shots/<SHOTS_LABEL>/`.
+`install-ios-zen.sh`
 (`pnpm ios:zen`) builds, copies `dist/public` into `mobile/ios/Goyo/www`,
 renders the AppIcon with `sips`, then runs `xcodegen`, `xcodebuild`, and
 `xcrun devicectl` install/launch.
