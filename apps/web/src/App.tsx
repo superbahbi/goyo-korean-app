@@ -10,7 +10,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 
-const GoyoMobileApp = lazy(() => import("../../mobile/App"));
+const GoyoMobileApp = lazy(() => import("../../../mobile/App"));
 
 function Router() {
   return (

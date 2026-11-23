@@ -1,4 +1,4 @@
-# client/src/components/ui/
+# apps/web/src/components/ui/
 
 ## Responsibility
 
@@ -10,7 +10,7 @@ instead of Radix directly. This folder carries no domain logic and no app state.
 
 Each file follows the same recipe: a Radix primitive (`@radix-ui/react-dialog`,
 `-select`, `-checkbox`, `-switch`, `-tooltip`, `-progress`, `-slot`), class
-composition with `cn` from `@/lib/utils`, and `class-variance-authority` where
+composition with `cn` from `@domain/utils`, and `class-variance-authority` where
 variants exist. Every element carries a `data-slot="…"` attribute used by
 nested Tailwind selectors. Exports:
 
@@ -46,7 +46,7 @@ theme propagation in `Toaster`.
 ## Integration
 
 Depends on `@radix-ui/*`, `class-variance-authority`, `lucide-react`,
-`@/lib/utils`, `@/hooks/useComposition`, and `@/contexts/ThemeContext`. Consumed
+`@domain/utils`, `@/hooks/useComposition`, and `@/contexts/ThemeContext`. Consumed
 by nearly every sibling folder — `../` (HomeHeader, QuickLinks, FlashCard,
 DownloadAllAudio, AlphabetCard…), `../browse/`, `../settings/`, and the
 `../study/`, `../practice/`, `../stats/`, `../grammar/` components — plus pages

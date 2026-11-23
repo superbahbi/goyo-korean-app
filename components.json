@@ -4,16 +4,16 @@
   "rsc": false,
   "tsx": true,
   "tailwind": {
-    "css": "client/src/index.css",
+    "css": "apps/web/src/index.css",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
     "components": "@/components",
-    "utils": "@/lib/utils",
+    "utils": "@domain/utils",
     "ui": "@/components/ui",
-    "lib": "@/lib",
+    "lib": "@domain",
     "hooks": "@/hooks"
   }
 }

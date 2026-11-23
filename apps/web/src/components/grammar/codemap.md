@@ -1,4 +1,4 @@
-# client/src/components/grammar/
+# apps/web/src/components/grammar/
 
 ## Responsibility
 
@@ -47,9 +47,9 @@ score card with retake. Closing or going back calls `stopAudio()`.
 
 Imports `../practice/{PracticeShell,ChoiceButton,PracticeFeedback,
 useQuestionLoop}`, `@/components/ui/{button,badge}`,
-`@/hooks/useSentenceAudioIds`, and `@/lib/{grammar,grammarProgress,audioPlayer}`.
+`@/hooks/useSentenceAudioIds`, and `@domain/{grammar,grammarProgress,audioPlayer}`.
 
 Consumers: `../dialogs/registry.tsx` lazily mounts `GrammarDialog` from a
 Dialog request and passes `progress` plus `onCompleteLesson`. Grade intent is
 not involved: grammar results update `GrammarProgress` only. Cross-references:
-`../practice`, `../dialogs`, `../../lib/grammar`, `../../lib/grammarProgress`.
+`../practice`, `../dialogs`, `@domain/grammar`, `@domain/grammarProgress`.

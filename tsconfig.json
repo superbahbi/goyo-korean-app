@@ -1,6 +1,6 @@
 {
   "include": [
-    "client/src/**/*",
+    "apps/web/**/*",
     "packages/domain/**/*",
     "packages/shared/**/*",
     "mobile/src/**/*",
@@ -24,7 +24,7 @@
     "baseUrl": ".",
     "types": ["node", "vite/client", "vite-plugin-pwa/client"],
     "paths": {
-      "@/*": ["./client/src/*"],
+      "@/*": ["./apps/web/src/*"],
       "@domain/*": ["./packages/domain/src/*"],
       "@shared/*": ["./packages/shared/*"]
     }

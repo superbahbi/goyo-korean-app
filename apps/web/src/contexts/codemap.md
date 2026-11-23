@@ -1,4 +1,4 @@
-# client/src/contexts/
+# apps/web/src/contexts/
 
 ## Responsibility
 

@@ -69,7 +69,7 @@ stopAudio, onClose})` → phase `intro` → `dismissIntro` → `recall` →
   (`studySession`, `srs.previewIntervals`, `practiceQuestion`,
   `practiceDistractors`, `practiceVerdict`, `shuffle`, `alphabet`,
   `hangulStrokes`, `grammar`, `grammarProgress`, `audioPlayer`, `vocabulary`,
-  `mastery`, `savedState`), plus `client/src/components/practice/scenarios` and
-  `client/src/components/stats/types`.
+  `mastery`, `savedState`), plus `apps/web/src/components/practice/scenarios` and
+  `apps/web/src/components/stats/types`.
 - Consumed only by `../../App.tsx` (dashboard, session, or one Modal-hosted
   dialog); `FlashCardView` is also consumed by `StudySessionScreen`.

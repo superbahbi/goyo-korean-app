@@ -23,7 +23,7 @@ import { createQuestionLoop } from "../../../packages/domain/src/practiceQuestio
 import { pickDistractors } from "../../../packages/domain/src/practiceDistractors";
 import { shuffle } from "../../../packages/domain/src/shuffle";
 import { describeVerdict } from "../../../packages/domain/src/practiceVerdict";
-import { SCENARIOS } from "../../../client/src/components/practice/scenarios";
+import { SCENARIOS } from "../../../apps/web/src/components/practice/scenarios";
 import {
   playAlphabetAudio,
   playVocabularyAudio,

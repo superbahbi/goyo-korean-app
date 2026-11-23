@@ -1,4 +1,4 @@
-# client/src/components/
+# apps/web/src/components/
 
 ## Responsibility
 
@@ -7,7 +7,7 @@ components render the `UserState`-derived view handed down by `pages/Home.tsx`
 and translate learner intent — open a Dialog request, start a Study session,
 submit a Grade — into callbacks. They own only transient UI state (reveal,
 filters, paging, download progress); persistence, scheduling, and dialog
-selection live in `@/lib` and `@/hooks`. Child folders own their own slices:
+selection live in `@domain` and `@/hooks`. Child folders own their own slices:
 `browse/`, `dialogs/`, `grammar/`, `practice/`, `settings/`, `stats/`, `study/`,
 `ui/`.
 
@@ -61,7 +61,7 @@ only while open; `FlashCard` keys on `currentCard.id`).
 
 ## Integration
 
-Imports domain logic from `@/lib` (`srs.previewIntervals`, `mastery`,
+Imports domain logic from `@domain` (`srs.previewIntervals`, `mastery`,
 `vocabulary`, `audioPlayer`/`audioIndex`, `dashboardPlan`/`dashboardView`/
 `dashboardForecast`, `dialogLauncher`, `gradeIntent.repeatableSession`,
 `practiceVerdict`, `queue.selectShadowingCards`), hooks

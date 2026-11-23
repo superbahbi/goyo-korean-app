@@ -71,7 +71,7 @@ level, totalXp, streak, scenarioCardIds, labelDate})`;
   (`setAudioSpeaker`, `stopAudio`), `dashboardView`, `day`, `dialogLauncher`
   (`reduceDialog`, `ActiveDialog`, `DialogRequestInput`, `NO_DIALOG`),
   `gradeOutcome` (types only), `savedState` (types only), `vocabulary`, and
-  `client/src/components/practice/scenarios`; plus the shared adapters
+  `apps/web/src/components/practice/scenarios`; plus the shared adapters
   `shared/theme` (`THEME_STORAGE_KEY`, `ThemePreference`) and
   `shared/storage` (`createCrossPlatformProgressStore`).
 - Consumed by `../../App.tsx` and `../components/DashboardScreen.tsx`; other

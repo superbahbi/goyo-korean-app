@@ -43,9 +43,9 @@ root itself contains no production modules.
 - Upward: consumed by `../App.tsx`, which imports `./components/*`,
   `./context/GoyoMobileContext`, and `./primitives/dom`.
 - Downward: `./context` imports `packages/domain/src/*` and
-  `client/src/components/practice/scenarios`; `./components` imports
-  `packages/domain/src/*`, `client/src/components/practice/scenarios`, and
-  `client/src/components/stats/types`; `./primitives` imports only `react`.
+  `apps/web/src/components/practice/scenarios`; `./components` imports
+  `packages/domain/src/*`, `apps/web/src/components/practice/scenarios`, and
+  `apps/web/src/components/stats/types`; `./primitives` imports only `react`.
 - Rendering contract: nothing here imports `react-native` or
   `react-native-web`; the screens render as DOM everywhere the SPA runs —
   browsers, Vitest, and the iOS WKWebView shell.

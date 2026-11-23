@@ -1,4 +1,4 @@
-# client/src/components/browse/
+# apps/web/src/components/browse/
 
 ## Responsibility
 
@@ -21,7 +21,7 @@ Two presentational components, no local state:
   Shows Korean front, meaning (`back`), a height-reserved romanization line that
   only fills when `isShowingRoman`, the example sentence with its own speaker
   button when `hasSentenceAudio`, plus tag, mastery (`MASTERY_LABELS` /
-  `MASTERY_STYLES` from `@/lib/mastery`), and an "Audio pending" badge when
+  `MASTERY_STYLES` from `@domain/mastery`), and an "Audio pending" badge when
   `card.audioReady === false`. The speak button is disabled while
   `isSpeaking` or audio is pending; both buttons are labelled with the card's
   Korean text and expose `aria-busy` / `aria-pressed`.
@@ -44,8 +44,8 @@ identity rather than list index.
 
 ## Integration
 
-Imports `@/components/ui/badge`, `@/components/ui/button`, `@/lib/mastery`, and
-`@/lib/vocabulary`. Its only consumer is `../BrowseDialog.tsx`, which owns the
+Imports `@/components/ui/badge`, `@/components/ui/button`, `@domain/mastery`, and
+`@domain/vocabulary`. Its only consumer is `../BrowseDialog.tsx`, which owns the
 query, category, and mastery filters (front, back, romanization, and example
 text matching) plus the 40-card page size; `BrowseDialog` in turn is lazily
 rendered by `../dialogs/registry.tsx` under the `browse` Dialog request.

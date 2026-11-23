@@ -1,4 +1,4 @@
-# client/src/
+# apps/web/src/
 
 ## Responsibility
 
@@ -59,4 +59,4 @@ component reads the theme directly for styling.
   plus `wouter`, `framer-motion`, `@vercel/analytics/react`,
   `@vercel/speed-insights/react`, `sonner`, `virtual:pwa-register`.
 - Consumers: `client/index.html` (entry + pre-paint theme script) and every
-  module under `components/`, `hooks/`, `lib/`, `pages/`, `contexts/`.
+  module under `components/`, `hooks/`, `pages/`, `contexts/`.

@@ -1,10 +1,10 @@
-# client/src/pages/
+# apps/web/src/pages/
 
 ## Responsibility
 
 Route-level screens and the Hangul practice surface. Pages own screen
 composition and transient UI state; they delegate domain logic to `../hooks`
-and `../lib` and render presentational pieces from `../components`.
+and `@domain` and render presentational pieces from `../components`.
 
 ## Design
 
@@ -38,7 +38,7 @@ Hangul browser, lazily mounted as a Dialog body:
   `currentIndex`. `null` category renders the category chooser (themed cards +
   static `TIPS` guide); a selection renders the card walker.
 - Data from `ALPHABET_CATEGORIES` / `getAlphabetCategoryCards(selectedCategory)`
-  in `@/lib/alphabet`; playback via `playAlphabetAudio(characterId, type)`.
+  in `@domain/alphabet`; playback via `playAlphabetAudio(characterId, type)`.
 - Uses `useAudioPlayback()` to read `playing` and disable Previous/Next while a
   clip is sounding — no local busy flag.
 - Framing via `PracticeShell` + `PracticePrimaryButton` (progress, counter,
@@ -61,9 +61,9 @@ AlphabetPractice: category click → index reset → card walk → Speak/Next/Pr
 
 - Imports `../hooks/*`, `../components/*` (HomeHeader, SaveAlerts, WelcomeCard,
   ProgressCards, ReviewPlanCard, PracticeMenu, QuickLinks, CategoryGrid,
-  HomeDialogHost, AlphabetCard, practice/PracticeShell, `ui/*`), `../lib/*`
+  HomeDialogHost, AlphabetCard, practice/PracticeShell, `ui/*`), `@domain/*`
   (vocabulary, alphabet, audioPlayer, storageProtection), plus `wouter`,
   `framer-motion`, `lucide-react`, `sonner`.
 - Consumers: `../App.tsx` routes `/` and the 404 fallback;
   `../components/dialogs/registry.tsx` lazy-loads `AlphabetPractice` for the
-  `alphabet` Dialog kind. Cross-links: `../hooks`, `../contexts`, `../lib`.
+  `alphabet` Dialog kind. Cross-links: `../hooks`, `../contexts`, `@domain`.

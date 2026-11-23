@@ -47,7 +47,7 @@ from the web/domain modules it imports.
   (`repeatableSession`).
 - The root tsconfig include list makes `../shared/**` and
   `../packages/domain/src/**` resolvable from mobile code.
-- Consumed by `client/src/App.tsx`, which lazy-loads `../../mobile/App` at the
+- Consumed by `apps/web/src/App.tsx`, which lazy-loads `../../mobile/App` at the
   `/mobile` route, and by `scripts/install-ios-zen.sh` (`pnpm ios:zen`), which
   builds the SPA and copies `dist/public` into `mobile/ios/Goyo/www` for the
   XcodeGen project.
