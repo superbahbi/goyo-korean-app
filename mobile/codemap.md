@@ -39,7 +39,7 @@ from the web/domain modules it imports.
 
 ## Integration
 - Imports `./src/components/*`, `./src/context/GoyoMobileContext`,
-  `./src/primitives/react-native`, and `../shared/core`.
+  `./src/primitives/dom`, and `../shared/core`.
 - The root tsconfig include list makes `../shared/**` and
   `../client/src/lib/**` resolvable from mobile code.
 - Consumed by `client/src/App.tsx`, which lazy-loads `../../mobile/App` at the

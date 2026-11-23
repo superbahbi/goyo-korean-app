@@ -59,7 +59,7 @@ every Grade, Dialog request, and settings change to the provider in
   `onReplaceState`; reset needs a second confirm tap.
 
 ## Integration
-- Imports `../primitives/react-native` for all rendering and
+- Imports `../primitives/dom` for all rendering and
   `../context/GoyoMobileContext` (`useGoyoMobile`) from `DashboardScreen`.
 - Imports domain modules directly from the web tree: `client/src/lib`
   (`studySession`, `srs.previewIntervals`, `practiceQuestion`,

@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-} from "../primitives/react-native";
+} from "../primitives/dom";
 import { useGoyoMobile } from "../context/GoyoMobileContext";
 
 /** Native dashboard: the same plan, forecast, practice modes, and categories as web. */
@@ -167,9 +167,7 @@ export function DashboardScreen() {
           </View>
           <View>
             <Text style={[styles.brandTitle, { color: c.text }]}>Goyo</Text>
-            <Text style={[styles.brandSub, { color: c.muted }]}>
-              iOS · Android · Web
-            </Text>
+            <Text style={[styles.brandSub, { color: c.muted }]}>iOS · Web</Text>
           </View>
         </View>
         <View style={styles.headerStats}>

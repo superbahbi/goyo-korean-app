@@ -22,7 +22,7 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-} from "./src/primitives/react-native";
+} from "./src/primitives/dom";
 
 function GoyoMobileShell() {
   const {
@@ -160,9 +160,10 @@ function GoyoMobileShell() {
 }
 
 /**
- * Universal React Native app root for iOS, Android, and Web.
- * Shares the same domain data, SRS scheduler, study session state machine,
- * practice question loops, and saved-state format as the Vite web app.
+ * Mobile app root for the `/mobile` route: the DOM screens iOS's WKWebView
+ * shell serves, sharing the same domain data, SRS scheduler, study session
+ * state machine, practice question loops, and saved-state format as the web
+ * app.
  */
 export function GoyoMobileApp() {
   return (

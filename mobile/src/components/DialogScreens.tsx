@@ -6,7 +6,7 @@ import {
   ScrollView,
   TextInput,
   StyleSheet,
-} from "../primitives/react-native";
+} from "../primitives/dom";
 import {
   CATEGORIES,
   type VocabularyCard,

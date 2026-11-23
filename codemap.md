@@ -84,7 +84,7 @@ into `public/` and `client/src/lib` datasets; the app never writes content.
 | `shared/` | Framework-free cross-platform domain re-exports used by web + mobile | [View Map](shared/codemap.md) |
 | `mobile/` | Mobile UI served by the SPA at `/mobile`; iOS WKWebView shell + audio bridge | [View Map](mobile/codemap.md) |
 | `mobile/src/` | Mobile source root: three-layer architecture definition | [View Map](mobile/src/codemap.md) |
-| `mobile/src/primitives/` | RN platform-abstraction facade + RN→CSS style translator | [View Map](mobile/src/primitives/codemap.md) |
+| `mobile/src/primitives/` | DOM component kit + RN-flavoured style translator for the mobile screens | [View Map](mobile/src/primitives/codemap.md) |
 | `mobile/src/context/` | Single mobile state container: UserState, deck, Dialog request, commands | [View Map](mobile/src/context/codemap.md) |
 | `mobile/src/components/` | Mobile screens: dashboard, practice modes, dialogs, study runner | [View Map](mobile/src/components/codemap.md) |
 | `scripts/` | Content ops: deck audits, ElevenLabs audio pipeline, dev tooling | [View Map](scripts/codemap.md) |

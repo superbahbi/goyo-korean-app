@@ -15,9 +15,9 @@ import {
   createMemoryStorage,
 } from "../../shared/storage";
 import { DARK_THEME, LIGHT_THEME, getThemeColors } from "../../shared/theme";
-import { Platform, StyleSheet, flattenStyle } from "./primitives/react-native";
+import { Platform, StyleSheet, flattenStyle } from "./primitives/dom";
 
-describe("React Native universal primitives & shared codebase", () => {
+describe("Mobile DOM kit & shared codebase", () => {
   it("flattens nested React Native style arrays cleanly", () => {
     const styles = StyleSheet.create({
       box: { padding: 12, backgroundColor: "#ffffff" },
@@ -49,7 +49,7 @@ describe("React Native universal primitives & shared codebase", () => {
     expect(selected).toBe(`${Platform.OS}-val`);
   });
 
-  it("shares the exact same deck, grammar, SRS session machine, and dashboard view across iOS, Android, and Web", () => {
+  it("grades through the shared store and derives the same dashboard the web app computes", () => {
     const store = createCrossPlatformProgressStore(createMemoryStorage());
     const today = getLocalDateKey();
     const firstCard = CURATED_CARDS[0]!;

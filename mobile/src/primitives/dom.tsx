@@ -1,8 +1,7 @@
-import { Fragment, createElement, useState } from "react";
+import { createElement, useState } from "react";
 import type {
   ButtonHTMLAttributes,
   ChangeEvent,
-  ComponentType,
   CSSProperties,
   HTMLAttributes,
   InputHTMLAttributes,
@@ -14,12 +13,15 @@ import type {
 } from "react";
 
 /**
- * Strictly typed universal React Native primitives:
- * - On iOS & Android native runtimes, delegates to React Native host components.
- * - On Web / WKWebView, translates React Native flexbox & shorthand styles
- *   (paddingHorizontal, paddingVertical, marginHorizontal, marginVertical,
- *   pixel lineHeight, implicit solid borders, and flex column defaults) into
- *   standards-compliant DOM CSS so layout matches React Native on every screen.
+ * Strictly typed DOM component kit for the mobile screens.
+ *
+ * Every component here renders standards-compliant markup (`div`, `span`,
+ * `button`, `input`, `textarea`) — this is the only render path, both in
+ * browsers and inside the iOS WKWebView shell. The prop shapes (flexbox
+ * styles, `paddingHorizontal`/`marginVertical` shorthands, pixel `lineHeight`,
+ * `accessibilityRole`/`testID`) are kept as the screens author them, and
+ * `rnStyleToCss` translates those RN-flavoured styles into plain DOM CSS so
+ * the layout matches what the shorthand props promise.
  */
 
 export type PlatformName = "web" | "ios" | "android";
@@ -85,7 +87,7 @@ function hasPositiveNumber(value: StyleValue | undefined): boolean {
 }
 
 /**
- * Converts a flattened React Native style object into a valid React DOM
+ * Converts a flattened RN-flavoured style object into a valid React DOM
  * CSSProperties object.
  */
 export function rnStyleToCss(
@@ -116,7 +118,8 @@ export function rnStyleToCss(
   for (const [key, value] of Object.entries(flat)) {
     if (value === undefined || RN_ONLY_KEYS.has(key)) continue;
     if (key === "lineHeight" && typeof value === "number") {
-      // React DOM treats numeric lineHeight as a unitless multiplier; React Native uses pixels.
+      // React DOM treats numeric lineHeight as a unitless multiplier; the
+      // screens' styles specify pixels.
       css.lineHeight = `${value}px`;
     } else if (key === "flex" && typeof value === "number") {
       if (value > 0) {
@@ -133,7 +136,8 @@ export function rnStyleToCss(
     }
   }
 
-  // React Native defaults borderStyle to "solid" whenever any borderWidth is set.
+  // Any positive border width implies a solid border, matching how the
+  // shorthand styles are authored.
   if (
     css.borderStyle === undefined &&
     (hasPositiveNumber(flat.borderWidth) ||
@@ -204,45 +208,12 @@ export interface TextInputProps extends Omit<BaseProps, "children"> {
 export interface ModalProps {
   visible: boolean;
   transparent?: boolean;
+  /** Kept for prop-shape stability; the DOM sheet animates via CSS, not JS. */
   animationType?: "none" | "slide" | "fade";
   onRequestClose?: () => void;
   testID?: string;
   children?: ReactNode;
 }
-
-interface NativeModule {
-  View: ComponentType<Record<string, unknown>>;
-  Text: ComponentType<Record<string, unknown>>;
-  Pressable: ComponentType<Record<string, unknown>>;
-  ScrollView: ComponentType<Record<string, unknown>>;
-  TextInput: ComponentType<Record<string, unknown>>;
-  Modal: ComponentType<Record<string, unknown>>;
-  SafeAreaView: ComponentType<Record<string, unknown>>;
-  Platform?: { OS?: string };
-}
-let cachedNative: NativeModule | null | undefined;
-
-/** Load React Native only when a native bundle's `require` is available. */
-function nativeModule(): NativeModule | null {
-  if (cachedNative !== undefined) return cachedNative;
-  if (typeof document !== "undefined") return (cachedNative = null);
-  const scope = globalThis as unknown as {
-    require?: (id: string) => unknown;
-    __r?: (id: string) => unknown;
-  };
-  const loader = scope.require ?? scope.__r;
-  if (typeof loader !== "function") return (cachedNative = null);
-  try {
-    const loaded = loader("react-native") as Partial<NativeModule>;
-    cachedNative =
-      loaded?.View && loaded.Text ? (loaded as NativeModule) : null;
-  } catch {
-    cachedNative = null;
-  }
-  return cachedNative;
-}
-
-const hasDom = () => typeof document !== "undefined";
 
 const VIEW_BASE: CSSProperties = {
   display: "flex",
@@ -296,20 +267,6 @@ export function View({
   id,
 }: ViewProps): ReactElement {
   const flat = flattenStyle(style);
-  const native = nativeModule();
-  if (native)
-    return createElement(
-      native.View,
-      {
-        style: flat,
-        accessibilityRole,
-        accessibilityLabel,
-        accessibilityState,
-        testID,
-      },
-      children
-    );
-  if (!hasDom()) return createElement(Fragment, null, children);
   const props = {
     id,
     role: accessibilityRole,
@@ -332,21 +289,6 @@ export function Text({
   id,
 }: TextProps): ReactElement {
   const flat = flattenStyle(style);
-  const native = nativeModule();
-  if (native)
-    return createElement(
-      native.Text,
-      {
-        style: flat,
-        numberOfLines,
-        accessibilityRole,
-        accessibilityLabel,
-        accessibilityState,
-        testID,
-      },
-      children
-    );
-  if (!hasDom()) return createElement(Fragment, null, children);
   const base: CSSProperties = { ...TEXT_BASE, ...rnStyleToCss(flat) };
   const clamped: CSSProperties = numberOfLines
     ? {
@@ -382,22 +324,6 @@ export function Pressable({
   const [pressed, setPressed] = useState(false);
   const resolved = typeof style === "function" ? style({ pressed }) : style;
   const flat = flattenStyle(resolved);
-  const native = nativeModule();
-  if (native)
-    return createElement(
-      native.Pressable,
-      {
-        style,
-        onPress,
-        disabled,
-        accessibilityRole,
-        accessibilityLabel,
-        accessibilityState,
-        testID,
-      },
-      children
-    );
-  if (!hasDom()) return createElement(Fragment, null, children);
   const props = {
     id,
     type: "button",
@@ -428,32 +354,15 @@ export function ScrollView({
   contentContainerStyle,
   children,
   horizontal,
-  showsVerticalScrollIndicator,
-  showsHorizontalScrollIndicator,
   accessibilityRole,
   accessibilityLabel,
   testID,
   id,
 }: ScrollViewProps): ReactElement {
+  // `shows*ScrollIndicator` stays part of the prop surface but has no DOM
+  // equivalent; the scrollbars simply render.
   const flat = flattenStyle(style);
   const content = flattenStyle(contentContainerStyle);
-  const native = nativeModule();
-  if (native)
-    return createElement(
-      native.ScrollView,
-      {
-        style: flat,
-        contentContainerStyle: content,
-        horizontal,
-        showsVerticalScrollIndicator,
-        showsHorizontalScrollIndicator,
-        accessibilityRole,
-        accessibilityLabel,
-        testID,
-      },
-      children
-    );
-  if (!hasDom()) return createElement(Fragment, null, children);
   const outerStyle: CSSProperties = {
     ...VIEW_BASE,
     ...(horizontal
@@ -501,25 +410,6 @@ export function TextInput({
   id,
 }: TextInputProps): ReactElement {
   const flat = flattenStyle(style);
-  const native = nativeModule();
-  if (native)
-    return createElement(native.TextInput, {
-      style: flat,
-      value,
-      onChangeText,
-      placeholder,
-      secureTextEntry,
-      keyboardType,
-      autoCapitalize,
-      multiline,
-      editable,
-      maxLength,
-      onSubmitEditing,
-      accessibilityRole,
-      accessibilityLabel,
-      testID,
-    });
-  if (!hasDom()) return createElement(Fragment, null);
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => onChangeText?.(event.target.value);
@@ -562,18 +452,6 @@ export function TextInput({
 }
 
 export function SafeAreaView(props: ViewProps): ReactElement {
-  const native = nativeModule();
-  if (native)
-    return createElement(
-      native.SafeAreaView,
-      {
-        style: flattenStyle(props.style),
-        accessibilityRole: props.accessibilityRole,
-        accessibilityLabel: props.accessibilityLabel,
-        testID: props.testID,
-      },
-      props.children
-    );
   return View({
     ...props,
     style: [
@@ -589,20 +467,11 @@ export function SafeAreaView(props: ViewProps): ReactElement {
 export function Modal({
   visible,
   transparent,
-  animationType,
   onRequestClose,
   testID,
   children,
 }: ModalProps): ReactElement | null {
-  const native = nativeModule();
-  if (native)
-    return createElement(
-      native.Modal,
-      { visible, transparent, animationType, onRequestClose },
-      children
-    );
   if (!visible) return null;
-  if (!hasDom()) return createElement(Fragment, null, children);
   const overlay: CSSProperties = {
     position: "fixed",
     inset: 0,
@@ -660,16 +529,16 @@ export const StyleSheet = {
   hairlineWidth: 1,
 };
 
+/**
+ * The OS the user agent reports. The kit always renders DOM; this is only a
+ * hint for OS-flavoured tweaks (safe areas, scroll bounce), never a branch
+ * between render paths.
+ */
 function detectPlatform(): PlatformName {
-  const native = nativeModule();
-  const os = native?.Platform?.OS;
-  if (os === "ios" || os === "android" || os === "web") return os;
-  if (typeof navigator !== "undefined") {
-    if (navigator.product === "ReactNative")
-      return /android/i.test(navigator.userAgent) ? "android" : "ios";
-    if (/android/i.test(navigator.userAgent)) return "android";
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) return "ios";
-  }
+  if (typeof navigator === "undefined") return "web";
+  const userAgent = navigator.userAgent;
+  if (/android/i.test(userAgent)) return "android";
+  if (/iPad|iPhone|iPod/.test(userAgent)) return "ios";
   return "web";
 }
 

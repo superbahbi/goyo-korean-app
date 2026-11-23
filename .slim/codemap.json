@@ -178,7 +178,6 @@
     "mobile/src/components/PracticeScreens.tsx": "f08de48b1d23a7ef7ce6defd5827f87a",
     "mobile/src/components/StudySessionScreen.tsx": "f3f8427bc1fcc562063e4383e841dc9e",
     "mobile/src/context/GoyoMobileContext.tsx": "025191684a59c04907e64e5a59e01f80",
-    "mobile/src/primitives/react-native.tsx": "6ea6e38a6b48d7b7d27656657ccd0ad9",
     "mobile/tsconfig.json": "6e6d5ff75ac4aac1dc24375a65e7ab6d",
     "package.json": "c3de1cb6ce082ac7facd3d55cfceab1c",
     "playwright.config.ts": "1fe3235697385a0a080bfd96651bc5ba",
