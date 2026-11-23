@@ -9,8 +9,8 @@ grammar/alphabet content, and the saved-progress format. No React or JSX; browse
 thin singletons (`audioIndex`, `audioPlayer`, `progressStorage`).
 
 This is a workspace package, imported as `@domain/*`. Every surface — the web client
-(`client/`), the mobile UI (`mobile/`) and the Expo app (`apps/native/`) — depends on it, and
-nothing depends on it in the other direction.
+(`apps/web/`) and the mobile UI (`mobile/`) — depends on it, and nothing depends on it in the
+other direction.
 
 ## Design
 

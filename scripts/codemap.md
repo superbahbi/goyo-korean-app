@@ -47,7 +47,11 @@ generates both voices with `ThreadPoolExecutor(4)`, and logs failures to
 mp3s; `update-net-manifest.mjs` repairs the `num_004` entry and
 `regenerate-number-four.mjs` regenerates its clip.
 
-**Dev tooling** — `screenshots.ts` (`pnpm shots`) runs Vite `build` + `preview`
+**Dev tooling** — `codemap-check.ts` (`pnpm codemap:check`) reads the committed
+`.slim/codemap.json` and fails when any `file_hashes` or `folder_hashes` key no
+longer exists on disk; it does not compare hashes, since a changed hash only
+means "changed since the last run". `screenshots.ts` (`pnpm shots`) runs Vite
+`build` + `preview`
 unless `SHOTS_BASE_URL` is set, drives Playwright Chromium over desktop
 1280×900 and iPhone 15 viewports in light and dark, clears localStorage and
 seeds `goyo-theme`, opens each `SCREENS` entry plus the `MOBILE_SCREENS`
