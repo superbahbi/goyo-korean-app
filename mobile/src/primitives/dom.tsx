@@ -69,6 +69,8 @@ export function flattenStyle<T extends AnyStyle>(
   return style as T;
 }
 
+// Style keys with no DOM CSS equivalent: expanded shorthands (handled before
+// the copy loop) and RN-only visual hints the DOM ignores.
 const RN_ONLY_KEYS = new Set([
   "paddingHorizontal",
   "paddingVertical",
@@ -80,6 +82,9 @@ const RN_ONLY_KEYS = new Set([
   "shadowOpacity",
   "shadowRadius",
   "elevation",
+  "tintColor",
+  "overlayColor",
+  "resizeMode",
 ]);
 
 function hasPositiveNumber(value: StyleValue | undefined): boolean {
