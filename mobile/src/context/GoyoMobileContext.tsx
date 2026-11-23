@@ -32,6 +32,7 @@ import {
 } from "../../../client/src/lib/gradeOutcome";
 import { recordGrammarAttempt } from "../../../client/src/lib/grammarProgress";
 import { PROGRESS_STORAGE_KEY } from "../../../client/src/lib/progressStorage";
+import { THEME_STORAGE_KEY } from "../../../shared/theme";
 import {
   loadSavedState,
   parseSavedState,
@@ -123,6 +124,19 @@ function readInitialState(): { state: UserState; blocked: boolean } {
   }
 }
 
+function readStoredTheme(): Theme {
+  try {
+    if (typeof localStorage === "undefined") return "light";
+    // The web app may store "system"; the mobile app models only an explicit
+    // light/dark choice, so anything but "dark" falls back to light.
+    return localStorage.getItem(THEME_STORAGE_KEY) === "dark"
+      ? "dark"
+      : "light";
+  } catch {
+    return "light";
+  }
+}
+
 export function GoyoMobileProvider({ children }: { children: ReactNode }) {
   const [initial] = useState(readInitialState);
   const [state, setState] = useState<UserState>(initial.state);
@@ -143,7 +157,7 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
   const [recognitionSessionCards, setRecognitionSessionCards] = useState<
     VocabularyCard[]
   >([]);
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(readStoredTheme);
   const [notice, setNotice] = useState<string | null>(null);
 
   // Native environments may have no localStorage: in-memory state still works.
@@ -155,6 +169,16 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
       console.error("Failed to save mobile progress:", error);
     }
   }, [state, saveBlocked]);
+
+  // Native environments may have no localStorage: in-memory choice still works.
+  useEffect(() => {
+    if (typeof localStorage === "undefined") return;
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      // Persisting is best effort; the in-memory choice still applies.
+    }
+  }, [theme]);
 
   useEffect(() => {
     let active = true;

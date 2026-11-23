@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { THEME_STORAGE_KEY } from "@shared/theme";
+
+export { THEME_STORAGE_KEY };
 
 export type Theme = "light" | "dark" | "system";
 export type ResolvedTheme = "light" | "dark";
-
-export const THEME_STORAGE_KEY = "goyo-theme";
 
 interface ThemeContextType {
   /** The user's choice: light, dark, or follow the OS. */

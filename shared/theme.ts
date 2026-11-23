@@ -10,6 +10,14 @@
 
 export type ThemePreference = "system" | "light" | "dark";
 
+/**
+ * localStorage key the theme choice is persisted under, shared by the web
+ * client's ThemeContext and the mobile app's provider so one device keeps one
+ * choice across both surfaces. The web app may store "system" here; readers
+ * that only model an explicit light/dark choice treat it as a fallback.
+ */
+export const THEME_STORAGE_KEY = "goyo-theme";
+
 export interface ThemeColors {
   /** Screen background. */
   background: string;
