@@ -15,3 +15,14 @@ more screens could match, ask which one before reading further.
 
 After changing a screen, run `pnpm shots` and read the PNGs in
 `.tmp/shots/current/` before calling it done.
+
+## Repository Map
+
+A full codemap is available at `codemap.md` in the project root.
+
+Before working on any task, read `codemap.md` to understand:
+- Project architecture and entry points
+- Directory responsibilities and design patterns
+- Data flow and integration points between modules
+
+For deep work on a specific folder, also read that folder's `codemap.md`.
