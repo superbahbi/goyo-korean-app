@@ -3,7 +3,7 @@
   "include": [
     "./**/*.ts",
     "./**/*.tsx",
-    "../shared/**/*.ts",
+    "../packages/shared/**/*.ts",
     "../client/src/lib/**/*.ts"
   ]
 }

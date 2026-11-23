@@ -15,16 +15,16 @@ import {
   applyGradeOutcome,
   type GradeOptions,
   type GradeOutcome,
-} from "../client/src/lib/gradeOutcome";
-import { recordGrammarAttempt } from "../client/src/lib/grammarProgress";
-import { PROGRESS_STORAGE_KEY } from "../client/src/lib/progressStorage";
+} from "../../client/src/lib/gradeOutcome";
+import { recordGrammarAttempt } from "../../client/src/lib/grammarProgress";
+import { PROGRESS_STORAGE_KEY } from "../../client/src/lib/progressStorage";
 import {
   isNewerSave,
   loadSavedState,
   parseSavedState,
   type UserSettings,
   type UserState,
-} from "../client/src/lib/savedState";
+} from "../../client/src/lib/savedState";
 
 /**
  * The storage surface the progress store needs. A synchronous implementation

@@ -10,8 +10,12 @@ import { CURATED_CARDS } from "../../client/src/lib/vocabulary";
 import {
   createCrossPlatformProgressStore,
   createMemoryStorage,
-} from "../../shared/storage";
-import { DARK_THEME, LIGHT_THEME, getThemeColors } from "../../shared/theme";
+} from "../../packages/shared/storage";
+import {
+  DARK_THEME,
+  LIGHT_THEME,
+  getThemeColors,
+} from "../../packages/shared/theme";
 import { Platform, StyleSheet, flattenStyle } from "./primitives/dom";
 
 describe("Mobile DOM kit & shared codebase", () => {

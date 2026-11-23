@@ -20,13 +20,13 @@ anything that touches study progress.
 
 ## Design
 
-Monorepo, single pnpm package. The core architectural rule is a strict
+Monorepo, pnpm workspace. The core architectural rule is a strict
 dependency direction:
 
 ```
 mobile/src/*  ──┐
 client/src/hooks, pages, components ──▶ client/src/lib (pure domain, no React)
-shared/ (progress store + theme tokens) ──┘
+packages/shared/ (progress store + theme tokens) ──┘
 ```
 
 - `client/src/lib/` is framework-free: it turns a Grade into SM-2 scheduling,
@@ -36,10 +36,11 @@ shared/ (progress store + theme tokens) ──┘
   `DashboardView` and delegate Grades/Dialog requests upward via callbacks;
   the Dialog registry (`client/src/components/dialogs/`) maps one Dialog
   request to one lazily mounted dialog.
-- `shared/` holds the two adapters both surfaces need: the cross-platform
-  progress store (`storage.ts`) and the theme tokens (`theme.ts`). Mobile
-  imports the domain itself from `client/src/lib`, exactly as the web
-  client does — there is no alias barrel and no second naming.
+- `packages/shared/` holds the two adapters both surfaces need: the
+  cross-platform progress store (`storage.ts`) and the theme tokens
+  (`theme.ts`). Mobile imports the domain itself from `client/src/lib`,
+  exactly as the web client does — there is no alias barrel and no second
+  naming.
 
 ## Flow
 
@@ -55,7 +56,7 @@ into `public/` and `client/src/lib` datasets; the app never writes content.
 
 - **Build**: `vite.config.ts` (root) — Tailwind 4, `VitePWA` precache config
   reading the audio manifest, alias `@/*` → `client/src/*` and
-  `@shared/*` → `shared/*` (mirrored in `tsconfig.json`).
+  `@shared/*` → `packages/shared/*` (mirrored in `tsconfig.json`).
 - **Deploy**: `vercel.json` — SPA rewrites, immutable asset/audio caching,
   no-cache for `sw.js`/`index.html`/audio manifest, strict CSP.
 - **Quality gates**: `vitest.config.ts` (unit), `playwright.config.ts`
@@ -83,7 +84,7 @@ into `public/` and `client/src/lib` datasets; the app never writes content.
 | `client/src/components/stats/`    | Stats dialog panels: tiles, forecast, mastery breakdowns                                     | [View Map](client/src/components/stats/codemap.md)    |
 | `client/src/components/study/`    | Study-session card UI: intro, production, grade actions, summary                             | [View Map](client/src/components/study/codemap.md)    |
 | `client/src/components/ui/`       | Generated shadcn/Radix primitives, no domain logic                                           | [View Map](client/src/components/ui/codemap.md)       |
-| `shared/`                         | Framework-free adapters used by web + mobile: progress store, theme tokens                   | [View Map](shared/codemap.md)                         |
+| `packages/shared/`                | Framework-free adapters used by web + mobile: progress store, theme tokens                   | [View Map](packages/shared/codemap.md)                |
 | `mobile/`                         | Mobile UI served by the SPA at `/mobile`; iOS WKWebView shell + audio bridge                 | [View Map](mobile/codemap.md)                         |
 | `mobile/src/`                     | Mobile source root: three-layer architecture definition                                      | [View Map](mobile/src/codemap.md)                     |
 | `mobile/src/primitives/`          | DOM component kit + RN-flavoured style translator for the mobile screens                     | [View Map](mobile/src/primitives/codemap.md)          |

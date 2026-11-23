@@ -39,8 +39,11 @@ import {
   type VocabularyCard,
   type VocabularyDeck,
 } from "../../../client/src/lib/vocabulary";
-import { THEME_STORAGE_KEY, type ThemePreference } from "../../../shared/theme";
-import { createCrossPlatformProgressStore } from "../../../shared/storage";
+import {
+  THEME_STORAGE_KEY,
+  type ThemePreference,
+} from "../../../packages/shared/theme";
+import { createCrossPlatformProgressStore } from "../../../packages/shared/storage";
 
 /**
  * One provider for the mobile app (the `/mobile` DOM screens served to

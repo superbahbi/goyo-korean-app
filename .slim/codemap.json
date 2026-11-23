@@ -11,7 +11,8 @@
       "mobile/**/*.ts",
       "mobile/**/*.tsx",
       "mobile/*.json",
-      "shared/**/*.ts",
+      "packages/shared/**/*.ts",
+      "packages/**/*.ts",
       "scripts/**/*.ts",
       "scripts/**/*.mjs",
       "scripts/**/*.py",
@@ -193,8 +194,8 @@
     "scripts/regenerate-number-four.mjs": "85c2baf50aea1913129dad65f3f3d438",
     "scripts/screenshots.ts": "018c5f4428d9c9e05c7edcd2982c9d7c",
     "scripts/update-net-manifest.mjs": "fcdff76ec8cd218d1c06d2357859074e",
-    "shared/storage.ts": "fd9a3f6917088918f08769650baa50cc",
-    "shared/theme.ts": "c7005d0191f9d18f18fd4fd2a8bb1d07",
+    "packages/shared/storage.ts": "dab64eb8ea5b99d569b2e8bcecbd65b9",
+    "packages/shared/theme.ts": "8e7e7f77c1f7d89ebfccf6c1e49d393f",
     "tsconfig.json": "8600efcb4efb3f180cecce53c0b515de",
     "tsconfig.node.json": "fd32df1e922920eb085c1d20ffd7fd58",
     "vercel.json": "608d7cf5fc8f5707acee0994dfcb4283",
@@ -223,7 +224,8 @@
     "mobile/src/components": "0dcce1b9db301cfbc95a02014c26d8eb",
     "mobile/src/context": "10b5e4b777480f0ede935118177b0854",
     "mobile/src/primitives": "a311d94f0b79552a6e38775bfd6b723e",
-    "scripts": "44604d3191eae4b98974e8b4e51d1ff3",
-    "shared": "cbb25394945b58749cafddda2196bc58"
+    "packages": "5e27eeeb381517987d6b8789d8a1b86a",
+    "packages/shared": "5e27eeeb381517987d6b8789d8a1b86a",
+    "scripts": "44604d3191eae4b98974e8b4e51d1ff3"
   }
 }
