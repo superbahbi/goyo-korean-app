@@ -24,17 +24,18 @@ Every stage is done only when its gate passes.
 
 ## Current state
 
-Verified on 2026-11-02 on `main` after the architecture round 2 merge (`#76`):
+Verified on 2026-11-24 on `main` after the monorepo moves (`#109`–`#111`) and delivery doc (`#112`):
 
-| Check              | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `vitest run`       | 467 tests pass in 39 files (scheduler, queue, saved state, review log, study days, deck data, XP, audio player, audio index, voice availability, grade intent, grade outcome, session machine, study keys, question loop, distractors, practice verdict, dialog launcher, dialog registry, dashboard view, progress storage, audit sampler, audit verdicts, imported part of speech, usage notes, curated examples, phase 3/7 guards, grammar, grammar progress, backup status, generator) |
-| `playwright test`  | 27 checks pass against the production build across 9 specs: nine flow smokes (four study-loop paths, Browse search and audio, grammar lesson, offline reload, progress export/import, Settings), six axe scans (dashboard, study, dialogs, Hangul, recognition overlays, grammar), seven keyboard/screen-reader semantics checks, and five iPhone WebKit checks (first-tap audio, iOS meta tags and manifest, one-time install hint, offline, service worker)                              |
-| `vite build`       | Passes. Main chunk 140.4 kB (41.1 kB gzipped), with React (194.3 kB), vendor (130.6 kB), motion (115.7 kB) and Radix (55.9 kB) in separate vendor chunks; Essential 600 lazy-loaded as its own 226.1 kB chunk (55.1 kB gzipped). Precache: 129 entries, 1,348 KiB                                                                                                                                                                                                                          |
-| CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                                                                                              |
+| Check              | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `vitest run`       | 513 tests pass in 44 files (domain core including scheduler, queue, saved state, review log, study days, deck data, XP, audio player, audio manifest, voice availability, grade intent, grade outcome, session machine, study keys, question loop, distractors, practice verdict, dialog launcher, dashboard view, progress storage, grammar, grammar progress, backup status, PWA config; plus `packages/shared/storage.test.ts`, `mobile/` tests, `apps/web/src/components/dialogs/registry.test.ts`, and `scripts/` tests) |
+| `playwright test`  | 27 checks across 9 specs in `e2e/` (Chromium + WebKit iPhone 15 in CI; local run on Linux requires WebKit system libs for `iphone.spec.ts`)                                                                                                                                                                                                                                                                                                                                                                                   |
+| `vite build`       | Passes (builds `apps/web/` to `dist/public/`). Main chunk 140.3 kB (40.9 kB gzipped), with React (194.3 kB), vendor (131.2 kB), motion (115.8 kB) and Radix (55.9 kB) in separate vendor chunks; Essential 600 lazy-loaded as its own 226.1 kB chunk (55.0 kB gzipped). Precache: 133 entries (includes duplicate manifest/icon entries and 40 dormant female alphabet clips tracked in Phase 10)                                                                                                                             |
+| `pnpm audit`       | 0 production vulnerabilities; dev/tooling dependencies have 4 critical and 22 high CVEs (tracked in Phase 10)                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| CI                 | Type check, lint, format check, tests, build and the Playwright job (Chromium and WebKit) are green on `main`                                                                                                                                                                                                                                                                                                                                                                                                                 |
 
 All gates pass.
 
@@ -100,10 +101,14 @@ precaches the shell, the audio index, Hangul and number audio; and the imported 
 and usage notes plus the curated examples are now guarded by tests. The Playwright suite covers an
 iPhone-class WebKit engine plus the keyboard and screen-reader semantics that axe cannot check.
 
-What is open: the Korean wording still has room for a later naturalness polish (see Phase 3 — content
-trust). The on-demand audio library is now 54 MB in `public/audio` after the male sentence batch;
-audio remains the largest tracked asset and the reason the Phase 4 keep-audio-in-git decision gets
-re-checked.
+What is open: a 2026-11-24 codebase readiness audit identified public-release blockers (production
+CSP vs inline theme script, Hangul alphabet examples, Lessons 13–18 grammar audio, offline sentence
+coverage, `/mobile` defects, and missing legal/SEO basics) plus high-priority bugs and asset/SW
+cleanup — all tracked in **Phase 10** and `#115`. `#108` tracks the Expo native app (Phases 1–3
+merged, Phase 4+ next). The Korean wording still has room for naturalness polish (see Phase 3 —
+content trust), and `next-themes` is now an unused leftover dependency. The audio directory holds
+2,289 MP3s (49.05 MB on disk, including 254 orphan clips and 680 dormant female clips); pruning and
+moving internal generation logs out of `public/audio/` are also in Phase 10.
 The 300-line target holds for UI code (`components/FlashCard.tsx` is 309 lines, almost all JSX). Deck
 data stays larger by design: `essentialVocabulary.ts` (7.7k lines), `vocabulary.ts` (1.7k),
 `grammar.ts` (594), `essentialTaxonomy.ts` (566), `alphabet.ts` (533) and `essentialFrequency.ts`
@@ -150,6 +155,8 @@ candidate left; the next one needs evidence, not a line count.
 | 7 Content trust completion          | Done (2026-11-02); re-measured at 10.4% of 96, fixed the 10 defects, and swept the remaining deck in seven batches; all 504 imported cards now carry a verdict; Korean-speaker spot check of samples 3–4 still pending                   |
 | 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                                                         |
 | 9 Architecture round 3              | Done (#89); save format moved to `lib/savedState.ts` (503 → 136 lines), module-size audit closed                                                                                                                                         |
+| 10 Public release readiness         | Open (#115); 2026-11-24 audit — Web/PWA release blockers, functional bugs, asset/SW hygiene, and iOS/App Store gate                                                                                                                      |
+| Native monorepo (#108)              | In progress (#108); Phases 1–3 merged (#109–#111), Phase 4+ Expo app next                                                                                                                                                                |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
 settings (#5), protected progress (#6) and the update notice (#7). Its browser checks passed on
@@ -696,6 +703,145 @@ instead of chasing line counts.
 
 Out of scope: behaviour changes, a new storage backend and any UI change. Round 3 is a pure
 refactor; the e2e suite is the behavioural net.
+
+## Phase 10: Public release readiness
+
+Tracked in `#115` from the 2026-11-24 codebase audit. Work is split into small PRs across five
+tracks; Tracks A–D gate a public Web/PWA launch, while Track E gates App Store / native distribution
+alongside `#108`.
+
+### Track A: Web / PWA release blockers
+
+1. **Production CSP and Vercel rewrites.** `vercel.json` (`script-src 'self'`) blocks the inline
+   dark-theme bootstrap script in `apps/web/index.html`, causing a CSP violation and light-mode
+   flash in production that `vite preview` in Playwright does not catch.
+   - Extract the inline theme script (`apps/web/index.html`) to a static external file (e.g.,
+     `public/theme-init.js`) or add its SHA-256 hash to `script-src`, and remove the leftover
+     template comment block.
+   - Exclude `assets/` and `_vercel/` from the catch-all SPA rewrite in `vercel.json` so missing
+     chunks return 404 instead of `index.html`.
+   - Acceptance: a CI check validates `dist/public/index.html` against `vercel.json` CSP with zero
+     blocked inline scripts.
+2. **Hangul alphabet examples and open content trust items.**
+   - Replace factually wrong, Hanja-root, bare-stem, or pun examples across all 40 letters in
+     `packages/domain/src/alphabet.ts` with real beginner words.
+   - Split merged homonym `essential_016` (`"boat; pear"`) and fix unnatural sentences (e.g.,
+     `essential_007`), complete the pending Korean-speaker spot check on Phase 7 samples 3–4 and
+     Phase 6 grammar lessons 13–18, and regenerate the rewritten `살인` sentence clip from Phase 7
+     batch 6.
+   - Acceptance: `pnpm test` and `pnpm audit:content` checks pass; every Hangul card cites a valid
+     Korean word matching its sound and English gloss.
+3. **Missing grammar sentence audio (Lessons 13–18).** 18 of 54 grammar examples (`progressive`,
+   `reason`, `if-when`, `negation`, `future`, `before-after`) lack entries in
+   `public/audio/index.json`.
+   - Generate and hash the 18 missing clips via `--sentences --grammar` and guard mobile grammar
+     speaker buttons with `getAvailableSentenceIds()`.
+   - Acceptance: all 54 grammar examples resolve in the audio manifest and play without silent
+     failures on Web and `/mobile`.
+4. **Offline audio completeness and Workbox cache headroom.**
+   - Include enabled `manifest.sentences` in `planAudioDownload()`
+     (`packages/domain/src/audioIndex.ts`), so offline packs cover both vocabulary and sentences.
+   - Harden `apps/web/src/components/DownloadAllAudio.tsx`: cancel or hoist active state on dialog
+     unmount, use `Promise.allSettled` with a failure summary, and show already-cached clip counts
+     and estimated size (~37 MB).
+   - Raise Workbox `runtimeCaching` `maxEntries` in `vite.config.ts` from `1800` to `3500`.
+   - Acceptance: offline batch caching stores all enabled word and sentence clips without evicting
+     earlier entries or leaking fetches after Settings closes.
+5. **Resolve `/mobile` route defects before public exposure (or gate `/mobile` off the public web
+   router while `#108` lands).**
+   - Fix ~1.1:1 dark-mode contrast on highlighted choice rows in
+     `mobile/src/components/PracticeScreens.tsx`; display last-question feedback and
+     `quiz.explanation` in `GrammarPracticeScreen`; add pagination past 60 cards in `BrowseScreen`;
+     render stroke-order SVG diagrams in `AlphabetPracticeScreen`.
+   - Surface `hasSaveError()` / `isSaveBlocked()` and cross-tab `storage` sync in
+     `mobile/src/context/GoyoMobileContext.tsx`; add Escape handling, focus trap, scroll lock, and
+     `env(safe-area-inset-bottom)` padding to `Modal` (`mobile/src/primitives/dom.tsx`).
+   - Call `stopAudio()` on close/advance in all mobile practice-mode and browse screens; align
+     Settings pace options (`dailyGoal: 30`) and import `reviewLog` preservation with Web; sync
+     `documentElement.classList` and `<meta name="theme-color">`; replace the `"iOS · Web"`
+     subtitle in `DashboardScreen.tsx`.
+   - Acceptance: `/mobile` passes dark/light contrast, keyboard/modal a11y, audio cleanup, and save
+     parity checks (or is removed from `apps/web/src/App.tsx` public routing).
+6. **Legal, privacy, and SEO metadata.**
+   - Add a root `LICENSE` matching `"license": "MIT"` in `package.json`, verify redistribution
+     rights for `The600EssentialKoreanWords.xlsx` and ElevenLabs audio, and surface a brief privacy
+     / cookieless Vercel Analytics note plus attribution/support link in the UI.
+   - Add `<meta name="description">`, Open Graph and Twitter Card tags with `og:image`,
+     `public/robots.txt`, and `public/sitemap.xml`.
+   - Acceptance: `LICENSE`, `robots.txt`, `sitemap.xml`, and social meta tags ship in `dist/public`
+     and match the deployed domain.
+
+### Track B: High-priority functional bugs and polish
+
+7. **Same-day interval previews and Listening homophone distractors.**
+   - Pass `today` to `previewIntervals()` (`packages/domain/src/srs.ts`, `StudySession.tsx`,
+     `StudySessionScreen.tsx`) and delegate to `scheduleReview` so repeat practice and same-session
+     `again` retries never advertise blocked interval growth.
+   - Exclude same-`front` homophones when picking Listening distractors
+     (`ListeningPractice.tsx`, `mobile/src/components/PracticeScreens.tsx`) across all 8 homonym
+     pairs (`차`, `눈`, `배`, `다리`, `병`, `열`, `분`, `공`).
+8. **Live midnight streak, audio lifecycle, storage unification, and Web UI polish.**
+   - Derive streak via `deriveStreak(studyDays, today)` inside `buildDashboardView`
+     (`packages/domain/src/dashboardView.ts`) so overnight open tabs never show stale streaks.
+   - Fix double-fetching uncached clips on `warm` + play (`packages/domain/src/audioElement.ts`),
+     replace the `GrammarLessonView.tsx` `playingId` race with `useAudioPlayback()`, wire
+     `autoPlayAudio` into `ShadowingPractice.tsx`, call `stopAudio()` on close/back in
+     `AlphabetPractice.tsx` and `ScenarioPractice.tsx`, key `FlashCard` / `FlashCardView` by
+     `${id}-${index}`, and fix the off-by-one fallback aliases in `alphabet.ts`.
+   - Unify `apps/web/src/hooks/useStudyState.ts` onto `createCrossPlatformProgressStore` (avoid
+     writing empty default state on bounce visits, enforce pre-write `isNewerSave` guard, respect
+     `saveBlocked` on import) and add a confirmed Reset Progress control to `SettingsDialog.tsx`.
+   - Add `dark:` classes to `home`, `work`, `society`, and `objects` category badges
+     (`vocabulary.ts`), align `NotFound.tsx` to emerald styling, add `100dvh` max-height support to
+     `BrowseDialog.tsx` and `StatsDialog.tsx`, and reconcile Prev/Next vs Quick Reference locking in
+     `AlphabetPractice.tsx`.
+   - Acceptance: unit tests cover same-day `previewIntervals`, homophone distractor exclusion,
+     midnight streak derivation, and storage guard parity; `pnpm test` and `pnpm test:e2e` pass.
+
+### Track C: Assets, Service Worker, dependencies, and repo hygiene
+
+9. **Audio asset and Service Worker precache cleanup.**
+   - Repair stale `client/src/lib/` paths in `scripts/prune-orphan-audio.mjs`, delete the 254
+     orphan MP3s (2.55 MB), move the 3 `elevenlabs-*manifest.json` generation logs (429 KB) out of
+     `public/audio/`, strip `voiceIds` from runtime `index.json`, and decide whether to archive the
+     680 dormant female MP3s (9.67 MB) while `FEMALE_VOICE_ENABLED = false`.
+   - In `vite.config.ts`, gate female alphabet precaching on `FEMALE_VOICE_ENABLED`, remove
+     duplicate `manifest.webmanifest`/icon precache entries against `PRECACHE_GLOBS`, and set
+     `revision: null` on content-hashed filenames instead of `mtimeMs`.
+10. **Dependencies and config hygiene.**
+    - Remove unused `next-themes` (prod) and `autoprefixer`, `postcss`, `esbuild` (dev); upgrade
+      vulnerable dev tooling (`vite`, `vitest`, `rollup`, `tar`, `picomatch`) to resolve 4 critical
+      and 22 high dev CVEs.
+    - Add `public/audio` to `.prettierignore`, include `scripts/**/*.ts` in `tsconfig.json`,
+      reconcile `pnpm-workspace.yaml`, and remove stale Manus/`server/` rules in `.vercelignore` and
+      `.gitignore`.
+    - Acceptance: `pnpm audit` reports 0 critical/high vulnerabilities, `dist/public/sw.js` contains
+      no duplicate or dormant precache URLs, and `pnpm check && pnpm lint && pnpm format:check`
+      pass cleanly.
+
+### Track D: Test coverage hardening
+
+11. **Expand Playwright E2E coverage.** Add dark-mode scans to `e2e/accessibility.spec.ts`, add E2E
+    coverage for `/mobile` (if kept public), `DownloadAllAudio`, and CSP compliance, and update seed
+    fixtures from `schemaVersion: 4` to `5`.
+    - Acceptance: `pnpm test:e2e` passes in Chromium and WebKit across both light and dark themes.
+
+### Track E: iOS / App Store release gate (separate milestone with `#108`)
+
+12. **iOS shell and App Store compliance.** Gate `<Analytics />` and `<SpeedInsights />` off
+    `goyo://` in `apps/web/src/App.tsx`; in `mobile/ios/Goyo/GoyoApp.swift` check
+    `AVAudioPlayer.play()` return value, use `.duckOthers` instead of `.mixWithOthers`, and enforce
+    `.standardized` path containment; parameterize personal signing (`DEVELOPMENT_TEAM`,
+    `net.bahbi.goyo`, Debug profile) out of `mobile/ios/project.yml`; provide a native 1024×1024
+    icon asset, `PrivacyInfo.xcprivacy`, `ITSAppUsesNonExemptEncryption`, and Release/Archive build
+    config; complete `#108` Phases 4–9 if shipping through Expo/EAS.
+
+### Post-launch depth (non-blocking)
+
+Expand Survival Scenarios beyond 6 items (`apps/web/src/components/practice/scenarios.ts`), rotate
+the Shadowing session queue beyond the first 8 cards (`packages/domain/src/queue.ts`), add
+`usageNote` entries to the 136 curated cards, revisit the temporary 90-day SRS cap in Phase 5, and
+evaluate CSS transitions vs `framer-motion` (38 kB gzipped) on initial load.
 
 ## Deferred, not decided
 
