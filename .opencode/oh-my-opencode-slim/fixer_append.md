@@ -9,9 +9,9 @@ packages/shared`.
 Use the vocabulary of `GLOSSARY.md` in names, tests and commit text. If the change
 contradicts an ADR in `docs/adr/`, say so in your report instead of silently overriding it.
 
-Stay inside the brief. Do not rename, move or reformat files the brief does not name:
-`pnpm format:check` can already fail on files that were unformatted before your change, so
-check the baseline (`git stash && pnpm format:check`) and fix only what you broke.
+Stay inside the brief. Do not rename, move or reformat files the brief does not name, and do not
+run a repo-wide `prettier --write`: format only the files you changed. Do not `git stash` to look
+for a formatting baseline — the committed tree is formatted.
 
 Validation runs from the repo root and is reported with the command and its exit status:
 `pnpm check`, `pnpm lint`, `pnpm test`, `pnpm build`, plus `pnpm test:e2e` when the change

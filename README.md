@@ -107,12 +107,14 @@ The web app lives in `apps/web/`, but the build stays at the repo root: `vercel.
 `dist/public`. So the Vercel project needs no dashboard change — the repository's build and output
 settings are unchanged.
 
-Every push to `main` deploys the web app automatically. The native app is not on Vercel: iOS and
-Android builds ship through EAS (`eas build`), not through a web host.
+Every push to `main` deploys the web app automatically. The native app is not on Vercel: the iOS
+app is built on this Mac with `pnpm ios:zen` (XcodeGen + `xcodebuild` + `devicectl`) and installed
+straight onto the owner's iPhone, not through a web host or EAS.
 
 ## Contributing
 
-1. Branch from `main`: `fix/…`, `feat/…`, `chore/…`, `docs/…`.
+1. Branch from `main`: `fix/…`, `feat/…`, `chore/…`, `docs/…`, `refactor/…` or
+   `test/…`.
 2. Make one focused change.
 3. Run the gate above.
 4. Open a PR. CI must be green and a reviewer model checks the diff.

@@ -12,6 +12,7 @@
     "start": "vite preview --host",
     "ios:zen": "bash scripts/install-ios-zen.sh",
     "check": "tsc --noEmit",
+    "codemap:check": "tsx scripts/codemap-check.ts",
     "lint": "eslint .",
     "test": "vitest run",
     "test:e2e": "playwright test",

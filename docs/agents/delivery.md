@@ -26,14 +26,14 @@ Two commands are not part of the gate but belong to specific changes:
 | `pnpm shots`         | A screen changed. It writes PNGs to `.tmp/shots/current/`; **read them** before calling the change done. |
 | `pnpm audit:content` | Content changed. It writes a Markdown sheet under `docs/audits/`.                                        |
 
-`pnpm format:check` fails on files that were already unformatted before your change.
-Check the baseline first (`git stash && pnpm format:check`) so you only fix what you
-broke — and do not reformat the repo to make your own diff look tidy.
+`pnpm format:check` is part of the gate and the committed tree is clean. Format only
+the files your change touches (`pnpm exec prettier --write <paths>`); do not reformat
+the repo to make your own diff look tidy.
 
 ## Branch, commit, push
 
-Branch from `main`: `feat/…`, `fix/…`, `chore/…`, `docs/…`. No direct commits to
-`main`.
+Branch from `main`: `feat/…`, `fix/…`, `chore/…`, `docs/…`, `refactor/…` or
+`test/…`. No direct commits to `main`.
 
 ```sh
 git checkout -b feat/short-description
@@ -129,9 +129,13 @@ so `curl` on them returns a login page. Use the production domain
 
 ## The native app is not on Vercel
 
-Vercel ships the web app only. iOS and Android builds go through EAS (`eas build`),
-and an EAS Update pushes OTA changes to installed apps. A push to `main` does not
-publish a native build — do not report a green Vercel check as a native deploy.
+Vercel ships the web app only. The iOS app is built on this Mac and installed
+straight onto the owner's iPhone: `pnpm ios:zen` builds `dist/public`, copies it
+into `mobile/ios/Goyo/www`, renders the icon, then runs `xcodegen`, `xcodebuild`
+and `xcrun devicectl` (see `scripts/install-ios-zen.sh`). There is no EAS and no
+Android target — the Expo toolchain was removed in #107. A push to `main` does
+not rebuild the native app; do not report a green Vercel check as a native
+deploy.
 
 ## Moving a directory
 
@@ -181,6 +185,10 @@ md5( "\n".join(f"{path}:{file_hash}" for path, file_hash in sorted(files)) + "\n
 where `files` are the entries of `file_hashes` whose path starts with that folder
 plus a slash. Recompute every folder hash after a move — including the folders you
 did not touch, since a stale entry from an earlier rename is invisible otherwise.
+
+Then run `pnpm codemap:check`. It fails on any `file_hashes` or `folder_hashes`
+key whose path no longer exists on disk; it does not compare hashes, because a
+changed hash only means "changed since the last run".
 
 **7. Build config that points at the moved tree.** `vite.config.ts` (`root`,
 `publicDir`, `build.outDir`), `vercel.json` (`buildCommand`, `outputDirectory`),
