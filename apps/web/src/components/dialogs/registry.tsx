@@ -61,6 +61,8 @@ export interface HomeDialogDeps {
   settings: {
     updateSettings: (settings: Partial<UserState["settings"]>) => void;
     replaceState: (state: UserState) => void;
+    resetProgress: () => Promise<void>;
+    saveBlocked: boolean;
   };
   grammar: {
     progress: GrammarProgress;
@@ -176,6 +178,8 @@ export const DIALOG_REGISTRY: Record<DialogKind, DialogEntry> = {
         state={deps.state}
         updateSettings={deps.settings.updateSettings}
         replaceState={deps.settings.replaceState}
+        resetProgress={deps.settings.resetProgress}
+        saveBlocked={deps.settings.saveBlocked}
         today={deps.today}
       />
     ),

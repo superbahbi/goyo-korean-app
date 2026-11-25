@@ -114,6 +114,12 @@ export interface CrossPlatformProgressStore {
   updateSettings(partial: Partial<UserSettings>): void;
   recordGrammarResult(lessonId: string, correct: number, total: number): void;
   replaceState(next: UserState): void;
+  /**
+   * Another tab or window wrote (or removed) the stored save. Adopt it without
+   * writing it back; a save from a newer build is never adopted, it blocks
+   * this store's writes instead.
+   */
+  adoptStoredSave(raw: string | null): void;
   resetProgress(): Promise<void>;
   /** Resolves once every write already issued has settled. */
   flush(): Promise<void>;
@@ -310,6 +316,22 @@ export function createCrossPlatformProgressStore(
     mutate(next);
   };
 
+  const adoptStoredSave = (raw: string | null) => {
+    if (isNewerSave(raw)) {
+      if (!blocked) {
+        blocked = true;
+        notify();
+      }
+      return;
+    }
+    // Counts as a change, so an async hydrate still in flight keeps it.
+    revision += 1;
+    hydrated = true;
+    blocked = false;
+    state = parseSavedState(raw);
+    notify();
+  };
+
   const resetProgress = async (): Promise<void> => {
     try {
       const result = storage.removeItem(PROGRESS_STORAGE_KEY);
@@ -349,6 +371,7 @@ export function createCrossPlatformProgressStore(
     updateSettings,
     recordGrammarResult,
     replaceState,
+    adoptStoredSave,
     resetProgress,
     flush,
   };

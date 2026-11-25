@@ -33,7 +33,11 @@ are kept and a newer save sets `blocked`. Every mutation (`gradeCard`,
 `persist()` → `notify()`. `persist()` returns early when `blocked`, probes sync
 storage with `isNewerSave` (cross-tab guard), writes JSON, and tracks async
 writes plus `saveError`. `gradeCard` delegates to `applyGradeOutcome` and
-returns its `GradeOutcome`. `flush()` drains `pendingWrites`.
+returns its `GradeOutcome`. `adoptStoredSave(raw)` takes another tab's write
+(from a `storage` event) without writing it back, and blocks instead when the
+raw save is newer. Construction never writes, so a visit that changes nothing
+leaves no save. `resetProgress()` removes the key and returns to the default
+state. `flush()` drains `pendingWrites`.
 
 `theme.ts` is pure data: the web client's ThemeContext and the mobile
 provider both persist the full preference domain under `THEME_STORAGE_KEY`
@@ -43,7 +47,8 @@ and resolve `"system"` against `prefers-color-scheme` themselves.
 
 Imports the domain from `packages/domain/src/*` — `gradeOutcome`,
 `grammarProgress`, `progressStorage`, `savedState`. Consumed by the web
-client (`apps/web/src/contexts/ThemeContext` for `THEME_STORAGE_KEY`) and by
+client (`apps/web/src/hooks/useStudyState` for the progress store,
+`apps/web/src/contexts/ThemeContext` for `THEME_STORAGE_KEY`) and by
 mobile (`mobile/src/context/GoyoMobileContext` for the progress store and
 theme key, `mobile/src/components/DialogScreens` for `ThemePreference`,
 plus `storage.test.ts` and `theme` via `mobile/src/App.test.ts`). The web

@@ -17,15 +17,17 @@ browser/storage/audio side effects at the React edge.
   the dashboard never blanks, then `loadVocabularyDeck()` dynamic-imports the
   Essential 600 chunk. Returns `VocabularyDeck & { ready }`; errors are logged
   and still mark `ready`.
-- `useStudyState()` — the progress adapter. Lazy `readStoredSave()` via
-  `loadSavedState`, cross-tab `storage` reconciliation with `isNewerSave` /
-  `parseSavedState` (`saveBlocked` when a newer build wrote first), and a
-  persist effect keyed on `[state, saveBlocked]` writing `PROGRESS_STORAGE_KEY`
-  (`saveError` on failure). `gradeCard` calls `applyGradeOutcome` against a
-  `stateRef` (so two grades in one tick compose) and returns the `GradeOutcome`
-  synchronously; also exposes `updateSettings`, `recordGrammarResult`
-  (`recordGrammarAttempt`), and `replaceState`. Asks
-  `requestPersistentStorage()` on first real grade.
+- `useStudyState()` — the progress adapter over the shared
+  `createCrossPlatformProgressStore` (`@shared/storage`, the store `/mobile`
+  uses). The store is created once and reads localStorage synchronously, so
+  the first render has the save; `useSyncExternalStore` subscribes to one
+  snapshot of `{ state, saveBlocked, saveError }`. A `storage` event for
+  `PROGRESS_STORAGE_KEY` goes to `store.adoptStoredSave` (a newer build's save
+  blocks instead of being adopted). Nothing is written until a mutation, and
+  every write is guarded by `isNewerSave` first. `gradeCard` asks
+  `requestPersistentStorage()` and returns the store's `GradeOutcome`
+  synchronously; also exposes `updateSettings`, `recordGrammarResult`,
+  `replaceState` and `resetProgress`.
 - `useHomeDashboard(options)` — one `useMemo` over `buildDashboardView`,
   injecting `SCENARIO_CARD_IDS` from `../components/practice/scenarios` and a
   locale `labelDate` formatter; returns a `DashboardView`.

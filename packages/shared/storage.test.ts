@@ -269,6 +269,77 @@ describe("createCrossPlatformProgressStore with synchronous storage", () => {
     expect(storedState(storage).stats.totalXp).toBe(77);
   });
 
+  it("adopts another tab's save without writing it back", () => {
+    const storage = createMemoryStorage();
+    const store = createCrossPlatformProgressStore(storage);
+    const listener = vi.fn();
+    store.subscribe(listener);
+    const setItem = vi.spyOn(storage, "setItem");
+    const other = parseSavedState(null);
+    other.stats.totalXp = 42;
+
+    store.adoptStoredSave(JSON.stringify(other));
+
+    expect(store.getState().stats.totalXp).toBe(42);
+    expect(setItem).not.toHaveBeenCalled();
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  it("adopts another tab's reset as a fresh save", () => {
+    const storage = createMemoryStorage();
+    const store = createCrossPlatformProgressStore(storage);
+    store.gradeCard("surv_001", "good");
+
+    store.adoptStoredSave(null);
+
+    expect(store.getState().cardStates).toEqual({});
+    expect(store.getState().stats.totalXp).toBe(0);
+  });
+
+  it("blocks instead of adopting a newer build's save from another tab", () => {
+    const storage = createMemoryStorage();
+    const store = createCrossPlatformProgressStore(storage);
+    store.gradeCard("surv_001", "good");
+    const newer = JSON.stringify({ schemaVersion: SCHEMA_VERSION + 1 });
+    storage.setItem(PROGRESS_STORAGE_KEY, newer);
+
+    store.adoptStoredSave(newer);
+    store.gradeCard("surv_002", "good");
+
+    expect(store.isSaveBlocked()).toBe(true);
+    expect(Object.keys(store.getState().cardStates)).toEqual([
+      "surv_001",
+      "surv_002",
+    ]);
+    expect(storage.getItem(PROGRESS_STORAGE_KEY)).toBe(newer);
+  });
+
+  it("lifts the block when another tab writes a save this build can read", () => {
+    const newer = { schemaVersion: SCHEMA_VERSION + 1 };
+    const storage = seededStorage(newer);
+    const store = createCrossPlatformProgressStore(storage);
+    expect(store.isSaveBlocked()).toBe(true);
+
+    const readable = JSON.stringify(parseSavedState(null));
+    storage.setItem(PROGRESS_STORAGE_KEY, readable);
+    store.adoptStoredSave(readable);
+    store.updateSettings({ dailyGoal: 12 });
+
+    expect(store.isSaveBlocked()).toBe(false);
+    expect(storedState(storage).settings.dailyGoal).toBe(12);
+  });
+
+  it("writes nothing until the first change", () => {
+    const storage = createMemoryStorage();
+    const setItem = vi.spyOn(storage, "setItem");
+
+    createCrossPlatformProgressStore(storage);
+
+    // A visit that never studies must not leave a default save behind.
+    expect(setItem).not.toHaveBeenCalled();
+    expect(storage.getItem(PROGRESS_STORAGE_KEY)).toBeNull();
+  });
+
   it("resets progress and clears the stored save", async () => {
     const storage = createMemoryStorage();
     const store = createCrossPlatformProgressStore(storage);
