@@ -17,6 +17,8 @@ export interface PickDistractorsOptions {
   correctCardId: string;
   /** Two cards answer the same way when their keys match. */
   dedupeKey: (card: VocabularyCard) => string;
+  /** Cards sharing this key with the correct card are excluded (e.g. homophones). */
+  excludeMatchingKey?: (card: VocabularyCard) => string;
   /** Cards carrying this tag are offered before the rest. */
   preferTag?: string;
   /** Injected by tests; production uses the Fisher–Yates shuffle. */
@@ -29,6 +31,7 @@ export function pickDistractors(
     count,
     correctCardId,
     dedupeKey,
+    excludeMatchingKey,
     preferTag,
     shuffleCards = shuffle,
   }: PickDistractorsOptions
@@ -45,9 +48,20 @@ export function pickDistractors(
 
   const correctCard = cards.find(card => card.id === correctCardId);
   const seen = new Set(correctCard ? [dedupeKey(correctCard)] : []);
+  const excludedKey =
+    correctCard && excludeMatchingKey
+      ? excludeMatchingKey(correctCard)
+      : undefined;
   const distractors: VocabularyCard[] = [];
 
   for (const card of ordered) {
+    if (
+      excludedKey !== undefined &&
+      excludeMatchingKey &&
+      excludeMatchingKey(card) === excludedKey
+    ) {
+      continue;
+    }
     const key = dedupeKey(card);
     if (seen.has(key)) continue;
     seen.add(key);

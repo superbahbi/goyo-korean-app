@@ -45,7 +45,6 @@ function input(
     newCardsPerDay: 3,
     level: 1,
     totalXp: 0,
-    streak: 0,
     scenarioCardIds: ["surv_001"],
     labelDate: (_key, style) => (style === "weekday" ? "WD" : "MD"),
     ...overrides,
@@ -255,5 +254,33 @@ describe("first run and today's plan", () => {
     expect(view.today.plan.summary).toBe(
       "You've hit today's goal. Extra practice is optional from here."
     );
+  });
+});
+
+describe("live streak derivation", () => {
+  it("derives the active streak from studyDays and resets when today moves past yesterday", () => {
+    const studyDays = {
+      "2026-10-30": { cards: 3, reviews: 3 },
+      "2026-10-31": { cards: 3, reviews: 3 },
+      "2026-11-01": { cards: 3, reviews: 3 },
+    };
+
+    const onStudiedDay = buildDashboardView(
+      input({ studyDays, today: "2026-11-01" })
+    );
+    expect(onStudiedDay.stats.streak).toBe(3);
+    expect(onStudiedDay.dialog.stats.streak).toBe(3);
+
+    const nextDayBeforeStudy = buildDashboardView(
+      input({ studyDays, today: "2026-11-02" })
+    );
+    expect(nextDayBeforeStudy.stats.streak).toBe(3);
+    expect(nextDayBeforeStudy.dialog.stats.streak).toBe(3);
+
+    const twoDaysLater = buildDashboardView(
+      input({ studyDays, today: "2026-11-03" })
+    );
+    expect(twoDaysLater.stats.streak).toBe(0);
+    expect(twoDaysLater.dialog.stats.streak).toBe(0);
   });
 });

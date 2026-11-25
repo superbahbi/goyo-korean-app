@@ -135,10 +135,21 @@ export interface IntervalPreview {
 /**
  * The interval each grade would schedule, in days, for the grade buttons.
  *
- * Pure and built on `scheduleRecall`, so the labels shown before grading cannot
- * drift from what grading actually saves.
+ * When `today` is supplied, previews run through `scheduleReview` so same-day
+ * repeats and same-session retries reflect the same-day guard instead of
+ * advertising blocked interval growth.
  */
-export function previewIntervals(state?: SrsCardState): IntervalPreview {
+export function previewIntervals(
+  state?: SrsCardState,
+  today?: string
+): IntervalPreview {
+  if (today) {
+    return {
+      again: scheduleReview(state, "again", today).schedule.interval,
+      good: scheduleReview(state, "good", today).schedule.interval,
+      easy: scheduleReview(state, "easy", today).schedule.interval,
+    };
+  }
   return {
     again: scheduleRecall(state, "again").interval,
     good: scheduleRecall(state, "good").interval,

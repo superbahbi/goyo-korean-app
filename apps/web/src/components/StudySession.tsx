@@ -12,6 +12,7 @@ import { useStudySession } from "./study/useStudySession";
 import { PracticeShell } from "./practice/PracticeShell";
 import { VocabularyCard } from "@domain/vocabulary";
 import { previewIntervals } from "@domain/srs";
+import { getLocalDateKey } from "@domain/day";
 import { STUDY_KEY_HINT } from "@domain/studyKeys";
 import { cn } from "@domain/utils";
 import type { CardState } from "@domain/mastery";
@@ -20,6 +21,7 @@ interface StudySessionProps {
   queue: VocabularyCard[];
   /** Saved card states; used to teach cards the learner has never seen. */
   cardStates?: Record<string, CardState>;
+  today?: string;
   onGrade: (
     cardId: string,
     rating: "again" | "good" | "easy",
@@ -34,6 +36,7 @@ interface StudySessionProps {
 export function StudySession({
   queue,
   cardStates,
+  today = getLocalDateKey(),
   onGrade,
   onClose,
   allowRepeat = false,
@@ -69,9 +72,10 @@ export function StudySession({
   const intervals = useMemo(
     () =>
       previewIntervals(
-        flipped ? cardStates?.[currentCard?.id ?? ""] : undefined
+        flipped ? cardStates?.[currentCard?.id ?? ""] : undefined,
+        today
       ),
-    [flipped, currentCard?.id, cardStates]
+    [flipped, currentCard?.id, cardStates, today]
   );
 
   if (completed) {

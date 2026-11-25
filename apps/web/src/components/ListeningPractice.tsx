@@ -49,8 +49,10 @@ export function ListeningPractice({
         const distractors = pickDistractors(cards, {
           count: DISTRACTOR_COUNT,
           correctCardId: card.id,
-          // Distractors must differ in meaning, not just in card id.
+          // Distractors must differ in meaning, not just in card id, and must
+          // not share the spoken Korean word (homophones).
           dedupeKey: candidate => candidate.back.trim().toLowerCase(),
+          excludeMatchingKey: candidate => candidate.front.trim(),
         });
         return {
           card,

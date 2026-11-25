@@ -252,5 +252,50 @@ describe("SRS scheduling", () => {
         easy: 4,
       });
     });
+
+    it("reflects the same-day guard when today is provided", () => {
+      const today = "2026-11-01";
+      expect(
+        previewIntervals(
+          {
+            interval: 2,
+            easeFactor: 2.35,
+            consecutiveCorrect: 1,
+            timesReviewed: 1,
+            timesCorrect: 1,
+            lastReviewDate: today,
+          },
+          today
+        )
+      ).toEqual({ again: 1, good: 2, easy: 2 });
+
+      expect(
+        previewIntervals(
+          {
+            interval: 1,
+            easeFactor: 2.35,
+            consecutiveCorrect: 0,
+            timesReviewed: 1,
+            timesCorrect: 0,
+            lastReviewDate: today,
+          },
+          today
+        )
+      ).toEqual({ again: 1, good: 1, easy: 1 });
+
+      const matureEarlier = {
+        interval: 10,
+        easeFactor: 2.5,
+        consecutiveCorrect: 3,
+        timesReviewed: 4,
+        timesCorrect: 4,
+        lastReviewDate: "2026-10-29",
+      };
+      expect(previewIntervals(matureEarlier, today)).toEqual({
+        again: 1,
+        good: 25,
+        easy: 34,
+      });
+    });
   });
 });

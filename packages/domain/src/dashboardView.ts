@@ -1,6 +1,10 @@
 import type { CardState, MasteryState } from "@domain/mastery";
-import type { StudyDays } from "@domain/studyDays";
-import { daysStudiedWithin, reviewsWithin } from "@domain/studyDays";
+import {
+  daysStudiedWithin,
+  deriveStreak,
+  reviewsWithin,
+  type StudyDays,
+} from "@domain/studyDays";
 import type { VocabularyCard } from "@domain/vocabulary";
 import {
   buildDailyQueue,
@@ -87,6 +91,7 @@ export interface DashboardView {
     learningCards: VocabularyCard[];
   };
   stats: {
+    streak: number;
     daysStudied7: number;
     daysStudied30: number;
     reviews7: number;
@@ -123,7 +128,6 @@ export interface DashboardViewInput {
   newCardsPerDay: number;
   level: number;
   totalXp: number;
-  streak: number;
   /** Card ids that have a scenario; scenario practice needs at least one. */
   scenarioCardIds: readonly string[];
   /** Locale policy is injected so the builder stays pure and testable. */
@@ -141,11 +145,11 @@ export function buildDashboardView({
   newCardsPerDay,
   level,
   totalXp,
-  streak,
   scenarioCardIds,
   labelDate,
 }: DashboardViewInput): DashboardView {
   const cardsStudiedToday = studyDays[today]?.cards ?? 0;
+  const streak = deriveStreak(studyDays, today);
   const daysStudied7 = daysStudiedWithin(studyDays, today, 7);
   const daysStudied30 = daysStudiedWithin(studyDays, today, 30);
   const reviews7 = reviewsWithin(studyDays, today, 7);
@@ -232,6 +236,7 @@ export function buildDashboardView({
     ),
     pools: { queue, recognitionCards, weakCards, learningCards },
     stats: {
+      streak,
       daysStudied7,
       daysStudied30,
       reviews7,

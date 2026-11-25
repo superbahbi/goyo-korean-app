@@ -175,6 +175,7 @@ function buildListeningQuestions(cards: VocabularyCard[]) {
       count: 3,
       correctCardId: card.id,
       dedupeKey: c => c.back.trim().toLowerCase(),
+      excludeMatchingKey: c => c.front.trim(),
     });
     return {
       card,
