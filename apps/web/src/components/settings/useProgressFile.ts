@@ -17,12 +17,25 @@ export interface PendingImport {
 interface UseProgressFileOptions {
   state: UserState;
   replaceState: (next: UserState) => void;
+  /** A newer build's save is stored here; an import would not be written. */
+  saveBlocked: boolean;
   today: string;
+}
+
+// The store never overwrites a newer build's save, so an import in this tab
+// would only live in memory. Say so instead of reporting a success that a
+// reload would undo.
+function rejectImportWhileBlocked(): void {
+  toast.error("Import paused", {
+    description:
+      "This browser has progress from a newer version of Goyo. Reload the app to update it, then import the file.",
+  });
 }
 
 export function useProgressFile({
   state,
   replaceState,
+  saveBlocked,
   today,
 }: UseProgressFileOptions) {
   // Rendered only while open, so import drafts never leak between opens.
@@ -69,6 +82,10 @@ export function useProgressFile({
     const file = event.target.files?.[0];
     event.target.value = "";
     if (!file) return;
+    if (saveBlocked) {
+      rejectImportWhileBlocked();
+      return;
+    }
 
     let result;
     try {
@@ -94,6 +111,11 @@ export function useProgressFile({
 
   const confirmImport = () => {
     if (!pendingImport) return;
+    if (saveBlocked) {
+      setPendingImport(null);
+      rejectImportWhileBlocked();
+      return;
+    }
     // A progress-only file must not wipe the local review log.
     replaceState({
       ...pendingImport.state,

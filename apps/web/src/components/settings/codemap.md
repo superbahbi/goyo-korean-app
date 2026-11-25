@@ -3,8 +3,8 @@
 ## Responsibility
 
 The sections that fill the Settings dialog: theme, study pace (daily goal, new
-cards per day, auto-play), Korean speaker, progress export/import, offline audio
-download, and app reload. It also owns `useProgressFile`, the hook that
+cards per day, auto-play), Korean speaker, progress export/import, progress
+reset, offline audio download, and app reload. It also owns `useProgressFile`, the hook that
 implements the export → validate → confirm → replace flow around
 `UserState`.
 
@@ -24,10 +24,15 @@ localStorage directly. Named exports:
 - `ProgressFileSection` — export/import buttons, an "Include review log"
   checkbox, backup-age copy, and the amber "Replace current progress?" confirm
   region driven by `pendingImport`.
+- `ResetProgressSetting` — a "Reset progress" button that opens a red
+  "Erase all progress in this browser?" confirm region (Cancel has focus)
+  before calling `resetProgress()` from `useStudyState`; theme and downloaded
+  audio are kept.
 - `ReloadSetting` — injects `navigator.serviceWorker` and timer functions into
   `reloadToLatestApp`, so the reload policy stays framework-free.
 
-`useProgressFile({ state, replaceState, today })` is a headless hook returning
+`useProgressFile({ state, replaceState, saveBlocked, today })` is a headless
+hook returning
 `pendingImport`, `clearPendingImport`, `includeReviewLog`/`setIncludeReviewLog`,
 `lastBackupAt`, `importInputRef`, `handleExportProgress`, `handleImportFile`,
 and `confirmImport`. Its public type is `ProgressFile =
@@ -42,7 +47,9 @@ confirmation. Export: `buildExportPayload(state, new Date(), { includeReviewLog
 })` → JSON Blob → `goyo-progress-<today>.json` download → `recordBackup()` and
 `setLastBackupAt(now)`. Import: file input → `file.text()` →
 `validateImportPayload`; a failure toasts and stops, a success sets
-`pendingImport` and renders the confirmation. `confirmImport` calls
+`pendingImport` and renders the confirmation. While `saveBlocked` (a newer
+build's save is stored), both the file pick and `confirmImport` toast "Import
+paused" instead, because the store would not write the import. `confirmImport` calls
 `replaceState`, preserving the current `reviewLog` when the imported file has
 none, then toasts a card count. The hook's drafts are fresh because the dialog
 mounts only while open; closing calls `clearPendingImport`.

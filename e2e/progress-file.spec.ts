@@ -57,3 +57,52 @@ test("exports progress and imports the same file back", async ({ page }) => {
     )
     .toBe(1);
 });
+
+test("resets progress only after the second, explicit step", async ({
+  page,
+}) => {
+  await page.addInitScript(() => window.localStorage.clear());
+  await page.goto("/");
+
+  await page
+    .getByRole("button", { name: /start (daily|first) session/i })
+    .click();
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Space");
+  await page.keyboard.press("2");
+  await page.keyboard.press("Escape");
+  await expect
+    .poll(() =>
+      page.evaluate(key => window.localStorage.getItem(key), PROGRESS_KEY)
+    )
+    .not.toBeNull();
+
+  await page.getByRole("button", { name: "Open settings" }).click();
+  const settings = page.getByRole("dialog");
+  await settings.getByRole("button", { name: "Reset progress" }).click();
+
+  // The first click only asks; Cancel has focus and leaves the save alone.
+  const confirm = settings.getByRole("region", {
+    name: "Erase all progress in this browser?",
+  });
+  await expect(confirm).toContainText("1 card");
+  await expect(confirm.getByRole("button", { name: "Cancel" })).toBeFocused();
+  await confirm.getByRole("button", { name: "Cancel" }).click();
+  await expect(confirm).toBeHidden();
+  expect(
+    await page.evaluate(key => window.localStorage.getItem(key), PROGRESS_KEY)
+  ).not.toBeNull();
+
+  await settings.getByRole("button", { name: "Reset progress" }).click();
+  await settings.getByRole("button", { name: "Erase progress" }).click();
+  await expect(page.getByText("Progress reset")).toBeVisible();
+  expect(
+    await page.evaluate(key => window.localStorage.getItem(key), PROGRESS_KEY)
+  ).toBeNull();
+
+  // Back on the dashboard, the learner is a first-time learner again.
+  await page.keyboard.press("Escape");
+  await expect(
+    page.getByRole("button", { name: /start first session/i })
+  ).toBeVisible();
+});

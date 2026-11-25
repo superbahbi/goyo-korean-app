@@ -9,6 +9,7 @@ import { DownloadAllAudio } from "@/components/DownloadAllAudio";
 import { AudioSpeakerSetting } from "@/components/settings/AudioSpeakerSetting";
 import { ProgressFileSection } from "@/components/settings/ProgressFileSection";
 import { ReloadSetting } from "@/components/settings/ReloadSetting";
+import { ResetProgressSetting } from "@/components/settings/ResetProgressSetting";
 import { ThemeSetting } from "@/components/settings/ThemeSetting";
 import {
   AutoPlaySetting,
@@ -24,6 +25,9 @@ interface SettingsDialogProps {
   state: UserState;
   updateSettings: (settings: Partial<UserState["settings"]>) => void;
   replaceState: (next: UserState) => void;
+  resetProgress: () => Promise<void>;
+  /** A newer build's save is stored here, so imports would not be kept. */
+  saveBlocked: boolean;
   today: string;
 }
 
@@ -33,9 +37,16 @@ export function SettingsDialog({
   state,
   updateSettings,
   replaceState,
+  resetProgress,
+  saveBlocked,
   today,
 }: SettingsDialogProps) {
-  const progressFile = useProgressFile({ state, replaceState, today });
+  const progressFile = useProgressFile({
+    state,
+    replaceState,
+    saveBlocked,
+    today,
+  });
 
   return (
     <Dialog
@@ -55,8 +66,8 @@ export function SettingsDialog({
         <DialogHeader className="shrink-0 border-b px-6 pt-6 pr-12 pb-4 text-left">
           <DialogTitle>Settings</DialogTitle>
           <DialogDescription className="sr-only">
-            Appearance theme, daily goal, Korean speaker, progress export and
-            import, and reload.
+            Appearance theme, daily goal, Korean speaker, progress export,
+            import and reset, offline audio, and reload.
           </DialogDescription>
         </DialogHeader>
         <div
@@ -85,6 +96,7 @@ export function SettingsDialog({
             updateSettings={updateSettings}
           />
           <ProgressFileSection state={state} progressFile={progressFile} />
+          <ResetProgressSetting state={state} resetProgress={resetProgress} />
           <DownloadAllAudio />
           <ReloadSetting />
         </div>

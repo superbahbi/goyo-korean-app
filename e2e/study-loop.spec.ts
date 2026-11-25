@@ -82,11 +82,10 @@ test("introduces a new word without logging a grade", async ({ page }) => {
   await expect(page.getByText("New word", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: /start practising/i }).click();
 
-  // Presentation only: advancing the intro writes no review and no card state.
-  await expect.poll(async () => (await readProgress(page)) !== null).toBe(true);
-  const afterIntro = await readProgress(page);
-  expect(afterIntro!.reviewLog.entries).toHaveLength(0);
-  expect(afterIntro!.cardStates).toEqual({});
+  // Presentation only: advancing the intro writes nothing. A fresh learner
+  // has no save until the first grade, so a visit that never studies leaves
+  // storage untouched.
+  expect(await readProgress(page)).toBeNull();
 
   await page.keyboard.press("Space");
   await expect(page.getByText("How did that feel?")).toBeVisible();

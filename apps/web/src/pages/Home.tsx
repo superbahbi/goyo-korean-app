@@ -32,6 +32,7 @@ export default function Home() {
     updateSettings,
     recordGrammarResult,
     replaceState,
+    resetProgress,
     saveBlocked,
     saveError,
   } = useStudyState();
@@ -110,7 +111,7 @@ export default function Home() {
   const dialogDeps: HomeDialogDeps = {
     today,
     state,
-    settings: { updateSettings, replaceState },
+    settings: { updateSettings, replaceState, resetProgress, saveBlocked },
     grammar: { progress: state.grammar, onComplete: recordGrammarResult },
     recognition: {
       cards: recognitionSessionCards,
