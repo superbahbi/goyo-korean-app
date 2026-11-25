@@ -37,6 +37,10 @@
       "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
     },
     {
+      "source": "/theme-init.js",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    },
+    {
       "source": "/index.html",
       "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
     },
@@ -61,6 +65,9 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!audio/|icons/).*)", "destination": "/index.html" }
+    {
+      "source": "/((?!audio/|icons/|assets/|_vercel/).*)",
+      "destination": "/index.html"
+    }
   ]
 }
