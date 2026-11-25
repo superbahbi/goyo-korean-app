@@ -1622,7 +1622,8 @@ export const CATEGORIES = [
     id: "home",
     name: "Home",
     icon: "🏠",
-    color: "bg-stone-100 text-stone-700",
+    color:
+      "bg-stone-100 dark:bg-stone-800/60 text-stone-700 dark:text-stone-300",
   },
   {
     id: "places",
@@ -1647,13 +1648,14 @@ export const CATEGORIES = [
     id: "work",
     name: "Work",
     icon: "💼",
-    color: "bg-zinc-100 text-zinc-700",
+    color: "bg-zinc-100 dark:bg-zinc-800/60 text-zinc-700 dark:text-zinc-300",
   },
   {
     id: "society",
     name: "Society",
     icon: "🏛️",
-    color: "bg-neutral-100 text-neutral-700",
+    color:
+      "bg-neutral-100 dark:bg-neutral-800/60 text-neutral-700 dark:text-neutral-300",
   },
   {
     id: "leisure",
@@ -1673,7 +1675,7 @@ export const CATEGORIES = [
     id: "objects",
     name: "Objects",
     icon: "📦",
-    color: "bg-gray-100 text-gray-700",
+    color: "bg-gray-100 dark:bg-gray-800/60 text-gray-700 dark:text-gray-300",
   },
   {
     id: "verbs",
