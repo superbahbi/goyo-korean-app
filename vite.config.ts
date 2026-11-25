@@ -1,11 +1,13 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { readFileSync, statSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { AUDIO_CACHE_NAME } from "./packages/domain/src/audioCache";
 import { PRECACHE_GLOBS } from "./packages/domain/src/pwaConfig";
+import { FEMALE_VOICE_ENABLED } from "./packages/domain/src/voiceAvailability";
 
 // =============================================================================
 // Goyo dev server
@@ -41,19 +43,28 @@ function alphabetAudioEntries() {
 
   addAll(index.alphabet.consonants);
   addAll(index.alphabet.vowels);
-  addAll(index.female?.alphabet?.consonants);
-  addAll(index.female?.alphabet?.vowels);
+  if (FEMALE_VOICE_ENABLED) {
+    addAll(index.female?.alphabet?.consonants);
+    addAll(index.female?.alphabet?.vowels);
+  }
   for (const [id, file] of Object.entries(index.vocabulary)) {
     if (id.startsWith("num_")) files.add(file);
   }
 
-  // A revision derived from the file itself means a regenerated clip is
-  // re-fetched instead of being served from an old precache entry.
+  // Content-hashed filenames (<base>.<sha256-8>.mp3) already carry their own
+  // cache-busting identity, so Workbox needs no extra revision query. Any
+  // unhashed fallback gets a deterministic content hash rather than mtimeMs.
   return [...files].map(file => {
-    const stats = statSync(path.join(ROOT, "public", "audio", file));
+    if (/\.[0-9a-f]{8}\.mp3$/i.test(file)) {
+      return {
+        url: `/audio/${file}`,
+        revision: null,
+      };
+    }
+    const bytes = readFileSync(path.join(ROOT, "public", "audio", file));
     return {
       url: `/audio/${file}`,
-      revision: `${stats.size}-${Math.round(stats.mtimeMs)}`,
+      revision: createHash("sha256").update(bytes).digest("hex").slice(0, 8),
     };
   });
 }
