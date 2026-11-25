@@ -118,7 +118,7 @@ export function BrowseDialog({
         onOpenChange(next);
       }}
     >
-      <DialogContent className="flex max-h-[90vh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0">
+      <DialogContent className="flex max-h-[90vh] w-full max-w-3xl flex-col gap-0 overflow-hidden p-0 supports-[height:100dvh]:max-h-[90dvh]">
         <div className="shrink-0 border-b border-border bg-gradient-to-br from-emerald-50 dark:from-emerald-950/40 to-background px-5 pb-4 pt-5 sm:px-6">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl text-foreground">

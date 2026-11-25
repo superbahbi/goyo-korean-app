@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Tailwind scans the Vite root (apps/web) on its own. The domain package keeps
+   class strings for category, Hangul-set and mastery colours, so it is a
+   source too, or those utilities never reach the stylesheet. */
+@source "../../../packages/domain/src";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

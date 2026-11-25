@@ -124,6 +124,13 @@ const SCREENS: Screen[] = [
       await page.getByRole("dialog").waitFor();
     },
   },
+  {
+    name: "not-found",
+    path: "/no-such-page",
+    open: async page => {
+      await page.getByRole("button", { name: "Back to dashboard" }).waitFor();
+    },
+  },
 ];
 
 // The SPA's /mobile route: the DOM screens the iOS WKWebView shell serves.
