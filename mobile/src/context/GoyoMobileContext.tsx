@@ -230,6 +230,19 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
         : "light"
       : themePreference;
 
+  // public/theme-init.js paints the document before React; keep it in step
+  // when the learner changes the theme here, so the status bar, overscroll
+  // area and native controls follow the screens.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const root = document.documentElement;
+    root.classList.toggle("dark", theme === "dark");
+    root.style.colorScheme = theme;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", theme === "dark" ? "#0a1311" : "#f5f8f6");
+  }, [theme]);
+
   const view = useMemo(
     () =>
       buildDashboardView({
@@ -307,7 +320,12 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
   const openDialog = useCallback((request: DialogRequestInput) => {
     dispatchDialog({ type: "open", request });
   }, []);
-  const closeDialog = useCallback(() => dispatchDialog({ type: "close" }), []);
+  // Every sheet closes through here (its close button, the backdrop, Escape),
+  // so no practice clip or Browse pronunciation outlives its screen.
+  const closeDialog = useCallback(() => {
+    stopAudio();
+    dispatchDialog({ type: "close" });
+  }, []);
   const openBrowse = useCallback(
     (category: string | null = null) =>
       openDialog({ kind: "browse", category }),

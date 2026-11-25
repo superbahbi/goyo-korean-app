@@ -28,6 +28,7 @@ import {
   playAlphabetAudio,
   playVocabularyAudio,
   playSentenceAudio,
+  stopAudio,
 } from "../../../packages/domain/src/audioPlayer";
 import type { VocabularyCard } from "../../../packages/domain/src/vocabulary";
 const theme = (darkMode: boolean) => ({
@@ -240,6 +241,7 @@ export function AlphabetPracticeScreen({
                 <Pressable
                   key={tab.id}
                   onPress={() => {
+                    stopAudio();
                     setTabId(tab.id);
                     setSelected(null);
                   }}
@@ -529,7 +531,10 @@ export function ListeningPracticeScreen({
         score={`${state.correctCount} / ${state.questions.length}`}
         note="You recognized this many Korean recordings."
         c={c}
-        onRestart={loop.restart}
+        onRestart={() => {
+          stopAudio();
+          loop.restart();
+        }}
         onClose={onClose}
       />
     );
@@ -584,7 +589,10 @@ export function ListeningPracticeScreen({
             </Text>
             <Btn
               label={verdict.isLast ? "See results" : "Next recording"}
-              onPress={loop.next}
+              onPress={() => {
+                stopAudio();
+                loop.next();
+              }}
               c={c}
             />
           </View>
@@ -632,7 +640,10 @@ export function ScenarioPracticeScreen({
         score={`${state.correctCount} / ${state.questions.length}`}
         note="situations answered with the right phrase."
         c={c}
-        onRestart={loop.restart}
+        onRestart={() => {
+          stopAudio();
+          loop.restart();
+        }}
         onClose={onClose}
       />
     );
@@ -691,7 +702,10 @@ export function ScenarioPracticeScreen({
             </Text>
             <Btn
               label={verdict.isLast ? "See results" : "Next situation"}
-              onPress={loop.next}
+              onPress={() => {
+                stopAudio();
+                loop.next();
+              }}
               c={c}
             />
           </View>
@@ -724,6 +738,7 @@ export function ShadowingPracticeScreen({
         note="You spoke each phrase aloud and judged how it felt."
         c={c}
         onRestart={() => {
+          stopAudio();
           setIndex(0);
           setDone(false);
         }}
@@ -732,6 +747,7 @@ export function ShadowingPracticeScreen({
     );
   const finish = (rating: Rating) => {
     onGrade(card.id, rating);
+    stopAudio();
     if (index + 1 >= sample.length) setDone(true);
     else setIndex(index + 1);
   };

@@ -1,4 +1,4 @@
-import { createElement, useState } from "react";
+import { createElement, useEffect, useRef, useState } from "react";
 import type {
   ButtonHTMLAttributes,
   ChangeEvent,
@@ -469,6 +469,73 @@ export function SafeAreaView(props: ViewProps): ReactElement {
   });
 }
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * Behaves like a native sheet for keyboard and assistive-tech users: focus
+ * moves into it and stays there (Tab wraps), Escape closes it, the page behind
+ * it does not scroll, and focus returns to the opener when it closes.
+ */
+function useModalBehaviour(
+  visible: boolean,
+  sheetRef: { current: HTMLDivElement | null },
+  onRequestClose: (() => void) | undefined
+): void {
+  // Read through a ref so a new callback identity does not re-run the effect
+  // (which would steal focus back to the sheet on every render).
+  const closeRef = useRef(onRequestClose);
+  closeRef.current = onRequestClose;
+
+  useEffect(() => {
+    if (!visible || typeof document === "undefined") return;
+    const sheet = sheetRef.current;
+    const opener =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    if (sheet && !sheet.contains(document.activeElement)) {
+      sheet.focus({ preventScroll: true });
+    }
+
+    const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeRef.current?.();
+        return;
+      }
+      if (event.key !== "Tab" || !sheet) return;
+      const focusable = Array.from(
+        sheet.querySelectorAll<HTMLElement>(FOCUSABLE)
+      );
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      if (!first || !last) {
+        event.preventDefault();
+        sheet.focus({ preventScroll: true });
+      } else if (!sheet.contains(active)) {
+        event.preventDefault();
+        first.focus();
+      } else if (event.shiftKey && (active === first || active === sheet)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = overflow;
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
+    };
+  }, [visible, sheetRef]);
+}
+
 export function Modal({
   visible,
   transparent,
@@ -476,6 +543,8 @@ export function Modal({
   testID,
   children,
 }: ModalProps): ReactElement | null {
+  const sheetRef = useRef<HTMLDivElement | null>(null);
+  useModalBehaviour(visible, sheetRef, onRequestClose);
   if (!visible) return null;
   const overlay: CSSProperties = {
     position: "fixed",
@@ -497,6 +566,9 @@ export function Modal({
     borderTopRightRadius: 24,
     overflow: "hidden",
     boxShadow: "0 -10px 30px rgba(0,0,0,0.25)",
+    // Keep the last row clear of the iPhone home indicator.
+    paddingBottom: "env(safe-area-inset-bottom, 0px)",
+    outline: "none",
   };
   const onClick = (event: MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) onRequestClose?.();
@@ -507,11 +579,15 @@ export function Modal({
     createElement(
       "div",
       {
+        ref: sheetRef,
         role: "dialog",
         "aria-modal": "true",
+        tabIndex: -1,
         "data-testid": testID,
         style: sheet,
-      } as HTMLAttributes<HTMLDivElement>,
+      } as HTMLAttributes<HTMLDivElement> & {
+        ref: { current: HTMLDivElement | null };
+      },
       children
     )
   );
