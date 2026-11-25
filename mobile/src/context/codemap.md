@@ -34,7 +34,11 @@ level, totalXp, streak, scenarioCardIds, labelDate})`;
   light/dark the screens paint, and a "system" preference tracks
   `prefers-color-scheme` changes while the app is open. `toggleTheme` flips
   the resolved theme by storing an explicit choice; Settings offers all
-  three options through `setThemePreference`.
+  three options through `setThemePreference`. The resolved theme is mirrored
+  onto `html.dark`, `color-scheme` and `<meta name="theme-color">`, so the
+  document `public/theme-init.js` painted follows a change made here.
+- `closeDialog` calls `stopAudio()` before closing, so no practice clip or
+  Browse pronunciation outlives its sheet.
 - Effects as side channels: deck load (`loadVocabularyDeck`), a 60 s tick plus
   `visibilitychange`/`focus` to roll `today` over, `setAudioSpeaker` whenever
   `settings.audioSpeaker` changes, and a 4 s `notice` auto-dismiss.

@@ -167,7 +167,9 @@ export function DashboardScreen() {
           </View>
           <View>
             <Text style={[styles.brandTitle, { color: c.text }]}>Goyo</Text>
-            <Text style={[styles.brandSub, { color: c.muted }]}>iOS · Web</Text>
+            <Text style={[styles.brandSub, { color: c.muted }]}>
+              Scientific Korean practice
+            </Text>
           </View>
         </View>
         <View style={styles.headerStats}>

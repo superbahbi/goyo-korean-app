@@ -28,10 +28,14 @@ screens are authored in into plain CSS.
   a `<span>` (`numberOfLines` → `-webkit-line-clamp`), `TextInput`
   `<input>`/`<textarea>`, `ScrollView` an outer scroller plus an inner track,
   and `SafeAreaView` a `View` padded with `env(safe-area-inset-*)`.
-- **Modal** is a fixed overlay with a 640 px-max bottom sheet at `92dvh`; a
-  backdrop click calls `onRequestClose`, and `visible: false` renders `null`.
-  `animationType` is accepted for prop-shape stability but unused — the sheet
-  itself does not animate.
+- **Modal** is a fixed overlay with a 640 px-max bottom sheet at `92dvh`,
+  padded by `env(safe-area-inset-bottom)`; a backdrop click or Escape calls
+  `onRequestClose`, and `visible: false` renders `null`. While open,
+  `useModalBehaviour` moves focus into the sheet (`tabIndex=-1`), wraps
+  Tab/Shift+Tab inside it, sets `body` `overflow: hidden`, and on close
+  restores the scroll style and focuses the opener again. `animationType` is
+  accepted for prop-shape stability but unused — the sheet itself does not
+  animate.
 - Accessibility is translated: `accessibilityRole` → `role`,
   `accessibilityLabel` → `aria-label`, `accessibilityState` →
   `aria-disabled|selected|checked|busy|expanded`, `testID` → `data-testid`.

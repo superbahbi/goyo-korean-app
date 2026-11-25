@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-import { createElement } from "react";
+import { act, createElement } from "react";
+import { createRoot, type Root } from "react-dom/client";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   Modal,
   Pressable,
@@ -247,5 +248,100 @@ describe("DOM component kit rendered markup", () => {
       bottom: 0,
       left: 0,
     });
+  });
+});
+
+describe("Modal keyboard and focus behaviour", () => {
+  let container: HTMLDivElement;
+  let root: Root;
+
+  beforeEach(() => {
+    (
+      globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
+    ).IS_REACT_ACT_ENVIRONMENT = true;
+    container = document.createElement("div");
+    document.body.appendChild(container);
+    root = createRoot(container);
+  });
+
+  afterEach(() => {
+    act(() => root.unmount());
+    container.remove();
+    document.body.style.overflow = "";
+  });
+
+  function renderSheet(visible: boolean, onRequestClose = vi.fn()) {
+    act(() => {
+      root.render(
+        createElement(
+          "div",
+          null,
+          createElement("button", { id: "opener" }, "Open"),
+          createElement(
+            Modal,
+            { visible, onRequestClose, testID: "sheet" },
+            createElement("button", { id: "first" }, "First"),
+            createElement("button", { id: "last" }, "Last")
+          )
+        )
+      );
+    });
+    return onRequestClose;
+  }
+
+  function press(key: string, shiftKey = false) {
+    const event = new KeyboardEvent("keydown", {
+      key,
+      shiftKey,
+      bubbles: true,
+      cancelable: true,
+    });
+    act(() => {
+      document.dispatchEvent(event);
+    });
+    return event;
+  }
+
+  it("takes focus and locks page scroll, then gives both back on close", () => {
+    renderSheet(false);
+    const opener = document.getElementById("opener")!;
+    opener.focus();
+
+    renderSheet(true);
+    const sheet = document.querySelector('[data-testid="sheet"]')!;
+    expect(sheet.contains(document.activeElement)).toBe(true);
+    expect(document.body.style.overflow).toBe("hidden");
+
+    renderSheet(false);
+    expect(document.body.style.overflow).toBe("");
+    expect(document.activeElement).toBe(opener);
+  });
+
+  it("closes on Escape", () => {
+    const onRequestClose = renderSheet(true);
+
+    press("Escape");
+
+    expect(onRequestClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("wraps Tab and Shift+Tab inside the sheet", () => {
+    renderSheet(true);
+    const first = document.getElementById("first")!;
+    const last = document.getElementById("last")!;
+
+    last.focus();
+    expect(press("Tab").defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(first);
+
+    expect(press("Tab", true).defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(last);
+  });
+
+  it("pads the sheet clear of the home indicator", () => {
+    const markup = renderToStaticMarkup(
+      createElement(Modal, { visible: true }, "Body")
+    );
+    expect(markup).toContain("env(safe-area-inset-bottom, 0px)");
   });
 });
