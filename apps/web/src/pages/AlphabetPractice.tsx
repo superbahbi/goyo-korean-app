@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,8 +23,7 @@ import {
   getAlphabetCategoryCards,
   type AlphabetCategoryId,
 } from "@domain/alphabet";
-import { playAlphabetAudio } from "@domain/audioPlayer";
-import { useAudioPlayback } from "@/hooks/useAudioPlayback";
+import { playAlphabetAudio, stopAudio } from "@domain/audioPlayer";
 
 interface AlphabetPracticeProps {
   onClose: () => void;
@@ -59,7 +58,25 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
   const [selectedCategory, setSelectedCategory] =
     useState<AlphabetCategoryId | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { playing } = useAudioPlayback();
+
+  // Every way out of a letter stops its clip, so navigation never has to wait
+  // for playback and a letter's name never plays over the next one.
+  useEffect(() => () => stopAudio(), []);
+
+  const close = () => {
+    stopAudio();
+    onClose();
+  };
+
+  const goToLetter = (index: number) => {
+    stopAudio();
+    setCurrentIndex(index);
+  };
+
+  const backToCategories = () => {
+    stopAudio();
+    setSelectedCategory(null);
+  };
 
   const handleSpeak = (characterId: string, type: "consonant" | "vowel") => {
     void speakHangul(characterId, type);
@@ -85,7 +102,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
         description="Pick a set, listen to each shape, and move at your own pace."
         tone="indigo"
         closeLabel="Close Hangul practice"
-        onClose={onClose}
+        onClose={close}
       >
         <div className="grid gap-3 sm:grid-cols-2">
           {ALPHABET_CATEGORIES.map(category => {
@@ -148,15 +165,11 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
   const currentCard = cards[currentIndex] ?? cards[0];
 
   const handleNext = () => {
-    if (currentIndex < cards.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
+    if (currentIndex < cards.length - 1) goToLetter(currentIndex + 1);
   };
 
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
+    if (currentIndex > 0) goToLetter(currentIndex - 1);
   };
 
   const sectionTitle =
@@ -176,8 +189,8 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
       description="Watch each letter draw itself, hear its name, then move through the set."
       tone="indigo"
       closeLabel="Close Hangul practice"
-      onClose={onClose}
-      onBack={() => setSelectedCategory(null)}
+      onClose={close}
+      onBack={backToCategories}
       backLabel="Back to categories"
       progress={((currentIndex + 1) / cards.length) * 100}
       progressLabel={`${sectionTitle} progress`}
@@ -188,14 +201,14 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
           <Button
             variant="outline"
             onClick={handlePrev}
-            disabled={currentIndex === 0 || playing}
+            disabled={currentIndex === 0}
             className="min-h-12 rounded-xl"
           >
             <ArrowLeft size={16} className="mr-2" /> Previous
           </Button>
           <PracticePrimaryButton
             onClick={handleNext}
-            disabled={currentIndex === cards.length - 1 || playing}
+            disabled={currentIndex === cards.length - 1}
           >
             Next <ArrowRight size={16} className="ml-2" />
           </PracticePrimaryButton>
@@ -217,7 +230,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
             <motion.button
               key={card.id}
               type="button"
-              onClick={() => setCurrentIndex(idx)}
+              onClick={() => goToLetter(idx)}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.02 }}

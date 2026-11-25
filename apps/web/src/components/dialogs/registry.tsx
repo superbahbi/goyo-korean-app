@@ -135,6 +135,7 @@ export const DIALOG_REGISTRY: Record<DialogKind, DialogEntry> = {
         cards={deps.shadowing.cards}
         onGrade={deps.shadowing.onGrade}
         onClose={onClose}
+        autoPlayAudio={deps.state.settings.autoPlayAudio}
       />
     ),
   },

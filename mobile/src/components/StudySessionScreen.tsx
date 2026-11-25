@@ -468,7 +468,9 @@ export function StudySessionScreen({
         />
       </View>
 
+      {/* Keyed by position: a same-card retry must mount fresh to auto-play. */}
       <FlashCardView
+        key={`${currentCard.id}-${state.index}`}
         card={currentCard}
         revealed={state.revealed}
         autoPlayAudio={autoPlayAudio}
