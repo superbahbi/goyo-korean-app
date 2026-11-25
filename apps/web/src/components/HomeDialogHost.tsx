@@ -81,6 +81,7 @@ export function HomeDialogHost({
         <StudySession
           queue={study.queue}
           cardStates={deps.state.cardStates}
+          today={deps.today}
           onGrade={study.onGrade}
           onClose={study.onClose}
           allowRepeat={repeatableSession(study.mode, study.dailyGoalReached)}

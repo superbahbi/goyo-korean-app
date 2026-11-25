@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { VocabularyCard } from "@domain/vocabulary";
+import { loadVocabularyDeck, type VocabularyCard } from "@domain/vocabulary";
 import { pickDistractors } from "./practiceDistractors";
 
 function card(
@@ -146,5 +146,51 @@ describe("pickDistractors", () => {
     expect(picked).toHaveLength(3);
     expect(new Set(picked.map(candidate => candidate.id)).size).toBe(3);
     expect(picked.map(candidate => candidate.id)).not.toContain("a");
+  });
+
+  it("excludes same-front homophones even when their English meanings differ", () => {
+    const cards = [
+      card("eye", { front: "눈", back: "Eye" }),
+      card("snow", { front: "눈", back: "Snow" }),
+      card("water", { front: "물", back: "Water" }),
+      card("fire", { front: "불", back: "Fire" }),
+      card("tree", { front: "나무", back: "Tree" }),
+    ];
+
+    const picked = pickDistractors(cards, {
+      count: 3,
+      correctCardId: "eye",
+      dedupeKey: candidate => candidate.back.trim().toLowerCase(),
+      excludeMatchingKey: candidate => candidate.front.trim(),
+      shuffleCards: keepOrder,
+    });
+
+    expect(picked.map(candidate => candidate.id)).toEqual([
+      "water",
+      "fire",
+      "tree",
+    ]);
+  });
+
+  it("never picks another card from any homonym group as a Listening distractor", async () => {
+    const { studyReady } = await loadVocabularyDeck();
+    const homonymFronts = ["공", "눈", "다리", "배", "병", "분", "열", "차"];
+    const homonymCards = studyReady.filter(item =>
+      homonymFronts.includes(item.front.trim())
+    );
+    expect(homonymCards.length).toBeGreaterThanOrEqual(16);
+
+    for (const target of homonymCards) {
+      const picked = pickDistractors(studyReady, {
+        count: 3,
+        correctCardId: target.id,
+        dedupeKey: candidate => candidate.back.trim().toLowerCase(),
+        excludeMatchingKey: candidate => candidate.front.trim(),
+        shuffleCards: keepOrder,
+      });
+      expect(picked.map(candidate => candidate.front.trim())).not.toContain(
+        target.front.trim()
+      );
+    }
   });
 });

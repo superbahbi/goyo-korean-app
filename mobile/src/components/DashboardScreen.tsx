@@ -177,7 +177,7 @@ export function DashboardScreen() {
               { color: c.warning, backgroundColor: c.warningSoft },
             ]}
           >
-            🔥 {state.stats.streak}d
+            🔥 {view.stats.streak}d
           </Text>
           <Text
             style={[

@@ -31,6 +31,7 @@ import { FlashCardView } from "./FlashCardView";
 export interface StudySessionScreenProps {
   queue: VocabularyCard[];
   cardStates: Record<string, CardState>;
+  today: string;
   title: string;
   allowRepeat: boolean;
   autoPlayAudio: boolean;
@@ -89,6 +90,7 @@ const DARK = {
 export function StudySessionScreen({
   queue,
   cardStates,
+  today,
   title,
   allowRepeat,
   autoPlayAudio,
@@ -128,9 +130,10 @@ export function StudySessionScreen({
   const intervals = useMemo(
     () =>
       previewIntervals(
-        state.revealed ? cardStates[currentCard?.id ?? ""] : undefined
+        state.revealed ? cardStates[currentCard?.id ?? ""] : undefined,
+        today
       ),
-    [state.revealed, cardStates, currentCard?.id]
+    [state.revealed, cardStates, currentCard?.id, today]
   );
 
   useEffect(() => {

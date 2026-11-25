@@ -22,6 +22,7 @@ import { Modal, SafeAreaView, StyleSheet, View } from "./src/primitives/dom";
 function GoyoMobileShell() {
   const {
     state,
+    today,
     vocabulary,
     studyReady,
     view,
@@ -65,6 +66,7 @@ function GoyoMobileShell() {
         <StudySessionScreen
           queue={sessionQueue}
           cardStates={state.cardStates}
+          today={today}
           title={sessionTitle}
           allowRepeat={repeatableSession(
             sessionMode,

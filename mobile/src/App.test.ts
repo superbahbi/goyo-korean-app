@@ -73,12 +73,12 @@ describe("Mobile DOM kit & shared codebase", () => {
       newCardsPerDay: state.settings.newCardsPerDay,
       level: state.stats.level,
       totalXp: state.stats.totalXp,
-      streak: state.stats.streak,
       scenarioCardIds: SCENARIOS.map(s => s.cardId),
       labelDate: key => key,
     });
 
     expect(view.today.cardsStudiedToday).toBe(1);
+    expect(view.stats.streak).toBe(1);
     expect(GRAMMAR_LESSONS.length).toBe(18);
 
     const session = createStudySession({

@@ -243,7 +243,6 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
         newCardsPerDay: state.settings.newCardsPerDay,
         level: state.stats.level,
         totalXp: state.stats.totalXp,
-        streak: state.stats.streak,
         scenarioCardIds: SCENARIO_CARD_IDS,
         labelDate,
       }),

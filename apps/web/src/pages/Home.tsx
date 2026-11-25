@@ -57,7 +57,6 @@ export default function Home() {
     newCardsPerDay: state.settings.newCardsPerDay,
     level: state.stats.level,
     totalXp: state.stats.totalXp,
-    streak: state.stats.streak,
   });
 
   const {
@@ -136,7 +135,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-emerald-50 dark:via-emerald-950/40 to-muted">
       <HomeHeader
-        streak={state.stats.streak}
+        streak={view.stats.streak}
         totalXp={state.stats.totalXp}
         onOpenSettings={() => open({ kind: "settings" })}
       />

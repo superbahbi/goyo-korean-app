@@ -17,7 +17,6 @@ interface UseHomeDashboardOptions {
   newCardsPerDay: number;
   level: number;
   totalXp: number;
-  streak: number;
 }
 
 const SCENARIO_CARD_IDS = SCENARIOS.map(scenario => scenario.cardId);
@@ -47,7 +46,6 @@ export function useHomeDashboard({
   newCardsPerDay,
   level,
   totalXp,
-  streak,
 }: UseHomeDashboardOptions): DashboardView {
   return useMemo(
     () =>
@@ -62,7 +60,6 @@ export function useHomeDashboard({
         newCardsPerDay,
         level,
         totalXp,
-        streak,
         scenarioCardIds: SCENARIO_CARD_IDS,
         labelDate,
       }),
@@ -77,7 +74,6 @@ export function useHomeDashboard({
       newCardsPerDay,
       level,
       totalXp,
-      streak,
     ]
   );
 }
