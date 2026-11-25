@@ -88,7 +88,10 @@ speaker selection, `stopAudio`).
 
 **Persistence, backup, PWA** — `savedState.ts` is the one save format (`SCHEMA_VERSION = 5`;
 `parseSavedState` with per-field sanitizers, `loadSavedState` with the newer-save guard,
-`buildExportPayload`, `validateImportPayload`). `progressStorage.ts` owns the localStorage key and
+`buildExportPayload`, `validateImportPayload`, and `stateAfterImport`, which keeps the local review
+log when an imported file has none). `studyPace.ts` holds the daily-goal and new-cards-per-day
+options both surfaces offer (`DAILY_GOAL_OPTIONS`, `NEW_CARDS_PER_DAY_OPTIONS`) and `paceOptions`,
+which always includes the saved value. `progressStorage.ts` owns the localStorage key and
 reset; `backupStatus.ts` tracks local export age; `storageProtection.ts` handles iOS install hints
 and persistent-storage requests. `appReload.reloadToLatestApp` is the waiting-worker handshake
 (`SKIP_WAITING`, `controllerchange`, timeout); `pwaConfig.PRECACHE_GLOBS` feeds vite-plugin-pwa;

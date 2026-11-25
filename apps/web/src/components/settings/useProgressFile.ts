@@ -2,6 +2,7 @@ import { useRef, useState, type ChangeEvent } from "react";
 import { toast } from "sonner";
 import {
   buildExportPayload,
+  stateAfterImport,
   validateImportPayload,
   type UserState,
 } from "@domain/savedState";
@@ -117,12 +118,7 @@ export function useProgressFile({
       return;
     }
     // A progress-only file must not wipe the local review log.
-    replaceState({
-      ...pendingImport.state,
-      reviewLog: pendingImport.hasReviewLog
-        ? pendingImport.state.reviewLog
-        : state.reviewLog,
-    });
+    replaceState(stateAfterImport(state, pendingImport));
     const cardCount = Object.keys(pendingImport.state.cardStates).length;
     setPendingImport(null);
     toast.success(

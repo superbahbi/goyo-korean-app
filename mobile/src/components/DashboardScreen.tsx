@@ -23,6 +23,8 @@ const palette = {
     heroSoft: "#d1fae5",
     warning: "#c2410c",
     warningSoft: "#fff7ed",
+    danger: "#b91c1c",
+    dangerSoft: "#fef2f2",
   },
   dark: {
     bg: "#0a1311",
@@ -37,6 +39,8 @@ const palette = {
     heroSoft: "#a7f3d0",
     warning: "#fb923c",
     warningSoft: "#2a1608",
+    danger: "#f87171",
+    dangerSoft: "#2a0f10",
   },
 } as const;
 type Palette = { [K in keyof (typeof palette)["light"]]: string };
@@ -71,6 +75,8 @@ const Card = ({ c, children }: CardProps) => (
 export function DashboardScreen() {
   const {
     state,
+    saveBlocked,
+    saveError,
     view,
     vocabulary,
     studyReady,
@@ -219,6 +225,43 @@ export function DashboardScreen() {
       </View>
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+        {saveBlocked && (
+          <View
+            accessibilityRole="alert"
+            testID="save-blocked-alert"
+            style={[
+              styles.alert,
+              { backgroundColor: c.warningSoft, borderColor: c.warning },
+            ]}
+          >
+            <Text style={[styles.alertTitle, { color: c.warning }]}>
+              A newer save from Goyo is stored here.
+            </Text>
+            <Text style={[styles.alertBody, { color: c.text }]}>
+              This screen was built for an older save format, so it will not
+              overwrite that progress, and study here will not be saved. Update
+              Goyo and reopen it to continue where you left off.
+            </Text>
+          </View>
+        )}
+        {saveError && (
+          <View
+            accessibilityRole="alert"
+            testID="save-error-alert"
+            style={[
+              styles.alert,
+              { backgroundColor: c.dangerSoft, borderColor: c.danger },
+            ]}
+          >
+            <Text style={[styles.alertTitle, { color: c.danger }]}>
+              Your progress is not being saved.
+            </Text>
+            <Text style={[styles.alertBody, { color: c.text }]}>
+              Storage is full or blocked, so changes are only kept until Goyo
+              closes. Export your progress from Settings first.
+            </Text>
+          </View>
+        )}
         {notice && (
           <View
             style={[
@@ -546,6 +589,15 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   noticeText: { fontSize: 13, fontWeight: "600" },
+  alert: {
+    gap: 4,
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  alertTitle: { fontSize: 14, fontWeight: "700" },
+  alertBody: { fontSize: 13, lineHeight: 19 },
   hero: { borderRadius: 20, padding: 18, gap: 12 },
   heroTop: {
     flexDirection: "row",

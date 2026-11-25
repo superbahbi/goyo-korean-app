@@ -17,7 +17,9 @@ Practice`), Level & Mastery, 7-day Review Plan, practice and category grids.
   - `DialogScreens` — `BrowseScreen` (tag chips + text filter over
     front/back/romanization, 60-row cap, mastery badge), `StatsScreen` (stat
     tiles, mastery split, forecast bars, category accuracy), `SettingsScreen`
-    (goal/new-card chips, auto-play, theme, JSON export/import, reset confirm).
+    (goal/new-card chips from the shared `studyPace` lists, auto-play, theme,
+    JSON export, an import that asks "Replace current progress?" and applies
+    `stateAfterImport`, refused while `saveBlocked`, and reset confirm).
   - `FlashCardView` — audio-first front (hear, optional Korean text, then
     reveal) and a back with romanization, meaning, example, usage note.
   - `PracticeScreens` — `AlphabetPracticeScreen` (letter tabs + tips),
@@ -40,7 +42,8 @@ Practice`), Level & Mastery, 7-day Review Plan, practice and category grids.
 
 ## Flow
 
-- Dashboard in: `state`, `view` (from `buildDashboardView`), `theme`, `notice`;
+- Dashboard in: `state`, `view` (from `buildDashboardView`), `theme`, `notice`,
+  `saveBlocked` / `saveError` (two `role="alert"` banners, as on the web);
   out: `openDialog`, `openBrowse`, `openListening`, `openScenario`,
   `openShadowing`, `startDailySession`, `startWeakSession`,
   `startLearningSession`, `toggleTheme`, `dismissNotice`.

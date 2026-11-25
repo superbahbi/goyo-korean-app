@@ -18,10 +18,16 @@ import {
 import { playVocabularyAudio } from "../../../packages/domain/src/audioPlayer";
 import {
   buildExportPayload as serializeExport,
+  stateAfterImport,
   validateImportPayload as validateImport,
   type UserState,
   type UserSettings,
 } from "../../../packages/domain/src/savedState";
+import {
+  DAILY_GOAL_OPTIONS,
+  NEW_CARDS_PER_DAY_OPTIONS,
+  paceOptions,
+} from "../../../packages/domain/src/studyPace";
 import type {
   StatsDialogStats,
   StatsDialogForecast,
@@ -315,6 +321,7 @@ export function StatsScreen({
 
 export function SettingsScreen({
   state,
+  saveBlocked,
   darkMode,
   themePreference,
   onUpdateSettings,
@@ -324,6 +331,8 @@ export function SettingsScreen({
   onClose,
 }: {
   state: UserState;
+  /** A newer build's save is stored here; an import would not be written. */
+  saveBlocked: boolean;
   darkMode: boolean;
   themePreference: ThemePreference;
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
@@ -338,19 +347,53 @@ export function SettingsScreen({
   );
   const [notice, setNotice] = useState("");
   const [confirming, setConfirming] = useState(false);
-  const goals = [5, 10, 15, 20, 30],
-    newCards = [1, 3, 5, 10];
+  const [pendingImport, setPendingImport] = useState<{
+    state: UserState;
+    hasReviewLog: boolean;
+  } | null>(null);
+  // The same lists the web Settings offers, plus any off-list saved value.
+  const goals = paceOptions(DAILY_GOAL_OPTIONS, state.settings.dailyGoal),
+    newCards = paceOptions(
+      NEW_CARDS_PER_DAY_OPTIONS,
+      state.settings.newCardsPerDay
+    );
+  const cardCount = (save: UserState) => Object.keys(save.cardStates).length;
   const themeOptions: Array<{ value: ThemePreference; label: string }> = [
     { value: "system", label: "System" },
     { value: "light", label: "Light" },
     { value: "dark", label: "Dark" },
   ];
+  // Import asks before replacing, as on the web. A newer build's save is
+  // never overwritten, so the import would only live in memory: say so.
   const importProgress = () => {
+    if (saveBlocked) {
+      setPendingImport(null);
+      setNotice(
+        "Import paused: a newer version of Goyo saved progress here. Update Goyo, then import."
+      );
+      return;
+    }
     const result = validateImport(json);
-    if (result.ok) {
-      onReplaceState(result.state);
-      setNotice("Progress imported.");
-    } else setNotice(result.reason);
+    if (!result.ok) {
+      setPendingImport(null);
+      setNotice(result.reason);
+      return;
+    }
+    setNotice("");
+    setPendingImport({
+      state: result.state,
+      hasReviewLog: result.hasReviewLog,
+    });
+  };
+  const confirmImport = () => {
+    if (!pendingImport) return;
+    // A progress-only export must not wipe this device's review log.
+    onReplaceState(stateAfterImport(state, pendingImport));
+    const count = cardCount(pendingImport.state);
+    setPendingImport(null);
+    setNotice(
+      `Imported progress for ${count} ${count === 1 ? "card" : "cards"}.`
+    );
   };
   return (
     <View style={[S.screen, { backgroundColor: c.bg }]}>
@@ -456,6 +499,35 @@ export function SettingsScreen({
           ]}
         />
         <Btn label="Import JSON" onPress={importProgress} c={c} tone="ghost" />
+        {pendingImport ? (
+          <View
+            style={[S.box, { backgroundColor: c.card, borderColor: c.bad }]}
+            testID="import-confirm"
+          >
+            <Text style={[S.section, { color: c.fg }]}>
+              Replace current progress?
+            </Text>
+            <Text style={[S.small, { color: c.dim }]}>
+              This text holds {cardCount(pendingImport.state)} cards. Importing
+              it replaces your current progress ({cardCount(state)} cards) on
+              this device.
+            </Text>
+            <View style={S.chips}>
+              <Btn
+                label="Replace progress"
+                onPress={confirmImport}
+                c={c}
+                tone="bad"
+              />
+              <Btn
+                label="Cancel"
+                onPress={() => setPendingImport(null)}
+                c={c}
+                tone="ghost"
+              />
+            </View>
+          </View>
+        ) : null}
         {notice ? (
           <Text style={[S.small, { color: c.dim }]}>{notice}</Text>
         ) : null}
