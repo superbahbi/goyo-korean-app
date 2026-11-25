@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createAudioIndexStore,
+  estimateAudioDownloadMb,
   parseAudioManifest,
   planAudioDownload,
   resolveAlphabetClip,
@@ -220,10 +221,14 @@ describe("clip resolution", () => {
 });
 
 describe("planAudioDownload", () => {
-  it("lists vocabulary clips from the enabled voices once, as full URLs", () => {
+  it("lists vocabulary and sentence clips from the enabled voices once, as full URLs", () => {
     const manifest = parseAudioManifest({
       vocabulary: {
         surv_001: "male_surv_001.mp3",
+        surv_002: "shared.mp3",
+      },
+      sentences: {
+        surv_001: "male_sent_001.mp3",
         surv_002: "shared.mp3",
       },
       female: {
@@ -231,14 +236,108 @@ describe("planAudioDownload", () => {
           surv_001: "female_surv_001.mp3",
           surv_003: "shared.mp3",
         },
+        sentences: {
+          surv_001: "female_sent_001.mp3",
+        },
       },
     });
 
     expect(planAudioDownload(manifest)).toEqual([
       "/audio/male_surv_001.mp3",
       "/audio/shared.mp3",
-      ...(FEMALE_VOICE_ENABLED ? ["/audio/female_surv_001.mp3"] : []),
+      "/audio/male_sent_001.mp3",
+      ...(FEMALE_VOICE_ENABLED
+        ? ["/audio/female_surv_001.mp3", "/audio/female_sent_001.mp3"]
+        : []),
     ]);
+  });
+});
+
+describe("estimateAudioDownloadMb", () => {
+  it("estimates the download size from enabled vocabulary and sentence counts", () => {
+    const vocabulary = Object.fromEntries(
+      Array.from({ length: 640 }, (_, i) => [`w_${i}`, `w_${i}.mp3`])
+    );
+    const sentences = Object.fromEntries(
+      Array.from({ length: 675 }, (_, i) => [`s_${i}`, `s_${i}.mp3`])
+    );
+    const manifest = parseAudioManifest({
+      vocabulary,
+      sentences,
+      female: {
+        vocabulary: { extra: "female_extra.mp3" },
+        sentences: { extra: "female_sent_extra.mp3" },
+      },
+    });
+
+    expect(estimateAudioDownloadMb(manifest)).toBe(37);
+  });
+
+  it("deduplicates sentence clips that match vocabulary filenames and enforces a 1 MB floor", () => {
+    const manifest = parseAudioManifest({
+      vocabulary: { surv_001: "shared.mp3" },
+      sentences: { surv_001: "shared.mp3" },
+    });
+
+    expect(estimateAudioDownloadMb(manifest)).toBe(1);
+  });
+});
+
+describe("countCached", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it("counts matching cache.keys() entries by pathname and ignores query-string URLs", async () => {
+    const { storage, cache } = memoryCaches();
+    const cacheWithKeys = {
+      ...cache,
+      keys: vi.fn(async () => [
+        { url: "https://goyo.bahbi.net/audio/a.mp3" },
+        { url: "https://goyo.bahbi.net/audio/b.mp3?warm=1" },
+        { url: "https://goyo.bahbi.net/audio/c.mp3" },
+      ]),
+    };
+    (storage.open as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+      cacheWithKeys
+    );
+    const store = createAudioIndexStore({ caches: storage });
+
+    await expect(
+      store.countCached([
+        "/audio/a.mp3",
+        "/audio/a.mp3",
+        "/audio/b.mp3",
+        "/audio/missing.mp3",
+      ])
+    ).resolves.toBe(1);
+    expect(cache.match).not.toHaveBeenCalled();
+  });
+
+  it("falls back to cache.match() when cache.keys() is absent", async () => {
+    const { storage, entries } = memoryCaches();
+    entries.set("/audio/a.mp3", audioResponse());
+    entries.set("/audio/c.mp3", audioResponse());
+    const store = createAudioIndexStore({ caches: storage });
+
+    await expect(
+      store.countCached(["/audio/a.mp3", "/audio/b.mp3", "/audio/c.mp3"])
+    ).resolves.toBe(2);
+  });
+
+  it("returns 0 when the Cache API is unavailable, input is empty, or storage throws", async () => {
+    vi.stubGlobal("caches", undefined);
+    const noCacheStore = createAudioIndexStore();
+    await expect(noCacheStore.countCached(["/audio/a.mp3"])).resolves.toBe(0);
+
+    const { storage } = memoryCaches();
+    (storage.open as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("blocked")
+    );
+    const failingStore = createAudioIndexStore({ caches: storage });
+    await expect(failingStore.countCached([])).resolves.toBe(0);
+    await expect(failingStore.countCached(["/audio/a.mp3"])).resolves.toBe(0);
   });
 });
 

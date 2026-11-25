@@ -158,18 +158,46 @@ export function sentenceIdsWithClips(manifest: AudioManifest): Set<string> {
 }
 
 /**
- * Every vocabulary clip URL the offline download should store, de-duplicated
- * across the enabled voices and ordered as the manifest lists them. The paused
- * female library is skipped so a download does not store audio nobody can
- * select.
+ * Every vocabulary and sentence clip URL the offline download should store,
+ * de-duplicated across the enabled voices and ordered as the manifest lists
+ * them. The paused female library is skipped so a download does not store
+ * audio nobody can select.
  */
 export function planAudioDownload(manifest: AudioManifest): string[] {
   const files = new Set<string>(Object.values(manifest.vocabulary));
+  for (const file of Object.values(manifest.sentences)) files.add(file);
   if (FEMALE_VOICE_ENABLED) {
     for (const file of Object.values(manifest.female?.vocabulary ?? {}))
       files.add(file);
+    for (const file of Object.values(manifest.female?.sentences ?? {}))
+      files.add(file);
   }
   return Array.from(files, file => `/audio/${file}`);
+}
+
+/**
+ * Approximate offline download size in megabytes for the enabled vocabulary
+ * and sentence clips, based on average clip sizes on disk.
+ */
+export function estimateAudioDownloadMb(manifest: AudioManifest): number {
+  const vocabFiles = new Set<string>(Object.values(manifest.vocabulary));
+  if (FEMALE_VOICE_ENABLED) {
+    for (const file of Object.values(manifest.female?.vocabulary ?? {}))
+      vocabFiles.add(file);
+  }
+  const sentenceFiles = new Set<string>();
+  for (const file of Object.values(manifest.sentences)) {
+    if (!vocabFiles.has(file)) sentenceFiles.add(file);
+  }
+  if (FEMALE_VOICE_ENABLED) {
+    for (const file of Object.values(manifest.female?.sentences ?? {})) {
+      if (!vocabFiles.has(file)) sentenceFiles.add(file);
+    }
+  }
+  return Math.max(
+    1,
+    Math.round((vocabFiles.size * 8.5 + sentenceFiles.size * 47.5) / 1024)
+  );
 }
 
 /** The browser surface this module needs, injected so tests run in Node. */
@@ -177,6 +205,7 @@ export interface AudioCache {
   match(request: string): Promise<Response | undefined>;
   put(request: string, response: Response): Promise<void>;
   delete(request: string): Promise<boolean>;
+  keys?(): Promise<readonly { url: string }[]>;
 }
 
 export interface AudioCacheStorage {
@@ -207,6 +236,8 @@ export interface AudioIndexStore {
   warm(audioPath: string): Promise<boolean>;
   /** Drop one clip from the offline cache. Always resolves. */
   forget(audioPath: string): Promise<void>;
+  /** Count how many unique clips from `audioPaths` are currently cached. */
+  countCached(audioPaths: readonly string[]): Promise<number>;
 }
 
 function browserFetch(): AudioFetch | undefined {
@@ -298,7 +329,35 @@ export function createAudioIndexStore(
     }
   };
 
-  return { peek: () => manifest, get, prefetch, warm, forget };
+  const countCached = async (
+    audioPaths: readonly string[]
+  ): Promise<number> => {
+    const cacheStorage = dependencies.caches ?? browserCaches();
+    if (!cacheStorage || audioPaths.length === 0) return 0;
+
+    const uniquePaths = Array.from(new Set(audioPaths));
+    try {
+      const cache = await cacheStorage.open(AUDIO_CACHE_NAME);
+      if (typeof cache.keys === "function") {
+        const entries = await cache.keys();
+        const cachedPaths = new Set<string>();
+        for (const entry of entries) {
+          const parsed = new URL(entry.url, "https://goyo.local");
+          if (!parsed.search) cachedPaths.add(parsed.pathname);
+        }
+        return uniquePaths.filter(path => cachedPaths.has(path)).length;
+      }
+
+      const matches = await Promise.all(
+        uniquePaths.map(path => cache.match(path))
+      );
+      return matches.filter(Boolean).length;
+    } catch {
+      return 0;
+    }
+  };
+
+  return { peek: () => manifest, get, prefetch, warm, forget, countCached };
 }
 
 const defaultStore = createAudioIndexStore();
@@ -321,4 +380,10 @@ export function warmAudioClip(audioPath: string): Promise<boolean> {
 
 export function forgetAudioClip(audioPath: string): Promise<void> {
   return defaultStore.forget(audioPath);
+}
+
+export function countCachedAudioClips(
+  audioPaths: readonly string[]
+): Promise<number> {
+  return defaultStore.countCached(audioPaths);
 }
