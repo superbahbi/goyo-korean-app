@@ -53,6 +53,7 @@ const rootArg = cliArgs.find(
 const defaultRoot = path.resolve(fileURLToPath(import.meta.url), "../..");
 const projectRoot = rootArg ? path.resolve(rootArg) : defaultRoot;
 const audioDir = path.join(projectRoot, "public", "audio");
+const manifestDir = path.join(projectRoot, "scripts", "audio-manifests");
 
 interface VoicePreset {
   voiceId: string;
@@ -102,7 +103,7 @@ const grammarOnly = sentenceMode && process.argv.includes("--grammar");
 const sampleArg = process.argv.find(arg => arg.startsWith("--sample="));
 const sampleSize = sampleArg ? Number(sampleArg.split("=")[1]) : undefined;
 const manifestPath = path.join(
-  audioDir,
+  manifestDir,
   process.env.ELEVENLABS_MANIFEST_NAME ||
     (sentenceMode ? activePreset.sentenceManifest : activePreset.manifest)
 );
@@ -390,6 +391,7 @@ export async function main() {
     sentences: results.filter(result => result.group === "sentences"),
   };
 
+  await mkdir(manifestDir, { recursive: true });
   await writeFile(
     manifestPath,
     `${JSON.stringify(summary, null, 2)}\n`,

@@ -6,8 +6,8 @@ import path from "node:path";
 const ROOT = path.resolve(import.meta.dirname, "..");
 const MANIFEST = path.join(ROOT, "public", "audio", "index.json");
 const SOURCES = [
-  path.join(ROOT, "client", "src", "lib", "vocabulary.ts"),
-  path.join(ROOT, "client", "src", "lib", "essentialVocabulary.ts"),
+  path.join(ROOT, "packages", "domain", "src", "vocabulary.ts"),
+  path.join(ROOT, "packages", "domain", "src", "essentialVocabulary.ts"),
 ];
 
 const ids = new Set();
@@ -36,5 +36,5 @@ const removedFemale = manifest.female?.vocabulary
 writeFileSync(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 console.log(
   `pruned ${removedMale} male and ${removedFemale} female entries; ` +
-    `now ${Object.keys(manifest.vocabulary).length} male, ${Object.keys(manifest.female.vocabulary).length} female`
+    `now ${Object.keys(manifest.vocabulary).length} male, ${Object.keys(manifest.female?.vocabulary ?? {}).length} female`
 );

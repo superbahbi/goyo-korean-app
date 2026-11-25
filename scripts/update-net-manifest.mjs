@@ -5,8 +5,8 @@ import path from "node:path";
 const rootDir = path.resolve(fileURLToPath(import.meta.url), "../..");
 const manifestPath = path.join(
   rootDir,
-  "public",
-  "audio",
+  "scripts",
+  "audio-manifests",
   "elevenlabs-manifest.json"
 );
 const audioPath = path.join(

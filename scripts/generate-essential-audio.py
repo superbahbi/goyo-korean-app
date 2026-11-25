@@ -55,10 +55,10 @@ with ThreadPoolExecutor(max_workers=4) as pool:
         ok,card,voice,status=future.result(); completed+=1
         if not ok: failures.append((card,voice,status))
         if completed%20==0:
-            index['metadata']={'provider':'ElevenLabs','model':MODELS['female'],'models':MODELS,'voices':VOICE_NAMES,'voiceIds':{'male':VOICES['male'][0],'female':VOICES['female'][0]}}
+            index['metadata']={'provider':'ElevenLabs','model':MODELS['female'],'models':MODELS,'voices':VOICE_NAMES}
             write_manifest_atomically(index, INDEX_PATH)
             print(f'completed {completed}/{len(tasks)} failures={len(failures)}',flush=True)
-index['metadata']={'provider':'ElevenLabs','model':MODELS['female'],'models':MODELS,'voices':VOICE_NAMES,'voiceIds':{'male':VOICES['male'][0],'female':VOICES['female'][0]}}
+index['metadata']={'provider':'ElevenLabs','model':MODELS['female'],'models':MODELS,'voices':VOICE_NAMES}
 write_manifest_atomically(index, INDEX_PATH)
 (ROOT / '.tmp').mkdir(parents=True, exist_ok=True)
 Path(ROOT/'.tmp/essential-audio-failures.json').write_text(json.dumps(failures,ensure_ascii=False,indent=2),encoding='utf-8')

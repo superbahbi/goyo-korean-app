@@ -12,4 +12,11 @@ describe("service worker precache", () => {
   it("keeps the app shell in the precache", () => {
     expect(PRECACHE_GLOBS.some(glob => glob.includes("js"))).toBe(true);
   });
+
+  it("omits webmanifest and icon pngs that VitePWA precaches separately", () => {
+    expect(PRECACHE_GLOBS.some(glob => glob.includes("webmanifest"))).toBe(
+      false
+    );
+    expect(PRECACHE_GLOBS.some(glob => glob.includes("png"))).toBe(false);
+  });
 });
