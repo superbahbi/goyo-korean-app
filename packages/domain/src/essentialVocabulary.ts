@@ -103,10 +103,10 @@ const ESSENTIAL_WORDS_RAW: VocabularyCard[] = [
     back: "horse",
     romanization: "mal",
     tag: "essential",
-    example: "말이 놀이터에서 친구들과 함께 뛰고 있어요.",
+    example: "말이 넓은 들판을 달리고 있어요.",
     difficulty: "beginner",
     partOfSpeech: "noun",
-    exampleEnglish: "The horse is running with friends in the playground.",
+    exampleEnglish: "A horse is running across a wide field.",
     usageNote:
       "말 is a homonym (word also means 'speech'); context determines meaning.",
     source: "600 essential words · row 13",
@@ -237,7 +237,7 @@ const ESSENTIAL_WORDS_RAW: VocabularyCard[] = [
   {
     id: "essential_016",
     front: "배",
-    back: "boat; pear",
+    back: "boat",
     romanization: "bae",
     tag: "essential",
     example: "저는 주말에 작은 배를 타고 강을 건넜어요.",
