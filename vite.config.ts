@@ -106,7 +106,12 @@ const plugins = [
       globPatterns: [...PRECACHE_GLOBS],
       additionalManifestEntries: alphabetAudioEntries(),
       navigateFallback: "/index.html",
-      navigateFallbackDenylist: [/^\/audio\//, /^\/icons\//],
+      // Real files a visitor may open directly must not get the SPA shell.
+      navigateFallbackDenylist: [
+        /^\/audio\//,
+        /^\/icons\//,
+        /^\/(?:robots\.txt|sitemap\.xml|og-image\.png)$/,
+      ],
       runtimeCaching: [
         {
           urlPattern: /\/audio\/.*\.mp3$/,

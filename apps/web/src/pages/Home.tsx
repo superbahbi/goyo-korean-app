@@ -14,6 +14,7 @@ import { ReviewPlanCard } from "@/components/ReviewPlanCard";
 import { PracticeMenu } from "@/components/PracticeMenu";
 import { QuickLinks } from "@/components/QuickLinks";
 import { CategoryGrid } from "@/components/CategoryGrid";
+import { AppFooter } from "@/components/AppFooter";
 import {
   HomeDialogHost,
   type StudySessionDeps,
@@ -207,6 +208,8 @@ export default function Home() {
           />
         )}
       </main>
+
+      <AppFooter />
 
       <HomeDialogHost
         dialog={activeDialog}

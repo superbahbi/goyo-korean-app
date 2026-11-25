@@ -57,6 +57,9 @@ unless `SHOTS_BASE_URL` is set, drives Playwright Chromium over desktop
 seeds `goyo-theme`, opens each `SCREENS` entry plus the `MOBILE_SCREENS`
 lane (the `/mobile` route under the iPhone user agent), waits 350 ms for
 Radix/Framer Motion, and writes PNGs to `.tmp/shots/<SHOTS_LABEL>/`.
+`render-og-image.ts` draws the 1200×630 link-preview card from inline HTML
+(the Hangul comes from `public/icons/icon-512.png`, so no Korean font is
+needed) with Playwright Chromium and writes `public/og-image.png`.
 `install-ios-zen.sh`
 (`pnpm ios:zen`) builds, copies `dist/public` into `mobile/ios/Goyo/www`,
 renders the AppIcon with `sips`, then runs `xcodegen`, `xcodebuild`, and

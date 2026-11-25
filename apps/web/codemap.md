@@ -15,12 +15,13 @@ it here needs no Vercel dashboard change.
 - Single-page document (`index.html`) with one mount node (`#root`) and one
   module entry (`/src/main.tsx`); routing is client-side (wouter), so there is
   no per-route HTML.
-- **Pre-paint theme bootstrap**: an inline IIFE reads the `goyo-theme`
-  localStorage key and `prefers-color-scheme`, then toggles `html.dark`, sets
-  `colorScheme`, and rewrites the `theme-color` meta before first paint. It is
-  a deliberate duplicate of `THEME_STORAGE_KEY` / `applyTheme` in
-  `src/contexts/ThemeContext.tsx` — both must stay in sync to avoid a
-  light-flash for dark-mode learners.
+- **Pre-paint theme bootstrap**: `/theme-init.js` (`public/theme-init.js`, an
+  external script so the strict `script-src 'self'` CSP allows it) reads the
+  `goyo-theme` localStorage key and `prefers-color-scheme`, then toggles
+  `html.dark`, sets `colorScheme`, and rewrites the `theme-color` meta before
+  first paint. It is a deliberate duplicate of `THEME_STORAGE_KEY` /
+  `applyTheme` in `src/contexts/ThemeContext.tsx` — both must stay in sync to
+  avoid a light-flash for dark-mode learners.
 - Installable-PWA meta contract: `mobile-web-app-capable`,
   `apple-mobile-web-app-capable`, `apple-mobile-web-app-title` ("Goyo"),
   `apple-mobile-web-app-status-bar-style`, `viewport-fit=cover`, and
@@ -28,13 +29,15 @@ it here needs no Vercel dashboard change.
 - Icons resolve to `public/icons/icon-192.png` for both favicon and
   apple-touch-icon; the web app manifest and service worker come from the
   Workbox plugin in `vite.config.ts`.
-- A commented-out Google Fonts `<link>` block is a marked-deletion placeholder,
-  not active styling.
+- Search and link-preview metadata: `description`, a canonical link to
+  `https://goyo.bahbi.net/`, Open Graph and Twitter Card tags pointing at
+  `public/og-image.png` (1200×630, rendered by `scripts/render-og-image.ts`).
+  `public/robots.txt` and `public/sitemap.xml` name the same domain.
 
 ## Flow
 
 1. Browser requests `/` → server returns `index.html`.
-2. Inline script resolves dark/light and paints the correct document class
+2. `/theme-init.js` resolves dark/light and paints the correct document class
    before React exists (no FOUC).
 3. `#root` is populated by `/src/main.tsx`, which mounts `App`; from then on
    every screen, dialog, and theme change is React/CSS-variable driven.

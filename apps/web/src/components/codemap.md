@@ -20,7 +20,9 @@ Feature groups and their named exports:
   `ThemeToggle` at `sm+`), `SectionHeading` (eyebrow/title/action, id for
   `aria-labelledby`), `QuickLinks` (Browse Deck, Full Stats launchers),
   `SaveAlerts` (two `role="alert"` storage warnings), `ThemeToggle` (one-tap
-  light/dark).
+  light/dark), `AppFooter` (the dashboard's closing note: progress stays in
+  this browser, the cookieless analytics disclosure, ElevenLabs audio credit,
+  and outbound source/feedback/license links).
 - **Daily plan and progress** — `WelcomeCard` (hero, starts the daily session),
   `ProgressCards` (first-run "Start here" block or Today/Level/Learned tiles),
   `ReviewPlanCard` (7-day forecast, workload Badge), `CategoryGrid` (theme tiles
