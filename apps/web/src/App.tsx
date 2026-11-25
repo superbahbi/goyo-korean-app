@@ -12,6 +12,11 @@ import Home from "./pages/Home";
 
 const GoyoMobileApp = lazy(() => import("../../../mobile/App"));
 
+// The iOS shell serves this bundle from its own goyo:// scheme. Vercel's
+// analytics describe the website only, so the native app never loads them.
+const IN_NATIVE_SHELL =
+  typeof window !== "undefined" && window.location.protocol === "goyo:";
+
 function Router() {
   return (
     <Switch>
@@ -47,11 +52,15 @@ function App() {
           </ThemeProvider>
         </MotionConfig>
       </ErrorBoundary>
-      {/* Aggregate, cookieless page views and Core Web Vitals. Kept outside the
-          error boundary so a failed analytics script can never take down the
-          study app. */}
-      <Analytics />
-      <SpeedInsights />
+      {/* Aggregate, cookieless page views and Core Web Vitals, disclosed in the
+          dashboard footer. Kept outside the error boundary so a failed
+          analytics script can never take down the study app. */}
+      {!IN_NATIVE_SHELL && (
+        <>
+          <Analytics />
+          <SpeedInsights />
+        </>
+      )}
     </>
   );
 }

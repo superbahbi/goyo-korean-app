@@ -1,0 +1,6 @@
+# Goyo is one public page; /mobile is the iOS shell's view of the same app.
+User-agent: *
+Allow: /
+Disallow: /mobile
+
+Sitemap: https://goyo.bahbi.net/sitemap.xml

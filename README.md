@@ -12,7 +12,7 @@ React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the
 - **Scheduling:** a small, tested SM-2 variant. The rules live in `docs/improvement-plan.md`.
 - **Progress:** `localStorage`, moved between devices with JSON export/import.
 - **Theme:** system, light and dark, persisted per device.
-- **Analytics:** Vercel Web Analytics and Speed Insights — aggregate, cookieless page views and Core Web Vitals; no accounts or personal data.
+- **Analytics:** Vercel Web Analytics and Speed Insights — aggregate, cookieless page views and Core Web Vitals; no accounts or personal data. The dashboard footer discloses it, and the iOS shell (`goyo://`) never loads it.
 
 ## Requirements
 
@@ -121,3 +121,21 @@ straight onto the owner's iPhone, not through a web host or EAS.
 
 `docs/improvement-plan.md` holds the plan, the current phase and the backlog. Read it before starting
 new work; do not keep a second task list elsewhere.
+
+## License
+
+The source code is released under the [MIT License](LICENSE).
+
+The vocabulary content and the pronunciation audio ship with the app so it works offline:
+
+- The 136 curated cards were written for Goyo. The 504 imported cards take their headwords from
+  `The600EssentialKoreanWords.xlsx`; their examples, translations and usage notes were written for
+  Goyo and reviewed (see "Reference: deck provenance" in `docs/improvement-plan.md`).
+- Word and sentence audio is generated with ElevenLabs.
+
+The MIT License covers the source code. The headword list and the generated audio come from the
+sources above and are not covered by it.
+
+`public/robots.txt`, `public/sitemap.xml` and the link-preview tags in `apps/web/index.html` name
+the production domain, `https://goyo.bahbi.net`. `public/og-image.png` is rendered by
+`pnpm exec tsx scripts/render-og-image.ts`.
