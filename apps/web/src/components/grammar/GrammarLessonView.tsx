@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { Lightbulb, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GrammarQuiz } from "@/components/grammar/GrammarQuiz";
+import { useAudioPlayback } from "@/hooks/useAudioPlayback";
 import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
 import { grammarExampleId, type GrammarLesson } from "@domain/grammar";
 import type { GrammarProgress } from "@domain/grammarProgress";
@@ -19,17 +19,10 @@ export function GrammarLessonView({
   onComplete,
 }: GrammarLessonViewProps) {
   const sentenceAudioIds = useSentenceAudioIds();
-  const [playingId, setPlayingId] = useState<string | null>(null);
+  // The player owns the now-playing clip. A local flag cleared when an older
+  // play() settles would drop the highlight of the example that replaced it.
+  const playback = useAudioPlayback();
   const best = progress.scores[lesson.id];
-
-  const play = async (sentenceId: string) => {
-    setPlayingId(sentenceId);
-    try {
-      await playSentenceAudio(sentenceId);
-    } finally {
-      setPlayingId(null);
-    }
-  };
 
   return (
     <div className="space-y-5">
@@ -64,6 +57,10 @@ export function GrammarLessonView({
           {lesson.examples.map((example, index) => {
             const sentenceId = grammarExampleId(lesson.id, index);
             const hasAudio = sentenceAudioIds.has(sentenceId);
+            const isPlaying =
+              playback.playing &&
+              playback.clip?.kind === "sentence" &&
+              playback.clip.id === sentenceId;
             return (
               <li
                 key={sentenceId}
@@ -87,13 +84,11 @@ export function GrammarLessonView({
                     size="icon"
                     aria-label={`Play example: ${example.ko}`}
                     className="h-9 w-9 shrink-0 rounded-full text-emerald-700 hover:bg-emerald-100 dark:text-emerald-300 dark:hover:bg-emerald-900/50"
-                    onClick={() => void play(sentenceId)}
+                    onClick={() => void playSentenceAudio(sentenceId)}
                   >
                     <Volume2
                       size={16}
-                      className={
-                        playingId === sentenceId ? "animate-pulse" : ""
-                      }
+                      className={isPlaying ? "animate-pulse" : ""}
                     />
                   </Button>
                 )}

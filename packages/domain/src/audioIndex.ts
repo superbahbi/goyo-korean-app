@@ -1,7 +1,3 @@
-import {
-  ALPHABET_CONSONANT_AUDIO_ALIASES,
-  ALPHABET_VOWEL_AUDIO_ALIASES,
-} from "./alphabet";
 import { AUDIO_CACHE_NAME } from "./audioCache";
 import { FEMALE_VOICE_ENABLED } from "./voiceAvailability";
 
@@ -125,8 +121,8 @@ export function resolveSentenceClip(
 
 /**
  * Alphabet filename for a character id, or undefined when the clip is missing.
- * The male index keys basic alphabet clips by mnemonic, so after trying the id
- * the resolver applies the consonant/vowel alias kept with the alphabet data.
+ * Both voices key every consonant and vowel clip by its domain id
+ * (`cons_001`, `vowel_001`), so the id is the only lookup.
  */
 export function resolveAlphabetClip(
   manifest: AudioManifest,
@@ -139,13 +135,7 @@ export function resolveAlphabetClip(
       ? manifest.female?.alphabet
       : manifest.alphabet;
   const files = type === "consonant" ? alphabet?.consonants : alphabet?.vowels;
-  if (!files) return undefined;
-  const aliases =
-    type === "consonant"
-      ? ALPHABET_CONSONANT_AUDIO_ALIASES
-      : ALPHABET_VOWEL_AUDIO_ALIASES;
-  const alias = aliases[characterId];
-  return files[characterId] ?? (alias ? files[alias] : undefined);
+  return files?.[characterId];
 }
 
 /** Sentence ids that have a clip in at least one voice. */
@@ -297,7 +287,12 @@ export function createAudioIndexStore(
     void get().catch(() => {});
   };
 
-  const warm = async (audioPath: string): Promise<boolean> => {
+  // One request per clip at a time: tapping the speaker again before the first
+  // prefetch lands, or a corrupt-clip retry while it is still running, joins
+  // the pending download instead of fetching the same bytes again.
+  const pendingWarms = new Map<string, Promise<boolean>>();
+
+  const warmOnce = async (audioPath: string): Promise<boolean> => {
     const cacheStorage = dependencies.caches ?? browserCaches();
     const fetchImpl = dependencies.fetch ?? browserFetch();
     if (!cacheStorage || !fetchImpl) return false;
@@ -316,6 +311,16 @@ export function createAudioIndexStore(
       return true;
     }
     return false;
+  };
+
+  const warm = (audioPath: string): Promise<boolean> => {
+    const pendingWarm = pendingWarms.get(audioPath);
+    if (pendingWarm) return pendingWarm;
+    const request = warmOnce(audioPath).finally(() => {
+      pendingWarms.delete(audioPath);
+    });
+    pendingWarms.set(audioPath, request);
+    return request;
   };
 
   const forget = async (audioPath: string): Promise<void> => {

@@ -15,7 +15,7 @@ import { FEMALE_VOICE_ENABLED } from "./voiceAvailability";
 /**
  * The manifest seam is shared by playback and the offline download, so these
  * tests drive it through its interface with fake fetch/cache dependencies: one
- * request per store, one narrowing rule, one alias resolver, one cache-put
+ * request per store, one narrowing rule, one id resolver, one cache-put
  * policy.
  */
 
@@ -23,8 +23,8 @@ const manifestPayload = {
   vocabulary: { surv_001: "male_surv_001.mp3" },
   sentences: { surv_001: "male_sent_surv_001.mp3" },
   alphabet: {
-    consonants: { ga: "male_cons_ga.mp3" },
-    vowels: { a: "male_vowel_a.mp3" },
+    consonants: { cons_001: "male_cons_001.mp3" },
+    vowels: { vowel_001: "male_vowel_001.mp3" },
   },
   female: {
     vocabulary: { surv_001: "female_surv_001.mp3" },
@@ -183,14 +183,13 @@ describe("clip resolution", () => {
     );
   });
 
-  it("resolves consonant and vowel ids through their aliases", () => {
-    // The male index keys basic characters by mnemonic, not by id.
+  it("resolves consonant and vowel clips by character id", () => {
     expect(
       resolveAlphabetClip(manifest, "cons_001", "consonant", "elevenlabs")
-    ).toBe("male_cons_ga.mp3");
+    ).toBe("male_cons_001.mp3");
     expect(
       resolveAlphabetClip(manifest, "vowel_001", "vowel", "elevenlabs")
-    ).toBe("male_vowel_a.mp3");
+    ).toBe("male_vowel_001.mp3");
     expect(
       resolveAlphabetClip(
         manifest,
@@ -358,6 +357,41 @@ describe("warmAudioClip", () => {
     expect(fetchImpl).toHaveBeenCalledWith("/audio/clip.mp3?warm=1");
     expect(cache.put).toHaveBeenCalledWith("/audio/clip.mp3", clip);
     expect(entries.get("/audio/clip.mp3")).toBe(clip);
+  });
+
+  it("shares one download when the same clip is warmed again before it lands", async () => {
+    const { storage, cache } = memoryCaches();
+    let release: (response: Response) => void = () => {};
+    const fetchImpl = vi.fn(
+      () =>
+        new Promise<Response>(resolve => {
+          release = resolve;
+        })
+    );
+    const store = createAudioIndexStore({ fetch: fetchImpl, caches: storage });
+
+    const first = store.warm("/audio/clip.mp3");
+    const second = store.warm("/audio/clip.mp3");
+    // Let both calls get past the cache lookup before the download settles.
+    await vi.waitFor(() => expect(fetchImpl).toHaveBeenCalledTimes(1));
+    release(audioResponse());
+
+    await expect(Promise.all([first, second])).resolves.toEqual([true, true]);
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+    expect(cache.put).toHaveBeenCalledTimes(1);
+  });
+
+  it("starts a new download after an earlier one failed", async () => {
+    const { storage } = memoryCaches();
+    const fetchImpl = vi
+      .fn<(input: string) => Promise<Response>>()
+      .mockRejectedValueOnce(new Error("offline"))
+      .mockResolvedValueOnce(audioResponse());
+    const store = createAudioIndexStore({ fetch: fetchImpl, caches: storage });
+
+    await expect(store.warm("/audio/clip.mp3")).rejects.toThrow(/offline/);
+    await expect(store.warm("/audio/clip.mp3")).resolves.toBe(true);
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
   });
 
   it("does not fetch when the clip is already cached", async () => {

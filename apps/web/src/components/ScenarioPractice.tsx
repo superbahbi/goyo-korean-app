@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Check, RotateCcw } from "lucide-react";
 import { type VocabularyCard } from "@domain/vocabulary";
@@ -68,6 +69,10 @@ export function ScenarioPractice({
 
   const { answered, isCorrect, isLast } = verdict;
 
+  // Closing the dialog any other way (Escape, the host unmounting it) must not
+  // leave the phrase playing over the dashboard.
+  useEffect(() => () => stopAudio(), []);
+
   const closePractice = () => {
     stopAudio();
     onClose();
@@ -127,7 +132,7 @@ export function ScenarioPractice({
 
   const nextScenario = () => {
     if (!answered) return;
-    if (isLast) stopAudio();
+    stopAudio();
     next();
   };
 

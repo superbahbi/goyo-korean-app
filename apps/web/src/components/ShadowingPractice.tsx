@@ -26,12 +26,15 @@ interface ShadowingPracticeProps {
   cards: VocabularyCard[];
   onGrade: (cardId: string, rating: "again" | "good") => void;
   onClose: () => void;
+  /** The learner's auto-play setting; off means the model plays only on tap. */
+  autoPlayAudio?: boolean;
 }
 
 export function ShadowingPractice({
   cards,
   onGrade,
   onClose,
+  autoPlayAudio = true,
 }: ShadowingPracticeProps) {
   const queue = useMemo(() => selectShadowingCards(cards), [cards]);
   const [index, setIndex] = useState(0);
@@ -42,7 +45,7 @@ export function ShadowingPractice({
 
   useAutoPlayOnce({
     clipId: complete ? null : (currentCard?.id ?? null),
-    enabled: true,
+    enabled: autoPlayAudio,
     play: playVocabularyAudio,
   });
 
@@ -64,8 +67,9 @@ export function ShadowingPractice({
   const next = () => {
     if (!currentCard) return;
     onGrade(currentCard.id, ratingForVerdict(shadowed));
+    // The next phrase must not start over the end of this one.
+    stopAudio();
     if (index === queue.length - 1) {
-      stopAudio();
       setComplete(true);
     } else {
       setIndex(value => value + 1);
