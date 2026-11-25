@@ -2,7 +2,10 @@ import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StrokeOrderDiagram } from "@/components/StrokeOrderDiagram";
-import { AlphabetCard as AlphabetCardType } from "@domain/alphabet";
+import {
+  splitAlphabetExample,
+  type AlphabetCard as AlphabetCardType,
+} from "@domain/alphabet";
 
 interface AlphabetCardProps {
   card: AlphabetCardType;
@@ -10,6 +13,7 @@ interface AlphabetCardProps {
 }
 
 export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
+  const example = splitAlphabetExample(card.example);
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -32,7 +36,9 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
       {/* Example */}
       <div className="bg-muted/60 rounded-xl p-4 mb-6 border border-border">
         <p className="text-sm text-foreground/70 mb-1">Example:</p>
-        <p className="text-lg font-semibold text-foreground">{card.example}</p>
+        <p className="text-lg font-semibold text-foreground">
+          <span lang="ko">{example.word}</span> {example.gloss}
+        </p>
       </div>
 
       {/* Speak Button */}

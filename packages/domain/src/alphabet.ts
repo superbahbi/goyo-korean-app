@@ -13,7 +13,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㄱ",
     romanization: "g/k",
     sound: "기역",
-    example: "가 (ga - house)",
+    example: "가방 (gabang - bag)",
     type: "consonant",
   },
   {
@@ -21,7 +21,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㄴ",
     romanization: "n",
     sound: "니은",
-    example: "나 (na - I)",
+    example: "나 (na - I, me)",
     type: "consonant",
   },
   {
@@ -37,7 +37,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㄹ",
     romanization: "r/l",
     sound: "리을",
-    example: "라 (ra - pull)",
+    example: "라면 (ramyeon - instant noodles)",
     type: "consonant",
   },
   {
@@ -45,7 +45,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅁ",
     romanization: "m",
     sound: "미음",
-    example: "마 (ma - horse)",
+    example: "물 (mul - water)",
     type: "consonant",
   },
   {
@@ -53,7 +53,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅂ",
     romanization: "b/p",
     sound: "비읍",
-    example: "바 (ba - wind)",
+    example: "바람 (baram - wind)",
     type: "consonant",
   },
   {
@@ -61,7 +61,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅅ",
     romanization: "s",
     sound: "시옷",
-    example: "사 (sa - four)",
+    example: "사과 (sagwa - apple)",
     type: "consonant",
   },
   {
@@ -69,7 +69,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅇ",
     romanization: "ng",
     sound: "이응",
-    example: "아 (a - I)",
+    example: "영어 (yeongeo - English)",
     type: "consonant",
   },
   {
@@ -77,7 +77,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅈ",
     romanization: "j",
     sound: "지읒",
-    example: "자 (ja - self)",
+    example: "지도 (jido - map)",
     type: "consonant",
   },
   {
@@ -93,7 +93,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅋ",
     romanization: "k",
     sound: "키읔",
-    example: "카 (ka - card)",
+    example: "코 (ko - nose)",
     type: "consonant",
   },
   {
@@ -101,7 +101,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅌ",
     romanization: "t",
     sound: "티읕",
-    example: "타 (ta - other)",
+    example: "토끼 (tokki - rabbit)",
     type: "consonant",
   },
   {
@@ -109,7 +109,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅍ",
     romanization: "p",
     sound: "피읖",
-    example: "파 (pa - wave)",
+    example: "포도 (podo - grapes)",
     type: "consonant",
   },
   {
@@ -117,7 +117,7 @@ const BASIC_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅎ",
     romanization: "h",
     sound: "히읗",
-    example: "하 (ha - do)",
+    example: "하나 (hana - one)",
     type: "consonant",
   },
 ];
@@ -128,7 +128,7 @@ const DOUBLE_CONSONANTS: AlphabetCard[] = [
     hangul: "ㄲ",
     romanization: "kk",
     sound: "쌍기역",
-    example: "까 (kka - peel)",
+    example: "꽃 (kkot - flower)",
     type: "consonant",
   },
   {
@@ -136,7 +136,7 @@ const DOUBLE_CONSONANTS: AlphabetCard[] = [
     hangul: "ㄸ",
     romanization: "tt",
     sound: "쌍디귿",
-    example: "따 (tta - follow)",
+    example: "딸기 (ttalgi - strawberry)",
     type: "consonant",
   },
   {
@@ -144,7 +144,7 @@ const DOUBLE_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅃ",
     romanization: "pp",
     sound: "쌍비읍",
-    example: "빠 (ppa - fast)",
+    example: "빵 (ppang - bread)",
     type: "consonant",
   },
   {
@@ -152,7 +152,7 @@ const DOUBLE_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅆ",
     romanization: "ss",
     sound: "쌍시옷",
-    example: "싸 (ssa - cheap)",
+    example: "쌀 (ssal - uncooked rice)",
     type: "consonant",
   },
   {
@@ -160,7 +160,7 @@ const DOUBLE_CONSONANTS: AlphabetCard[] = [
     hangul: "ㅉ",
     romanization: "jj",
     sound: "쌍지읒",
-    example: "짜 (jja - salty)",
+    example: "찌개 (jjigae - stew)",
     type: "consonant",
   },
 ];
@@ -171,7 +171,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅏ",
     romanization: "a",
     sound: "아",
-    example: "아 (a - I)",
+    example: "아이 (ai - child)",
     type: "vowel",
   },
   {
@@ -179,7 +179,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅑ",
     romanization: "ya",
     sound: "야",
-    example: "야 (ya - hey)",
+    example: "야구 (yagu - baseball)",
     type: "vowel",
   },
   {
@@ -187,7 +187,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅓ",
     romanization: "eo",
     sound: "어",
-    example: "어 (eo - uh)",
+    example: "어머니 (eomeoni - mother)",
     type: "vowel",
   },
   {
@@ -195,7 +195,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅕ",
     romanization: "yeo",
     sound: "여",
-    example: "여 (yeo - woman)",
+    example: "여자 (yeoja - woman)",
     type: "vowel",
   },
   {
@@ -203,7 +203,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅗ",
     romanization: "o",
     sound: "오",
-    example: "오 (o - five)",
+    example: "오이 (oi - cucumber)",
     type: "vowel",
   },
   {
@@ -211,7 +211,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅛ",
     romanization: "yo",
     sound: "요",
-    example: "요 (yo - ending)",
+    example: "요리 (yori - cooking)",
     type: "vowel",
   },
   {
@@ -219,7 +219,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅜ",
     romanization: "u",
     sound: "우",
-    example: "우 (u - rain)",
+    example: "우유 (uyu - milk)",
     type: "vowel",
   },
   {
@@ -227,7 +227,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅠ",
     romanization: "yu",
     sound: "유",
-    example: "유 (yu - oil)",
+    example: "유리 (yuri - glass)",
     type: "vowel",
   },
   {
@@ -235,7 +235,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅡ",
     romanization: "eu",
     sound: "으",
-    example: "으 (eu - sound)",
+    example: "음악 (eumak - music)",
     type: "vowel",
   },
   {
@@ -243,7 +243,7 @@ const BASIC_VOWELS: AlphabetCard[] = [
     hangul: "ㅣ",
     romanization: "i",
     sound: "이",
-    example: "이 (i - this)",
+    example: "이름 (ireum - name)",
     type: "vowel",
   },
 ];
@@ -254,7 +254,7 @@ const COMPOUND_VOWELS: AlphabetCard[] = [
     hangul: "ㅐ",
     romanization: "ae",
     sound: "애",
-    example: "애 (ae - child)",
+    example: "개 (gae - dog)",
     type: "vowel",
   },
   {
@@ -262,7 +262,7 @@ const COMPOUND_VOWELS: AlphabetCard[] = [
     hangul: "ㅒ",
     romanization: "yae",
     sound: "얘",
-    example: "얘 (yae - this person)",
+    example: "얘기 (yaegi - chat, story)",
     type: "vowel",
   },
   {
@@ -270,7 +270,7 @@ const COMPOUND_VOWELS: AlphabetCard[] = [
     hangul: "ㅔ",
     romanization: "e",
     sound: "에",
-    example: "에 (e - at)",
+    example: "게 (ge - crab)",
     type: "vowel",
   },
   {
@@ -302,7 +302,7 @@ const COMPOUND_VOWELS: AlphabetCard[] = [
     hangul: "ㅚ",
     romanization: "oe",
     sound: "외",
-    example: "외 (oe - outside)",
+    example: "외국 (oeguk - foreign country)",
     type: "vowel",
   },
   {
@@ -310,7 +310,7 @@ const COMPOUND_VOWELS: AlphabetCard[] = [
     hangul: "ㅝ",
     romanization: "wo",
     sound: "워",
-    example: "워 (wo - sound)",
+    example: "뭐 (mwo - what)",
     type: "vowel",
   },
   {
@@ -318,7 +318,7 @@ const COMPOUND_VOWELS: AlphabetCard[] = [
     hangul: "ㅞ",
     romanization: "we",
     sound: "웨",
-    example: "웨 (we - way)",
+    example: "웨이터 (weiteo - waiter)",
     type: "vowel",
   },
   {
@@ -326,7 +326,7 @@ const COMPOUND_VOWELS: AlphabetCard[] = [
     hangul: "ㅟ",
     romanization: "wi",
     sound: "위",
-    example: "위 (wi - above)",
+    example: "위 (wi - top, above)",
     type: "vowel",
   },
   {
@@ -334,7 +334,7 @@ const COMPOUND_VOWELS: AlphabetCard[] = [
     hangul: "ㅢ",
     romanization: "ui",
     sound: "의",
-    example: "의 (ui - of)",
+    example: "의사 (uisa - doctor)",
     type: "vowel",
   },
 ];
@@ -439,6 +439,19 @@ export const ALPHABET_DATASET_IS_COMPLETE =
   ALPHABET_VOWEL_TOTAL === 21;
 export const ALPHABET_LEARNING_NOTE =
   "Consonants are pronounced by their Korean letter names; for example, ㄴ is 니은 (nieun).";
+
+/**
+ * Splits an example such as "가방 (gabang - bag)" into the Korean word and the
+ * romanized gloss, so a view can mark only the word as Korean.
+ */
+export function splitAlphabetExample(example: string): {
+  word: string;
+  gloss: string;
+} {
+  const space = example.indexOf(" ");
+  if (space === -1) return { word: example, gloss: "" };
+  return { word: example.slice(0, space), gloss: example.slice(space + 1) };
+}
 
 export function getAlphabetAudioText(characterId: string): string {
   return ALPHABET_AUDIO_TEXT[characterId] ?? characterId;
