@@ -29,21 +29,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Manus specific
-.manus/
-.manus-logs/
-.project-config.json
-
 # Documentation
 README.md
-DESIGN_AND_LEARNING_SCIENCE.md
-LEARNING_GUIDE.md
-IMPLEMENTATION_SUMMARY.md
-REDESIGN_SPEC.md
 
-# Server files (not needed for static deployment)
-server/
-patches/
-template.json
+# Config files (not needed for static deployment)
 components.json
 tsconfig.node.json
