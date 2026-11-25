@@ -17,8 +17,9 @@ const ROOT = import.meta.dirname;
 
 /**
  * The Hangul and number clips are small and used from the very first session, so
- * they are precached. The 26 MB vocabulary library stays on-demand: each clip is
- * cached the first time it plays, and the Settings dialog can fetch the rest.
+ * they are precached. The ~37 MB vocabulary and sentence library stays on-demand:
+ * each clip is cached the first time it plays, and the Settings dialog can
+ * fetch the rest.
  */
 function alphabetAudioEntries() {
   const manifestPath = path.join(ROOT, "public", "audio", "index.json");
@@ -112,7 +113,7 @@ const plugins = [
           handler: "CacheFirst",
           options: {
             cacheName: AUDIO_CACHE_NAME,
-            expiration: { maxEntries: 1800, maxAgeSeconds: 60 * 60 * 24 * 365 },
+            expiration: { maxEntries: 3500, maxAgeSeconds: 60 * 60 * 24 * 365 },
             cacheableResponse: { statuses: [0, 200] },
           },
         },
