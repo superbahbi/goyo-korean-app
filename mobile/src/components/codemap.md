@@ -15,20 +15,33 @@ every Grade, Dialog request, and settings change to the provider in
   - `DashboardScreen` — daily-goal hero (`Start Daily Session` / `Repeat
 Practice`), Level & Mastery, 7-day Review Plan, practice and category grids.
   - `DialogScreens` — `BrowseScreen` (tag chips + text filter over
-    front/back/romanization, 60-row cap, mastery badge), `StatsScreen` (stat
+    front/back/romanization in 60-row pages with a "Show N more" button that
+    resets on a new search or tag, mastery badge), `StatsScreen` (stat
     tiles, mastery split, forecast bars, category accuracy), `SettingsScreen`
     (goal/new-card chips from the shared `studyPace` lists, auto-play, theme,
     JSON export, an import that asks "Replace current progress?" and applies
     `stateAfterImport`, refused while `saveBlocked`, and reset confirm).
   - `FlashCardView` — audio-first front (hear, optional Korean text, then
     reveal) and a back with romanization, meaning, example, usage note.
-  - `PracticeScreens` — `AlphabetPracticeScreen` (letter tabs + tips),
-    `GrammarPracticeScreen` (lesson list, explanation, inline quiz),
-    `ListeningPracticeScreen` / `ScenarioPracticeScreen` (Question loop),
-    `ShadowingPracticeScreen` (first 8 cards, self-report).
+  - `PracticeScreens` — `AlphabetPracticeScreen` (letter tabs + tips; a
+    selected letter shows `StrokeDiagram`), `GrammarPracticeScreen` (lesson
+    list, explanation, inline quiz whose last answer keeps its verdict and
+    explanation until "See results"; example speakers only where a clip
+    exists), `ListeningPracticeScreen` / `ScenarioPracticeScreen` (Question
+    loop), `ShadowingPracticeScreen` (first 8 cards, self-report; the sentence
+    button only where a clip exists). Revealed rows add ✓ / ✗ so the verdict
+    does not rest on colour alone.
+  - `StrokeDiagram` — a still stroke-order chart from `getHangulStrokes`:
+    every stroke plus a numbered dot where the pen starts (`strokeStart`
+    parses the path's first point), labelled for screen readers.
+  - `useSentenceAudioIds` — resolves `getAvailableSentenceIds()` once per
+    mount; Grammar, Shadowing and `StudySessionScreen` hide sentence players
+    without a clip.
   - `StudySessionScreen` — React binding for the Session machine.
 - Theming is file-local (`LIGHT`/`DARK` constants or a `theme(darkMode)` factory
-  returning `{bg, card, line, fg, dim, ok, bad}`); `darkMode: boolean` flows down
+  returning `{bg, card, line, fg, dim, ok, good, bad}`, where `good`/`bad` are
+  pale washes in light mode and deep ones in dark mode so revealed rows keep
+  `fg` readable); `darkMode: boolean` flows down
   from the shell. Repeated micro-components: `Head`, `Btn`, `Bar`, `Done`,
   `Section`, `Card`, `ProgressBar`, `SpeakButton`.
 - Framework-free engines are adapted with `useMemo` + `useSyncExternalStore`:

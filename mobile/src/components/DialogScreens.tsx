@@ -107,6 +107,8 @@ const Section = ({ title, c }: { title: string; c: C }) => (
   <Text style={[S.section, { color: c.fg }]}>{title}</Text>
 );
 
+const BROWSE_PAGE = 60;
+
 export function BrowseScreen({
   vocabulary,
   cardStates,
@@ -123,6 +125,13 @@ export function BrowseScreen({
   const c = theme(darkMode);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(initialCategory ?? "all");
+  // Rows render in pages, so the whole 639-card deck stays reachable without
+  // mounting it at once; a new search or category starts from the top page.
+  const [pageLimit, setPageLimit] = useState(BROWSE_PAGE);
+  const search = (next: string) => {
+    setQuery(next);
+    setPageLimit(BROWSE_PAGE);
+  };
   const filtered = useMemo(() => {
     const term = query.trim().toLowerCase();
     return vocabulary.filter(card => {
@@ -133,7 +142,8 @@ export function BrowseScreen({
         .includes(term);
     });
   }, [vocabulary, query, category]);
-  const shown = filtered.slice(0, 60);
+  const shown = filtered.slice(0, pageLimit);
+  const remaining = filtered.length - shown.length;
   return (
     <View style={[S.screen, { backgroundColor: c.bg }]}>
       <Head
@@ -145,7 +155,7 @@ export function BrowseScreen({
       <ScrollView contentContainerStyle={S.pad}>
         <TextInput
           value={query}
-          onChangeText={setQuery}
+          onChangeText={search}
           placeholder="Search Korean or English"
           placeholderTextColor={c.dim}
           style={[
@@ -160,7 +170,10 @@ export function BrowseScreen({
               return (
                 <Pressable
                   key={item.id}
-                  onPress={() => setCategory(item.id)}
+                  onPress={() => {
+                    setCategory(item.id);
+                    setPageLimit(BROWSE_PAGE);
+                  }}
                   style={[
                     S.chip,
                     {
@@ -202,6 +215,14 @@ export function BrowseScreen({
             />
           </View>
         ))}
+        {remaining > 0 ? (
+          <Btn
+            label={`Show ${Math.min(BROWSE_PAGE, remaining)} more (${remaining} left)`}
+            onPress={() => setPageLimit(limit => limit + BROWSE_PAGE)}
+            c={c}
+            tone="ghost"
+          />
+        ) : null}
       </ScrollView>
     </View>
   );
