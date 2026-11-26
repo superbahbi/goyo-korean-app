@@ -41,6 +41,24 @@ async function audit(page: Page, scope?: string) {
   }));
 }
 
+for (const width of [320, 393]) {
+  test(`the dashboard header fits a ${width}px phone`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await openMobile(page);
+    const settings = page.getByRole("button", { name: "Open settings" });
+    await expect(settings).toBeVisible();
+    const box = await settings.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.x + box!.width).toBeLessThanOrEqual(width);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
 for (const colorScheme of ["light", "dark"] as const) {
   test(`dashboard, Settings, Stats and Browse have no WCAG A/AA violations (${colorScheme})`, async ({
     page,

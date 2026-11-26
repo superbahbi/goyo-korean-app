@@ -171,9 +171,17 @@ export function DashboardScreen() {
           <View style={styles.logo}>
             <Text style={styles.logoText}>고요</Text>
           </View>
-          <View>
-            <Text style={[styles.brandTitle, { color: c.text }]}>Goyo</Text>
-            <Text style={[styles.brandSub, { color: c.muted }]}>
+          <View style={styles.brandCopy}>
+            <Text
+              numberOfLines={1}
+              style={[styles.brandTitle, { color: c.text }]}
+            >
+              Goyo
+            </Text>
+            <Text
+              numberOfLines={1}
+              style={[styles.brandSub, { color: c.muted }]}
+            >
               Scientific Korean practice
             </Text>
           </View>
@@ -545,8 +553,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
   },
-  brand: { flexDirection: "row", alignItems: "center", gap: 8 },
+  // The brand shrinks (and its subtitle truncates) so the streak, XP and
+  // button group keeps its width instead of pushing the header past the
+  // viewport on a phone.
+  brand: {
+    flex: 1,
+    minWidth: 0,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  brandCopy: { flex: 1, minWidth: 0 },
   logo: {
+    flexShrink: 0,
     width: 36,
     height: 36,
     borderRadius: 12,
@@ -558,6 +577,7 @@ const styles = StyleSheet.create({
   brandTitle: { fontSize: 16, fontWeight: "bold" },
   brandSub: { fontSize: 10, marginTop: 1 },
   headerStats: {
+    flexShrink: 0,
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
@@ -569,8 +589,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10,
     overflow: "hidden",
+    whiteSpace: "nowrap",
   },
   iconButton: {
+    flexShrink: 0,
     width: 34,
     height: 34,
     borderRadius: 10,
