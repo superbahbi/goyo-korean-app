@@ -40,7 +40,10 @@ const theme = (darkMode: boolean) => ({
   line: darkMode ? "#334155" : "#e2e8f0",
   fg: darkMode ? "#f1f5f9" : "#0f172a",
   dim: darkMode ? "#94a3b8" : "#64748b",
-  ok: "#059669",
+  // A fill behind white text (5.5:1), and green text on the card or sheet
+  // (#059669 gave 3.6:1 and 3.8:1 and failed WCAG AA).
+  ok: "#047857",
+  okText: darkMode ? "#34d399" : "#047857",
   bad: "#dc2626",
 });
 type C = ReturnType<typeof theme>;
@@ -250,7 +253,7 @@ export function StatsScreen({
     { label: "Total reviews", value: String(stats.totalReviews) },
   ];
   const mastery = [
-    { label: "Known", value: stats.masteryCounts.known, color: c.ok },
+    { label: "Known", value: stats.masteryCounts.known, color: c.okText },
     {
       label: "Learning",
       value: stats.masteryCounts.learning,
@@ -268,7 +271,7 @@ export function StatsScreen({
         c={c}
         onClose={onClose}
       />
-      <ScrollView contentContainerStyle={S.pad}>
+      <ScrollView contentContainerStyle={S.pad} accessibilityLabel="Statistics">
         <View style={S.grid}>
           {tiles.map(tile => (
             <View
@@ -480,7 +483,9 @@ export function SettingsScreen({
           style={[S.row, { backgroundColor: c.card, borderColor: c.line }]}
         >
           <Text style={[S.f1, { color: c.fg }]}>Auto-play audio</Text>
-          <Text style={{ color: state.settings.autoPlayAudio ? c.ok : c.dim }}>
+          <Text
+            style={{ color: state.settings.autoPlayAudio ? c.okText : c.dim }}
+          >
             {state.settings.autoPlayAudio ? "On" : "Off"}
           </Text>
         </Pressable>
@@ -512,6 +517,7 @@ export function SettingsScreen({
         <TextInput
           value={json}
           onChangeText={setJson}
+          accessibilityLabel="Progress JSON: copy it to export, or paste a file's text to import"
           multiline
           style={[
             S.input,

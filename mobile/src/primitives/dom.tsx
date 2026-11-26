@@ -168,6 +168,8 @@ interface BaseProps {
   accessibilityRole?: string;
   accessibilityLabel?: string;
   accessibilityState?: AccessibilityState;
+  /** Hides decorative content (an emoji icon) from assistive tech: `aria-hidden`. */
+  accessibilityElementsHidden?: boolean;
   testID?: string;
   id?: string;
   children?: ReactNode;
@@ -268,6 +270,7 @@ export function View({
   accessibilityRole,
   accessibilityLabel,
   accessibilityState,
+  accessibilityElementsHidden,
   testID,
   id,
 }: ViewProps): ReactElement {
@@ -276,6 +279,7 @@ export function View({
     id,
     role: accessibilityRole,
     "aria-label": accessibilityLabel,
+    "aria-hidden": accessibilityElementsHidden ? "true" : undefined,
     "data-testid": testID,
     ...stateProps(accessibilityState),
     style: { ...VIEW_BASE, ...rnStyleToCss(flat) },
@@ -290,6 +294,7 @@ export function Text({
   accessibilityRole,
   accessibilityLabel,
   accessibilityState,
+  accessibilityElementsHidden,
   testID,
   id,
 }: TextProps): ReactElement {
@@ -308,6 +313,7 @@ export function Text({
     id,
     role: accessibilityRole,
     "aria-label": accessibilityLabel,
+    "aria-hidden": accessibilityElementsHidden ? "true" : undefined,
     "data-testid": testID,
     ...stateProps(accessibilityState),
     style: clamped,
@@ -385,8 +391,11 @@ export function ScrollView({
   };
   const props = {
     id,
-    role: accessibilityRole,
+    // A labelled scroller is a named region and a keyboard stop, so a sheet
+    // with nothing else to focus can still be scrolled with the arrow keys.
+    role: accessibilityRole ?? (accessibilityLabel ? "region" : undefined),
     "aria-label": accessibilityLabel,
+    tabIndex: accessibilityLabel ? 0 : undefined,
     "data-testid": testID,
     style: outerStyle,
   } as HTMLAttributes<HTMLDivElement>;

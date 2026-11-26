@@ -36,6 +36,10 @@ screens are authored in into plain CSS.
   restores the scroll style and focuses the opener again. `animationType` is
   accepted for prop-shape stability but unused — the sheet itself does not
   animate.
+- `accessibilityElementsHidden` → `aria-hidden="true"` on `View`/`Text` (for
+  decorative emoji), and a `ScrollView` with an `accessibilityLabel` becomes
+  a focusable named region (`role="region"`, `tabIndex=0`) so a sheet with
+  nothing else to focus still scrolls from the keyboard.
 - Accessibility is translated: `accessibilityRole` → `role`,
   `accessibilityLabel` → `aria-label`, `accessibilityState` →
   `aria-disabled|selected|checked|busy|expanded`, `testID` → `data-testid`.

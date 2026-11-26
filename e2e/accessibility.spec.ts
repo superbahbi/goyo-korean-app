@@ -1,4 +1,5 @@
 import { PROGRESS_STORAGE_KEY } from "../packages/domain/src/progressStorage";
+import { SCHEMA_VERSION } from "../packages/domain/src/savedState";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
@@ -40,7 +41,7 @@ function seedProgress() {
   );
 
   return {
-    schemaVersion: 4,
+    schemaVersion: SCHEMA_VERSION,
     cardStates,
     stats: {
       totalXp: 120,
@@ -103,12 +104,18 @@ async function audit(page: Page, label: string, scope?: string) {
   return violations;
 }
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }, testInfo) => {
   await page.addInitScript(
     ([key, state]) => window.localStorage.setItem(key, JSON.stringify(state)),
     [PROGRESS_KEY, seedProgress()] as const
   );
   await page.goto("/");
+  // The chromium-dark project must really paint the dark theme, or its scans
+  // would quietly re-check the light one.
+  const dark = testInfo.project.use.colorScheme === "dark";
+  await expect(page.locator("html")).toHaveClass(
+    dark ? /\bdark\b/ : /^(?!.*\bdark\b)/
+  );
 });
 
 test("dashboard has no WCAG A/AA violations", async ({ page }) => {
