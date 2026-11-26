@@ -39,7 +39,10 @@ const theme = (darkMode: boolean) => ({
   line: darkMode ? "#334155" : "#e2e8f0",
   fg: darkMode ? "#f1f5f9" : "#0f172a",
   dim: darkMode ? "#94a3b8" : "#64748b",
-  ok: "#059669",
+  // A fill behind white text (5.5:1), and green text or strokes on the sheet
+  // (#059669 under white text was 3.8:1 and failed WCAG AA).
+  ok: "#047857",
+  okText: darkMode ? "#34d399" : "#047857",
   // Highlighted answer rows keep c.fg readable: pale washes in light mode,
   // deep ones in dark mode (the pale ones were ~1.1:1 under light text).
   good: darkMode ? "#064e3b" : "#d1fae5",
@@ -316,7 +319,7 @@ export function AlphabetPracticeScreen({
                   <StrokeDiagram
                     characterId={selected.id}
                     hangul={selected.hangul}
-                    color={c.ok}
+                    color={c.okText}
                     badge={c.fg}
                     badgeText={c.bg}
                   />
@@ -400,7 +403,7 @@ export function GrammarPracticeScreen({
                     {item.subtitle}
                   </Text>
                 </View>
-                <Text style={{ color: done ? c.ok : c.dim }}>
+                <Text style={{ color: done ? c.okText : c.dim }}>
                   {done ? "✓ Done" : "Start"}
                 </Text>
               </Pressable>
@@ -456,14 +459,16 @@ export function GrammarPracticeScreen({
           );
           // Only examples with a generated clip offer the speaker.
           return sentenceIds.has(id) ? (
+            // Named by its visible sentence (WCAG 2.5.3); the speaker is a cue.
             <Pressable
               key={`${lesson.id}-${index}`}
-              accessibilityLabel={`Play example: ${example.ko}`}
               onPress={() => void playSentenceAudio(id)}
               style={[S.row, { backgroundColor: c.card, borderColor: c.line }]}
             >
               {text}
-              <Text style={{ color: c.ok }}>🔊</Text>
+              <Text style={{ color: c.okText }} accessibilityElementsHidden>
+                🔊
+              </Text>
             </Pressable>
           ) : (
             <View

@@ -1,4 +1,5 @@
 import { PROGRESS_STORAGE_KEY } from "../packages/domain/src/progressStorage";
+import { SCHEMA_VERSION } from "../packages/domain/src/savedState";
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -26,7 +27,7 @@ function dayKey(offset = 0) {
 function seedProgress(autoPlayAudio: boolean) {
   const cardIds = ["surv_001", "surv_002", "surv_003", "surv_004", "surv_005"];
   return {
-    schemaVersion: 4,
+    schemaVersion: SCHEMA_VERSION,
     cardStates: Object.fromEntries(
       cardIds.map(id => [
         id,

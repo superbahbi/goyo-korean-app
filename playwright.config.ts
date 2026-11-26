@@ -31,6 +31,17 @@ export default defineConfig({
         ...(channel ? { channel } : {}),
       },
     },
+    // Contrast is a per-theme property, so the axe scans run again with the
+    // OS in dark mode (the app follows "system" by default).
+    {
+      name: "chromium-dark",
+      testMatch: /accessibility\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        colorScheme: "dark",
+        ...(channel ? { channel } : {}),
+      },
+    },
     // WebKit is the engine behind every iPhone browser and installed iOS PWA.
     // Only the iPhone spec runs here: the desktop specs already cover behaviour
     // in Chromium, and running them twice would only slow the suite.

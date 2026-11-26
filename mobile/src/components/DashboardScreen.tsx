@@ -423,14 +423,15 @@ export function DashboardScreen() {
                 key={mode.key}
                 onPress={mode.onPress}
                 accessibilityRole="button"
-                accessibilityLabel={mode.title}
                 testID={`practice-${mode.key}`}
                 style={[
                   styles.modeTile,
                   { backgroundColor: c.card, borderColor: c.border },
                 ]}
               >
-                <Text style={styles.modeIcon}>{mode.icon}</Text>
+                <Text style={styles.modeIcon} accessibilityElementsHidden>
+                  {mode.icon}
+                </Text>
                 <Text style={[styles.modeTitle, { color: c.text }]}>
                   {mode.title}
                 </Text>
@@ -446,7 +447,6 @@ export function DashboardScreen() {
           <Pressable
             onPress={() => openBrowse()}
             accessibilityRole="button"
-            accessibilityLabel="Browse deck"
             testID="browse-deck"
             style={[
               styles.quickLink,
@@ -454,13 +454,13 @@ export function DashboardScreen() {
             ]}
           >
             <Text style={[styles.quickText, { color: c.text }]}>
-              📚 Browse Deck ({vocabulary.length} cards)
+              <Text accessibilityElementsHidden>📚 </Text>
+              Browse Deck ({vocabulary.length} cards)
             </Text>
           </Pressable>
           <Pressable
             onPress={() => openDialog({ kind: "stats" })}
             accessibilityRole="button"
-            accessibilityLabel="Full stats and forecast"
             testID="open-stats"
             style={[
               styles.quickLink,
@@ -468,7 +468,8 @@ export function DashboardScreen() {
             ]}
           >
             <Text style={[styles.quickText, { color: c.text }]}>
-              📊 Full Stats &amp; Forecast
+              <Text accessibilityElementsHidden>📊 </Text>
+              Full Stats &amp; Forecast
             </Text>
           </Pressable>
         </View>
@@ -483,7 +484,6 @@ export function DashboardScreen() {
                 key={category.id}
                 onPress={() => openBrowse(category.id)}
                 accessibilityRole="button"
-                accessibilityLabel={`Browse ${category.name}`}
                 testID={`category-${category.id}`}
                 style={[
                   styles.categoryTile,
@@ -496,6 +496,7 @@ export function DashboardScreen() {
                       styles.categoryIcon,
                       { backgroundColor: c.accentSoft },
                     ]}
+                    accessibilityElementsHidden
                   >
                     {category.icon}
                   </Text>
