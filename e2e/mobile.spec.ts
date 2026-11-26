@@ -1,5 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { devices, expect, test, type Page } from "@playwright/test";
+import { PROGRESS_STORAGE_KEY } from "../packages/domain/src/progressStorage";
+import { SCHEMA_VERSION } from "../packages/domain/src/savedState";
 
 /**
  * The /mobile route is what the iOS shell runs. Chromium at iPhone size covers
@@ -59,6 +61,87 @@ for (const colorScheme of ["light", "dark"] as const) {
     await page.keyboard.press("Escape");
 
     await page.getByTestId("browse-deck").click();
+    await expect(page.locator(sheet)).toBeVisible();
+    expect(await audit(page, sheet)).toEqual([]);
+  });
+}
+
+// Five survival cards reviewed yesterday, so Listening opens with real
+// questions instead of its "study a few cards first" notice.
+function reviewedLearner() {
+  const day = (offset: number) => {
+    const date = new Date();
+    date.setDate(date.getDate() + offset);
+    return [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0"),
+    ].join("-");
+  };
+  const ids = ["surv_001", "surv_002", "surv_003", "surv_004", "surv_005"];
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    cardStates: Object.fromEntries(
+      ids.map(id => [
+        id,
+        {
+          id,
+          due: day(1),
+          interval: 3,
+          timesReviewed: 2,
+          timesCorrect: 2,
+          lastReviewDate: day(-1),
+          easeFactor: 2.5,
+          consecutiveCorrect: 1,
+          lapseCount: 0,
+        },
+      ])
+    ),
+    settings: { dailyGoal: 10, newCardsPerDay: 3, autoPlayAudio: false },
+  };
+}
+
+for (const colorScheme of ["light", "dark"] as const) {
+  test(`practice sheets have no WCAG A/AA violations (${colorScheme})`, async ({
+    page,
+  }) => {
+    await page.addInitScript(
+      ([key, state]) => window.localStorage.setItem(key, JSON.stringify(state)),
+      [PROGRESS_STORAGE_KEY, reviewedLearner()] as const
+    );
+    await page.emulateMedia({ colorScheme });
+    await openMobile(page);
+    const sheet = '[data-testid="goyo-mobile-modal"]';
+
+    await page.getByTestId("practice-hangul").click();
+    await page.locator(sheet).getByRole("button", { name: /^ㄷ/ }).click();
+    await expect(
+      page.getByRole("img", { name: /Stroke order for ㄷ/ })
+    ).toBeVisible();
+    expect(await audit(page, sheet)).toEqual([]);
+    await page.keyboard.press("Escape");
+
+    await page.getByTestId("practice-grammar").click();
+    await page.locator(sheet).getByRole("button", { name: /^1\. / }).click();
+    await page
+      .locator(sheet)
+      .getByText(/^Quiz · 1\//)
+      .waitFor();
+    // Answer the first question so the verdict colours are on screen.
+    const options = page.locator(`${sheet} button:not([aria-label])`);
+    await options.last().click();
+    await expect(
+      page.locator(sheet).getByText(/^(Correct\.|Not quite\.)/)
+    ).toBeVisible();
+    expect(await audit(page, sheet)).toEqual([]);
+    await page.keyboard.press("Escape");
+
+    await page.getByTestId("practice-listening").click();
+    await expect(page.locator(sheet)).toBeVisible();
+    expect(await audit(page, sheet)).toEqual([]);
+    await page.keyboard.press("Escape");
+
+    await page.getByTestId("practice-shadowing").click();
     await expect(page.locator(sheet)).toBeVisible();
     expect(await audit(page, sheet)).toEqual([]);
   });
