@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
+import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import {
   View,
   Text,
@@ -19,7 +13,6 @@ import {
 } from "../../../packages/domain/src/studySession";
 import { previewIntervals } from "../../../packages/domain/src/srs";
 import {
-  getAvailableSentenceIds,
   playSentenceAudio,
   playVocabularyAudio,
   stopAudio,
@@ -27,6 +20,7 @@ import {
 import type { VocabularyCard } from "../../../packages/domain/src/vocabulary";
 import type { CardState } from "../../../packages/domain/src/mastery";
 import { FlashCardView } from "./FlashCardView";
+import { useSentenceAudioIds } from "./useSentenceAudioIds";
 
 export interface StudySessionScreenProps {
   queue: VocabularyCard[];
@@ -100,9 +94,7 @@ export function StudySessionScreen({
 }: StudySessionScreenProps) {
   const c = darkMode ? DARK : LIGHT;
   const latest = useRef({ cardStates, onGrade, onClose });
-  const [sentenceIds, setSentenceIds] = useState<ReadonlySet<string>>(
-    () => new Set()
-  );
+  const sentenceIds = useSentenceAudioIds();
 
   useEffect(() => {
     latest.current = { cardStates, onGrade, onClose };
@@ -141,16 +133,6 @@ export function StudySessionScreen({
   }, [session, state.index]);
 
   useEffect(() => () => session.dispose(), [session]);
-
-  useEffect(() => {
-    let cancelled = false;
-    void getAvailableSentenceIds().then(ids => {
-      if (!cancelled) setSentenceIds(ids);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   if (state.completed) {
     const { again, good, easy } = state.results;

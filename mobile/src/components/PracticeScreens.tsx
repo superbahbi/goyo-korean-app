@@ -31,6 +31,8 @@ import {
   stopAudio,
 } from "../../../packages/domain/src/audioPlayer";
 import type { VocabularyCard } from "../../../packages/domain/src/vocabulary";
+import { StrokeDiagram } from "./StrokeDiagram";
+import { useSentenceAudioIds } from "./useSentenceAudioIds";
 const theme = (darkMode: boolean) => ({
   bg: darkMode ? "#0f172a" : "#ffffff",
   card: darkMode ? "#1e293b" : "#f8fafc",
@@ -38,9 +40,14 @@ const theme = (darkMode: boolean) => ({
   fg: darkMode ? "#f1f5f9" : "#0f172a",
   dim: darkMode ? "#94a3b8" : "#64748b",
   ok: "#059669",
-  good: "#d1fae5",
-  bad: "#fee2e2",
+  // Highlighted answer rows keep c.fg readable: pale washes in light mode,
+  // deep ones in dark mode (the pale ones were ~1.1:1 under light text).
+  good: darkMode ? "#064e3b" : "#d1fae5",
+  bad: darkMode ? "#7f1d1d" : "#fee2e2",
 });
+/** A mark that does not depend on colour for a revealed right or wrong row. */
+const verdictMark = (right: boolean, wrong: boolean) =>
+  right ? "✓ " : wrong ? "✗ " : "";
 type C = ReturnType<typeof theme>;
 type Rating = "again" | "good";
 const Head = ({
@@ -302,7 +309,18 @@ export function AlphabetPracticeScreen({
                   { backgroundColor: c.card, borderColor: c.line },
                 ]}
               >
-                <Text style={[S.huge, { color: c.fg }]}>{selected.hangul}</Text>
+                <View style={S.strokeRow}>
+                  <Text style={[S.huge, { color: c.fg }]}>
+                    {selected.hangul}
+                  </Text>
+                  <StrokeDiagram
+                    characterId={selected.id}
+                    hangul={selected.hangul}
+                    color={c.ok}
+                    badge={c.fg}
+                    badgeText={c.bg}
+                  />
+                </View>
                 <Text style={[S.boxT, { color: c.fg }]}>
                   {selected.romanization} · {selected.sound}
                 </Text>
@@ -340,6 +358,7 @@ export function GrammarPracticeScreen({
   onClose: () => void;
 }) {
   const c = theme(darkMode);
+  const sentenceIds = useSentenceAudioIds();
   const [lessonId, setLessonId] = useState<string | null>(null);
   const [qi, setQi] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
@@ -392,15 +411,15 @@ export function GrammarPracticeScreen({
     );
   }
   const quiz = lesson.quiz[qi];
+  const lastQuestion = qi === lesson.quiz.length - 1;
   const choose = (index: number) => {
     if (picked !== null || !quiz) return;
     const next = correct + (index === quiz.answerIndex ? 1 : 0);
     setPicked(index);
     setCorrect(next);
-    if (qi === lesson.quiz.length - 1) {
-      setFinished(true);
-      onCompleteLesson(lesson.id, next, lesson.quiz.length);
-    }
+    // Record as soon as the last answer is in, but keep its feedback on
+    // screen; the results open only when the learner asks for them.
+    if (lastQuestion) onCompleteLesson(lesson.id, next, lesson.quiz.length);
   };
   return (
     <View style={[S.screen, { backgroundColor: c.bg }]}>
@@ -413,7 +432,10 @@ export function GrammarPracticeScreen({
       <ScrollView contentContainerStyle={S.pad}>
         <Btn
           label="← All lessons"
-          onPress={() => setLessonId(null)}
+          onPress={() => {
+            stopAudio();
+            setLessonId(null);
+          }}
           c={c}
           tone="ghost"
         />
@@ -424,21 +446,34 @@ export function GrammarPracticeScreen({
             <Text style={[S.body, { color: c.dim }]}>{point.body}</Text>
           </View>
         ))}
-        {lesson.examples.map((example, index) => (
-          <Pressable
-            key={`${lesson.id}-${index}`}
-            onPress={() =>
-              void playSentenceAudio(audioId(example, lesson.id, index))
-            }
-            style={[S.row, { backgroundColor: c.card, borderColor: c.line }]}
-          >
+        {lesson.examples.map((example, index) => {
+          const id = audioId(example, lesson.id, index);
+          const text = (
             <View style={S.f1}>
               <Text style={[S.rowT, { color: c.fg }]}>{example.ko}</Text>
               <Text style={[S.small, { color: c.dim }]}>{example.en}</Text>
             </View>
-            <Text style={{ color: c.ok }}>🔊</Text>
-          </Pressable>
-        ))}
+          );
+          // Only examples with a generated clip offer the speaker.
+          return sentenceIds.has(id) ? (
+            <Pressable
+              key={`${lesson.id}-${index}`}
+              accessibilityLabel={`Play example: ${example.ko}`}
+              onPress={() => void playSentenceAudio(id)}
+              style={[S.row, { backgroundColor: c.card, borderColor: c.line }]}
+            >
+              {text}
+              <Text style={{ color: c.ok }}>🔊</Text>
+            </Pressable>
+          ) : (
+            <View
+              key={`${lesson.id}-${index}`}
+              style={[S.row, { backgroundColor: c.card, borderColor: c.line }]}
+            >
+              {text}
+            </View>
+          );
+        })}
         <View style={[S.box, { backgroundColor: c.card, borderColor: c.line }]}>
           <Text style={[S.boxT, { color: c.fg }]}>
             {finished
@@ -481,24 +516,37 @@ export function GrammarPracticeScreen({
                     },
                   ]}
                 >
-                  <Text style={{ color: c.fg }}>{option}</Text>
+                  <Text style={{ color: c.fg }}>
+                    {verdictMark(
+                      picked !== null && index === quiz.answerIndex,
+                      picked === index && index !== quiz.answerIndex
+                    )}
+                    {option}
+                  </Text>
                 </Pressable>
               ))}
               {picked !== null ? (
                 <>
+                  <Text style={[S.boxT, { color: c.fg }]}>
+                    {picked === quiz.answerIndex
+                      ? "Correct."
+                      : `Not quite. The answer is “${quiz.options[quiz.answerIndex]}”.`}
+                  </Text>
                   <Text style={[S.small, { color: c.dim }]}>
                     {quiz.explanation}
                   </Text>
-                  {!finished ? (
-                    <Btn
-                      label="Next question"
-                      onPress={() => {
-                        setPicked(null);
-                        setQi(qi + 1);
-                      }}
-                      c={c}
-                    />
-                  ) : null}
+                  <Btn
+                    label={lastQuestion ? "See results" : "Next question"}
+                    onPress={() => {
+                      if (lastQuestion) {
+                        setFinished(true);
+                        return;
+                      }
+                      setPicked(null);
+                      setQi(qi + 1);
+                    }}
+                    c={c}
+                  />
                 </>
               ) : null}
             </>
@@ -573,7 +621,10 @@ export function ListeningPracticeScreen({
                 },
               ]}
             >
-              <Text style={{ color: c.fg }}>{choice.text}</Text>
+              <Text style={{ color: c.fg }}>
+                {verdictMark(shown, wrong)}
+                {choice.text}
+              </Text>
             </Pressable>
           );
         })}
@@ -684,7 +735,10 @@ export function ScenarioPracticeScreen({
                 },
               ]}
             >
-              <Text style={{ color: c.fg }}>{choice.front}</Text>
+              <Text style={{ color: c.fg }}>
+                {verdictMark(shown, wrong)}
+                {choice.front}
+              </Text>
             </Pressable>
           );
         })}
@@ -726,6 +780,7 @@ export function ShadowingPracticeScreen({
   onClose: () => void;
 }) {
   const c = theme(darkMode);
+  const sentenceIds = useSentenceAudioIds();
   const sample = useMemo(() => cards.slice(0, 8), [cards]);
   const [index, setIndex] = useState(0);
   const [done, setDone] = useState(false);
@@ -776,12 +831,14 @@ export function ShadowingPracticeScreen({
             onPress={() => void playVocabularyAudio(card.id)}
             c={c}
           />
-          <Btn
-            label="🔊 Sentence"
-            onPress={() => void playSentenceAudio(card.id)}
-            c={c}
-            tone="ghost"
-          />
+          {sentenceIds.has(card.id) ? (
+            <Btn
+              label="🔊 Sentence"
+              onPress={() => void playSentenceAudio(card.id)}
+              c={c}
+              tone="ghost"
+            />
+          ) : null}
         </View>
         <Text style={[S.body, { color: c.dim }]}>
           Listen, repeat aloud, then judge yourself.
@@ -798,6 +855,13 @@ export function ShadowingPracticeScreen({
   );
 }
 const S = StyleSheet.create({
+  strokeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    flexWrap: "wrap",
+    gap: 12,
+  },
   screen: { flex: 1 },
   f1: { flex: 1 },
   center: { alignItems: "center", justifyContent: "center", gap: 14 },
