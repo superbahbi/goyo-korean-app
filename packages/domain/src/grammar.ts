@@ -593,14 +593,14 @@ export const GRAMMAR_LESSONS: GrammarLesson[] = [
       },
       {
         heading: "The past progressive",
-        body: "Replace 있어요 with 있었어요: 어제 밤에는 비가 오고 있었어요 (it was raining last night).",
+        body: "Replace 있어요 with 있었어요: 어젯밤에는 비가 오고 있었어요 (it was raining last night).",
       },
     ],
     examples: [
       { ko: "지금 뭐 하고 있어요?", en: "What are you doing now?" },
       { ko: "저는 책을 읽고 있어요.", en: "I am reading a book." },
       {
-        ko: "어제 밤에는 비가 오고 있었어요.",
+        ko: "어젯밤에는 비가 오고 있었어요.",
         en: "It was raining last night.",
       },
     ],
@@ -636,7 +636,7 @@ export const GRAMMAR_LESSONS: GrammarLesson[] = [
       },
       {
         heading: "Reason and result",
-        body: "비가 와서 집에 있었어요 (it rained, so I stayed home). 배가 아서 약을 먹었어요 (my stomach hurt, so I took medicine).",
+        body: "비가 와서 집에 있었어요 (it rained, so I stayed home). 배가 아파서 약을 먹었어요 (my stomach hurt, so I took medicine).",
       },
       {
         heading: "Sequence",
@@ -646,7 +646,7 @@ export const GRAMMAR_LESSONS: GrammarLesson[] = [
     examples: [
       { ko: "비가 와서 집에 있었어요.", en: "It rained, so I stayed home." },
       {
-        ko: "배가 아서 약을 먹었어요.",
+        ko: "배가 아파서 약을 먹었어요.",
         en: "My stomach hurt, so I took medicine.",
       },
       {
