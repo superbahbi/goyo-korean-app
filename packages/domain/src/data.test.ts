@@ -174,6 +174,21 @@ describe("sentence audio index", () => {
       expect(knownIds.has(id), id).toBe(true);
     }
   });
+
+  it("has a male clip on disk for every deck and grammar example", async () => {
+    const { vocabulary } = await loadVocabularyDeck();
+    const spokenIds = [
+      ...vocabulary
+        .filter(card => (card.example ?? "").trim().length > 0)
+        .map(card => card.id),
+      ...GRAMMAR_SENTENCE_LINES.map(line => line.id),
+    ];
+    const missing = spokenIds.filter(id => {
+      const file = manifest.sentences?.[id];
+      return !file || !existsSync(path.join(REPO_ROOT, "public/audio", file));
+    });
+    expect(missing).toEqual([]);
+  });
 });
 
 describe("Revised Romanization", async () => {

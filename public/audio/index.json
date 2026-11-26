@@ -2063,6 +2063,25 @@
     "verb_015": "elevenlabs_sent_verb_015.00f059c5.mp3",
     "essential_018": "elevenlabs_sent_essential_018.3fb8080a.mp3",
     "essential_257": "elevenlabs_sent_essential_257.d814ee37.mp3",
-    "essential_395": "elevenlabs_sent_essential_395.fc557ae8.mp3"
+    "essential_395": "elevenlabs_sent_essential_395.fc557ae8.mp3",
+    "essential_007": "elevenlabs_sent_essential_007.3ecce5e3.mp3",
+    "grammar_before-after_1": "elevenlabs_sent_grammar_before-after_1.a84fe646.mp3",
+    "grammar_before-after_2": "elevenlabs_sent_grammar_before-after_2.db79f183.mp3",
+    "grammar_before-after_3": "elevenlabs_sent_grammar_before-after_3.0f9db12e.mp3",
+    "grammar_future_1": "elevenlabs_sent_grammar_future_1.518214ab.mp3",
+    "grammar_future_2": "elevenlabs_sent_grammar_future_2.34af5b5d.mp3",
+    "grammar_future_3": "elevenlabs_sent_grammar_future_3.951779d1.mp3",
+    "grammar_if-when_1": "elevenlabs_sent_grammar_if-when_1.d9773309.mp3",
+    "grammar_if-when_2": "elevenlabs_sent_grammar_if-when_2.c2d3ca3d.mp3",
+    "grammar_if-when_3": "elevenlabs_sent_grammar_if-when_3.564c8795.mp3",
+    "grammar_negation_1": "elevenlabs_sent_grammar_negation_1.b8ad8307.mp3",
+    "grammar_negation_2": "elevenlabs_sent_grammar_negation_2.00d6fc4b.mp3",
+    "grammar_negation_3": "elevenlabs_sent_grammar_negation_3.a13935b6.mp3",
+    "grammar_progressive_1": "elevenlabs_sent_grammar_progressive_1.12c21ca3.mp3",
+    "grammar_progressive_2": "elevenlabs_sent_grammar_progressive_2.0e9952ca.mp3",
+    "grammar_progressive_3": "elevenlabs_sent_grammar_progressive_3.0e94404f.mp3",
+    "grammar_reason_1": "elevenlabs_sent_grammar_reason_1.34f880ec.mp3",
+    "grammar_reason_2": "elevenlabs_sent_grammar_reason_2.f75365d3.mp3",
+    "grammar_reason_3": "elevenlabs_sent_grammar_reason_3.ad17e9ca.mp3"
   }
 }
