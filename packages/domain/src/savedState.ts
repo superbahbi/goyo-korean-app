@@ -360,3 +360,21 @@ export function validateImportPayload(
     hasReviewLog,
   };
 }
+
+/**
+ * The state an accepted import replaces the save with. A progress-only file
+ * (exported without its review log) must not wipe this device's review log,
+ * so the current log is kept unless the file brings its own. Web and /mobile
+ * both import through this rule.
+ */
+export function stateAfterImport(
+  current: UserState,
+  imported: { state: UserState; hasReviewLog: boolean }
+): UserState {
+  return {
+    ...imported.state,
+    reviewLog: imported.hasReviewLog
+      ? imported.state.reviewLog
+      : current.reviewLog,
+  };
+}

@@ -7,6 +7,7 @@ import {
   isNewerSave,
   parseSavedState,
   SCHEMA_VERSION,
+  stateAfterImport,
   validateImportPayload,
 } from "./savedState";
 import { applyGradeOutcome } from "./gradeOutcome";
@@ -730,5 +731,43 @@ describe("grammar progress in the save", () => {
       today
     );
     expect(buildExportPayload(state)).toHaveProperty("grammar", grammar);
+  });
+});
+
+describe("stateAfterImport", () => {
+  const entry = {
+    cardId: "surv_001",
+    at: "2026-11-01T09:00:00.000Z",
+    rating: "good" as const,
+    responseTimeMs: null,
+    mode: "daily" as const,
+  };
+
+  it("keeps this device's review log when the file has none", () => {
+    const current = parseSavedState(null);
+    current.reviewLog = { schemaVersion: 1, entries: [entry] };
+    const imported = parseSavedState(null);
+    imported.stats.totalXp = 50;
+
+    const next = stateAfterImport(current, {
+      state: imported,
+      hasReviewLog: false,
+    });
+
+    expect(next.stats.totalXp).toBe(50);
+    expect(next.reviewLog.entries).toEqual([entry]);
+  });
+
+  it("takes the file's review log when it brings one", () => {
+    const current = parseSavedState(null);
+    current.reviewLog = { schemaVersion: 1, entries: [entry] };
+    const imported = parseSavedState(null);
+
+    const next = stateAfterImport(current, {
+      state: imported,
+      hasReviewLog: true,
+    });
+
+    expect(next.reviewLog.entries).toEqual([]);
   });
 });

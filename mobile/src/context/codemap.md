@@ -16,8 +16,11 @@ transient notices — plus the commands that mutate them.
   (localStorage, else an in-memory fallback): the store owns hydration, the
   newer-save guard, and save errors; the provider constructs one store, seeds
   React state from `store.getState()`, and re-renders through
-  `store.subscribe`. Several Grades in one tick compose because the store
-  always grades from its own newest state.
+  `store.subscribe`, mirroring `isSaveBlocked()` / `hasSaveError()` as
+  `saveBlocked` / `saveError` for the dashboard alerts and the Settings import
+  guard. A `storage` event for `PROGRESS_STORAGE_KEY` (the web dashboard or a
+  second tab writing) goes to `store.adoptStoredSave`. Several Grades in one
+  tick compose because the store always grades from its own newest state.
 - State split by lifetime: `useState` for `today`, `deck`, `isStudying`,
   `sessionQueue`, `sessionMode`, `recognitionSessionCards`, `themePreference`,
   `notice`; `useReducer(reduceDialog, NO_DIALOG)` for the Dialog request (one

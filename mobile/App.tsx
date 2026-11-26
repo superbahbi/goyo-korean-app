@@ -22,6 +22,7 @@ import { Modal, SafeAreaView, StyleSheet, View } from "./src/primitives/dom";
 function GoyoMobileShell() {
   const {
     state,
+    saveBlocked,
     today,
     vocabulary,
     studyReady,
@@ -143,6 +144,7 @@ function GoyoMobileShell() {
           {activeDialog?.kind === "settings" && (
             <SettingsScreen
               state={state}
+              saveBlocked={saveBlocked}
               darkMode={darkMode}
               themePreference={themePreference}
               onUpdateSettings={updateSettings}

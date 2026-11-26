@@ -9,6 +9,19 @@ import {
 import { Switch } from "@/components/ui/switch";
 import type { UserState } from "@domain/savedState";
 import { stopAudio } from "@domain/audioPlayer";
+import {
+  DAILY_GOAL_OPTIONS,
+  NEW_CARDS_PER_DAY_OPTIONS,
+  paceOptions,
+} from "@domain/studyPace";
+
+const DAILY_GOAL_LABELS: Record<number, string> = {
+  5: "Quick practice",
+  10: "Balanced",
+  15: "Focused",
+  20: "Intensive",
+  30: "Ambitious",
+};
 
 interface StudyPaceSettingsProps {
   settings: UserState["settings"];
@@ -42,10 +55,12 @@ export function DailyGoalSetting({
           <SelectValue placeholder="Choose a daily goal" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="5">5 cards · Quick practice</SelectItem>
-          <SelectItem value="10">10 cards · Balanced</SelectItem>
-          <SelectItem value="15">15 cards · Focused</SelectItem>
-          <SelectItem value="20">20 cards · Intensive</SelectItem>
+          {paceOptions(DAILY_GOAL_OPTIONS, settings.dailyGoal).map(goal => (
+            <SelectItem key={goal} value={String(goal)}>
+              {goal} cards
+              {DAILY_GOAL_LABELS[goal] ? ` · ${DAILY_GOAL_LABELS[goal]}` : ""}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
       <p className="mt-2 text-xs leading-relaxed text-foreground/70">
@@ -83,11 +98,13 @@ export function NewCardsPerDaySetting({
           <SelectValue placeholder="Choose a new-card pace" />
         </SelectTrigger>
         <SelectContent>
-          {[1, 2, 3, 5, 8, 10].map(count => (
-            <SelectItem key={count} value={String(count)}>
-              {count} new {count === 1 ? "card" : "cards"} per day
-            </SelectItem>
-          ))}
+          {paceOptions(NEW_CARDS_PER_DAY_OPTIONS, settings.newCardsPerDay).map(
+            count => (
+              <SelectItem key={count} value={String(count)}>
+                {count} new {count === 1 ? "card" : "cards"} per day
+              </SelectItem>
+            )
+          )}
         </SelectContent>
       </Select>
       <p className="mt-2 text-xs leading-relaxed text-foreground/70">

@@ -18,6 +18,7 @@ import {
   type DashboardView,
 } from "../../../packages/domain/src/dashboardView";
 import { getLocalDateKey } from "../../../packages/domain/src/day";
+import { PROGRESS_STORAGE_KEY } from "../../../packages/domain/src/progressStorage";
 import {
   NO_DIALOG,
   reduceDialog,
@@ -61,6 +62,10 @@ const PREFERS_DARK_QUERY = "(prefers-color-scheme: dark)";
 
 export interface GoyoMobileContextValue {
   state: UserState;
+  /** A newer build's save is stored here; this session's changes stay in memory. */
+  saveBlocked: boolean;
+  /** The last write failed (storage full or blocked). */
+  saveError: boolean;
   today: string;
   vocabulary: VocabularyCard[];
   studyReady: VocabularyCard[];
@@ -145,7 +150,30 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
   // guard, and save errors. React only mirrors its state.
   const [store] = useState(() => createCrossPlatformProgressStore());
   const [state, setState] = useState<UserState>(() => store.getState());
-  useEffect(() => store.subscribe(() => setState(store.getState())), [store]);
+  const [saveBlocked, setSaveBlocked] = useState(() => store.isSaveBlocked());
+  const [saveError, setSaveError] = useState(() => store.hasSaveError());
+  useEffect(
+    () =>
+      store.subscribe(() => {
+        setState(store.getState());
+        setSaveBlocked(store.isSaveBlocked());
+        setSaveError(store.hasSaveError());
+      }),
+    [store]
+  );
+
+  // Another tab (the web dashboard, or a second /mobile tab) wrote or reset
+  // progress: adopt it instead of overwriting it later. A newer build's save
+  // blocks this session's writes instead.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== PROGRESS_STORAGE_KEY) return;
+      store.adoptStoredSave(event.newValue);
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, [store]);
 
   const [today, setToday] = useState(getLocalDateKey);
   const [deck, setDeck] = useState<VocabularyDeck>({
@@ -412,6 +440,8 @@ export function GoyoMobileProvider({ children }: { children: ReactNode }) {
 
   const value: GoyoMobileContextValue = {
     state,
+    saveBlocked,
+    saveError,
     today,
     vocabulary: deck.vocabulary,
     studyReady: deck.studyReady,
