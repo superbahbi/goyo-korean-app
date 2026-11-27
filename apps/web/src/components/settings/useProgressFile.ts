@@ -2,6 +2,7 @@ import { useRef, useState, type ChangeEvent } from "react";
 import { toast } from "sonner";
 import {
   buildExportPayload,
+  importSizeRejection,
   stateAfterImport,
   validateImportPayload,
   type UserState,
@@ -85,6 +86,12 @@ export function useProgressFile({
     if (!file) return;
     if (saveBlocked) {
       rejectImportWhileBlocked();
+      return;
+    }
+
+    const tooBig = importSizeRejection(file.size);
+    if (tooBig) {
+      toast.error("Import failed", { description: tooBig });
       return;
     }
 

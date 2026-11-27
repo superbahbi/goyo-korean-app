@@ -289,6 +289,20 @@ export function buildExportPayload(
     : payload;
 }
 
+/**
+ * The largest progress file an import will read. A full save is under about
+ * 1 MB (the review log is capped) and localStorage holds about 5 MB, so a
+ * bigger file cannot be a save this device could keep.
+ */
+export const MAX_IMPORT_BYTES = 5 * 1024 * 1024;
+
+/** The reason a file of `sizeBytes` is refused before reading, or null. */
+export function importSizeRejection(sizeBytes: number): string | null {
+  return sizeBytes > MAX_IMPORT_BYTES
+    ? "The file is larger than 5 MB, too big to be a Goyo progress file."
+    : null;
+}
+
 export type ImportValidation =
   | {
       ok: true;

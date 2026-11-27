@@ -1,6 +1,7 @@
 import { Component, type ReactNode } from "react";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { isChunkLoadError, reloadToLatestApp } from "@domain/appReload";
 
 interface LazyBoundaryProps {
   onClose: () => void;
@@ -9,6 +10,7 @@ interface LazyBoundaryProps {
 
 interface LazyBoundaryState {
   failed: boolean;
+  error: unknown;
 }
 
 /**
@@ -19,10 +21,10 @@ export class LazyBoundary extends Component<
   LazyBoundaryProps,
   LazyBoundaryState
 > {
-  state: LazyBoundaryState = { failed: false };
+  state: LazyBoundaryState = { failed: false, error: null };
 
-  static getDerivedStateFromError(): LazyBoundaryState {
-    return { failed: true };
+  static getDerivedStateFromError(error: unknown): LazyBoundaryState {
+    return { failed: true, error };
   }
 
   componentDidCatch(error: unknown) {
@@ -31,6 +33,9 @@ export class LazyBoundary extends Component<
 
   render() {
     if (!this.state.failed) return this.props.children;
+    // React.lazy caches a rejected import, so a retry rethrows the same error.
+    // Only a page load fetches the chunk again.
+    const stale = isChunkLoadError(this.state.error);
 
     return (
       <div
@@ -50,12 +55,12 @@ export class LazyBoundary extends Component<
                 id="lazy-boundary-title"
                 className="text-lg font-semibold text-foreground"
               >
-                This practice mode could not load
+                This screen could not load
               </h2>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                The page may have been updated while it was open, or the
-                connection dropped. Try again, and refresh the page if it keeps
-                failing.
+                {stale
+                  ? "Goyo may have been updated while it was open, or the connection dropped. Reload to get the latest version. Your saved progress is kept."
+                  : "Something went wrong while opening it. Try again, and reload the page if it keeps failing."}
               </p>
             </div>
           </div>
@@ -63,9 +68,19 @@ export class LazyBoundary extends Component<
             <Button
               type="button"
               className="w-full bg-emerald-600 text-white hover:bg-emerald-700 sm:flex-1"
-              onClick={() => this.setState({ failed: false })}
+              onClick={() =>
+                stale
+                  ? void reloadToLatestApp({
+                      serviceWorker: navigator.serviceWorker,
+                      reload: () => window.location.reload(),
+                      setTimeout: (handler, ms) =>
+                        window.setTimeout(handler, ms),
+                      clearTimeout: id => window.clearTimeout(id),
+                    })
+                  : this.setState({ failed: false, error: null })
+              }
             >
-              Try again
+              {stale ? "Reload Goyo" : "Try again"}
             </Button>
             <Button
               type="button"
