@@ -206,7 +206,7 @@ async function main() {
                 .getByRole("button", { name: /start (daily|first) session/i })
                 .waitFor();
             await screen.open(page);
-            // Let Radix and Framer Motion finish their enter transition.
+            // Let Radix and the CSS entrance animations finish.
             await page.waitForTimeout(350);
             const file = path.join(
               OUT_DIR,
