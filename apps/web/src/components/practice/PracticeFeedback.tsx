@@ -1,5 +1,4 @@
 import { type ReactNode } from "react";
-import { motion } from "framer-motion";
 import { cn } from "@domain/utils";
 
 interface PracticeFeedbackProps {
@@ -71,13 +70,14 @@ export function PracticeFeedback({
     <div aria-live="polite">
       {answered &&
         (animate ? (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={cardClassName}
+          <div
+            className={cn(
+              "animate-in fade-in slide-in-from-bottom-2",
+              cardClassName
+            )}
           >
             {content}
-          </motion.div>
+          </div>
         ) : (
           <div className={cardClassName}>{content}</div>
         ))}

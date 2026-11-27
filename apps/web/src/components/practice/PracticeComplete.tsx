@@ -1,5 +1,4 @@
 import { type ReactNode } from "react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@domain/utils";
@@ -66,11 +65,7 @@ export function PracticeComplete({
         )}
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-md rounded-3xl bg-card p-6 text-center shadow-2xl sm:p-8"
-        >
+        <div className="animate-in fade-in zoom-in-95 w-full max-w-md rounded-3xl bg-card p-6 text-center shadow-2xl sm:p-8">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400">
             {icon}
           </div>
@@ -99,7 +94,7 @@ export function PracticeComplete({
               </Button>
             )}
           </div>
-        </motion.div>
+        </div>
       </DialogContent>
     </Dialog>
   );

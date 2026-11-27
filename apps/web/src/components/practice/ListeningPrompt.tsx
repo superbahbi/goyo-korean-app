@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { type VocabularyCard } from "@domain/vocabulary";
@@ -17,11 +16,7 @@ export function ListeningPrompt({
   onPlay,
 }: ListeningPromptProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="rounded-3xl border border-emerald-100 dark:border-emerald-900/60 bg-card p-5 text-center shadow-xl shadow-emerald-100/50 sm:p-7"
-    >
+    <div className="animate-in fade-in slide-in-from-bottom-3 rounded-3xl border border-emerald-100 dark:border-emerald-900/60 bg-card p-5 text-center shadow-xl shadow-emerald-100/50 sm:p-7">
       <Button
         size="lg"
         onClick={onPlay}
@@ -49,6 +44,6 @@ export function ListeningPrompt({
           </p>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

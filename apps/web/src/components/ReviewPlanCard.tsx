@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { CalendarDays } from "lucide-react";
-import { motion } from "framer-motion";
 import type { DashboardView } from "@domain/dashboardView";
 import type { LabeledForecastDay } from "@domain/dashboardForecast";
 
@@ -23,10 +22,9 @@ export function ReviewPlanCard({ today, review }: ReviewPlanCardProps) {
   } = review;
   const hasHistory = forecastPeak.count > 0;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15 }}
+    <div
+      className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-300"
+      style={{ animationDelay: "0.15s" }}
     >
       <Card className="gap-0 overflow-hidden border-border/70 bg-card py-0 shadow-sm">
         <div className="p-4 sm:p-5">
@@ -127,6 +125,6 @@ export function ReviewPlanCard({ today, review }: ReviewPlanCardProps) {
           </div>
         </div>
       </Card>
-    </motion.div>
+    </div>
   );
 }

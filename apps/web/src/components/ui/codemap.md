@@ -9,7 +9,7 @@ instead of Radix directly. This folder carries no domain logic and no app state.
 ## Design
 
 Each file follows the same recipe: a Radix primitive (`@radix-ui/react-dialog`,
-`-select`, `-checkbox`, `-switch`, `-tooltip`, `-progress`, `-slot`), class
+`-select`, `-checkbox`, `-switch`, `-progress`, `-slot`), class
 composition with `cn` from `@domain/utils`, and `class-variance-authority` where
 variants exist. Every element carries a `data-slot="…"` attribute used by
 nested Tailwind selectors. Exports:
@@ -27,7 +27,7 @@ nested Tailwind selectors. Exports:
   not submit business logic.
 - `select.tsx` — trigger/content/item/label/separator/scroll buttons, popper
   positioning, in-viewport scrolling.
-- `checkbox.tsx`, `switch.tsx`, `progress.tsx`, `tooltip.tsx` — single-control
+- `checkbox.tsx`, `switch.tsx`, `progress.tsx` — single-control
   wrappers.
 - `sonner.tsx` — `Toaster` re-themed from `ThemeContext.resolvedTheme`.
 

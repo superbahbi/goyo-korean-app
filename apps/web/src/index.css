@@ -230,7 +230,27 @@
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Stroke-order drawing: the path is normalised with pathLength={1}, so a dash
+   of 1 hides it at offset 1 and reveals it at offset 0. Opacity stays 0 until
+   the first frame because a zero-length round cap would still paint a dot. */
+@keyframes stroke-draw {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  1% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
   }
 }

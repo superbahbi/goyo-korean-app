@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card";
 import { Play, Sparkles, Trophy } from "lucide-react";
-import { motion } from "framer-motion";
 import type { TodayPlan } from "@domain/dashboardPlan";
 
 interface WelcomeCardProps {
@@ -13,11 +12,7 @@ export function WelcomeCard({ plan, onStartSession }: WelcomeCardProps) {
   const { newCards, overdueCount, dailyGoalReached, summary } = plan;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
+    <div className="animate-in fade-in slide-in-from-bottom-3 duration-[400ms]">
       <Card className="relative overflow-hidden gap-0 border-none bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-600 py-0 text-white shadow-xl shadow-emerald-900/10">
         <div
           className="pointer-events-none absolute -right-6 -top-8 opacity-10"
@@ -75,6 +70,6 @@ export function WelcomeCard({ plan, onStartSession }: WelcomeCardProps) {
           </button>
         </div>
       </Card>
-    </motion.div>
+    </div>
   );
 }

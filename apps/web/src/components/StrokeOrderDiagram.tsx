@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getHangulStrokes } from "@domain/hangulStrokes";
@@ -26,7 +25,6 @@ export function StrokeOrderDiagram({
   className,
 }: StrokeOrderDiagramProps) {
   const strokes = getHangulStrokes(characterId);
-  const reduceMotion = useReducedMotion();
   const [runId, setRunId] = useState(0);
 
   if (strokes.length === 0) return null;
@@ -61,37 +59,23 @@ export function StrokeOrderDiagram({
         </g>
         <g aria-hidden="true">
           {strokes.map((d, index) => (
-            <motion.path
+            <path
               key={`${characterId}-${runId}-${index}`}
               d={d}
+              pathLength={1}
               fill="none"
               stroke="currentColor"
               strokeWidth={7}
               strokeLinecap="round"
               strokeLinejoin="round"
-              initial={
-                reduceMotion
-                  ? { pathLength: 1, opacity: 1 }
-                  : { pathLength: 0, opacity: 0 }
-              }
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={
-                reduceMotion
-                  ? { duration: 0 }
-                  : {
-                      pathLength: {
-                        duration: STROKE_DURATION,
-                        delay: index * STROKE_STAGGER,
-                        ease: "easeInOut",
-                      },
-                      // A zero-length round cap still paints a dot, so keep a
-                      // stroke invisible until its turn to be drawn.
-                      opacity: {
-                        duration: 0.01,
-                        delay: index * STROKE_STAGGER,
-                      },
-                    }
-              }
+              // Drawn by the stroke-draw keyframes (index.css), which hide a
+              // stroke until its turn. Without motion-safe the path is simply
+              // complete, which is what a reduced-motion learner sees.
+              className="[stroke-dasharray:1] motion-safe:animate-[stroke-draw_ease-in-out_both]"
+              style={{
+                animationDuration: `${STROKE_DURATION}s`,
+                animationDelay: `${index * STROKE_STAGGER}s`,
+              }}
             />
           ))}
         </g>

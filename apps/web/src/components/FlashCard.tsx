@@ -2,7 +2,6 @@ import { memo, useCallback, useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Volume2 } from "lucide-react";
-import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { playSentenceAudio, playVocabularyAudio } from "@domain/audioPlayer";
 import { useAutoPlayOnce } from "@/hooks/useAutoPlayOnce";
@@ -93,12 +92,7 @@ function FlashCardBase({
   const romanization = getRomanization();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-      className="w-full h-full flex flex-col items-center justify-center"
-    >
+    <div className="animate-in fade-in zoom-in-95 duration-300 w-full h-full flex flex-col items-center justify-center">
       {/* The card surface is the mouse/touch reveal; the keyboard path is the
           labelled reveal button in the session footer. No third hint is needed.
           A flexible height on phones keeps the whole back visible above the
@@ -108,15 +102,11 @@ function FlashCardBase({
         onClick={handleFlip}
       >
         {/* Front */}
-        <motion.div
-          initial={false}
+        <div
           inert={isRevealed}
-          animate={{
-            opacity: isRevealed ? 0 : 1,
-            pointerEvents: isRevealed ? "none" : "auto",
-          }}
-          transition={{ duration: 0.3 }}
-          className="absolute inset-0 flex flex-col items-center justify-center overflow-y-auto rounded-3xl border-2 border-border/70 bg-card p-6 text-center shadow-xl sm:p-8"
+          className={`absolute inset-0 flex flex-col items-center justify-center overflow-y-auto rounded-3xl border-2 border-border/70 bg-card p-6 text-center shadow-xl transition-opacity duration-300 sm:p-8 ${
+            isRevealed ? "pointer-events-none opacity-0" : "opacity-100"
+          }`}
         >
           <Badge
             variant="outline"
@@ -172,14 +162,9 @@ function FlashCardBase({
             </h2>
           )}
           {!audioFirst && showRoman && romanization && (
-            <motion.p
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mb-6 font-mono text-xl font-semibold text-emerald-600 dark:text-emerald-400 sm:mb-8 sm:text-2xl"
-            >
+            <p className="animate-in fade-in slide-in-from-top-2.5 mb-6 font-mono text-xl font-semibold text-emerald-600 dark:text-emerald-400 sm:mb-8 sm:text-2xl">
               {romanization}
-            </motion.p>
+            </p>
           )}
           <div className="mt-5 flex items-center gap-3 sm:mt-8 sm:gap-4">
             <Button
@@ -210,18 +195,14 @@ function FlashCardBase({
               </Button>
             )}
           </div>
-        </motion.div>
+        </div>
 
         {/* Back */}
-        <motion.div
-          initial={false}
+        <div
           inert={!isRevealed}
-          animate={{
-            opacity: isRevealed ? 1 : 0,
-            pointerEvents: isRevealed ? "auto" : "none",
-          }}
-          transition={{ duration: 0.3 }}
-          className="absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-background to-teal-50 p-5 text-center shadow-xl dark:border-emerald-800/70 dark:from-emerald-950 dark:to-teal-950 sm:p-9"
+          className={`absolute inset-0 overflow-y-auto rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 via-background to-teal-50 p-5 text-center shadow-xl transition-opacity duration-300 dark:border-emerald-800/70 dark:from-emerald-950 dark:to-teal-950 sm:p-9 ${
+            isRevealed ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
         >
           <div className="flex min-h-full flex-col items-center justify-center">
             <Badge className="mb-3 bg-emerald-700 text-white shadow-sm sm:mb-5">
@@ -298,9 +279,9 @@ function FlashCardBase({
               </div>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

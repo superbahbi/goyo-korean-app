@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StrokeOrderDiagram } from "@/components/StrokeOrderDiagram";
@@ -15,11 +14,7 @@ interface AlphabetCardProps {
 export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
   const example = splitAlphabetExample(card.example);
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="bg-card rounded-2xl border-2 border-border p-6 sm:p-8 max-w-md w-full shadow-lg"
-    >
+    <div className="animate-in fade-in zoom-in-95 bg-card rounded-2xl border-2 border-border p-6 sm:p-8 max-w-md w-full shadow-lg">
       {/* Main Hangul Character */}
       <div className="text-center mb-6">
         <StrokeOrderDiagram
@@ -62,6 +57,6 @@ export function AlphabetCard({ card, onSpeak }: AlphabetCardProps) {
           {card.type === "consonant" ? "Consonant" : "Vowel"}
         </span>
       </div>
-    </motion.div>
+    </div>
   );
 }

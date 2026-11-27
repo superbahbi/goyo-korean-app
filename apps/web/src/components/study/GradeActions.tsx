@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Check, Star, X } from "lucide-react";
-import { motion } from "framer-motion";
 import { cn } from "@domain/utils";
 import type { IntervalPreview, SrsRating } from "@domain/srs";
 
@@ -53,11 +52,10 @@ export function GradeActions({ intervals, onGrade }: GradeActionsProps) {
       {GRADES.map(({ rating, label, icon: Icon, className }, position) => {
         const days = intervals[rating];
         return (
-          <motion.div
+          <div
             key={rating}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + position * 0.05 }}
+            className="animate-in fade-in slide-in-from-bottom-2.5 fill-mode-both duration-300"
+            style={{ animationDelay: `${0.1 + position * 0.05}s` }}
           >
             <Button
               variant="outline"
@@ -78,7 +76,7 @@ export function GradeActions({ intervals, onGrade }: GradeActionsProps) {
                 , next review in {daysDescription(days)}
               </span>
             </Button>
-          </motion.div>
+          </div>
         );
       })}
     </div>

@@ -147,21 +147,15 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        // Keep the framework and large animation/Radix libraries in stable
-        // vendor chunks, so an app-code edit does not invalidate the whole
-        // main chunk and the entry stays small.
+        // Only React gets its own stable chunk, so an app-code edit does not
+        // invalidate it. Every other dependency is left to Rollup: what the
+        // entry needs stays in the entry, and what only a lazy dialog or page
+        // uses (Radix Dialog, Select, Switch, Checkbox) loads with that code
+        // instead of riding the first load in a catch-all vendor chunk.
         manualChunks(id) {
-          if (!id.includes("node_modules")) return;
           if (/node_modules\/(react|react-dom|scheduler)\//.test(id)) {
             return "react-vendor";
           }
-          if (
-            /node_modules\/(framer-motion|motion-dom|motion-utils)\//.test(id)
-          ) {
-            return "motion-vendor";
-          }
-          if (id.includes("node_modules/@radix-ui/")) return "radix-vendor";
-          return "vendor";
         },
       },
     },
