@@ -1,4 +1,5 @@
 import { cn } from "@domain/utils";
+import { isChunkLoadError, reloadToLatestApp } from "@domain/appReload";
 import {
   clearProgress,
   PROGRESS_STORAGE_KEY,
@@ -13,6 +14,8 @@ interface Props {
 
 interface State {
   hasError: boolean;
+  /** A lazy chunk is gone (a newer deploy); only a reload can recover. */
+  staleChunk: boolean;
   confirmingReset: boolean;
 }
 
@@ -59,11 +62,15 @@ function resetProgressAndReload() {
 class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, confirmingReset: false };
+    this.state = { hasError: false, staleChunk: false, confirmingReset: false };
   }
 
-  static getDerivedStateFromError(): State {
-    return { hasError: true, confirmingReset: false };
+  static getDerivedStateFromError(error: unknown): State {
+    return {
+      hasError: true,
+      staleChunk: isChunkLoadError(error),
+      confirmingReset: false,
+    };
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
@@ -72,7 +79,10 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      const rawSave = readRawSave();
+      const { staleChunk } = this.state;
+      // A missing chunk after a deploy is not broken progress: offer the
+      // reload onto the new build and keep backup and reset out of the way.
+      const rawSave = staleChunk ? null : readRawSave();
       return (
         <div className="flex items-center justify-center min-h-screen p-8 bg-background">
           <div className="flex flex-col items-center w-full max-w-2xl p-8">
@@ -81,11 +91,15 @@ class ErrorBoundary extends Component<Props, State> {
               className="text-destructive mb-6 flex-shrink-0"
             />
 
-            <h2 className="text-xl mb-2">Something went wrong.</h2>
+            <h2 className="text-xl mb-2">
+              {staleChunk ? "Goyo has been updated." : "Something went wrong."}
+            </h2>
             <p className="text-sm text-muted-foreground text-center mb-6">
-              {rawSave !== null
-                ? "Try reloading the page. If the problem keeps happening, download a backup of your progress first, then reset it. Resetting erases saved study history on this device."
-                : "Try reloading the page. If the problem keeps happening, you can reset your local progress, which erases saved study history on this device."}
+              {staleChunk
+                ? "This page is from an older version, or the connection dropped. Reload to get the latest version. Your saved progress is kept."
+                : rawSave !== null
+                  ? "Try reloading the page. If the problem keeps happening, download a backup of your progress first, then reset it. Resetting erases saved study history on this device."
+                  : "Try reloading the page. If the problem keeps happening, you can reset your local progress, which erases saved study history on this device."}
             </p>
 
             {this.state.confirmingReset && (
@@ -100,7 +114,17 @@ class ErrorBoundary extends Component<Props, State> {
 
             <div className="flex flex-wrap justify-center gap-3">
               <button
-                onClick={() => window.location.reload()}
+                onClick={() =>
+                  staleChunk
+                    ? void reloadToLatestApp({
+                        serviceWorker: navigator.serviceWorker,
+                        reload: () => window.location.reload(),
+                        setTimeout: (handler, ms) =>
+                          window.setTimeout(handler, ms),
+                        clearTimeout: id => window.clearTimeout(id),
+                      })
+                    : window.location.reload()
+                }
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-lg",
                   "bg-primary text-primary-foreground",
@@ -125,25 +149,27 @@ class ErrorBoundary extends Component<Props, State> {
                   Download backup
                 </button>
               )}
-              <button
-                onClick={() => {
-                  if (!this.state.confirmingReset) {
-                    this.setState({ confirmingReset: true });
-                    return;
-                  }
-                  resetProgressAndReload();
-                }}
-                className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-lg",
-                  "border border-destructive text-destructive",
-                  "hover:bg-destructive/10 cursor-pointer",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
-                )}
-              >
-                {this.state.confirmingReset
-                  ? "Yes, erase local progress"
-                  : "Reset local progress"}
-              </button>
+              {!staleChunk && (
+                <button
+                  onClick={() => {
+                    if (!this.state.confirmingReset) {
+                      this.setState({ confirmingReset: true });
+                      return;
+                    }
+                    resetProgressAndReload();
+                  }}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-lg",
+                    "border border-destructive text-destructive",
+                    "hover:bg-destructive/10 cursor-pointer",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2"
+                  )}
+                >
+                  {this.state.confirmingReset
+                    ? "Yes, erase local progress"
+                    : "Reset local progress"}
+                </button>
+              )}
             </div>
           </div>
         </div>

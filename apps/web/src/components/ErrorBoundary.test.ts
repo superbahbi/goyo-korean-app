@@ -3,15 +3,26 @@ import { act, createElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PROGRESS_STORAGE_KEY } from "@domain/progressStorage";
+import { reloadToLatestApp } from "@domain/appReload";
 import ErrorBoundary from "./ErrorBoundary";
+
+vi.mock("@domain/appReload", async importOriginal => ({
+  ...(await importOriginal<typeof import("@domain/appReload")>()),
+  reloadToLatestApp: vi.fn(() => Promise.resolve()),
+}));
 
 (
   globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
 ).IS_REACT_ACT_ENVIRONMENT = true;
 
+let crash: Error;
 function Crash(): never {
-  throw new Error("render failed");
+  throw crash;
 }
+const originalUrl = {
+  createObjectURL: URL.createObjectURL,
+  revokeObjectURL: URL.revokeObjectURL,
+};
 
 let container: HTMLDivElement;
 let root: Root;
@@ -31,6 +42,8 @@ beforeEach(() => {
   // React reports the caught render error; keep the test output readable.
   vi.spyOn(console, "error").mockImplementation(() => {});
   localStorage.clear();
+  crash = new Error("render failed");
+  vi.mocked(reloadToLatestApp).mockClear();
   container = document.createElement("div");
   document.body.appendChild(container);
   root = createRoot(container);
@@ -40,6 +53,7 @@ afterEach(() => {
   act(() => root.unmount());
   container.remove();
   vi.restoreAllMocks();
+  Object.assign(URL, originalUrl);
 });
 
 describe("crash screen backup", () => {
@@ -87,5 +101,19 @@ describe("crash screen backup", () => {
 
     expect(button("Yes, erase local progress")).toBeDefined();
     expect(localStorage.getItem(PROGRESS_STORAGE_KEY)).toBe("{}");
+  });
+
+  it("treats a missing chunk as an update: reload only, no backup or reset", () => {
+    localStorage.setItem(PROGRESS_STORAGE_KEY, "{}");
+    crash = new TypeError(
+      "Failed to fetch dynamically imported module: https://goyo.bahbi.net/assets/App-old.js"
+    );
+    renderCrashed();
+
+    expect(container.textContent).toContain("Goyo has been updated.");
+    expect(button("Download backup")).toBeUndefined();
+    expect(button("Reset local progress")).toBeUndefined();
+    act(() => button("Reload Page")!.click());
+    expect(reloadToLatestApp).toHaveBeenCalledTimes(1);
   });
 });
