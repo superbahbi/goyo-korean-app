@@ -34,7 +34,7 @@ export function ListeningPrompt({
       {revealed && (
         <div className="mt-6 border-t border-border/70 pt-5">
           <p
-            className="text-4xl font-bold tracking-wide text-foreground"
+            className="break-keep text-4xl font-bold tracking-wide text-foreground"
             lang="ko"
           >
             {card.front}
