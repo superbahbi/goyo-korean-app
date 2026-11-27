@@ -139,7 +139,7 @@ export function ShadowingPractice({
           Replay as many times as you need.
         </p>
         {visible ? (
-          <div className="animate-in fade-in slide-in-from-bottom-1.5 mt-7 border-t border-border/70 pt-6 text-center">
+          <div className="animate-in fade-in slide-in-from-bottom-[6px] mt-7 border-t border-border/70 pt-6 text-center">
             <p
               className="text-4xl font-bold tracking-wide text-foreground"
               lang="ko"

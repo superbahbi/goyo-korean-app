@@ -54,7 +54,7 @@ export function GradeActions({ intervals, onGrade }: GradeActionsProps) {
         return (
           <div
             key={rating}
-            className="animate-in fade-in slide-in-from-bottom-2.5 fill-mode-both duration-300"
+            className="animate-in fade-in slide-in-from-bottom-[10px] fill-mode-both duration-300"
             style={{ animationDelay: `${0.1 + position * 0.05}s` }}
           >
             <Button

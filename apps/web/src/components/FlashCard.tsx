@@ -162,7 +162,7 @@ function FlashCardBase({
             </h2>
           )}
           {!audioFirst && showRoman && romanization && (
-            <p className="animate-in fade-in slide-in-from-top-2.5 mb-6 font-mono text-xl font-semibold text-emerald-600 dark:text-emerald-400 sm:mb-8 sm:text-2xl">
+            <p className="animate-in fade-in slide-in-from-top-[10px] mb-6 font-mono text-xl font-semibold text-emerald-600 dark:text-emerald-400 sm:mb-8 sm:text-2xl">
               {romanization}
             </p>
           )}
