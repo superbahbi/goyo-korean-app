@@ -24,20 +24,20 @@ Every stage is done only when its gate passes.
 
 ## Current state
 
-Verified on 2026-11-26 on `main` after Phase 10 Tracks A–D (`#117`–`#130`):
+Verified on 2026-11-27 on `main` (`c7f8a63`) after Phase 11 (`#137`–`#140`), which followed Phase 10 Tracks A–D (`#117`–`#130`):
 
-| Check              | Result                                                                                                                                                                                                                                                                                                                                                                                                   |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `vitest run`       | 596 tests pass in 48 files (domain core, the shared progress store, `mobile/` primitives and screens, the dialog registry and `scripts/`; Phase 10 added the store's cross-tab adoption, study-pace options, the import rule, a per-card Hangul example guard, the mobile sheet's focus/Escape/scroll behaviour and the stroke chart)                                                                    |
-| `playwright test`  | 44 checks across 12 specs in `e2e/`: Chromium (33), a `chromium-dark` rerun of the axe spec (6) and WebKit iPhone 15 (5). New in Phase 10: the production CSP at runtime (`csp.spec.ts`), `/mobile` axe/keyboard/cross-tab checks in both themes (`mobile.spec.ts`) and the offline audio download (`offline-download.spec.ts`). A local run on Linux needs WebKit system libraries for `iphone.spec.ts` |
-| `vite build`       | Passes (builds `apps/web/` to `dist/public/`). Main chunk 139.3 kB (40.7 kB gzipped), with React, vendor, motion and Radix in separate vendor chunks; Essential 600 lazy-loaded as its own 226.1 kB chunk (55.1 kB gzipped). Precache: 91 entries (1,246 KiB)                                                                                                                                            |
-| `pnpm audit`       | 0 production vulnerabilities; dev tooling has 1 low and 5 moderate, no high or critical (`#119`)                                                                                                                                                                                                                                                                                                         |
-| CI                 | Type check, lint, format check, tests, build, the CSP check and the Playwright job (Chromium light and dark, WebKit) are green on `main`                                                                                                                                                                                                                                                                 |
+| Check              | Result                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tsc --noEmit`     | Passes                                                                                                                                                                                                                                                                                                                                                                                      |
+| `eslint .`         | Passes                                                                                                                                                                                                                                                                                                                                                                                      |
+| `prettier --check` | Passes                                                                                                                                                                                                                                                                                                                                                                                      |
+| `vitest run`       | 681 tests pass in 57 files (domain core, the shared progress store, `mobile/` primitives and screens, the dialog registry and `scripts/`; Phase 11 added romanization, dashboard stats and plan, audio clip replacement, theme-palette and `theme-init.js` key parity, and the two error boundaries under jsdom)                                                                            |
+| `playwright test`  | 44 checks across 12 specs in `e2e/`: Chromium (33), a `chromium-dark` rerun of the axe spec (6) and WebKit iPhone 15 (5), as measured at the end of Phase 10 and not re-run for this docs update. A local run on Linux needs WebKit system libraries for `iphone.spec.ts`; the WebKit project only runs in CI                                                                               |
+| `vite build`       | Passes (builds `apps/web/` to `dist/public/`). Entry `index-*.js` 249.5 kB (77.1 kB gzipped), `react-vendor` 192.9 kB (60.5 kB gzipped); Essential 600 lazy-loaded as its own 226.1 kB chunk (55.1 kB gzipped); the `/mobile` app is a lazy 68.0 kB chunk (18.4 kB gzipped). First load 155,246 B gzipped over 4 requests (Phase 10: 215,715 B over 7). Precache: 92 entries (1,136.00 KiB) |
+| `pnpm audit`       | 0 production vulnerabilities; dev tooling has 1 low and 5 moderate, no high or critical (`#119`)                                                                                                                                                                                                                                                                                            |
+| CI                 | Type check, lint, format check, `codemap:check`, tests, build, the CSP check and the Playwright job (Chromium light and dark, WebKit) are green on `main`                                                                                                                                                                                                                                   |
 
-All gates pass.
+All gates pass. The deck shows 639 cards, not 640: `essential_171` (주스) duplicates a curated card and `loadVocabularyDeck` drops it.
 
 Repeat practice XP (2026-11-02, `#81`): daily repeat grades now earn half the rating's XP
 (again 3, good 5, easy 8); the daily goal stays a distinct-card count. ADR 0010 records it.
@@ -102,12 +102,15 @@ and usage notes plus the curated examples are now guarded by tests. The Playwrig
 iPhone-class WebKit engine plus the keyboard and screen-reader semantics that axe cannot check.
 
 What is open: Phase 10 Tracks A–D merged on 2026-11-25/26 (`#117`–`#133`; see Phase 10 for
-the item-by-item record). `LICENSE` names Robert Kugler (`#132`), and every deck and grammar example
+the item-by-item record), and Phase 11 hardened the production build on 2026-11-27 (`#137`–`#140`;
+see Phase 11). `LICENSE` names Robert Kugler (`#132`), and every deck and grammar example
 now has a male clip, enforced by a test (`#133`). What remains needs the maintainer or a Mac: the
 redistribution rights for `The600EssentialKoreanWords.xlsx` (an unattributed list found on Reddit,
 so its rights are unknown) and the ElevenLabs output; the Korean-speaker spot check (Phase 7
 samples 3–4, grammar lessons 13–18 with their new clips and the new Hangul examples); and Track E,
-the iOS / App Store gate, which needs Xcode.
+the iOS / App Store gate, which needs Xcode. Phase 11 left three smaller open items (listed there):
+the nine deck headwords that keep an "h" in romanization, an unverified iOS home-screen backup
+download, and a WebKit e2e that only runs in CI.
 `#108` tracks the Expo native app (Phases 1–3 merged, Phase 4+ next). The Korean wording still has
 room for naturalness polish (see Phase 3 — content trust). The audio directory holds the hashed
 male library plus the 680 dormant female clips kept while `FEMALE_VOICE_ENABLED = false`.
@@ -158,6 +161,7 @@ candidate left; the next one needs evidence, not a line count.
 | 8 First session and card experience | Done (#60–#62 plus the first-run follow-up); mobile card fits, intervals on grade buttons, first-run start block, new-word intro                                                                                                         |
 | 9 Architecture round 3              | Done (#89); save format moved to `lib/savedState.ts` (503 → 136 lines), module-size audit closed                                                                                                                                         |
 | 10 Public release readiness         | Tracks A–D merged (#117–#133); left: content rights, Korean-speaker check (maintainer) and Track E (iOS, needs a Mac)                                                                                                                    |
+| 11 Production hardening             | Done (#137–#140, 2026-11-27); first load 215.7 → 155.2 kB gzipped, crash recovery, 681 tests, UI polish; left: nine romanization headwords (content decision) and an iOS device check                                                    |
 | Native monorepo (#108)              | In progress (#108); Phases 1–3 merged (#109–#111), Phase 4+ Expo app next                                                                                                                                                                |
 
 Phase 0 is merged: offline audio (#2), local environment (#3), visible audio failure (#4), real
@@ -860,8 +864,66 @@ alongside `#108`.
 
 Expand Survival Scenarios beyond 6 items (`apps/web/src/components/practice/scenarios.ts`), rotate
 the Shadowing session queue beyond the first 8 cards (`packages/domain/src/queue.ts`), add
-`usageNote` entries to the 136 curated cards, revisit the temporary 90-day SRS cap in Phase 5, and
-evaluate CSS transitions vs `framer-motion` (38 kB gzipped) on initial load.
+`usageNote` entries to the 136 curated cards, and revisit the temporary 90-day SRS cap in Phase 5. The
+CSS-vs-`framer-motion` evaluation is done: `framer-motion` was replaced by CSS in Phase 11 (`#139`).
+
+## Phase 11: Production hardening
+
+Tracked in `#136`. Four PRs, each squash-merged on green CI on
+2026-11-27 and checked live: `https://goyo.bahbi.net` serves bundle hashes equal to a local build of
+`c7f8a63`. Two independent reviews (Claude Opus 5.5 and Gemini 4 Neon) both said "ready after
+fixes"; their major findings were fixed before merge.
+
+| PR     | Merge commit | Change                                                                                                              |
+| ------ | ------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `#139` | `c8758c0`    | Performance: `framer-motion` replaced by CSS, dead tooltip code removed, analytics loaded lazily                    |
+| `#138` | `b8a0b98`    | Crash recovery: stale-chunk reload, a raw-save backup before reset, import size cap                                 |
+| `#137` | `9af1348`    | Tests for romanization, dashboard stats and plan, audio clip replacement, theme-key parity and the error boundaries |
+| `#140` | `c7f8a63`    | UI polish: Korean typography, touch targets, locked practice tiles, Browse dialog width                             |
+
+**Performance (`#139`).** `framer-motion` is gone: enter transitions use `tw-animate-css`,
+`StrokeOrderDiagram` draws with a `stroke-draw` keyframe, and the reduced-motion rule now zeroes
+animation and transition delays as well as durations. The unused `TooltipProvider`, `ui/tooltip.tsx`
+and `@radix-ui/react-tooltip` were removed, `manualChunks` keeps only `react-vendor`, and Vercel
+Analytics and Speed Insights load lazily inside their own null-rendering error boundary. First load
+(entry, modulepreloads, CSS and `theme-init.js`, gzip -9) fell from 215,715 B to 155,246 B on `main`
+after all four PRs, and from 7 requests to 4.
+
+**Crash recovery (`#138`).** `isChunkLoadError` (`packages/domain/src/appReload.ts`) recognises a
+chunk that a newer deploy removed. `LazyBoundary` offers "Reload Goyo" for it, because `React.lazy`
+caches the rejection and "Try again" could never recover. The root `ErrorBoundary` treats it as an
+update (reload only, no reset). Any other crash offers "Download backup" of the raw stored save
+(`goyo-progress-backup-<date>.json`, never parsed; hidden in the `goyo://` iOS shell) before "Reset
+local progress". `reloadToLatestApp` now waits up to 10 s for a worker that `update()` finds still
+installing. Imports over 5 MB (`MAX_IMPORT_BYTES`, `importSizeRejection` in `savedState.ts`) are
+refused before the file is read, on web and on `/mobile`.
+
+**Tests (`#137`).** New suites for `romanize`, `dashboardStats`, `dashboardPlan`, `audioElement`,
+the theme palettes, and key parity between `ThemeContext` and `public/theme-init.js`, plus jsdom
+tests for `ErrorBoundary` and `LazyBoundary`.
+
+**UI (`#140`).** No synthetic italic on Hangul and `break-keep` on Korean text (web and `/mobile`);
+keyboard hints only where the pointer is fine; matched 44 px audio controls on the new-word card;
+the Hangul "Hear Pronunciation" button is visible on an iPhone without scrolling; the Browse dialog
+is 768 px on desktop (it was stuck at 512 px) with "Show/Hide romanization" labels; the practice
+grid is 3+4 with locked tiles shown as locked; dialog and shell close targets are 44 px; the dark
+progress track is visible; `/mobile` Auto-play is a `role="switch"`.
+
+**Gate on `c7f8a63`.** `pnpm check`, `lint`, `format:check`, `codemap:check` and
+`scripts/check-csp.ts` pass; `pnpm test` runs 681 tests in 57 files. Build: entry 249.54 kB (77.05
+kB gzipped), `react-vendor` 192.93 kB (60.53 kB gzipped), Essential 600 226.10 kB (55.06 kB
+gzipped), `/mobile` 68.03 kB (18.41 kB gzipped); precache 92 entries (1,136.00 KiB).
+
+**Still open (recorded, not resolved).**
+
+- Nine deck words keep an "h" in romanization where strict Revised Romanization merges it:
+  생각하다 `saenggakhada` (strict: `saenggakada`), 착하다, 약하다, 딱딱하다, 행복하다, 행복해요,
+  답답해요, 따뜻하다 and 깨끗하다. This is a content decision for the maintainer or the
+  Korean-speaker check.
+- `romanize()` also lacks ㄴ/ㄹ liquidization, ㄹ nasalization after ㄱ/ㅂ and ㄷ+히 palatalization.
+  No deck headword hits them today, so nothing is wrong yet.
+- "Download backup" in a home-screen iOS web app is unverified on a device (Track E).
+- The WebKit iPhone e2e only runs in CI; this Linux host lacks the WebKit libraries.
 
 ## Deferred, not decided
 

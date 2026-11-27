@@ -37,15 +37,21 @@ Feature groups and their named exports:
   Question loop from `practice/useQuestionLoop` with `pickDistractors` and map
   verdicts through `ratingForVerdict` (Recognition practice);
   `ShadowingPractice` self-reports "I shadowed it" and is Practice-only;
-  `AlphabetCard` + `StrokeOrderDiagram` (animated SVG jamo strokes,
-  `useReducedMotion`-aware).
+  `AlphabetCard` + `StrokeOrderDiagram` (SVG jamo strokes drawn by the
+  `stroke-draw` CSS keyframe, shown complete under reduced motion).
 - **Dialog bodies and host** — `BrowseDialog`, `SettingsDialog`, `StatsDialog`
   (re-exports `components/stats/types`), and `HomeDialogHost`, which maps one
   Dialog request through `dialogs/registry` and separately mounts the Study
   session as the documented launcher exception.
-- **Resilience and offline** — `ErrorBoundary` (default class export; two-step
-  `clearProgress` reset), `LazyBoundary` (class boundary around lazy chunks),
-  and `DownloadAllAudio` (Warm every manifest clip in batches of 6 with cancel).
+- **Resilience and offline** — `ErrorBoundary` (default class export): a
+  chunk-load error (`isChunkLoadError`) is treated as an update and offers only
+  "Reload Page" through `reloadToLatestApp`; any other crash offers reload,
+  "Download backup" (the raw stored save, never parsed; hidden under the
+  `goyo://` iOS shell) and a two-step `clearProgress` reset. `LazyBoundary`
+  (class boundary around lazy chunks): for a chunk-load error it shows "Reload
+  Goyo", since `React.lazy` caches the rejected import and "Try again" cannot
+  recover; other errors keep "Try again" and Close. `DownloadAllAudio` (Warm
+  every manifest clip in batches of 6 with cancel).
 
 ## Flow
 
