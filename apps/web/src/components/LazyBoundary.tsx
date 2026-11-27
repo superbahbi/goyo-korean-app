@@ -55,12 +55,12 @@ export class LazyBoundary extends Component<
                 id="lazy-boundary-title"
                 className="text-lg font-semibold text-foreground"
               >
-                This practice mode could not load
+                This screen could not load
               </h2>
               <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                 {stale
-                  ? "Goyo was probably updated while it was open. Reload to get the new version. Your saved progress is kept."
-                  : "The connection may have dropped. Try again, and refresh the page if it keeps failing."}
+                  ? "Goyo may have been updated while it was open, or the connection dropped. Reload to get the latest version. Your saved progress is kept."
+                  : "Something went wrong while opening it. Try again, and reload the page if it keeps failing."}
               </p>
             </div>
           </div>

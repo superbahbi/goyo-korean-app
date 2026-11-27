@@ -16,8 +16,15 @@ interface State {
   confirmingReset: boolean;
 }
 
+// The iOS shell serves the app from goyo:// (see App.tsx). Its WKWebView does
+// not handle <a download>, so a backup link there would open the raw file in a
+// view with no way back; the shell keeps its own Settings export instead.
+const CAN_DOWNLOAD_FILES =
+  typeof window !== "undefined" && window.location.protocol !== "goyo:";
+
 /** The stored save exactly as written; null when none or storage is blocked. */
 function readRawSave(): string | null {
+  if (!CAN_DOWNLOAD_FILES) return null;
   try {
     return localStorage.getItem(PROGRESS_STORAGE_KEY);
   } catch {
@@ -76,9 +83,9 @@ class ErrorBoundary extends Component<Props, State> {
 
             <h2 className="text-xl mb-2">Something went wrong.</h2>
             <p className="text-sm text-muted-foreground text-center mb-6">
-              Try reloading the page. If the problem keeps happening, download a
-              backup of your progress first, then reset it. Resetting erases
-              saved study history on this device.
+              {rawSave !== null
+                ? "Try reloading the page. If the problem keeps happening, download a backup of your progress first, then reset it. Resetting erases saved study history on this device."
+                : "Try reloading the page. If the problem keeps happening, you can reset your local progress, which erases saved study history on this device."}
             </p>
 
             {this.state.confirmingReset && (
