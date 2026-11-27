@@ -171,6 +171,41 @@ describe("reloadToLatestApp", () => {
     expect(env.reload).toHaveBeenCalledOnce();
   });
 
+  it("waits for a worker the update check finds still installing, then hands over", async () => {
+    const worker = fakeWorker("installing");
+    let installing: ServiceWorkerLike | null = null;
+    let waiting: ServiceWorkerLike | null = null;
+    const registration = {
+      get waiting() {
+        return waiting;
+      },
+      get installing() {
+        return installing;
+      },
+      update: vi.fn(async () => {
+        installing = worker;
+      }),
+    };
+    const container = fakeContainer(registration);
+    const env = environment({ serviceWorker: container });
+
+    const done = reloadToLatestApp(env);
+    await vi.waitFor(() => expect(registration.update).toHaveBeenCalledOnce());
+    expect(env.reload).not.toHaveBeenCalled();
+
+    installing = null;
+    waiting = worker;
+    worker.moveTo("installed");
+    await vi.waitFor(() =>
+      expect(worker.messages).toEqual([{ type: "SKIP_WAITING" }])
+    );
+    expect(env.reload).not.toHaveBeenCalled();
+    worker.moveTo("activated");
+    await done;
+
+    expect(env.reload).toHaveBeenCalledOnce();
+  });
+
   it("reloads without waiting when the update check finds nothing", async () => {
     const registration = fakeRegistration(null);
     const env = environment({

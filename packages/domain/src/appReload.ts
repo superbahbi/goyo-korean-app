@@ -10,6 +10,8 @@
  */
 
 const DEFAULT_ACTIVATION_TIMEOUT_MS = 3000;
+// A fresh worker precaches the shell (~1.1 MB) before it can wait.
+const DEFAULT_INSTALL_TIMEOUT_MS = 10000;
 const SKIP_WAITING_MESSAGE = { type: "SKIP_WAITING" } as const;
 
 /** The subset of `ServiceWorker` the reload handshake needs. */
@@ -23,6 +25,8 @@ export interface ServiceWorkerLike {
 /** The subset of `ServiceWorkerRegistration` the reload handshake needs. */
 export interface ServiceWorkerRegistrationLike {
   readonly waiting: ServiceWorkerLike | null;
+  /** A worker the update check just found, still precaching. */
+  readonly installing?: ServiceWorkerLike | null;
   update(): Promise<unknown>;
 }
 
@@ -40,6 +44,7 @@ export interface AppReloadEnvironment {
   setTimeout: (handler: () => void, ms: number) => number;
   clearTimeout: (id: number) => void;
   activationTimeoutMs?: number;
+  installTimeoutMs?: number;
 }
 
 async function findRegistration(
@@ -61,6 +66,34 @@ async function requestUpdate(
   } catch {
     // Offline (or a failed update check) still allows a reload.
   }
+}
+
+/**
+ * Resolves once an installing worker has finished (installed, activated or
+ * redundant) or the timeout elapses, so a reload that found a fresh deploy can
+ * hand over to it instead of reloading into the old precache.
+ */
+function waitForInstall(
+  worker: ServiceWorkerLike,
+  env: AppReloadEnvironment
+): Promise<void> {
+  return new Promise(resolve => {
+    let timer = 0;
+    const done = () => {
+      env.clearTimeout(timer);
+      worker.removeEventListener("statechange", check);
+      resolve();
+    };
+    const check = () => {
+      if (worker.state !== "installing") done();
+    };
+    worker.addEventListener("statechange", check);
+    timer = env.setTimeout(
+      done,
+      env.installTimeoutMs ?? DEFAULT_INSTALL_TIMEOUT_MS
+    );
+    check();
+  });
 }
 
 /**
@@ -139,6 +172,11 @@ export async function reloadToLatestApp(
   if (!waiting) {
     await requestUpdate(registration);
     waiting = registration.waiting;
+    const installing = registration.installing;
+    if (!waiting && installing) {
+      await waitForInstall(installing, env);
+      waiting = registration.waiting;
+    }
   }
 
   if (!waiting) {
