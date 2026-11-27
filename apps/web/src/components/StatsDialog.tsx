@@ -40,7 +40,9 @@ export function StatsDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl supports-[height:100dvh]:max-h-[90dvh]">
-        <DialogHeader>
+        {/* Clear the 44 px close button; symmetric on phones so the
+            centred title stays centred. */}
+        <DialogHeader className="px-10 sm:pr-10 sm:pl-0">
           <DialogTitle className="flex items-center gap-2 text-2xl">
             <Target
               size={20}
