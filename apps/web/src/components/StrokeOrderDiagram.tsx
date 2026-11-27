@@ -42,7 +42,7 @@ export function StrokeOrderDiagram({
         viewBox="0 0 100 100"
         role="img"
         aria-label={`Stroke order for ${hangul}: ${strokeCount}`}
-        className="mt-1 h-32 w-32 text-emerald-600 dark:text-emerald-400 sm:h-40 sm:w-40"
+        className="mt-1 h-24 w-24 text-emerald-600 dark:text-emerald-400 sm:h-40 sm:w-40"
       >
         <g aria-hidden="true" className="opacity-[0.12]">
           {strokes.map((d, index) => (

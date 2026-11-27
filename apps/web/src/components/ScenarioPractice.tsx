@@ -186,12 +186,19 @@ export function ScenarioPractice({
         correctText="That fits the situation."
         wrongText={
           <>
-            A useful answer is “<span lang="ko">{current.card.front}</span>”.
+            A useful answer is “
+            <span className="break-keep" lang="ko">
+              {current.card.front}
+            </span>
+            ”.
           </>
         }
         detail={
           <>
-            {current.card.back} · <span lang="ko">{current.card.example}</span>
+            {current.card.back} ·{" "}
+            <span className="break-keep" lang="ko">
+              {current.card.example}
+            </span>
           </>
         }
       />

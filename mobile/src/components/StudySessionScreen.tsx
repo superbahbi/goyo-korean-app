@@ -305,6 +305,7 @@ export function StudySessionScreen({
                 fontWeight: "700",
                 textAlign: "center",
                 marginTop: 18,
+                wordBreak: "keep-all",
               }}
             >
               {currentCard.front}
@@ -346,9 +347,10 @@ export function StudySessionScreen({
                 style={{
                   color: c.text,
                   fontSize: 15,
-                  fontStyle: "italic",
+                  fontWeight: "500",
                   lineHeight: 22,
                   marginTop: 8,
+                  wordBreak: "keep-all",
                 }}
               >
                 {currentCard.example}

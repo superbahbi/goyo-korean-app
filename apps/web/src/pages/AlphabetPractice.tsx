@@ -179,7 +179,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
       title={sectionTitle}
       titleLang="en"
       badge={
-        <Badge className="bg-indigo-100 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-900/50">
+        <Badge className="hidden bg-indigo-100 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-900/50 sm:inline-flex">
           Hangul
         </Badge>
       }
@@ -218,7 +218,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
         </div>
       )}
 
-      <div className="mt-8">
+      <div className="mt-5 sm:mt-8">
         <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
           Quick reference
         </h2>

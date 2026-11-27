@@ -37,7 +37,7 @@ export function NewCardIntro({
       </p>
 
       <h2
-        className="mt-6 text-5xl font-bold tracking-tight text-foreground"
+        className="mt-6 break-keep text-5xl font-bold tracking-tight text-foreground"
         lang="ko"
       >
         {card.front}
@@ -54,7 +54,7 @@ export function NewCardIntro({
           In context
         </p>
         <p
-          className="mt-2 text-sm italic leading-relaxed text-foreground/80"
+          className="mt-2 break-keep text-sm font-medium leading-relaxed text-foreground/90"
           lang="ko"
         >
           “{card.example}”
@@ -70,24 +70,24 @@ export function NewCardIntro({
         <Button
           type="button"
           variant="secondary"
-          className="rounded-full"
+          className="h-11 rounded-full border border-border px-3.5 font-semibold"
           data-intro-audio
           aria-label={`Hear it again for ${card.front}`}
           onClick={() => void playVocabularyAudio(card.id)}
         >
-          <Volume2 size={18} />
+          <Volume2 size={17} />
           Hear it again
         </Button>
         {sentenceAudioReady && (
           <Button
             type="button"
-            variant="ghost"
-            className="rounded-full"
+            variant="secondary"
+            className="h-11 rounded-full border border-border px-3.5 font-semibold"
             data-intro-audio
             aria-label={`Hear sentence for ${card.front}`}
             onClick={() => void playSentenceAudio(card.id)}
           >
-            <Volume2 size={16} />
+            <Volume2 size={17} />
             Hear sentence
           </Button>
         )}
@@ -100,7 +100,7 @@ export function NewCardIntro({
       >
         Start practising
       </Button>
-      <p className="mt-3 text-xs text-muted-foreground">
+      <p className="mt-3 hidden text-xs text-muted-foreground pointer-fine:block">
         Press Enter or Space to continue
       </p>
     </div>

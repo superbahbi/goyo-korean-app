@@ -97,12 +97,13 @@ export function PracticeShell({
           "[background-color:var(--background)]"
         )}
       >
-        <header className="flex shrink-0 items-center gap-1.5 border-b border-border bg-card px-3 py-2.5 sm:px-4 sm:py-3">
+        <header className="flex shrink-0 items-center gap-1.5 border-b border-border bg-card px-3 py-2 sm:px-4 sm:py-2.5">
           <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
             aria-label={closeLabel}
+            className="size-11 rounded-xl"
           >
             <X size={20} />
           </Button>
@@ -112,7 +113,7 @@ export function PracticeShell({
               size="sm"
               onClick={onBack}
               aria-label={backLabel}
-              className="gap-1.5 text-foreground/70 hover:text-foreground"
+              className="h-11 min-w-11 gap-1.5 rounded-xl px-2.5 text-foreground/70 hover:text-foreground"
             >
               <ArrowLeft size={16} />
               <span className="hidden sm:inline">{backLabel}</span>
@@ -156,7 +157,10 @@ export function PracticeShell({
                 {badge && <div className="flex justify-center">{badge}</div>}
                 <DialogTitle asChild>
                   <h1
-                    className="mt-3 font-serif text-2xl leading-tight text-foreground sm:mt-4 sm:text-3xl"
+                    className={cn(
+                      "mt-3 font-serif text-2xl leading-tight text-foreground sm:mt-4 sm:text-3xl",
+                      titleLang === "ko" && "break-keep"
+                    )}
                     lang={titleLang}
                   >
                     {title}
