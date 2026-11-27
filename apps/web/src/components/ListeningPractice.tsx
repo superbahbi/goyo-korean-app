@@ -178,7 +178,11 @@ export function ListeningPractice({
         correct={isCorrect}
         correctText="Correct — nice listening."
         wrongText={`The answer is “${current.card.back}”.`}
-        detail={<span lang="ko">{current.card.example}</span>}
+        detail={
+          <span className="break-keep" lang="ko">
+            {current.card.example}
+          </span>
+        }
       />
     </PracticeShell>
   );

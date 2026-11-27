@@ -259,7 +259,11 @@ const stateProps = (state?: AccessibilityState) => ({
   "aria-disabled": state?.disabled ? "true" : undefined,
   "aria-selected": state?.selected ? "true" : undefined,
   "aria-checked":
-    state?.checked === "mixed" ? "mixed" : state?.checked ? "true" : undefined,
+    state?.checked === "mixed"
+      ? "mixed"
+      : typeof state?.checked === "boolean"
+        ? String(state.checked)
+        : undefined,
   "aria-busy": state?.busy ? "true" : undefined,
   "aria-expanded": state?.expanded ? "true" : undefined,
 });

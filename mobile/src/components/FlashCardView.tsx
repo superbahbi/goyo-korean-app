@@ -144,6 +144,7 @@ export function FlashCardView({
                 fontWeight: "700",
                 textAlign: "center",
                 marginBottom: 8,
+                wordBreak: "keep-all",
               }}
             >
               {card.front}
@@ -221,6 +222,7 @@ export function FlashCardView({
             fontWeight: "700",
             textAlign: "center",
             marginTop: 18,
+            wordBreak: "keep-all",
           }}
         >
           {card.front}
@@ -263,9 +265,10 @@ export function FlashCardView({
               style={{
                 color: c.text,
                 fontSize: 15,
-                fontStyle: "italic",
+                fontWeight: "500",
                 lineHeight: 22,
                 marginTop: 8,
+                wordBreak: "keep-all",
               }}
             >
               {card.example}

@@ -327,7 +327,7 @@ export function AlphabetPracticeScreen({
                 <Text style={[S.boxT, { color: c.fg }]}>
                   {selected.romanization} · {selected.sound}
                 </Text>
-                <Text style={[S.body, { color: c.dim }]}>
+                <Text style={[S.body, S.keepAll, { color: c.dim }]}>
                   {selected.example}
                 </Text>
                 <Text style={[S.body, { color: c.dim }]}>
@@ -453,7 +453,9 @@ export function GrammarPracticeScreen({
           const id = audioId(example, lesson.id, index);
           const text = (
             <View style={S.f1}>
-              <Text style={[S.rowT, { color: c.fg }]}>{example.ko}</Text>
+              <Text style={[S.rowT, S.keepAll, { color: c.fg }]}>
+                {example.ko}
+              </Text>
               <Text style={[S.small, { color: c.dim }]}>{example.en}</Text>
             </View>
           );
@@ -640,7 +642,7 @@ export function ListeningPracticeScreen({
             <Text style={[S.boxT, { color: c.fg }]}>
               {verdict.isCorrect ? "Correct" : `Answer: ${current.card.back}`}
             </Text>
-            <Text style={[S.small, { color: c.dim }]}>
+            <Text style={[S.small, S.keepAll, { color: c.dim }]}>
               {current.card.example}
             </Text>
             <Btn
@@ -825,7 +827,9 @@ export function ShadowingPracticeScreen({
           <Text style={[S.huge, { color: c.fg }]}>{card.front}</Text>
           <Text style={[S.boxT, { color: c.fg }]}>{card.romanization}</Text>
           <Text style={[S.body, { color: c.dim }]}>{card.back}</Text>
-          <Text style={[S.small, { color: c.dim }]}>{card.example}</Text>
+          <Text style={[S.small, S.keepAll, { color: c.dim }]}>
+            {card.example}
+          </Text>
           {card.exampleEnglish ? (
             <Text style={[S.small, { color: c.dim }]}>
               {card.exampleEnglish}
@@ -901,11 +905,13 @@ const S = StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
   },
-  hangul: { fontSize: 28, fontWeight: "700" },
-  huge: { fontSize: 40, fontWeight: "700" },
+  hangul: { fontSize: 28, fontWeight: "700", wordBreak: "keep-all" },
+  huge: { fontSize: 40, fontWeight: "700", wordBreak: "keep-all" },
+  // Korean wraps between words, never inside one.
+  keepAll: { wordBreak: "keep-all" },
   small: { fontSize: 12, lineHeight: 18 },
   body: { fontSize: 15, lineHeight: 22 },
-  big: { fontSize: 38, fontWeight: "700" },
+  big: { fontSize: 38, fontWeight: "700", wordBreak: "keep-all" },
   box: { borderRadius: 16, borderWidth: 1, padding: 16, gap: 8 },
   boxT: { fontSize: 16, fontWeight: "600" },
   row: {

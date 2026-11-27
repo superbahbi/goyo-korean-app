@@ -141,7 +141,7 @@ export function ShadowingPractice({
         {visible ? (
           <div className="animate-in fade-in slide-in-from-bottom-[6px] mt-7 border-t border-border/70 pt-6 text-center">
             <p
-              className="text-4xl font-bold tracking-wide text-foreground"
+              className="break-keep text-4xl font-bold tracking-wide text-foreground"
               lang="ko"
             >
               {currentCard.front}
@@ -149,7 +149,10 @@ export function ShadowingPractice({
             <p className="mt-2 font-mono text-emerald-700 dark:text-emerald-300">
               {currentCard.romanization}
             </p>
-            <p className="mt-4 text-sm italic text-muted-foreground" lang="ko">
+            <p
+              className="mt-4 break-keep text-sm font-medium text-foreground/85"
+              lang="ko"
+            >
               {currentCard.example}
             </p>
           </div>

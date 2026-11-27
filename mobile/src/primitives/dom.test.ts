@@ -168,6 +168,19 @@ describe("DOM component kit rendered markup", () => {
     expect(markup).toContain('data-testid="play-button"');
     expect(styleOf(markup)).toContain("appearance:none");
     expect(styleOf(markup)).toContain("cursor:pointer");
+
+    const unchecked = renderToStaticMarkup(
+      createElement(
+        Pressable,
+        {
+          accessibilityRole: "switch",
+          accessibilityLabel: "Play audio",
+          accessibilityState: { checked: false },
+        },
+        createElement(Text, null, "Play")
+      )
+    );
+    expect(unchecked).toContain('aria-checked="false"');
   });
 
   it("renders TextInput as input, or textarea when multiline", () => {

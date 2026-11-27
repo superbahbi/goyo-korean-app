@@ -68,7 +68,7 @@ export function GrammarLessonView({
               >
                 <div className="min-w-0 flex-1">
                   <p
-                    className="text-[15px] font-semibold leading-snug text-foreground"
+                    className="break-keep text-[15px] font-semibold leading-snug text-foreground"
                     lang="ko"
                   >
                     {example.ko}

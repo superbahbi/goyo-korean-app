@@ -66,7 +66,7 @@ export function ProgressCards({
               <Progress
                 value={todayProgress.percent}
                 aria-label="Today's planned cards studied"
-                className="mt-2 h-1.5 bg-muted"
+                className="mt-2 h-1.5"
               />
             </div>
 
@@ -166,7 +166,7 @@ export function ProgressCards({
                 <Progress
                   value={tile.percent}
                   aria-label={tile.ariaLabel}
-                  className="mt-2 h-1.5 bg-muted"
+                  className="mt-2 h-1.5"
                 />
                 <p
                   className={`mt-2 text-[11px] leading-snug text-muted-foreground sm:text-xs ${

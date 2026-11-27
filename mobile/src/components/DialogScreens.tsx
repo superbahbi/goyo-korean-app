@@ -209,7 +209,9 @@ export function BrowseScreen({
               {card.romanization} · {card.back}
             </Text>
             {card.example ? (
-              <Text style={[S.small, { color: c.dim }]}>{card.example}</Text>
+              <Text style={[S.small, S.keepAll, { color: c.dim }]}>
+                {card.example}
+              </Text>
             ) : null}
             <Btn
               label="🔊 Speak"
@@ -485,6 +487,9 @@ export function SettingsScreen({
           ))}
         </View>
         <Pressable
+          accessibilityRole="switch"
+          accessibilityLabel="Auto-play audio"
+          accessibilityState={{ checked: state.settings.autoPlayAudio }}
           onPress={() =>
             onUpdateSettings({ autoPlayAudio: !state.settings.autoPlayAudio })
           }
@@ -492,10 +497,33 @@ export function SettingsScreen({
         >
           <Text style={[S.f1, { color: c.fg }]}>Auto-play audio</Text>
           <Text
-            style={{ color: state.settings.autoPlayAudio ? c.okText : c.dim }}
+            accessibilityElementsHidden
+            style={{
+              color: state.settings.autoPlayAudio ? c.okText : c.dim,
+              fontSize: 13,
+              fontWeight: "600",
+            }}
           >
             {state.settings.autoPlayAudio ? "On" : "Off"}
           </Text>
+          <View
+            accessibilityElementsHidden
+            style={[
+              S.switchTrack,
+              {
+                backgroundColor: state.settings.autoPlayAudio ? c.ok : c.line,
+              },
+            ]}
+          >
+            <View
+              style={[
+                S.switchThumb,
+                {
+                  marginLeft: state.settings.autoPlayAudio ? 18 : 0,
+                },
+              ]}
+            />
+          </View>
         </Pressable>
         <Section title="Theme" c={c} />
         <View style={S.chips}>
@@ -654,7 +682,21 @@ const S = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
   },
-  korean: { fontSize: 20, fontWeight: "700" },
+  korean: { fontSize: 20, fontWeight: "700", wordBreak: "keep-all" },
+  keepAll: { wordBreak: "keep-all" },
+  switchTrack: {
+    width: 44,
+    height: 26,
+    borderRadius: 999,
+    padding: 3,
+    justifyContent: "center",
+  },
+  switchThumb: {
+    width: 20,
+    height: 20,
+    borderRadius: 999,
+    backgroundColor: "#fff",
+  },
   badge: {
     fontSize: 11,
     borderWidth: 1,

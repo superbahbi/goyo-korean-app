@@ -37,7 +37,10 @@ export function ChoiceButton({
       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs text-muted-foreground">
         {letter}
       </span>
-      <span className="flex-1" lang={labelLang}>
+      <span
+        className={`flex-1 ${labelLang === "ko" ? "break-keep" : ""}`}
+        lang={labelLang}
+      >
         {label}
       </span>
       {answered && correct && (

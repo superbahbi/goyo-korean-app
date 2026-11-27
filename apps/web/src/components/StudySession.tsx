@@ -211,7 +211,7 @@ export function StudySession({
         />
       </div>
 
-      <p className="mt-3 hidden text-center text-xs text-muted-foreground sm:block">
+      <p className="mt-3 hidden text-center text-xs text-muted-foreground pointer-fine:block">
         {STUDY_KEY_HINT}
       </p>
     </PracticeShell>
