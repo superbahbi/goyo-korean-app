@@ -18,6 +18,7 @@ import {
 import { playVocabularyAudio } from "../../../packages/domain/src/audioPlayer";
 import {
   buildExportPayload as serializeExport,
+  importSizeRejection,
   stateAfterImport,
   validateImportPayload as validateImport,
   type UserState,
@@ -395,6 +396,13 @@ export function SettingsScreen({
       setNotice(
         "Import paused: a newer version of Goyo saved progress here. Update Goyo, then import."
       );
+      return;
+    }
+    // The import is pasted text; size it as the file it would be.
+    const tooBig = importSizeRejection(new Blob([json]).size);
+    if (tooBig) {
+      setPendingImport(null);
+      setNotice(tooBig);
       return;
     }
     const result = validateImport(json);

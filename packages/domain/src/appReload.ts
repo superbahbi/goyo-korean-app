@@ -151,3 +151,24 @@ export async function reloadToLatestApp(
   await activateWaitingWorker(waiting, container, env);
   env.reload();
 }
+
+const CHUNK_LOAD_MESSAGES = [
+  "failed to fetch dynamically imported module", // Chromium
+  "error loading dynamically imported module", // Firefox
+  "importing a module script failed", // WebKit
+  "unable to preload css", // Vite's CSS preload failure
+];
+
+/**
+ * True when `error` is a failed dynamic import (a lazy chunk that is gone or
+ * unreachable). `React.lazy` caches that rejection, so only a page load can
+ * recover; callers offer a reload instead of a retry.
+ */
+export function isChunkLoadError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) return false;
+  const { name, message } = error as { name?: unknown; message?: unknown };
+  if (name === "ChunkLoadError") return true;
+  if (typeof message !== "string") return false;
+  const text = message.toLowerCase();
+  return CHUNK_LOAD_MESSAGES.some(known => text.includes(known));
+}

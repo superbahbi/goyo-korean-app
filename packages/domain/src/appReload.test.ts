@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, type Mock } from "vitest";
 import {
+  isChunkLoadError,
   reloadToLatestApp,
   type AppReloadEnvironment,
   type ServiceWorkerContainerLike,
@@ -241,5 +242,43 @@ describe("reloadToLatestApp", () => {
     await reloadToLatestApp(env);
 
     expect(env.reload).toHaveBeenCalledOnce();
+  });
+});
+
+describe("isChunkLoadError", () => {
+  it.each([
+    new TypeError(
+      "Failed to fetch dynamically imported module: https://x/assets/a.js"
+    ),
+    new TypeError("error loading dynamically imported module: https://x/a.js"),
+    new TypeError("Importing a module script failed."),
+    new Error("Unable to preload CSS for /assets/a.css"),
+    Object.assign(new Error("Loading chunk 3 failed."), {
+      name: "ChunkLoadError",
+    }),
+  ])("recognises a dynamic-import failure: %s", error => {
+    expect(isChunkLoadError(error)).toBe(true);
+  });
+
+  it("rejects ordinary errors", () => {
+    expect(isChunkLoadError(new Error("Cannot read properties of null"))).toBe(
+      false
+    );
+  });
+
+  it("rejects non-Error values", () => {
+    expect(
+      isChunkLoadError("Failed to fetch dynamically imported module")
+    ).toBe(false);
+    expect(isChunkLoadError(null)).toBe(false);
+    expect(isChunkLoadError(undefined)).toBe(false);
+    expect(isChunkLoadError({})).toBe(false);
+    expect(isChunkLoadError({ message: 42 })).toBe(false);
+  });
+
+  it("accepts an error-like object with a matching message", () => {
+    expect(
+      isChunkLoadError({ message: "Importing a module script failed" })
+    ).toBe(true);
   });
 });

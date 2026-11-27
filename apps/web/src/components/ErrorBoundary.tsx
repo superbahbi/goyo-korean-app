@@ -1,6 +1,10 @@
 import { cn } from "@domain/utils";
-import { clearProgress } from "@domain/progressStorage";
-import { AlertTriangle, RotateCcw } from "lucide-react";
+import {
+  clearProgress,
+  PROGRESS_STORAGE_KEY,
+  progressBackupFileName,
+} from "@domain/progressStorage";
+import { AlertTriangle, Download, RotateCcw } from "lucide-react";
 import { Component, ErrorInfo, ReactNode } from "react";
 
 interface Props {
@@ -10,6 +14,30 @@ interface Props {
 interface State {
   hasError: boolean;
   confirmingReset: boolean;
+}
+
+/** The stored save exactly as written; null when none or storage is blocked. */
+function readRawSave(): string | null {
+  try {
+    return localStorage.getItem(PROGRESS_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+// The save is not parsed: the crash may come from it, and a newer build's save
+// must be kept byte for byte.
+function downloadRawSave(raw: string) {
+  const url = URL.createObjectURL(
+    new Blob([raw], { type: "application/json" })
+  );
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = progressBackupFileName();
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function resetProgressAndReload() {
@@ -37,6 +65,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      const rawSave = readRawSave();
       return (
         <div className="flex items-center justify-center min-h-screen p-8 bg-background">
           <div className="flex flex-col items-center w-full max-w-2xl p-8">
@@ -47,9 +76,9 @@ class ErrorBoundary extends Component<Props, State> {
 
             <h2 className="text-xl mb-2">Something went wrong.</h2>
             <p className="text-sm text-muted-foreground text-center mb-6">
-              Try reloading the page. If the problem keeps happening, you can
-              reset your local progress, which erases saved study history on
-              this device.
+              Try reloading the page. If the problem keeps happening, download a
+              backup of your progress first, then reset it. Resetting erases
+              saved study history on this device.
             </p>
 
             {this.state.confirmingReset && (
@@ -75,6 +104,20 @@ class ErrorBoundary extends Component<Props, State> {
                 <RotateCcw size={16} />
                 Reload Page
               </button>
+              {rawSave !== null && (
+                <button
+                  onClick={() => downloadRawSave(rawSave)}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-lg",
+                    "border border-border text-foreground",
+                    "hover:bg-muted cursor-pointer",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  )}
+                >
+                  <Download size={16} />
+                  Download backup
+                </button>
+              )}
               <button
                 onClick={() => {
                   if (!this.state.confirmingReset) {

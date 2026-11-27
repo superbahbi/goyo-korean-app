@@ -3,6 +3,8 @@ import { emptyGrammarProgress } from "@domain/grammarProgress";
 import { FEMALE_VOICE_ENABLED } from "@domain/voiceAvailability";
 import {
   buildExportPayload,
+  importSizeRejection,
+  MAX_IMPORT_BYTES,
   getSavedSchemaVersion,
   isNewerSave,
   parseSavedState,
@@ -769,5 +771,39 @@ describe("stateAfterImport", () => {
     });
 
     expect(next.reviewLog.entries).toEqual([]);
+  });
+});
+
+describe("raw save as a backup", () => {
+  it("is accepted by validateImportPayload, review log included", () => {
+    const state = parseSavedState(
+      JSON.stringify({
+        cardStates: { surv_001: card },
+        stats,
+        settings,
+        studyDays,
+        reviewLog,
+      }),
+      today
+    );
+    // packages/shared/storage.ts persists `JSON.stringify(state)`.
+    const raw = JSON.stringify(state);
+    const result = validateImportPayload(raw, today);
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.hasReviewLog).toBe(true);
+      expect(result.state.cardStates.surv_001).toEqual(card);
+    }
+  });
+});
+
+describe("importSizeRejection", () => {
+  it("accepts a file at the limit", () => {
+    expect(importSizeRejection(MAX_IMPORT_BYTES)).toBeNull();
+    expect(importSizeRejection(0)).toBeNull();
+  });
+
+  it("rejects a file over the limit with a reason", () => {
+    expect(importSizeRejection(MAX_IMPORT_BYTES + 1)).toMatch(/5 MB/);
   });
 });
