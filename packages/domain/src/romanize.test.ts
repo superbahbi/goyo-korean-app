@@ -118,12 +118,17 @@ describe("romanize: sound changes RR transcribes (RR ch.3 art.3)", () => {
     ]);
   });
 
-  it("writes ㄹ after ㄴ/ㅁ/ㅇ as n: 종로 → jongno, 신문로 → sinmunno (art.3 item 1)", () => {
+  it("writes ㄹ after ㅁ/ㅇ as n: 종로 → jongno, 음료수 → eumnyosu (art.3 item 1)", () => {
     expectAll([
       ["종로", "jongno"],
-      ["신문로", "sinmunno"],
       ["음료수", "eumnyosu"],
     ]);
+  });
+
+  it("writes ㄹ after ㄴ as n, which RR uses for compounds read [ㄴㄴ] such as 신문로 → sinmunno (art.3 item 1)", () => {
+    // RR's general ㄴ + ㄹ rule is ll (신라 → silla); romanize() does not
+    // implement it, as its header records. 신문로 is RR's own [ㄴㄴ] example.
+    expectAll([["신문로", "sinmunno"]]);
   });
 
   it("writes ㄹ as r before a vowel and l elsewhere (art.3 item 1 and art.8)", () => {
