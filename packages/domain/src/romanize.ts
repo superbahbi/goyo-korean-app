@@ -2,9 +2,17 @@
 // Implemented: syllable decomposition, initial/vowel/final tables, liaison (연음),
 // final-consonant neutralization, nasal assimilation before ㄴ/ㅁ, ㅎ aspiration,
 // ㄷ/ㅌ + 이 palatalization (ji/chi), and ㄹ as r or l (n after ㄴ/ㅁ/ㅇ).
-// Not implemented: ㄹ-ㄴ assimilation (설날 gives seolnal, not seollal), ㅅ-ㅎ
-// tensing, and cross-word liaison. Spaces in the input are kept and words are
-// romanized separately.
+// Not implemented: ㄴ/ㄹ liquidization in both orders (신라 gives sinna, not
+// silla; 설날 gives seolnal, not seollal), nasalization of ㄹ after ㄱ/ㅂ (독립문
+// gives doklimmun, not dongnimmun), ㄷ + 히 palatalization (굳히다 gives guthida,
+// not guchida), aspiration of ㄱ/ㄷ/ㅂ/ㅈ before a ㅎ onset in verbs (잡히다 gives
+// japhida, not japida), ㅅ-ㅎ tensing, and cross-word liaison. On 2026-11-27 only
+// the verb aspiration gap reached the deck, in nine headwords: 생각하다, 착하다,
+// 약하다, 딱딱하다, 행복하다, 행복해요, 답답해요, 따뜻하다 and 깨끗하다 keep the h
+// (saenggakhada, ttatteuthada) where strict RR writes the merged sound
+// (saenggakada, ttatteutada). That is an open content decision in
+// docs/improvement-plan.md; check any new headword that crosses these by hand.
+// Spaces in the input are kept and words are romanized separately.
 
 const CHO = [
   "ㄱ",
