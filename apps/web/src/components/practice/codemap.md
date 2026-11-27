@@ -29,7 +29,7 @@ PracticeQuestion>` lazily constructs `createQuestionLoop` and subscribes with
   keeps an always-mounted `aria-live="polite"` region and accepts class and
   action slots. `ListeningPrompt`, `ScenarioPrompt`, and `PracticeComplete`
   are stateless.
-- `SCENARIOS` is a data table of `{ id, place, prompt, cardId }`; its `Scenario`
+- `scenarios.ts` exports `SCENARIOS`, a data table of `{ id, place, prompt, cardId }`; its `Scenario`
   interface is module-local and not exported.
 
 ## Flow

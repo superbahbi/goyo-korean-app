@@ -18,14 +18,18 @@ semantic design-token theme consumed by every component in the tree.
 
 **`App.tsx`** — provider + routing shell:
 
-- Provider order: `ErrorBoundary` → `MotionConfig reducedMotion="user"` →
-  `ThemeProvider defaultTheme="system" switchable` → `TooltipProvider` →
-  `Toaster` + `Router`.
+- Provider order: `ErrorBoundary` → `ThemeProvider defaultTheme="system"
+switchable` → `Toaster` + `Router`. There is no `MotionConfig` or
+  `TooltipProvider`; animation is CSS and honours `prefers-reduced-motion`
+  in `index.css`.
 - `Router` is a wouter `<Switch>`: `/` → `Home`, `/mobile` → lazily imported
   `../../mobile/App` inside `Suspense fallback={null}`, `/404` → `NotFound`,
   and a catch-all `<Route component={NotFound} />`.
-- `Analytics` and `SpeedInsights` sit **outside** the error boundary so a
-  failing analytics script cannot take down study.
+- `Analytics` and `SpeedInsights` are `React.lazy` imports, so they load after
+  the app paints and stay out of the first-load bundle. They sit **outside**
+  the error boundary, inside an `AnalyticsBoundary` that renders `null` when
+  the chunk fails (offline, blocked), so a failing analytics script cannot
+  take down study. They are skipped entirely in the `goyo://` iOS shell.
 
 **`index.css`** — Tailwind 4 token theme:
 
@@ -59,5 +63,5 @@ component reads the theme directly for styling.
   plus `wouter`, `@vercel/analytics/react` and
   `@vercel/speed-insights/react` (both lazy, behind a null-rendering error
   boundary), `sonner`, `virtual:pwa-register`.
-- Consumers: `client/index.html` (entry + pre-paint theme script) and every
+- Consumers: `apps/web/index.html` (entry + pre-paint theme script) and every
   module under `components/`, `hooks/`, `pages/`, `contexts/`.

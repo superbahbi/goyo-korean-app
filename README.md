@@ -4,7 +4,7 @@ Audio-first Korean vocabulary practice with spaced repetition. Free, offline-cap
 
 React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the PWA.
 
-- **Deck:** 136 curated cards plus 504 imported Essential 600 cards (640 total), each with a Korean
+- **Deck:** 639 cards: 136 curated plus 504 imported Essential 600 cards, with one duplicate (`essential_171`) dropped. Every card has a Korean
   example and ElevenLabs pronunciation in two voices.
 - **Practice:** seven modes on one shared shell — daily study, Hangul, grammar, listening, survival
   scenarios, shadowing, and weak-word review — plus eighteen TOPIK I grammar lessons with tracked
@@ -16,7 +16,7 @@ React 19 + TypeScript + Vite + Tailwind 4, with a Workbox service worker for the
 
 ## Requirements
 
-- Node 22 (`nvm use`) — Vite 7 needs 22.12 or newer.
+- Node 22.12 or newer (`nvm use`), matching `engines` in `package.json` and Vite 7.
 - pnpm 10 through Corepack: `corepack enable`.
 
 ## Getting started
@@ -31,6 +31,9 @@ pnpm dev          # Web app (Vite) on http://localhost:3000 (mobile view at /mob
 | Command              | What it does                                                                                                                                                                           |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `pnpm audit:content` | Sample imported cards into a Markdown audit sheet                                                                                                                                      |
+| `pnpm audio:hash`    | Rename pronunciation clips to `<base>.<sha256-8>.mp3` and rewrite `public/audio/index.json`; run it after adding or replacing clips by hand                                            |
+| `pnpm codemap:check` | Fail when a path in `.slim/codemap.json` no longer exists on disk (it does not compare hashes)                                                                                         |
+| `pnpm ios:zen`       | Build the web bundle, copy it into the iOS shell, then XcodeGen, `xcodebuild` and `devicectl` install onto a connected iPhone (default device name `Zen`; needs a Mac with Xcode)      |
 | `pnpm dev`           | Dev server on port 3000                                                                                                                                                                |
 | `pnpm build`         | Production build into `dist/public`                                                                                                                                                    |
 | `pnpm start`         | Preview the production build (`PORT=4175 pnpm start` to change the port)                                                                                                               |
@@ -44,6 +47,18 @@ pnpm dev          # Web app (Vite) on http://localhost:3000 (mobile view at /mob
 
 The gate for every change is `pnpm check && pnpm lint && pnpm format:check && pnpm test && pnpm build`.
 CI also runs `pnpm test:e2e`, which builds the app and serves it with `vite preview`.
+
+## Troubleshooting
+
+- **Stuck on an old version.** Open Settings and use the reload button. It asks a waiting update to
+  take over, then reloads, so the new files are the ones served. Progress is kept.
+- **A screen says it could not load.** Press "Reload Goyo". This happens when a new version was
+  deployed while the app was open; "Try again" cannot fetch a file that no longer exists.
+- **A crash screen appears.** Reload first. If it keeps happening, press "Download backup" before
+  "Reset local progress" — resetting erases study history on that device. The backup is the stored
+  save as written, so it can be imported later from Settings.
+- **Moving progress to another device.** Use Settings export, then import on the other device.
+  Files over 5 MB are refused.
 
 ## Layout
 

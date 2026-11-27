@@ -56,14 +56,22 @@ unless `SHOTS_BASE_URL` is set, drives Playwright Chromium over desktop
 1280×900 and iPhone 15 viewports in light and dark, clears localStorage and
 seeds `goyo-theme`, opens each `SCREENS` entry plus the `MOBILE_SCREENS`
 lane (the `/mobile` route under the iPhone user agent), waits 350 ms for
-Radix/Framer Motion, and writes PNGs to `.tmp/shots/<SHOTS_LABEL>/`.
-`render-og-image.ts` draws the 1200×630 link-preview card from inline HTML
+the Radix enter transition, and writes PNGs to `.tmp/shots/<SHOTS_LABEL>/`.
+`check-csp.ts` (`pnpm exec tsx scripts/check-csp.ts`, a CI step after the
+build) validates `dist/public/index.html` against the
+`Content-Security-Policy` header in `vercel.json`: no inline `<script>`, no
+inline `on*=` handlers, no third-party script origins, and every local
+`<script src>` must exist in `dist/public/`. `render-og-image.ts` draws the 1200×630 link-preview card from inline HTML
 (the Hangul comes from `public/icons/icon-512.png`, so no Korean font is
 needed) with Playwright Chromium and writes `public/og-image.png`.
 `install-ios-zen.sh`
 (`pnpm ios:zen`) builds, copies `dist/public` into `mobile/ios/Goyo/www`,
 renders the AppIcon with `sips`, then runs `xcodegen`, `xcodebuild`, and
 `xcrun devicectl` install/launch.
+
+Tests sit beside their scripts and run under `pnpm test`: `audit-content.test.ts`,
+`audit-verdicts.test.ts`, `check-csp.test.ts`, `codemap-check.test.ts` and
+`generate-elevenlabs-audio.test.ts`.
 
 ## Flow
 
@@ -85,5 +93,5 @@ manifest written here is parsed at runtime by `packages/domain/src/audioIndex`
 and is the same map the PWA uses for playback and offline
 download, so a clip absent from `index.json` is unreachable. External deps:
 ElevenLabs TTS, OpenAI, Playwright, Vite, Xcode. `package.json` exposes
-`audit:content`, `audio:hash`, `shots`, `ios:zen`; other scripts run with
+`audit:content`, `audio:hash`, `codemap:check`, `shots`, `ios:zen`; other scripts run with
 `tsx`/`python3` directly.
