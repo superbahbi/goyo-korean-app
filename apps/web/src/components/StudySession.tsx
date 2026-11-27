@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronDown, Mic2 } from "lucide-react";
-import { AnimatePresence } from "framer-motion";
 import { FlashCard } from "./FlashCard";
 import { useSentenceAudioIds } from "@/hooks/useSentenceAudioIds";
 import { ProductionAttempt } from "./study/ProductionAttempt";
@@ -192,26 +191,24 @@ export function StudySession({
         aria-label="Study card"
         className="flex-1 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-inset"
       >
-        <AnimatePresence mode="wait">
-          {/* Keyed by position too: a one-card retry repeats the same id at the
+        {/* Keyed by position too: a one-card retry repeats the same id at the
               next index, and must mount fresh so it auto-plays again. */}
-          <FlashCard
-            key={`${currentCard.id}-${index}`}
-            wordId={currentCard.id}
-            front={currentCard.front}
-            back={currentCard.back}
-            romanization={currentCard.romanization}
-            example={currentCard.example}
-            exampleEnglish={currentCard.exampleEnglish}
-            usageNote={currentCard.usageNote}
-            tag={currentCard.tag}
-            onFlip={handleFlip}
-            revealed={flipped}
-            autoSpeak={autoPlayAudio}
-            audioFirst={true}
-            sentenceAudioReady={sentenceAudioIds.has(currentCard.id)}
-          />
-        </AnimatePresence>
+        <FlashCard
+          key={`${currentCard.id}-${index}`}
+          wordId={currentCard.id}
+          front={currentCard.front}
+          back={currentCard.back}
+          romanization={currentCard.romanization}
+          example={currentCard.example}
+          exampleEnglish={currentCard.exampleEnglish}
+          usageNote={currentCard.usageNote}
+          tag={currentCard.tag}
+          onFlip={handleFlip}
+          revealed={flipped}
+          autoSpeak={autoPlayAudio}
+          audioFirst={true}
+          sentenceAudioReady={sentenceAudioIds.has(currentCard.id)}
+        />
       </div>
 
       <p className="mt-3 hidden text-center text-xs text-muted-foreground sm:block">

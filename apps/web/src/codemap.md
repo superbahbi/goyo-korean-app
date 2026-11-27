@@ -54,9 +54,10 @@ component reads the theme directly for styling.
 
 ## Integration
 
-- Imports: `./components` (ErrorBoundary, `ui/sonner`, `ui/tooltip`),
+- Imports: `./components` (ErrorBoundary, `ui/sonner`),
   `./contexts/ThemeContext`, `./pages/Home`, `./pages/NotFound`, `../../mobile/App`,
-  plus `wouter`, `framer-motion`, `@vercel/analytics/react`,
-  `@vercel/speed-insights/react`, `sonner`, `virtual:pwa-register`.
+  plus `wouter`, `@vercel/analytics/react` and
+  `@vercel/speed-insights/react` (both lazy, behind a null-rendering error
+  boundary), `sonner`, `virtual:pwa-register`.
 - Consumers: `client/index.html` (entry + pre-paint theme script) and every
   module under `components/`, `hooks/`, `pages/`, `contexts/`.

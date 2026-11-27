@@ -63,7 +63,7 @@ AlphabetPractice: category click → index reset → card walk → Speak/Next/Pr
   ProgressCards, ReviewPlanCard, PracticeMenu, QuickLinks, CategoryGrid,
   HomeDialogHost, AlphabetCard, practice/PracticeShell, `ui/*`), `@domain/*`
   (vocabulary, alphabet, audioPlayer, storageProtection), plus `wouter`,
-  `framer-motion`, `lucide-react`, `sonner`.
+  `lucide-react`, `sonner`.
 - Consumers: `../App.tsx` routes `/` and the 404 fallback;
   `../components/dialogs/registry.tsx` lazy-loads `AlphabetPractice` for the
   `alphabet` Dialog kind. Cross-links: `../hooks`, `../contexts`, `@domain`.

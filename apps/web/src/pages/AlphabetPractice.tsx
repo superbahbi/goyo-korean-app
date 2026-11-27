@@ -12,7 +12,6 @@ import {
   Timer,
   Waves,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { AlphabetCard } from "@/components/AlphabetCard";
 import {
   PracticePrimaryButton,
@@ -108,23 +107,21 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
           {ALPHABET_CATEGORIES.map(category => {
             const Icon = CATEGORY_ICONS[category.id];
             return (
-              <motion.button
+              <button
                 key={category.id}
                 type="button"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
                 onClick={() => {
                   setCurrentIndex(0);
                   setSelectedCategory(category.id);
                 }}
-                className={`flex min-h-36 flex-col items-center justify-center rounded-2xl p-6 text-center transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${category.color}`}
+                className={`animate-in fade-in slide-in-from-bottom-3 flex min-h-36 flex-col items-center justify-center rounded-2xl p-6 text-center transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${category.color}`}
               >
                 <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/60 dark:bg-black/20">
                   <Icon size={24} aria-hidden="true" />
                 </span>
                 <span className="mt-3 text-xl font-bold">{category.name}</span>
                 <span className="mt-1 text-sm">{category.detail}</span>
-              </motion.button>
+              </button>
             );
           })}
         </div>
@@ -227,16 +224,14 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
         </h2>
         <div className="mt-3 grid grid-cols-5 gap-2 sm:grid-cols-8">
           {cards.map((card, idx) => (
-            <motion.button
+            <button
               key={card.id}
               type="button"
               onClick={() => goToLetter(idx)}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: idx * 0.02 }}
+              style={{ animationDelay: `${idx * 0.02}s` }}
               aria-label={`Go to ${card.hangul}`}
               aria-current={idx === currentIndex ? "true" : undefined}
-              className={`aspect-square rounded-xl text-2xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
+              className={`animate-in fade-in zoom-in-90 fill-mode-both aspect-square rounded-xl text-2xl font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
                 idx === currentIndex
                   ? "scale-105 bg-emerald-700 text-white shadow-lg"
                   : "border-2 border-border bg-card text-foreground hover:border-emerald-300 dark:hover:border-emerald-700"
@@ -244,7 +239,7 @@ export function AlphabetPractice({ onClose }: AlphabetPracticeProps) {
               lang="ko"
             >
               {card.hangul}
-            </motion.button>
+            </button>
           ))}
         </div>
       </div>

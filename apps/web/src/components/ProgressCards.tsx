@@ -2,7 +2,6 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import type { TodayPlan } from "@domain/dashboardPlan";
 import { BookOpen, Languages, Play, TrendingUp, Zap } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface ProgressCardsProps {
   plan: TodayPlan;
@@ -34,11 +33,10 @@ export function ProgressCards({
   if (firstRun) {
     const words = todayProgress.planned;
     return (
-      <motion.section
+      <section
         aria-labelledby="start-here-heading"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
+        className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-300"
+        style={{ animationDelay: "0.05s" }}
       >
         <Card className="gap-0 border-emerald-200/70 bg-card py-0 shadow-sm dark:border-emerald-900/60">
           <div className="p-4 sm:p-6">
@@ -97,7 +95,7 @@ export function ProgressCards({
             </div>
           </div>
         </Card>
-      </motion.section>
+      </section>
     );
   }
 
@@ -145,12 +143,10 @@ export function ProgressCards({
         const Icon = tile.icon;
         const isToday = tile.key === "today";
         return (
-          <motion.div
+          <div
             key={tile.key}
-            className="min-w-0"
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 * index }}
+            className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both min-w-0 duration-300"
+            style={{ animationDelay: `${0.05 * index}s` }}
           >
             <Card className="h-full gap-0 border-border/70 bg-card py-0 shadow-sm transition-shadow hover:shadow-md">
               <div className="flex h-full flex-col p-3 sm:p-5">
@@ -181,7 +177,7 @@ export function ProgressCards({
                 </p>
               </div>
             </Card>
-          </motion.div>
+          </div>
         );
       })}
     </div>

@@ -11,7 +11,6 @@ import {
   Volume2,
   X,
 } from "lucide-react";
-import { motion } from "framer-motion";
 import { type VocabularyCard } from "@domain/vocabulary";
 import { playVocabularyAudio, stopAudio } from "@domain/audioPlayer";
 import { PracticeComplete } from "@/components/practice/PracticeComplete";
@@ -140,11 +139,7 @@ export function ShadowingPractice({
           Replay as many times as you need.
         </p>
         {visible ? (
-          <motion.div
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-7 border-t border-border/70 pt-6 text-center"
-          >
+          <div className="animate-in fade-in slide-in-from-bottom-[6px] mt-7 border-t border-border/70 pt-6 text-center">
             <p
               className="text-4xl font-bold tracking-wide text-foreground"
               lang="ko"
@@ -157,7 +152,7 @@ export function ShadowingPractice({
             <p className="mt-4 text-sm italic text-muted-foreground" lang="ko">
               {currentCard.example}
             </p>
-          </motion.div>
+          </div>
         ) : (
           <div className="mt-6 flex justify-center">
             <Button
