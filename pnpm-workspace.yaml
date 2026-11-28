@@ -1,5 +1,7 @@
 packages:
   - "."
+  - "apps/marketing"
+  - "packages/shared"
 
 onlyBuiltDependencies:
   - esbuild

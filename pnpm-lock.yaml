@@ -127,6 +127,18 @@ importers:
         specifier: ^3.2.7
         version: 3.2.7(@types/node@24.7.0)(jiti@2.7.0)(jsdom@31.0.1)(lightningcss@1.33.0)(terser@5.51.2)(tsx@4.20.6)
 
+  apps/marketing:
+    dependencies:
+      '@goyo/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+    devDependencies:
+      vite:
+        specifier: ^7.3.8
+        version: 7.3.8(@types/node@24.7.0)(jiti@2.7.0)(lightningcss@1.33.0)(terser@5.51.2)(tsx@4.20.6)
+
+  packages/shared: {}
+
 packages:
 
   '@apideck/better-ajv-errors@0.3.7':

@@ -1,0 +1,8 @@
+{
+  "name": "@goyo/shared",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./theme": "./theme.ts"
+  }
+}

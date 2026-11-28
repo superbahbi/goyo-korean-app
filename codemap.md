@@ -3,11 +3,13 @@
 ## Responsibility
 
 Goyo — an audio-first Korean vocabulary PWA with spaced repetition. One repo
-ships three deliverables from a single domain core:
+ships four deliverables from a single domain core:
 
 - **Web client** (`apps/web/`): React 19 + Vite + Tailwind 4 SPA, installable
   Workbox PWA, progress in `localStorage` with JSON export/import. Free,
   offline-capable, no accounts.
+- **Marketing site** (`apps/marketing/`): static Vite site with shared theme tokens,
+  a pronunciation demo, and a separate Vercel project.
 - **Mobile app** (`mobile/`): the mobile UI the Vite SPA serves at `/mobile`,
   rendered as plain DOM, wrapped by the iOS WKWebView shell in `mobile/ios/`
   that bridges `HTMLAudioElement` playback to `AVAudioPlayer`.
@@ -70,6 +72,7 @@ into `public/` and `packages/domain` datasets; the app never writes content.
 
 | Directory                           | Responsibility                                                                                    | Link                                                    |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `apps/marketing/`                   | Static landing page, pronunciation demo, and separate Vercel configuration                        | [View Map](apps/marketing/codemap.md)                   |
 | `apps/web/`                         | Vite web-client root: SPA document, PWA meta, pre-paint theme                                     | [View Map](apps/web/codemap.md)                         |
 | `apps/web/src/`                     | Composition root: React mount, provider stack, routes, SW registration, Tailwind token theme      | [View Map](apps/web/src/codemap.md)                     |
 | `packages/domain/`                  | Pure domain layer: Grade→SM-2/XP/goal, datasets, Audio manifest, saved-state format               | [View Map](packages/domain/codemap.md)                  |

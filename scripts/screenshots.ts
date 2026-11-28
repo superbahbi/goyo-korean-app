@@ -32,6 +32,7 @@ interface Screen {
   name: string;
   /** Route to open; defaults to the web dashboard. */
   path?: string;
+  origin?: string;
   /** Interactions that bring the screen into view. */
   open: (page: Page) => Promise<void>;
   /** Capture only at desktop width. */
@@ -173,6 +174,37 @@ async function main() {
     });
   }
 
+  const marketing = {
+    root: "apps/marketing",
+    configFile: "apps/marketing/vite.config.ts",
+  };
+  await build({ ...marketing, logLevel: "warn" });
+  const marketingServer = await preview({
+    ...marketing,
+    preview: { host: "127.0.0.1", port: 0 },
+  });
+  const address = marketingServer.httpServer.address();
+  if (!address || typeof address === "string") {
+    throw new Error("Marketing preview did not listen on a TCP port");
+  }
+  const marketingScreen: Screen = {
+    name: "marketing",
+    origin: `http://127.0.0.1:${address.port}`,
+    path: "/",
+    fullPage: true,
+    open: async page => {
+      await page.getByText("Reveal meaning").click();
+      await page.getByText("Hello (polite)", { exact: true }).waitFor();
+      const audio = await page.locator("audio").getAttribute("src");
+      if (
+        !audio ||
+        !(await page.request.get(new URL(audio, page.url()).href)).ok()
+      ) {
+        throw new Error("Marketing pronunciation audio is unavailable");
+      }
+    },
+  };
+
   const browser = await chromium.launch(
     process.env.PLAYWRIGHT_CHANNEL
       ? { channel: process.env.PLAYWRIGHT_CHANNEL }
@@ -195,12 +227,12 @@ async function main() {
           { theme }
         );
 
-        for (const screen of [...SCREENS, ...MOBILE_SCREENS]) {
+        for (const screen of [...SCREENS, ...MOBILE_SCREENS, marketingScreen]) {
           if (screen.desktopOnly && viewport.name !== "desktop") continue;
           if (screen.iphoneOnly && viewport.name !== "iphone") continue;
           const page = await context.newPage();
           try {
-            await page.goto(`${BASE_URL}${screen.path ?? ""}`);
+            await page.goto(`${screen.origin ?? BASE_URL}${screen.path ?? ""}`);
             if (!screen.path)
               await page
                 .getByRole("button", { name: /start (daily|first) session/i })
@@ -230,6 +262,7 @@ async function main() {
     }
   } finally {
     await browser.close();
+    await marketingServer.close();
     await server?.close();
   }
 
