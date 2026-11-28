@@ -1,6 +1,7 @@
 {
   "include": [
     "apps/web/**/*",
+    "apps/marketing/*.ts",
     "packages/domain/**/*",
     "packages/shared/**/*",
     "mobile/src/**/*",
